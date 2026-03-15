@@ -1,0 +1,503 @@
+# CORTEX Phase 159 — Claude Code + VS Code Dual-Surface Native Integration
+# Source: code.claude.com/docs/en/best-practices + sub-agents + settings + memory
+#         vscode.dev/docs/copilot/customization/custom-agents + agent-skills
+# Synthesized: 2026-03-15 from live documentation fetch + CORTEX framework analysis
+
+id: "phase-159"
+title: "Claude Code + VS Code Dual-Surface Native Integration — .claude/ Config, CLAUDE.md, Skills Bridge, 5 Subagents, Handoffs"
+created: "2026-03-15"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-035   # Single canonical implementation (no duplication across .claude/ + .github/)
+  - CORE-049   # Silent if satisfied — CLAUDE.md must not produce startup noise
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-159-CLAUDE-CODE-DUAL-SURFACE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: Live documentation fetch 2026-03-15 from:
+    - https://code.claude.com/docs/en/best-practices
+    - https://code.claude.com/docs/en/sub-agents
+    - https://code.claude.com/docs/en/settings
+    - https://code.claude.com/docs/en/memory
+    - https://code.visualstudio.com/docs/copilot/customization/custom-agents
+    - https://code.visualstudio.com/docs/copilot/customization/agent-skills
+    - https://agentskills.io/ (open standard)
+
+  Key finding: CORTEX targets VS Code GitHub Copilot (via .github/copilot-instructions.md
+  and .github/skills/) but Claude Code (code.claude.com) reads from a PARALLEL,
+  partially overlapping directory structure:
+    - .claude/settings.json  (permissions, hooks, sandbox — Claude Code ONLY)
+    - CLAUDE.md / .claude/CLAUDE.md  (session memory — Claude Code equivalent of copilot-instructions.md)
+    - .claude/rules/  (path-scoped rules — maps to instructions.md applyTo patterns)
+    - .claude/skills/ OR .github/skills/  (agentskills.io open std — BOTH surfaces)
+    - .claude/agents/  (Claude Code subagents — VS Code ALSO reads these for compat)
+    - .github/agents/  (VS Code .agent.md — supports handoffs, VS Code-specific frontmatter)
+
+  CURRENT GAP: CORTEX has zero .claude/ directory configuration. Running CORTEX
+  under Claude Code (claude CLI, VS Code with Claude model) loses all project
+  context, coding standards, and orchestration conventions.
+
+  DUAL-SURFACE INSIGHT: VS Code now detects .claude/agents/*.md files directly
+  (Claude sub-agents format). One subagent definition works for both surfaces.
+  Similarly, .claude/skills/ is detected by VS Code alongside .github/skills/.
+  This enables CORTEX to support Claude CLI + VS Code Copilot with minimal duplication.
+
+  Score at entry: 5.0 / 10 (Claude Code compatibility)
+  Target score: 9.0 / 10
+  Git prerequisite: phase-153 COMPLETE (cortex_web MCP #37, CORTEX_TRUST_LEVEL)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-159-01"
+    title: "Missing .claude/settings.json — No permission hardening, hooks, or sandbox config"
+    severity: P0
+    source: "code.claude.com/docs/en/settings — documentation fetch 2026-03-15"
+    evidence: |
+      ls .claude/ → directory does not exist.
+      No deny rules protecting .env, secrets/, credentials files.
+      No SSRF-guarded WebFetch domain allowlist.
+      No PreToolUse/PostToolUse hooks for linting + bash validation.
+      Phase 153 adds cortex_web SSRF guard at MCP level, but .claude/settings.json
+      adds a second layer at the tool-permission level (defense-in-depth, OWASP A05).
+    action_ref: "phase-159-a"
+    status: OPEN
+
+  - id: "GAP-159-02"
+    title: "Missing CLAUDE.md — No Claude Code session memory or coding standards"
+    severity: P0
+    source: "code.claude.com/docs/en/memory + best-practices — documentation fetch 2026-03-15"
+    evidence: |
+      Claude Code reads CLAUDE.md at session start (equivalent of copilot-instructions.md).
+      No CLAUDE.md in repo root or .claude/ directory.
+      Claude Code sessions have no knowledge of CORTEX coding standards,
+      TDD cycle, import conventions, or governance rules.
+      Auto memory (MEMORY.md, 200-line limit) also unconfigured.
+      @import syntax for cortex-python.instructions.md not wired.
+    action_ref: "phase-159-a"
+    status: OPEN
+
+  - id: "GAP-159-03"
+    title: "Missing .claude/rules/ — Path-scoped rules not configured for Claude Code"
+    severity: P1
+    source: "code.claude.com/docs/en/memory#organize-rules — documentation fetch 2026-03-15"
+    evidence: |
+      VS Code uses .github/instructions/*.instructions.md with applyTo: globs.
+      Claude Code uses .claude/rules/*.md with YAML frontmatter paths: globs.
+      Same concept, different directory. No .claude/rules/ exists in CORTEX.
+      Path-scoped rules for cortex/**/*.py, tests/**/*.py, cortex-registry/**/*.yaml
+      need to be created (mirrors cortex-python/tests/yaml.instructions.md).
+    action_ref: "phase-159-a"
+    status: OPEN
+
+  - id: "GAP-159-04"
+    title: "Missing .claude/skills/ bridge — agentskills.io compatibility gap"
+    severity: P1
+    source: "agentskills.io + vscode.dev/docs/copilot/customization/agent-skills — 2026-03-15"
+    evidence: |
+      CORTEX skills live in .github/skills/ (VS Code Copilot convention).
+      VS Code ALSO detects .claude/skills/ and .agents/skills/ (agentskills.io standard).
+      Claude Code reads from .claude/skills/ exclusively.
+      Without .claude/skills/ bridge, CORTEX skills are invisible to Claude Code.
+      Solution: create .claude/skills/ with symlinks → .github/skills/<skill>/
+      OR create thin SKILL.md entrypoints that @import from .github/skills/ content.
+    action_ref: "phase-159-b"
+    status: OPEN
+
+  - id: "GAP-159-05"
+    title: "Missing cortex-tdd dual-surface subagent — No TDD executor with Plan Mode"
+    severity: P1
+    source: "code.claude.com/docs/en/sub-agents + best-practices — documentation fetch 2026-03-15"
+    evidence: |
+      Best practice: Explore→Plan→Implement workflow using Plan Mode (permissionMode: plan).
+      CORTEX has TDDOrchestrator in Python, but no .claude/agents/ definition for
+      Claude Code to auto-delegate. Phase 153 adds CLI parity but not subagent definitions.
+      cortex-tdd subagent: Plan Mode gate (pre-impl read-only exploration), then
+      TDD executor with CORE-008 enforcement, CORTEX MCP tools, project memory.
+    action_ref: "phase-159-c"
+    status: OPEN
+
+  - id: "GAP-159-06"
+    title: "Missing cortex-reviewer + cortex-debug dual-surface subagents"
+    severity: P1
+    source: "code.claude.com/docs/en/sub-agents#example-subagents — documentation fetch 2026-03-15"
+    evidence: |
+      Code reviewer pattern: read-only tools (Read, Grep, Glob, Bash), focused system prompt.
+      Debugger pattern: bash+edit tools, root-cause workflow, verification step.
+      CORTEX has CodeReviewOrchestrator (phase-132) and DebuggerOrchestrator (phase-86)
+      in Python, but no .claude/agents/ subagent definitions for Claude Code delegation.
+      Subagent context isolation prevents exploration from polluting main conversation.
+    action_ref: "phase-159-c"
+    status: OPEN
+
+  - id: "GAP-159-07"
+    title: "Missing cortex-security + cortex-architect dual-surface subagents"
+    severity: P1
+    source: "code.claude.com/docs/en/sub-agents + vscode.dev/customization/custom-agents"
+    evidence: |
+      Security reviewer: model=opus, read-only tools, OWASP checklist (SQL/XSS/injection/auth).
+      Architect: permissionMode=plan (read-only exploration), DoR gate + CAPE planning.
+      Both map to existing CORTEX orchestrators (AuditOrchestrator, DesignCoordinator)
+      but need .claude/agents/ definitions for Claude Code auto-delegation.
+      Persistent memory (memory: project) builds institutional audit + architecture knowledge.
+    action_ref: "phase-159-d"
+    status: OPEN
+
+  - id: "GAP-159-08"
+    title: "Missing VS Code .github/agents/ dual-surface agents with handoffs chain"
+    severity: P1
+    source: "vscode.dev/docs/copilot/customization/custom-agents#handoffs — 2026-03-15"
+    evidence: |
+      VS Code custom agents use .github/agents/*.agent.md with handoffs frontmatter.
+      Handoffs enable Plan→Implement→Review sequential workflow with UI buttons.
+      CORTEX has orchestration chain (Classifier→TDD Builder→Code Reviewer) but no
+      VS Code .agent.md files with handoffs. Opportunity to expose CORTEX workflow
+      as VS Code-native agent chain with single-click progression.
+      Note: VS Code also reads .claude/agents/*.md (Claude format) for dual compat.
+    action_ref: "phase-159-d"
+    status: OPEN
+
+  - id: "GAP-159-09"
+    title: "Missing Claude Code best practices drift locks and sandbox CI config"
+    severity: P2
+    source: "code.claude.com/docs/en/settings#sandbox-settings — documentation fetch 2026-03-15"
+    evidence: |
+      Sandbox settings (.claude/settings.json sandbox: section) enable OS-level isolation
+      for CI/CD runs (filesystem.allowWrite: [//tmp/cortex-build], network.allowedDomains).
+      Claude Code --print flag (headless CI) and CORTEX_TRUST_LEVEL (Phase 153) need
+      drift lock to ensure .claude/settings.json sandbox config stays aligned with
+      cortex_web SSRF guard (Phase 153 GAP-153-07).
+      Also: claude --agent flag for running CORTEX subagents as main thread with fan-out.
+    action_ref: "phase-159-e"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-159-a"
+    title: ".claude/ Directory Scaffold — settings.json + CLAUDE.md + rules/"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-159-01", "GAP-159-02", "GAP-159-03"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "preflight tests GREEN (446 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests: (1) test_claude_dir_exists, (2) test_settings_json_valid, (3) test_deny_rules_present (.env + secrets), (4) test_claude_md_exists, (5) test_rules_dir_has_python_rule, (6) test_webfetch_ssrf_deny"
+        gate: "pytest tests/core/test_phase_159_claude_config.py — ALL 6 tests FAIL"
+      green:
+        action: |
+          CREATE .claude/settings.json:
+            permissions.deny: [Read(./.env), Read(./.env.*), Read(./secrets/**),
+              Read(./config/credentials*), WebFetch(domain:*) except allowlist]
+            permissions.allow: [Bash(python3 -m pytest *), Bash(python3 scripts/*),
+              Bash(git diff *), Bash(git log *), Bash(ruff check *)]
+            hooks.PreToolUse: [{matcher: Bash, hooks: [{type: command,
+              command: .claude/scripts/validate-bash-command.sh}]}]
+            hooks.PostToolUse: [{matcher: "Edit|Write", hooks: [{type: command,
+              command: .claude/scripts/run-linter.sh}]}]
+            sandbox: {enabled: false, filesystem: {denyRead: [~/.aws/credentials]}}
+            model: "claude-sonnet-4-6"
+          CREATE .claude/CLAUDE.md + root CLAUDE.md (200-line limit):
+            @import: .github/copilot-instructions.md (core standards)
+            CORTEX-specific: package=cortex, TDD cycle, ruff clean, preflight gate
+            CLAUDE.md @imports: cortex-python standards section (Bash commands, style)
+            autoMemoryEnabled: true (in .claude/settings.json)
+          CREATE .claude/rules/ path-scoped rules:
+            python.md (paths: [cortex/**/*.py]) — mirrors cortex-python.instructions.md
+            tests.md (paths: [tests/**/*.py]) — mirrors cortex-tests.instructions.md
+            yaml.md (paths: [cortex-registry/**/*.yaml]) — mirrors cortex-yaml.instructions.md
+          CREATE .claude/scripts/ (validate-bash-command.sh, run-linter.sh):
+            validate-bash-command.sh: block rm -rf /, drop tables, --no-verify, dangerous patterns
+            run-linter.sh: run ruff check on edited Python files (exit 0 always, advisory)
+        gate: "pytest tests/core/test_phase_159_claude_config.py — ALL 6 tests GREEN"
+      refactor:
+        action: "Validate .claude/settings.json against JSON schema (json.schemastore.org/claude-code-settings.json). Ensure CLAUDE.md ≤200 lines. Run ruff check cortex/."
+        gate: "preflight GREEN (446), ruff clean, CLAUDE.md wc -l ≤ 200"
+
+    completion_gate:
+      command: "pytest tests/core/test_phase_159_claude_config.py -v && python3 -c \"import json; json.load(open('.claude/settings.json')); print('settings.json valid')\""
+      must_pass: true
+      artifacts_created:
+        - .claude/settings.json
+        - .claude/CLAUDE.md
+        - CLAUDE.md
+        - .claude/rules/python.md
+        - .claude/rules/tests.md
+        - .claude/rules/yaml.md
+        - .claude/scripts/validate-bash-command.sh
+        - .claude/scripts/run-linter.sh
+
+  - id: "phase-159-b"
+    title: ".claude/skills/ Bridge — agentskills.io Open Standard Compatibility"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-159-04"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-159-a"]
+    prerequisite: "phase-159-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests: (1) test_claude_skills_dir_exists, (2) test_skill_cortex_exists, (3) test_skill_cortex_tdd_exists, (4) test_skill_cortex_audit_exists, (5) test_skill_cortex_debug_exists, (6) test_skill_cortex_rca_exists, (7) test_skill_cortex_governance_exists, (8) test_skill_frontmatter_valid (name matches dir)"
+        gate: "pytest tests/core/test_phase_159_skills.py — ALL 8 tests FAIL"
+      green:
+        action: |
+          CREATE .claude/skills/ directory.
+          For each CORTEX skill in .github/skills/:
+            cortex/ → .claude/skills/cortex/SKILL.md (symlink or thin wrapper)
+            cortex-tdd/ → .claude/skills/cortex-tdd/SKILL.md
+            cortex-audit/ → .claude/skills/cortex-audit/SKILL.md
+            cortex-debug/ → .claude/skills/cortex-debug/SKILL.md
+            cortex-rca/ → .claude/skills/cortex-rca/SKILL.md
+            cortex-governance/ → .claude/skills/cortex-governance/SKILL.md
+            cortex-plan/ → .claude/skills/cortex-plan/SKILL.md
+          Each SKILL.md wrapper: frontmatter name MUST match directory name (agentskills.io rule).
+          Wrapper body: @import path to canonical .github/skills/<skill>/SKILL.md
+          This avoids duplication (CORE-035) while satisfying both surfaces.
+        gate: "pytest tests/core/test_phase_159_skills.py — ALL 8 tests GREEN"
+      refactor:
+        action: "Verify symlink resolution on macOS. Ensure skill names match directories exactly (agentskills.io compliance)."
+        gate: "smoke GREEN, ruff clean"
+
+    completion_gate:
+      command: "pytest tests/core/test_phase_159_skills.py -v"
+      must_pass: true
+      artifacts_created:
+        - .claude/skills/cortex/SKILL.md
+        - .claude/skills/cortex-tdd/SKILL.md
+        - .claude/skills/cortex-audit/SKILL.md
+        - .claude/skills/cortex-debug/SKILL.md
+        - .claude/skills/cortex-rca/SKILL.md
+        - .claude/skills/cortex-governance/SKILL.md
+        - .claude/skills/cortex-plan/SKILL.md
+
+  - id: "phase-159-c"
+    title: "CORTEX Subagents (1/2) — cortex-tdd + cortex-reviewer + cortex-debug"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-159-05", "GAP-159-06"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-159-b"]
+    prerequisite: "phase-159-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests: (1) test_cortex_tdd_agent_exists, (2) test_cortex_tdd_frontmatter_valid (name+description+tools+permissionMode=plan), (3) test_cortex_reviewer_agent_exists, (4) test_cortex_reviewer_tools_readonly (Read+Grep+Glob+Bash only), (5) test_cortex_debug_agent_exists, (6) test_cortex_debug_tools_include_edit"
+        gate: "pytest tests/core/test_phase_159_subagents_1.py — ALL 6 tests FAIL"
+      green:
+        action: |
+          CREATE .claude/agents/cortex-tdd.md:
+            name: cortex-tdd
+            description: TDD executor. Enforce CORE-008 RED→GREEN→REFACTOR cycle. Use proactively for IMPLEMENT and FIX intents. Explore then plan then code.
+            tools: Read, Grep, Glob, Bash, Edit, Write
+            model: inherit
+            permissionMode: plan  # Plan Mode: read-only exploration first
+            memory: project
+            skills: [cortex-tdd, cortex-governance]
+            Body: TDD cycle enforcement, DoR gate (CORE-071), sweep completeness (CORE-064).
+              Phase 1 (Plan Mode): read-only exploration + implementation plan.
+              Phase 2 (Normal): RED→GREEN→REFACTOR + convergence gate (CORE-068).
+              Always run preflight after implementation: python3 scripts/run_tests.py smoke.
+          CREATE .claude/agents/cortex-reviewer.md:
+            name: cortex-reviewer
+            description: Code review specialist. Proactively reviews code for quality, security (OWASP), CORTEX conventions. Use after any code change.
+            tools: Read, Grep, Glob, Bash
+            disallowedTools: Write, Edit
+            model: sonnet
+            memory: project
+            skills: [cortex-governance, cortex-audit]
+            Body: Review checklist including CORTEX CORE rules, ruff clean, import safety,
+              no dissolved package imports, OWASP ASVS checks, coverage adequacy.
+          CREATE .claude/agents/cortex-debug.md:
+            name: cortex-debug
+            description: Debugging specialist for test failures and errors. Use when encountering any error, test failure, or unexpected behavior. Proactive root cause analysis.
+            tools: Read, Grep, Glob, Bash, Edit
+            model: inherit
+            memory: project
+            skills: [cortex-debug, cortex-rca]
+            Body: 5-stage pipeline: Capture→Isolate→Hypothesize→Fix→Verify.
+              Follow cortex-debug SKILL workflow. Emit RCA after root cause identified.
+        gate: "pytest tests/core/test_phase_159_subagents_1.py — ALL 6 tests GREEN"
+      refactor:
+        action: "Validate YAML frontmatter syntax in all 3 agent files. Ensure model values are valid (inherit/sonnet/opus/haiku)."
+        gate: "smoke GREEN, ruff clean"
+
+    completion_gate:
+      command: "pytest tests/core/test_phase_159_subagents_1.py -v"
+      must_pass: true
+      artifacts_created:
+        - .claude/agents/cortex-tdd.md
+        - .claude/agents/cortex-reviewer.md
+        - .claude/agents/cortex-debug.md
+
+  - id: "phase-159-d"
+    title: "CORTEX Subagents (2/2) — cortex-security + cortex-architect + VS Code Handoffs"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-159-07", "GAP-159-08"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-159-c"]
+    prerequisite: "phase-159-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests: (1) test_cortex_security_agent_exists, (2) test_cortex_security_model_opus, (3) test_cortex_architect_permissionMode_plan, (4) test_github_agents_dir_exists, (5) test_cortex_tdd_vscode_agent_exists (.agent.md), (6) test_vscode_agent_has_handoffs, (7) test_handoffs_plan_to_implement_chain"
+        gate: "pytest tests/core/test_phase_159_subagents_2.py — ALL 7 tests FAIL"
+      green:
+        action: |
+          CREATE .claude/agents/cortex-security.md:
+            name: cortex-security
+            description: Security audit specialist. OWASP Top 10 + CORTEX-specific security patterns. Use proactively for any code touching auth, credentials, file I/O, or external APIs.
+            tools: Read, Grep, Glob, Bash
+            disallowedTools: Write, Edit
+            model: opus
+            memory: project
+            skills: [cortex-audit, cortex-governance]
+            Body: OWASP Top 10 checklist (A01-A10), CORTEX security rules,
+              env var / secret exposure detection, injection pattern scanning.
+          CREATE .claude/agents/cortex-architect.md:
+            name: cortex-architect
+            description: Architecture and planning agent. DoR gate + CAPE planning engine. Use for new feature design, phase planning, and complexity triage. Read-only exploration mode.
+            tools: Read, Grep, Glob, Bash
+            permissionMode: plan
+            model: opus
+            memory: project
+            skills: [cortex-plan, cortex-governance]
+            Body: DoR gate (CORE-071, 5-dim scoring), ComplexityTriageEngine (CAPE),
+              AutoPlanGenerator workflow, phase file scaffold guidance.
+          CREATE .github/agents/ directory.
+          CREATE .github/agents/cortex-plan.agent.md (VS Code format):
+            description: CORTEX planning agent — DoR gate + implementation plan
+            tools: [search, read, fetch]
+            handoffs: [{label: Start Implementation, agent: cortex-implement, send: false}]
+            Body: Plan Mode workflow — codebase exploration, DoR scoring, plan generation.
+          CREATE .github/agents/cortex-implement.agent.md:
+            description: CORTEX TDD implementation agent — CORE-008 RED→GREEN→REFACTOR
+            tools: [search, read, write, terminal, fetch]
+            handoffs: [{label: Review Code, agent: cortex-review, send: false}]
+            Body: TDD cycle enforcement, CORTEX conventions, preflight gate.
+          CREATE .github/agents/cortex-review.agent.md:
+            description: CORTEX code review agent — quality + security + CORE rules
+            tools: [search, read, terminal]
+            Body: Code review checklist, OWASP checks, CORTEX governance compliance.
+        gate: "pytest tests/core/test_phase_159_subagents_2.py — ALL 7 tests GREEN"
+      refactor:
+        action: "Validate all .agent.md YAML frontmatter. Verify handoffs chain is consistent (plan→implement→review). Ruff clean."
+        gate: "smoke GREEN, ruff clean"
+
+    completion_gate:
+      command: "pytest tests/core/test_phase_159_subagents_2.py -v"
+      must_pass: true
+      artifacts_created:
+        - .claude/agents/cortex-security.md
+        - .claude/agents/cortex-architect.md
+        - .github/agents/cortex-plan.agent.md
+        - .github/agents/cortex-implement.agent.md
+        - .github/agents/cortex-review.agent.md
+
+  - id: "phase-159-e"
+    title: "Validation, Drift Locks, and Claude Code Best Practices Alignment"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-159-09"]
+    governance_authority: "CORE-008, CORE-064, CORE-068"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-159-d"]
+    prerequisite: "phase-159-d completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests: drift lock checks (1) check_claude_settings_deny_env, (2) check_claude_settings_no_dangerous_allow, (3) check_claude_md_line_count_le_200, (4) check_skills_bridge_all_7_present, (5) check_agents_all_5_present, (6) check_github_agents_handoffs_chain, (7) check_sandbox_aligned_with_phase_153"
+        gate: "pytest tests/core/test_phase_159_drift_locks.py — ALL 7 tests FAIL or raise AssertionError"
+      green:
+        action: |
+          Wire drift lock tests as governance checks.
+          Add checks to: cortex/governance/drift_locks/phase_159_checks.py
+          Verify .claude/settings.json sandbox.filesystem.denyRead includes
+            sensitive paths aligned with cortex_web SSRF allow-list (Phase 153 GAP-159-09).
+          Document Claude Code best practices applied to CORTEX:
+            - Context management: /clear between unrelated tasks
+            - Plan Mode usage: explore first with cortex-architect, implement with cortex-tdd
+            - Subagent isolation: use cortex-reviewer for post-implementation review
+            - Non-interactive mode: claude -p "..." --output-format json for CI/CD
+            - Fan-out pattern: loop files via claude -p for batch migrations
+          Update .github/copilot-instructions.md:
+            Add section: Claude Code Integration (claude --agent, .claude/ dir reference)
+        gate: "pytest tests/core/test_phase_159_drift_locks.py — ALL 7 tests GREEN"
+      refactor:
+        action: "Run full preflight. Validate YAML. Run ruff. Confirm all 159 GAPs CLOSED."
+        gate: "preflight GREEN (≥446), smoke GREEN, ruff clean, all 9 GAPs CLOSED"
+
+    completion_gate:
+      command: "pytest tests/core/test_phase_159_drift_locks.py -v && python3 -m pytest tests/ -x --ignore=tests/chaos -q 2>&1 | tail -5"
+      must_pass: true
+      artifacts_created:
+        - cortex/governance/drift_locks/phase_159_checks.py
+        - tests/core/test_phase_159_claude_config.py
+        - tests/core/test_phase_159_skills.py
+        - tests/core/test_phase_159_subagents_1.py
+        - tests/core/test_phase_159_subagents_2.py
+        - tests/core/test_phase_159_drift_locks.py
+
+# ─────────────────────────────────────────────────────────────────────────────
+# HOLISTIC FINAL VERIFICATION (CORE-068)
+# ─────────────────────────────────────────────────────────────────────────────
+holistic_verification:
+  gate_id: "CORE-068-PHASE-159"
+  checks:
+    - V1: "All 9 GAPs in sweep_catalogue are CLOSED"
+    - V2: "5 .claude/agents/ subagents present with valid frontmatter"
+    - V3: "3 .github/agents/ VS Code agents with valid handoffs chain"
+    - V4: "7 .claude/skills/ bridge entries (one per CORTEX skill)"
+    - V5: "CLAUDE.md ≤ 200 lines, imports CORTEX standards"
+    - V6: ".claude/settings.json deny rules: .env, secrets/, credentials"
+    - V7: "Preflight tests ≥ 446 GREEN"
+    - V8: "Smoke tests GREEN (regression: 0 new failures)"
+    - V9: "Phase 153 CORTEX_TRUST_LEVEL + cortex_web SSRF alignment confirmed"
+
+completion_criteria:
+  - "All 9 GAPs CLOSED"
+  - "All 5 sub-phases passed their completion_gate"
+  - "CORE-068 holistic verification V1-V9 all GREEN"
+  - ".claude/ directory fully configured for Claude Code sessions"
+  - "Dual-surface (VS Code + Claude Code) agent library active"
+  - "No regressions in preflight or smoke test suite"
+
+depends_on:
+  - phase-153  # Claude Code Parity CLI (CORTEX_TRUST_LEVEL, cortex_web MCP)
+  - phase-158  # Unified CORTEX Prompt (CORE-035 prompt SSOT)
+
+estimated_smoke_delta: "+34 tests (6+8+6+7+7 across 5 sub-phases)"
+ruff_target: "0 violations"
+preflight_target: "≥446 GREEN"

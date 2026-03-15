@@ -1,0 +1,702 @@
+id: "phase-153"
+title: "CORTEX Developer CLI — Claude Code Parity: Trust-Tiered Execution + Native CLI REPL + Headless CI Mode + Web Fetch"
+created: "2026-03-15"
+status: PLANNED
+priority: P0
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-028   # File naming: snake_case only
+  - CORE-035   # Single canonical implementation
+  - CORE-050   # MCP tiered blocking
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-153-CORTEX-DEVELOPER-CLI"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: CORTEX vs Claude Code comparative analysis (2026-03-15 chat session).
+  Comparative score at entry: CORTEX 9.05/10 (governance, TDD, learning) vs
+    Claude Code 5.15/10 on same weighted 10-dimension scoring.
+  Key gaps where Claude Code outscores CORTEX:
+    - Setup/Time-to-value: Claude Code 9/10 vs CORTEX 5/10
+    - Raw flexibility: no trust model means mandatory proceed gates even for trivial ops
+    - Headless/CI use: no --print entrypoint for GitHub Actions integration
+    - No native terminal REPL: requires VS Code + MCP to operate
+    - Web fetch absent: cannot retrieve documentation or search for solutions
+    - Cold-start context: SQLite audit history not loaded at session start
+  Target: Close the developer-experience gap while preserving CORTEX governance superiority.
+  Baseline measurements:
+    - Smoke tests: 2791 passed
+    - Preflight tests: 446 passed
+    - Total collected: ~21,269
+  Git prerequisite: main branch, all phases 148-152 COMPLETE.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-153-01"
+    title: "No trust-tiered execution — every operation requires explicit `proceed` regardless of risk level"
+    severity: P0
+    source: "CORTEX vs Claude Code comparative analysis (2026-03-15)"
+    evidence: |
+      EnforcementOrchestrator always gates on DoR + proceed regardless of operation complexity.
+      A single-line docstring addition routes through the full 4-stage pipeline with DoR display.
+      Claude Code executes low-risk ops immediately without proceed confirmation.
+      Fix: CORTEX_TRUST_LEVEL env var with strict (default) | auto | interactive tiers.
+      auto: proceeds if complexity_score < 0.3 AND no P0 risks (CORE-008/CORE-064 still enforced).
+    action_ref: "phase-153-a"
+    status: OPEN
+
+  - id: "GAP-153-02"
+    title: "Session context cold-start — prior audit history not loaded at InteractionOrchestrator init"
+    severity: P1
+    source: "CORTEX vs Claude Code comparative analysis (2026-03-15)"
+    evidence: |
+      .cortex-runtime/traces/orchestrator-traces.db contains audit history but is never surfaced.
+      Every session starts with zero context: no prior P0s, no known flakes, no recurring patterns.
+      Claude Code builds context progressively; CORTEX forgets every session start.
+      Fix: InteractionOrchestrator.__init__ calls SessionBootstrap.load() — reads last 3 audit
+      sessions from SQLite and surfaces open P0s as a session banner.
+    action_ref: "phase-153-b"
+    status: OPEN
+
+  - id: "GAP-153-03"
+    title: "FileFactory lacks direct file operation methods — MCP-bound file ops prevent CLI/headless use"
+    severity: P0
+    source: "CORTEX vs Claude Code comparative analysis (2026-03-15)"
+    evidence: |
+      All file read/write in CORTEX routes through MCP tools, which require VS Code to be active.
+      cortex/core/file_factory.py exists but lacks read_file(), write_file(), apply_diff() methods.
+      Without these, orchestrators cannot operate in CLI or headless mode (no VS Code).
+      Fix: Extend FileFactory with pathlib-only direct ops; orchestrators use FileFactory when
+      MCP unavailable (mode detection via CORTEX_CLI_MODE env var or absence of MCP session).
+    action_ref: "phase-153-c"
+    status: OPEN
+
+  - id: "GAP-153-04"
+    title: "No FastPath for low-complexity single-file operations — routing overhead for trivial ops"
+    severity: P1
+    source: "CORTEX vs Claude Code comparative analysis (2026-03-15)"
+    evidence: |
+      IntentRouter routes all requests through full 4-stage pipeline (Interaction→Intent→Intelligence→Execution).
+      LENS analysis adds 200ms–2s latency even for trivial ops (add docstring, rename variable).
+      Claude Code executes these in <1s with no pipeline overhead.
+      Fix: Add complexity_score() to IntentRouter. Score < 0.3 → FastPathExecutor (TDD + AC markers;
+      no LENS, no DoR, no proceed gate). CORE-008 and CORE-064 still apply in FastPath.
+    action_ref: "phase-153-c"
+    status: OPEN
+
+  - id: "GAP-153-05"
+    title: "No headless/CI entrypoint — cannot use CORTEX in GitHub Actions or automated pipelines"
+    severity: P1
+    source: "CORTEX vs Claude Code comparative analysis (2026-03-15)"
+    evidence: |
+      Claude Code supports `claude --print "instruction"` for non-interactive execution.
+      CORTEX has no equivalent: python -m cortex --help works but there is no --print flag.
+      Blocks: GitHub Actions audit jobs, pre-merge checks, Docker-based CI pipelines.
+      Fix: cortex/cli/headless.py with --print flag. Implies CORTEX_TRUST_LEVEL=auto.
+      Output to stdout, exit 0 on success / 1 on P0. JSON report to .cortex-runtime/.
+    action_ref: "phase-153-d"
+    status: OPEN
+
+  - id: "GAP-153-06"
+    title: "No native developer CLI REPL — CORTEX requires VS Code + MCP for all operations"
+    severity: P0
+    source: "CORTEX vs Claude Code comparative analysis (2026-03-15)"
+    evidence: |
+      Claude Code runs as `claude` in any terminal: iTerm, Windows Terminal, Docker shells.
+      CORTEX requires VS Code open + MCP server active + GitHub Copilot Chat.
+      Blocks: server SSH sessions, Docker containers, CI environments, vim/nvim users.
+      Fix: cortex/cli/dev_repl.py — natural-language REPL routing through IntentRouter +
+      MasterOrchestrator from terminal. Uses FileFactory direct ops (GAP-153-03 fix).
+      Registered as `cortex` console_scripts entry in pyproject.toml.
+    action_ref: "phase-153-e"
+    status: OPEN
+
+  - id: "GAP-153-07"
+    title: "No web fetch capability — CORTEX cannot retrieve documentation or search for solutions"
+    severity: P1
+    source: "CORTEX vs Claude Code comparative analysis (2026-03-15)"
+    evidence: |
+      Claude Code fetches URLs, PyPI pages, GitHub Issues natively during problem-solving.
+      CORTEX has no cortex_web MCP tool: cannot look up error docs, package changelogs, or APIs.
+      Limits debug quality for external library errors (no stacktrace → docs correlation).
+      Fix: cortex/mcp/tools/web_tool.py with ops: fetch/search/pypi/gh_issue.
+      Security: URL allowlist + SSRF guard (block private IPs: 10.x/172.16.x/192.168.x/127.x).
+      Log all fetches to .cortex-runtime/. Register as tool #37 in mcp_registry.py.
+    action_ref: "phase-153-f"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (CORE-008 + CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES (ROI-ordered: highest impact first)
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  # ────────────────────────────────────────────────────────────────────────────
+  # SUB-PHASE A: Trust-Tiered Execution (GAP-153-01)
+  # Lowest effort, highest friction removal. Gate on env var before any pipeline.
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: "phase-153-a"
+    title: "Trust-Tiered Execution — CORTEX_TRUST_LEVEL env var + EnforcementOrchestrator guard"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-153-01"]
+    governance_authority: "CORE-008, CORE-035, CORE-064, CORE-068"
+    duration_estimate: "2 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2791 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tdd_sequence.red BEFORE any implementation"
+        gate: "python3 scripts/run_tests.py file tests/core/test_trust_tiered_execution.py — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement CORTEX_TRUST_LEVEL check in EnforcementOrchestrator.should_require_proceed()"
+        gate: "python3 scripts/run_tests.py file tests/core/test_trust_tiered_execution.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), deduplication (CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/core/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + cortex_validate op=compliance"
+      fix_step: "Apply targeted fixes for each issue found in rescan"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues inline — do NOT silently skip"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_strict_mode_always_requires_proceed — CORTEX_TRUST_LEVEL=strict → should_require_proceed() returns True for all ops"
+        - "test_auto_mode_low_complexity_skips_proceed — CORTEX_TRUST_LEVEL=auto + complexity=0.2 → returns False"
+        - "test_auto_mode_high_complexity_requires_proceed — CORTEX_TRUST_LEVEL=auto + complexity=0.8 → returns True"
+        - "test_auto_mode_p0_risk_requires_proceed — CORTEX_TRUST_LEVEL=auto + p0_risk=True → returns True regardless of complexity"
+        - "test_interactive_mode_single_file_skips_proceed — CORTEX_TRUST_LEVEL=interactive + file_count=1 → returns False"
+        - "test_interactive_mode_multi_file_requires_proceed — CORTEX_TRUST_LEVEL=interactive + file_count=5 → returns True"
+        - "test_tdd_always_enforced_in_auto_mode — CORTEX_TRUST_LEVEL=auto → CORE-008 check still runs (TDD gate not bypassed)"
+        - "test_sweep_completeness_always_enforced_in_auto_mode — CORTEX_TRUST_LEVEL=auto → CORE-064 check still runs"
+        - "test_invalid_trust_level_falls_back_to_strict — CORTEX_TRUST_LEVEL=invalid → defaults to strict behavior"
+        - "test_default_trust_level_is_strict — no env var set → should_require_proceed() returns True"
+      green:
+        - "Add TrustLevel enum (STRICT, AUTO, INTERACTIVE) to cortex/core/trust_tier.py"
+        - "Add should_require_proceed(complexity_score, p0_risk, file_count) to EnforcementOrchestrator"
+        - "Read CORTEX_TRUST_LEVEL from os.environ with 'strict' default"
+        - "AUTO: return True if complexity_score >= 0.3 OR p0_risk == True"
+        - "INTERACTIVE: return True if file_count > 1"
+        - "Preserve all CORE-008 and CORE-064 checks regardless of trust level"
+      refactor:
+        - "Add docstrings to TrustLevel, TrustTierConfig, should_require_proceed() (CORE-012)"
+        - "Add type hints to all signatures (CORE-011)"
+        - "Verify no duplicate TrustLevel definitions exist (CORE-035)"
+
+    acceptance_criteria:
+      - "CORTEX_TRUST_LEVEL env var read by EnforcementOrchestrator on every operation"
+      - "strict (default): proceed gate always shown — no change to existing behavior"
+      - "auto: proceed gate skipped when complexity_score < 0.3 AND p0_risk == False"
+      - "interactive: proceed gate skipped for single-file ops; shown for multi-file"
+      - "CORE-008 (TDD) enforced in ALL trust levels — this guard is never bypassed"
+      - "CORE-064 (sweep completeness) enforced in ALL trust levels"
+      - "All 10 tdd_sequence.red tests GREEN"
+      - "Zero regressions in tests/core/ REFACTOR gate"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/core/"
+      min_tests_pass: 10
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # SUB-PHASE B: Session Context Bootstrap (GAP-153-02)
+  # Removes cold-start problem: surface open P0s + recent patterns at session start.
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: "phase-153-b"
+    title: "Session Context Bootstrap — SQLite audit history loaded at InteractionOrchestrator init"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-153-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-153-a"]
+    prerequisite: "phase-153-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tdd_sequence.red BEFORE any implementation"
+        gate: "python3 scripts/run_tests.py file tests/core/test_session_bootstrap.py — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement SessionBootstrap.load() reading last 3 audit sessions from SQLite"
+        gate: "python3 scripts/run_tests.py file tests/core/test_session_bootstrap.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), deduplication (CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/core/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + cortex_validate op=compliance"
+      fix_step: "Apply targeted fixes for each issue found in rescan"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues inline"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_session_bootstrap_loads_when_db_exists — SessionBootstrap.load() returns SessionContext when .db present"
+        - "test_session_bootstrap_empty_when_db_missing — SessionBootstrap.load() returns empty context when no .db"
+        - "test_session_bootstrap_reads_last_3_sessions — only last 3 audit sessions surfaced (not all history)"
+        - "test_session_bootstrap_surfaces_open_p0s — open P0 issues appear in SessionContext.open_p0s"
+        - "test_session_bootstrap_formats_banner — SessionContext.to_banner() returns markdown string"
+        - "test_interaction_orchestrator_loads_bootstrap_on_init — InteractionOrchestrator.__init__ calls SessionBootstrap.load()"
+        - "test_bootstrap_silent_on_no_history — empty context produces no banner (no confusing empty headers)"
+        - "test_bootstrap_graceful_on_db_corruption — corrupted .db returns empty context (no crash)"
+      green:
+        - "Create cortex/core/session_bootstrap.py with SessionContext dataclass + SessionBootstrap.load()"
+        - "Query orchestrator-traces.db: SELECT last 3 distinct audit_session_ids ORDER BY timestamp DESC"
+        - "For each session, collect P0 actions that lack AC_COMPLETE (open P0s)"
+        - "Wire SessionBootstrap.load() into InteractionOrchestrator.__init__()"
+        - "SessionContext.to_banner() returns '🧠 Session Context: ...' string or '' if empty"
+      refactor:
+        - "Add docstrings to SessionContext, SessionBootstrap, to_banner() (CORE-012)"
+        - "Add type hints to all signatures (CORE-011)"
+        - "Guard against sqlite3.OperationalError for missing tables (CORE-035 single impl)"
+
+    acceptance_criteria:
+      - "SessionBootstrap.load() reads last 3 audit sessions from .cortex-runtime/traces/orchestrator-traces.db"
+      - "InteractionOrchestrator.__init__ calls SessionBootstrap.load() on construction"
+      - "Open P0s from prior audits surfaced in session banner"
+      - "Empty context when .db missing or empty — no crash, no confusing output"
+      - "All 8 tdd_sequence.red tests GREEN"
+      - "Zero regressions in tests/core/ REFACTOR gate"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/core/"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # SUB-PHASE C: FileFactory Direct Ops + FastPathExecutor (GAP-153-03, GAP-153-04)
+  # Enables MCP-free file operations AND low-complexity op shortcutting.
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: "phase-153-c"
+    title: "FileFactory Direct Ops + FastPathExecutor — MCP-Free File Ops + Complexity-Based Routing"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-153-03", "GAP-153-04"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-153-b"]
+    prerequisite: "phase-153-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tdd_sequence.red BEFORE any implementation"
+        gate: "python3 scripts/run_tests.py file tests/core/test_file_factory_direct.py tests/core/test_fast_path_executor.py — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Extend FileFactory with read_file/write_file/apply_diff; implement FastPathExecutor"
+        gate: "python3 scripts/run_tests.py file tests/core/test_file_factory_direct.py tests/core/test_fast_path_executor.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), deduplication (CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/core/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + cortex_validate op=compliance"
+      fix_step: "Apply targeted fixes for each issue found in rescan"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues inline"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        # FileFactory direct ops
+        - "test_file_factory_read_file_returns_content — FileFactory.read_file(path) returns file content as str"
+        - "test_file_factory_write_file_creates_file — FileFactory.write_file(path, content) creates/overwrites file"
+        - "test_file_factory_apply_diff_patches_content — FileFactory.apply_diff(path, unified_diff_str) applies patch"
+        - "test_file_factory_read_nonexistent_raises — FileFactory.read_file(nonexistent) raises FileNotFoundError"
+        - "test_file_factory_write_creates_parent_dirs — FileFactory.write_file creates missing parent directories"
+        - "test_file_factory_uses_pathlib_not_os_path — FileFactory impl uses pathlib.Path exclusively (CORE-011 check-30)"
+        # FastPathExecutor
+        - "test_fast_path_executor_runs_for_low_complexity — complexity=0.2, trust=auto → FastPathExecutor.execute() called"
+        - "test_fast_path_executor_bypasses_lens — FastPathExecutor does not import or invoke LENS analyzers"
+        - "test_fast_path_executor_still_enforces_tdd — FastPathExecutor raises if no test written first (CORE-008)"
+        - "test_fast_path_executor_still_enforces_sweep — FastPathExecutor raises if sweep check skipped (CORE-064)"
+        - "test_fast_path_executor_emits_ac_markers — AC_START + AC_COMPLETE emitted to .cortex-runtime/"
+        - "test_intent_router_complexity_score_low_for_single_file — IntentRouter.complexity_score(single_file_op) < 0.3"
+        - "test_intent_router_complexity_score_high_for_multi_file — IntentRouter.complexity_score(multi_file_refactor) >= 0.3"
+      green:
+        - "Add read_file(path: Path) -> str to cortex/core/file_factory.py"
+        - "Add write_file(path: Path, content: str) -> None to cortex/core/file_factory.py"
+        - "Add apply_diff(path: Path, unified_diff: str) -> None using difflib.patch_file"
+        - "Create cortex/core/fast_path_executor.py with FastPathExecutor.execute(request, context)"
+        - "Add complexity_score(request) -> float to IntentRouter (single-file < 0.3, multi-file >= 0.3)"
+        - "Route to FastPathExecutor in IntentRouter when complexity < 0.3 AND trust_level == AUTO"
+      refactor:
+        - "Add docstrings to read_file, write_file, apply_diff, FastPathExecutor (CORE-012)"
+        - "Add type hints to all signatures (CORE-011)"
+        - "Verify FileFactory uses pathlib.Path exclusively (check-30 compliance)"
+
+    acceptance_criteria:
+      - "FileFactory.read_file(), write_file(), apply_diff() operate via pathlib.Path only"
+      - "FastPathExecutor skips LENS but enforces CORE-008 (TDD) and CORE-064 (sweep)"
+      - "IntentRouter.complexity_score() returns float 0.0–1.0"
+      - "Low-complexity + auto trust level routes to FastPathExecutor"
+      - "AC markers emitted in FastPath just as in full pipeline"
+      - "All 13 tdd_sequence.red tests GREEN"
+      - "Zero regressions in tests/core/ REFACTOR gate"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/core/"
+      min_tests_pass: 13
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # SUB-PHASE D: Headless/CI Mode (GAP-153-05)
+  # --print flag for GitHub Actions + docker CI pipelines.
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: "phase-153-d"
+    title: "Headless/CI Mode — cortex/cli/headless.py + --print flag + JSON evidence output"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-153-05"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-028, CORE-035"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-153-c"]
+    prerequisite: "phase-153-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tdd_sequence.red BEFORE any implementation"
+        gate: "python3 scripts/run_tests.py file tests/cli/test_headless.py — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement cortex/cli/headless.py with --print flag, stdout output, JSON report"
+        gate: "python3 scripts/run_tests.py file tests/cli/test_headless.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), snake_case (CORE-028)"
+        gate: "python3 scripts/run_tests.py dir tests/cli/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + cortex_validate op=compliance"
+      fix_step: "Apply targeted fixes for each issue found in rescan"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues inline"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_headless_print_flag_routes_request — python -m cortex --print 'instruction' routes through IntentRouter"
+        - "test_headless_exit_0_on_success — successful op exits with code 0"
+        - "test_headless_exit_1_on_p0_found — P0 finding exits with code 1"
+        - "test_headless_output_to_stdout — result printed to stdout (not a file)"
+        - "test_headless_json_report_written — JSON evidence written to .cortex-runtime/traces/headless-{timestamp}.json"
+        - "test_headless_implies_auto_trust_level — --print implies CORTEX_TRUST_LEVEL=auto"
+        - "test_headless_no_interactive_prompts — no input() calls in headless execution path"
+        - "test_headless_audit_fix_returns_findings — --print '/audit fix' runs pipeline and returns findings inline"
+      green:
+        - "Create cortex/cli/headless.py with HeadlessRunner.run(instruction: str) -> HeadlessResult"
+        - "Add --print argument to cortex/__main__.py argparse config"
+        - "HeadlessResult: result_text, p0_count, p1_count, json_path"
+        - "Set CORTEX_TRUST_LEVEL=auto automatically when --print active"
+        - "Write JSON evidence to .cortex-runtime/traces/headless-{timestamp}.json"
+        - "sys.exit(0) on p0_count == 0; sys.exit(1) on p0_count > 0"
+      refactor:
+        - "Add docstrings to HeadlessRunner, HeadlessResult (CORE-012)"
+        - "Add type hints to all signatures (CORE-011)"
+        - "Confirm snake_case file naming (CORE-028)"
+
+    acceptance_criteria:
+      - "python3 -m cortex --print 'instruction' works from any shell without VS Code"
+      - "Exit code 0 on success, 1 on P0 findings"
+      - "All output to stdout — no interactive prompts"
+      - "JSON evidence written to .cortex-runtime/traces/"
+      - "CORTEX_TRUST_LEVEL=auto implied automatically in headless mode"
+      - "All 8 tdd_sequence.red tests GREEN"
+      - "Zero regressions in tests/cli/ REFACTOR gate"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/cli/"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # SUB-PHASE E: Native Developer CLI REPL (GAP-153-06)
+  # `cortex` command in any terminal — parity with `claude` CLI.
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: "phase-153-e"
+    title: "Native Developer CLI REPL — cortex/cli/dev_repl.py + `cortex` console_scripts entry"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-153-06"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-028, CORE-035"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-153-d"]
+    prerequisite: "phase-153-d completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tdd_sequence.red BEFORE any implementation"
+        gate: "python3 scripts/run_tests.py file tests/cli/test_dev_repl.py — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement cortex/cli/dev_repl.py; register cortex console_script in pyproject.toml"
+        gate: "python3 scripts/run_tests.py file tests/cli/test_dev_repl.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), snake_case (CORE-028)"
+        gate: "python3 scripts/run_tests.py dir tests/cli/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + cortex_validate op=compliance"
+      fix_step: "Apply targeted fixes for each issue found in rescan"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues inline"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_dev_repl_init_creates_orchestrators — DevRepl.__init__ instantiates IntentRouter + MasterOrchestrator"
+        - "test_dev_repl_process_routes_to_intent_router — DevRepl.process('fix bug in auth.py') routes through IntentRouter"
+        - "test_dev_repl_uses_file_factory_when_no_mcp — DevRepl uses FileFactory.read_file() when CORTEX_CLI_MODE=true"
+        - "test_dev_repl_prints_result_to_stdout — DevRepl.process() result printed to stdout"
+        - "test_dev_repl_history_preserved_across_turns — DevRepl.conversation_history grows with each turn"
+        - "test_dev_repl_exit_on_quit_command — DevRepl.run() exits when user types 'quit' or 'exit'"
+        - "test_cortex_main_module_handles_no_flags — python -m cortex with no flags starts DevRepl"
+        - "test_pyproject_console_script_entry_exists — pyproject.toml [project.scripts] has cortex = 'cortex.cli.dev_repl:main'"
+      green:
+        - "Create cortex/cli/dev_repl.py with DevRepl class and main() entry point"
+        - "DevRepl.process(instruction: str) -> str: IntentRouter.classify() → MasterOrchestrator.coordinate_operation()"
+        - "DevRepl.run(): readline REPL loop reading from stdin"
+        - "Set CORTEX_CLI_MODE=true env before orchestrator calls to signal FileFactory direct ops"
+        - "Update cortex/__main__.py: no flags → start DevRepl.run()"
+        - "Add [project.scripts] cortex = 'cortex.cli.dev_repl:main' to pyproject.toml"
+      refactor:
+        - "Add docstrings to DevRepl, process(), run(), main() (CORE-012)"
+        - "Add type hints to all signatures (CORE-011)"
+        - "Verify cortex/cli/__init__.py exists"
+
+    acceptance_criteria:
+      - "python3 -m cortex (no flags) starts interactive REPL"
+      - "DevRepl routes natural-language instructions through IntentRouter + MasterOrchestrator"
+      - "FileFactory direct ops used when CORTEX_CLI_MODE=true (no MCP dependency)"
+      - "pyproject.toml registers `cortex` as console_scripts entry point"
+      - "Conversation history preserved across turns within a session"
+      - "All 8 tdd_sequence.red tests GREEN"
+      - "Zero regressions in tests/cli/ REFACTOR gate"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/cli/"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # SUB-PHASE F: cortex_web MCP Tool (GAP-153-07)
+  # Web fetch, search, PyPI lookup — with SSRF guard.
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: "phase-153-f"
+    title: "cortex_web MCP Tool — Web Fetch + Search + PyPI + SSRF Guard (tool #37)"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-153-07"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-028, CORE-035, CORE-050"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-153-e"]
+    prerequisite: "phase-153-e completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tdd_sequence.red BEFORE any implementation"
+        gate: "python3 scripts/run_tests.py file tests/mcp/test_cortex_web_tool.py — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement cortex/mcp/tools/web_tool.py; register in mcp_registry.py as tool #37"
+        gate: "python3 scripts/run_tests.py file tests/mcp/test_cortex_web_tool.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), snake_case (CORE-028)"
+        gate: "python3 scripts/run_tests.py dir tests/mcp/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + cortex_validate op=compliance"
+      fix_step: "Apply targeted fixes for each issue found in rescan"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues inline"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        # SSRF guard (security-first — must be RED before any implementation)
+        - "test_ssrf_guard_blocks_private_ipv4_10x — fetch op=fetch url=http://10.0.0.1 → WebFetchError('SSRF blocked')"
+        - "test_ssrf_guard_blocks_private_ipv4_172 — fetch op=fetch url=http://172.16.0.1 → WebFetchError('SSRF blocked')"
+        - "test_ssrf_guard_blocks_private_ipv4_192 — fetch op=fetch url=http://192.168.1.1 → WebFetchError('SSRF blocked')"
+        - "test_ssrf_guard_blocks_localhost — fetch op=fetch url=http://localhost → WebFetchError('SSRF blocked')"
+        - "test_ssrf_guard_blocks_file_scheme — fetch op=fetch url=file:///etc/passwd → WebFetchError('SSRF blocked')"
+        # Functional ops
+        - "test_fetch_op_returns_text_content — op=fetch url=public_url → WebResult with content str"
+        - "test_pypi_op_returns_package_info — op=pypi package=requests → WebResult with version + summary"
+        - "test_search_op_returns_results_list — op=search query='python pathlib docs' → WebResult with results list"
+        - "test_fetch_logs_to_cortex_runtime — every fetch logged to .cortex-runtime/traces/web-fetches.log"
+        - "test_mcp_registry_has_37_tools — mcp_registry.py registers cortex_web as 37th tool"
+      green:
+        - "Create cortex/mcp/tools/web_tool.py with CortexWebTool(BaseMCPTool)"
+        - "Implement SsrfGuard._is_private_address(url) checking 10.x/172.16.x/192.168.x/127.x + file://"
+        - "Implement _fetch(url) using urllib.request (stdlib only — no requests dependency)"
+        - "Implement _pypi(package) fetching from https://pypi.org/pypi/{package}/json"
+        - "Implement _search(query) using DuckDuckGo Lite (https://lite.duckduckgo.com/lite/?q=)"
+        - "Log all fetches to .cortex-runtime/traces/web-fetches.log"
+        - "Register cortex_web in mcp_registry.py"
+      refactor:
+        - "Add docstrings to CortexWebTool, SsrfGuard, all public methods (CORE-012)"
+        - "Add type hints to all signatures (CORE-011)"
+        - "Verify SsrfGuard has no duplicate _is_private_address implementations (CORE-035)"
+
+    acceptance_criteria:
+      - "SSRF guard blocks all private IPv4 ranges + localhost + file:// before any HTTP call (security-first)"
+      - "op=fetch retrieves public URL content (stdlib urllib only, no new dependencies)"
+      - "op=pypi returns package metadata from PyPI JSON API"
+      - "op=search queries DuckDuckGo Lite (no API key required)"
+      - "All fetches logged to .cortex-runtime/traces/web-fetches.log"
+      - "cortex_web registered as tool #37 in mcp_registry.py"
+      - "All 10 tdd_sequence.red tests GREEN"
+      - "Zero regressions in tests/mcp/ REFACTOR gate"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/mcp/"
+      min_tests_pass: 10
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # FINAL: Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update
+  # ────────────────────────────────────────────────────────────────────────────
+  - id: "phase-153-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P0
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-153-f"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED, all 7 GAPs CLOSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥2791 smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate only; confirm all sweep_catalogue entries are CLOSED"
+        gate: "Verify all 7 GAPs (GAP-153-01 through GAP-153-07) have status: CLOSED"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥2791 tests pass with zero regressions"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Update phase YAML: planned/ → completed/, cortex-master.yaml status → COMPLETE"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid, wc -l ≤850"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 7 sweep_catalogue GAPs have status: CLOSED"
+      - "python3 scripts/run_tests.py smoke passes ≥2791 tests"
+      - "Zero new test failures vs baseline"
+      - "cortex --print '/audit fix' exits 0 from terminal (no VS Code required)"
+      - "CORTEX_TRUST_LEVEL=auto skips proceed gate for single-file docstring ops"
+      - "SessionBootstrap surfaces prior P0s in first session turn"
+      - "cortex_web registered as tool #37 with SSRF guard active"
+      - "phase-153 detail file moved: planned/ → completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤850 lines (THIN INDEX CONTRACT)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2791
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-153-DEVELOPER-CLI-{timestamp}"
+  complete: "AC_COMPLETE: AC-153-DEVELOPER-CLI-{timestamp} ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPLETION SECTION (fill on COMPLETE)
+# ─────────────────────────────────────────────────────────────────────────────
+# metrics_at_completion:
+#   score: "Developer-CLI parity: before → after"
+#   smoke_tests: "{N} passed, 0 failures"
+#   key_deliverables:
+#     - "cortex command in terminal (DevRepl)"
+#     - "CORTEX_TRUST_LEVEL env var (trust tiers)"
+#     - "cortex --print headless CI mode"
+#     - "FileFactory direct ops (MCP-free)"
+#     - "FastPathExecutor for low-complexity ops"
+#     - "SessionBootstrap cold-start fix"
+#     - "cortex_web MCP tool (#37) with SSRF guard"
+#
+# exit_criteria_met:
+#   - "All 7 GAPs CLOSED ✅"
+#   - "Smoke gate ≥2791 ✅"
+#   - "cortex command works from terminal ✅"

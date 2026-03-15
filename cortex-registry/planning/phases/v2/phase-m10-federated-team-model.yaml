@@ -1,0 +1,186 @@
+id: "phase-m10"
+title: "Federated Team Operating Model & Domain Contracts"
+created: "2026-03-15"
+status: PLANNED
+priority: P0
+governance_authority:
+  - CORE-035
+  - CORE-048
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M10-FEDERATED-OPERATING-MODEL"
+
+background: |
+  Source: V2 redesign reevaluation (2026-03-15)
+  After core technical consolidation (M1-M9), organizational-scale operation
+  requires explicit team ownership and collaboration contracts. This phase
+  installs the federated model:
+  - Platform Kernel Team owns shared orchestration, governance, MCP gateway.
+  - Domain Teams own domain capability packs (orchestrators/agents/skills/workflows).
+  - Shared Services Team owns reusable templates, evaluation baselines, observability.
+  
+  Objective: ensure multi-team velocity without tight coupling and without
+  duplicate ownership of capabilities.
+
+sweep_catalogue:
+  - id: "GAP-M10-01"
+    title: "Define platform/domain/shared ownership matrix"
+    severity: P0
+    action_ref: "phase-m10-a"
+    status: OPEN
+  - id: "GAP-M10-02"
+    title: "Create collaboration contract schema"
+    severity: P0
+    action_ref: "phase-m10-a"
+    status: OPEN
+  - id: "GAP-M10-03"
+    title: "Add domain handoff and approval flow"
+    severity: P1
+    action_ref: "phase-m10-b"
+    status: OPEN
+  - id: "GAP-M10-04"
+    title: "Define lifecycle states for domain capability packs"
+    severity: P1
+    action_ref: "phase-m10-b"
+    status: OPEN
+  - id: "GAP-M10-05"
+    title: "Establish cross-domain orchestration contract"
+    severity: P0
+    action_ref: "phase-m10-c"
+    status: OPEN
+  - id: "GAP-M10-06"
+    title: "Add operability checks for ownership conflicts"
+    severity: P1
+    action_ref: "phase-m10-c"
+    status: OPEN
+  - id: "GAP-M10-07"
+    title: "Sweep close + master update"
+    severity: P0
+    action_ref: "phase-m10-final"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+autonomous_execution:
+  mode: "SILENT_AUTONOMOUS"
+  progress_format: "phase-list+bar"
+  convergence_loop_required: true
+  max_convergence_cycles: 3
+
+phase_continuation:
+  next_phase_id: "phase-m11"
+  final_response_contract:
+    completion_line: "✅ Phase phase-m10 complete."
+    next_block: "### 🚀 Next Phase"
+    continuation_prompt: "execute phase-m11 on CORTEX-V2 with strict sequential contract and autonomous progress"
+
+phases:
+  - id: "phase-m10-a"
+    title: "Ownership matrix + collaboration contract"
+    status: PLANNED
+    priority: P0
+    gap_refs: ["GAP-M10-01", "GAP-M10-02"]
+    depends_on: []
+    tdd_cycle:
+      red:
+        action: "Define failing validations for ownership matrix completeness and contract schema fields"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_federated_model_schema.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Create federated ownership and collaboration contract YAML specs"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_federated_model_schema.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Normalize naming and eliminate overlap with existing governance specs"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Sub-phase COMPLETE forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m10-b"
+    title: "Handoff + approval + lifecycle model"
+    status: PLANNED
+    priority: P1
+    gap_refs: ["GAP-M10-03", "GAP-M10-04"]
+    depends_on: ["phase-m10-a"]
+    tdd_cycle:
+      red:
+        action: "Create failing checks for lifecycle states and approval transitions"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_capability_pack_lifecycle.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Implement lifecycle state model and team handoff approval workflow specs"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_capability_pack_lifecycle.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Ensure lifecycle contracts align with existing CORE rules"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Sub-phase COMPLETE forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m10-c"
+    title: "Cross-domain orchestration + conflict detection"
+    status: PLANNED
+    priority: P0
+    gap_refs: ["GAP-M10-05", "GAP-M10-06"]
+    depends_on: ["phase-m10-b"]
+    tdd_cycle:
+      red:
+        action: "Define failing checks for ownership conflicts and orchestration boundary violations"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_cross_domain_contracts.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Implement cross-domain contract schema and conflict detection rules"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_cross_domain_contracts.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Add deterministic conflict resolution order for platform-domain-shared precedence"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Sub-phase COMPLETE forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m10-final"
+    title: "Sweep close + master update"
+    status: PLANNED
+    priority: P0
+    gap_refs: ["GAP-M10-07"]
+    depends_on: ["phase-m10-c"]
+    tdd_cycle:
+      red:
+        action: "Verify all M10 gaps are closed"
+        gate: "Gap verification complete"
+        blocker: "Completion forbidden"
+      green:
+        action: "Run smoke gate and governance checks"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Completion forbidden"
+      refactor:
+        action: "Update cortex-master-v2.yaml phase-m10 status"
+        gate: "YAML valid"
+        blocker: "Completion forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true

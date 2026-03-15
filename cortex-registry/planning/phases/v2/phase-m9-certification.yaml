@@ -96,6 +96,23 @@ sequential_execution_contract:
   gate_on_failure: HALT
   tdd_cycle_mandatory: true
 
+autonomous_execution:
+  mode: "SILENT_AUTONOMOUS"
+  progress_format: "phase-list+bar"
+  convergence_loop_required: true
+  max_convergence_cycles: 3
+  completion_requires:
+    - "all_gap_refs_closed"
+    - "completion_gate_passed"
+    - "master_index_updated"
+
+phase_continuation:
+  next_phase_id: "phase-m10"
+  final_response_contract:
+    completion_line: "✅ Phase phase-m9 complete."
+    next_block: "### 🚀 Next Phase"
+    continuation_prompt: "execute phase-m10 on CORTEX-V2 with strict sequential contract and autonomous progress"
+
 phases:
   - id: "phase-m9-a"
     title: "Run /totalrecall audit+fix cycle"
@@ -296,7 +313,7 @@ phases:
       blocks_next_sub_phase: true
 
   - id: "phase-m9-final"
-    title: "Final Smoke Gate — Production Certification"
+    title: "Core Platform Certification Gate + Handoff"
     priority: P0
     status: PLANNED
     gap_refs: ["GAP-M9-05"]
@@ -318,11 +335,11 @@ phases:
         blocker: "None — this is the final step"
 
     acceptance_criteria:
-      - "ALL 51 GAPs across 9 phases CLOSED"
+      - "ALL GAPs in phases m1-m9 CLOSED"
       - "Full smoke gate pass"
       - "All health endpoints green"
       - "All drift locks enforced"
-      - "cortex-master-v2.yaml: production_readiness CERTIFIED"
+      - "cortex-master-v2.yaml: core platform certification achieved"
       - "CORTEX v2 metrics achieved:"
       - "  Python files: ~450 (from 1,422 — 68% reduction)"
       - "  Orchestrators: ~80 (from 348 — 77% reduction)"
@@ -337,4 +354,4 @@ phases:
       min_tests_pass: 2000
       zero_new_failures: true
       all_gap_refs_closed: true
-      blocks_next_sub_phase: false
+      blocks_next_sub_phase: true

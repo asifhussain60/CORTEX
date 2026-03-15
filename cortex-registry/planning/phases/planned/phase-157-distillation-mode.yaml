@@ -1,0 +1,373 @@
+# CORTEX Phase Plan — Phase 154
+# Distillation Mode — /distill DistillationOrchestrator + DISTILL IntentType + CortexDistill MCP
+# Source: cortex-registry/planning/phases/planned/phase-129-distillation-mode.yaml (renumbered)
+# Governance: CORE-008 (TDD), CORE-035 (SSOT), CORE-064 (Sweep), CORE-068 (Convergence)
+
+id: "phase-157"
+title: "Distillation Mode — /distill DistillationOrchestrator + DISTILL IntentType + CortexDistill MCP Tool"
+created: "2026-03-15"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-002   # All output inline — no .md/.txt report files generated
+  - CORE-008   # TDD mandatory — RED → GREEN → REFACTOR
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-028   # File naming: snake_case only
+  - CORE-035   # Single canonical implementation — no duplicates
+  - CORE-049   # Silent autonomous execution
+  - CORE-064   # Sweep Completeness Contract — no partial sweeps
+  - CORE-068   # Universal Convergence Gate — detect→fix→rescan until 0 P0/P1
+sweep_catalogue_id: "SWEEP-157-DISTILLATION-MODE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: Architectural evaluation 2026-03-05 (originally phase-129-distillation-mode.yaml).
+  Renumbered to phase-154 as phase-129 slot was used by Product Owner Intelligence Suite.
+
+  Problem: Long AI chat sessions (100–300+ messages) become entropy engines — repeated
+  clarifications, abandoned branches, redundant explanations, debugging chatter. The
+  resulting transcript is unusable as an operational prompt for subsequent orchestrators.
+
+  Opportunity: A first-class DISTILL mode that ingests a chat transcript file, performs
+  semantic analysis via LENS, reconstructs the original intent graph, reconciles
+  completed vs pending work, and synthesises a single token-optimised executable prompt
+  that replaces the original file in place.
+
+  Architecture:
+    - New intent DISTILL routed via IntentRouter → DistillationOrchestrator
+    - Reuses ChatFileDetector (from DigestSessionOrchestrator) — composition not inheritance
+    - Reuses RequestRephraseOrchestrator.analyze() for compression — composition only
+    - 5-stage pipeline: Detect → Segment → Reconstruct → Reconcile → Synthesise
+
+  Differentiation from DIGEST:
+    - DIGEST → produces EnhancementProposal[] for knowledge store ingestion
+    - DISTILL → produces a single synthesised executable prompt string; rewrites file in place
+
+  Current gaps:
+    - IntentType enum missing DISTILL (currently 33 values)
+    - No DistillationOrchestrator in cortex/orchestrators/support/
+    - No CortexDistill MCP tool in cortex/mcp/tools/
+    - DISTILL not registered in IntentRouter routing tables
+    - No distill-workflow.yaml template
+    - /distill not documented in copilot-instructions.md
+
+  Smoke baseline: 2791 passed (2026-03-12)
+  Preflight baseline: 446 passed
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  - id: "GAP-157-01"
+    title: "IntentType enum missing DISTILL value"
+    severity: P1
+    source: "architectural evaluation 2026-03-05"
+    evidence: |
+      cortex/models/canonical_enums.py — IntentType has 33 values (as of Phase 152).
+      DISTILL is not present. IntentRouter cannot classify /distill commands.
+      IntentRouter keyword_registry.py has no DISTILL_KEYWORDS list.
+    action_ref: "phase-157-a"
+    status: OPEN
+
+  - id: "GAP-157-02"
+    title: "No DistillationOrchestrator implementation"
+    severity: P1
+    source: "architectural evaluation 2026-03-05"
+    evidence: |
+      cortex/orchestrators/support/ — no distillation_orchestrator.py exists.
+      Five-stage pipeline required:
+        Stage 1: ChatFileDetector (reuse via composition from DigestSessionOrchestrator)
+        Stage 2: ConversationSegmenter — 5 block types (intent/exploration/implementation/debug/resolution)
+        Stage 3: IntentGraphReconstructor — objective + subtasks + completed + pending + abandoned
+        Stage 4: StateReconciler — diff recovered tasks vs detected completions
+        Stage 5: PromptSynthesiser — single optimised output via RequestRephraseOrchestrator.analyze()
+    action_ref: "phase-157-b"
+    status: OPEN
+
+  - id: "GAP-157-03"
+    title: "No CortexDistill MCP tool"
+    severity: P1
+    source: "architectural evaluation 2026-03-05"
+    evidence: |
+      cortex/mcp/tools/ — no cortex_distill_tool.py exists.
+      PRODUCTION_TOOLS in cortex/mcp/mcp_registry.py has no 'cortex_distill' entry.
+      ALL_TOOLS in cortex/mcp/tools/__init__.py has no CortexDistill entry.
+      MCP clients (Copilot Chat) cannot invoke distillation without this registered tool.
+    action_ref: "phase-157-c"
+    status: OPEN
+
+  - id: "GAP-157-04"
+    title: "DISTILL intent not registered in IntentRouter routing tables"
+    severity: P1
+    source: "architectural evaluation 2026-03-05"
+    evidence: |
+      cortex-registry/core/specifications/intent-routing-rules.yaml — no intent_distill block.
+      cortex/orchestrators/core/intent_router/routing_core_mixin.py — no DISTILL routing rule.
+      cortex/core/intelligence_routing_wiring.py — no IntentType.DISTILL mapping.
+      WorkflowComposer cannot route DISTILL — no distill-workflow.yaml template.
+    action_ref: "phase-157-d"
+    status: OPEN
+
+  - id: "GAP-157-05"
+    title: "DISTILL intent missing from intelligence routing and copilot-instructions documentation"
+    severity: P2
+    source: "architectural evaluation 2026-03-05"
+    evidence: |
+      cortex/core/intelligence_routing_engine.py INTENT_ROUTING_MAP — no DISTILL entry.
+      .github/copilot-instructions.md Quick Command Reference — no /distill entry.
+      copilot-instructions.md Orchestrator Display Name Map — no DistillationOrchestrator row.
+      Orchestration breadcrumb cannot display correct routing chain for /distill.
+    action_ref: "phase-154-e"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+
+  # ── SUB-PHASE 154-a: IntentType.DISTILL + Keyword Registry ────────────────
+  - id: "phase-157-a"
+    title: "Add IntentType.DISTILL + DISTILL_KEYWORDS to canonical_enums + keyword_registry"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-157-01"]
+    governance_authority: "CORE-008, CORE-035, CORE-011"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2791 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests asserting IntentType.DISTILL exists + DISTILL_KEYWORDS non-empty"
+        gate: "python3 scripts/run_tests.py file tests/core/test_intent_type_distill.py — ALL FAIL"
+        blocker: "Do NOT modify canonical_enums.py until tests fail"
+      green:
+        action: |
+          1. Add DISTILL = "distill" to cortex/models/canonical_enums.py IntentType enum
+          2. Add DISTILL_KEYWORDS = ["distill", "/distill", "compress transcript", "synthesise session"]
+             to cortex/orchestrators/core/intent_router/keyword_registry.py
+          3. Add distill pattern to cortex/orchestrators/core/intent_classifier.py _exact_operation_match
+        gate: "python3 scripts/run_tests.py file tests/core/test_intent_type_distill.py — ALL PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Confirm DISTILL positioned at end of IntentType (after FEEDBACK, before UNKNOWN)"
+        gate: "python3 scripts/run_tests.py dir tests/core/ — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_distill_intent_type_exists — IntentType.DISTILL present in canonical_enums"
+        - "test_distill_keyword_classification — classifier routes '/distill chat01.md' to DISTILL"
+        - "test_distill_keywords_non_empty — DISTILL_KEYWORDS list has ≥3 entries"
+      green:
+        - "Add DISTILL = 'distill' to IntentType enum in canonical_enums.py"
+        - "Add DISTILL_KEYWORDS list in keyword_registry.py"
+        - "Wire DISTILL pattern into intent_classifier.py _exact_operation_match"
+      refactor:
+        - "Confirm enum count incremented (33 → 34 IntentType values)"
+        - "Update any drift lock tests asserting exact IntentType count"
+
+    acceptance_criteria:
+      - "IntentType.DISTILL present in cortex.models.canonical_enums"
+      - "Classifier routes '/distill' commands to DISTILL intent"
+      - "All tdd_sequence.red tests GREEN, zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/core/"
+      min_tests_pass: 3
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE 154-b: DistillationOrchestrator 5-Stage Pipeline ────────────
+  - id: "phase-157-b"
+    title: "DistillationOrchestrator — 5-Stage Pipeline (Detect→Segment→Reconstruct→Reconcile→Synthesise)"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-157-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    depends_on: ["phase-157-a"]
+    prerequisite: "phase-157-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write DistillationOrchestrator tests covering all 5 pipeline stages"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/test_distillation_orchestrator.py — ALL FAIL"
+        blocker: "Do NOT implement DistillationOrchestrator until tests fail"
+      green:
+        action: |
+          Create cortex/orchestrators/support/distillation_orchestrator.py:
+          - Stage 1: ChatFileDetector (composition from DigestSessionOrchestrator)
+          - Stage 2: ConversationSegmenter (5 block type classifiers)
+          - Stage 3: IntentGraphReconstructor (objective/subtasks/completed/pending/abandoned)
+          - Stage 4: StateReconciler (diff recovered tasks vs detected completions)
+          - Stage 5: PromptSynthesiser (single token-optimised output via RequestRephraseOrchestrator.analyze())
+          Implements IOrchestrator protocol via OrchestratorProtocolMixin.
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/test_distillation_orchestrator.py — ALL PASS"
+        blocker: "Do NOT begin REFACTOR until all 5 pipeline stages pass"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), no duplicate implementations (CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/orchestrators/ — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_distillation_orchestrator_imports — DistillationOrchestrator importable from cortex.orchestrators.support"
+        - "test_distillation_orchestrator_implements_protocol — is_cortex_orchestrator() returns True"
+        - "test_conversation_segmenter_5_block_types — 5 block type classifiers return correct types"
+        - "test_intent_graph_reconstructor_extracts_objective — returns dict with objective key"
+        - "test_state_reconciler_diffs_tasks — PENDING items exclude COMPLETED items"
+        - "test_prompt_synthesiser_returns_single_string — output is a str, not a list"
+        - "test_distillation_orchestrator_execute_operation — execute_operation() returns SynthesisResult"
+        - "test_distillation_orchestrator_composition_not_inheritance — does not subclass DigestSessionOrchestrator"
+      green:
+        - "Implement ConversationSegmenter with 5 block type classifiers"
+        - "Implement IntentGraphReconstructor parsing objectives/subtasks/completed/pending/abandoned"
+        - "Implement StateReconciler diffing recovered vs completed tasks"
+        - "Implement PromptSynthesiser composing RequestRephraseOrchestrator.analyze()"
+        - "Implement DistillationOrchestrator._execute_operation() integrating all 5 stages"
+      refactor:
+        - "Add docstrings to all 5 stage components (CORE-012)"
+        - "Verify type hints on execute_operation() and all stage methods (CORE-011)"
+        - "Confirm ChatFileDetector used via composition only (CORE-035)"
+
+    acceptance_criteria:
+      - "DistillationOrchestrator implements IOrchestrator protocol"
+      - "All 5 pipeline stages: Detect→Segment→Reconstruct→Reconcile→Synthesise encapsulated"
+      - "Composition only — does not subclass DigestSessionOrchestrator or RequestRephraseOrchestrator"
+      - "All tdd_sequence.red tests GREEN, zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/orchestrators/"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE 154-c: CortexDistill MCP Tool ───────────────────────────────
+  - id: "phase-157-c"
+    title: "CortexDistill MCP Tool — Registration + IntentRouter + WorkflowComposer Wiring"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-157-03", "GAP-157-04"]
+    governance_authority: "CORE-008, CORE-035, CORE-064, CORE-068"
+    depends_on: ["phase-157-b"]
+    prerequisite: "phase-157-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write MCP registration + IntentRouter routing + WorkflowComposer template tests"
+        gate: "python3 scripts/run_tests.py file tests/mcp/test_cortex_distill_tool.py — ALL FAIL"
+        blocker: "Do NOT implement MCP wiring until tests fail"
+      green:
+        action: |
+          1. Create cortex/mcp/tools/cortex_distill_tool.py (CortexDistill MCP tool)
+          2. Register in cortex/mcp/mcp_registry.py PRODUCTION_TOOLS
+          3. Add CortexDistill to cortex/mcp/tools/__init__.py ALL_TOOLS
+          4. Wire IntentType.DISTILL → DistillationOrchestrator in routing_core_mixin.py
+          5. Add to cortex/core/intelligence_routing_wiring.py INTENT_ROUTING_MAP
+          6. Create cortex-registry/workflows/templates/lifecycle/distill-workflow.yaml
+          7. Add DISTILL → distill-workflow.yaml mapping in WorkflowComposer / WorkflowGateway
+        gate: "python3 scripts/run_tests.py file tests/mcp/test_cortex_distill_tool.py — ALL PASS"
+        blocker: "Do NOT begin REFACTOR until all tests pass"
+      refactor:
+        action: "Verify MCP tool count drift lock tests updated (36+1=37 or adjust as needed)"
+        gate: "python3 scripts/run_tests.py dir tests/mcp/ — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_cortex_distill_tool_registered — 'cortex_distill' in mcp_registry.PRODUCTION_TOOLS"
+        - "test_cortex_distill_tool_importable — CortexDistill importable from cortex.mcp.tools"
+        - "test_distill_intent_routes_to_orchestrator — IntentRouter routes DISTILL → DistillationOrchestrator"
+        - "test_distill_workflow_template_exists — distill-workflow.yaml present in lifecycle/"
+        - "test_workflow_composer_distill_routing — WorkflowGateway maps DISTILL to distill-workflow"
+      green:
+        - "Implement CortexDistill MCP tool with ops: distill (execute pipeline on file path)"
+        - "Register in PRODUCTION_TOOLS and ALL_TOOLS"
+        - "Wire DISTILL → DistillationOrchestrator in routing_core_mixin.py"
+        - "Create distill-workflow.yaml following lifecycle template conventions"
+        - "Add DISTILL to WorkflowGateway.get_mode_template_map()"
+      refactor:
+        - "Update MCP tool count drift lock assertions (+1 from 36: adjust to 37)"
+        - "Confirm SubPhaseComposer.INTENT_TEMPLATE_MAP includes DISTILL (CORE-035)"
+
+    acceptance_criteria:
+      - "cortex_distill registered and callable from MCP clients"
+      - "IntentRouter routes /distill commands to DistillationOrchestrator end-to-end"
+      - "distill-workflow.yaml present and mapped in WorkflowGateway"
+      - "All tdd_sequence.red tests GREEN, zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/mcp/"
+      min_tests_pass: 5
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE 154-d: Documentation + Smoke Gate ───────────────────────────
+  - id: "phase-157-d"
+    title: "Documentation Wiring + Smoke Gate — copilot-instructions + CORE-064 Close"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-157-05"]
+    governance_authority: "CORE-008, CORE-064"
+    depends_on: ["phase-157-c"]
+    prerequisite: "phase-157-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥2791 smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "Write drift lock tests asserting /distill appears in copilot-instructions + display name map"
+        gate: "python3 scripts/run_tests.py file tests/governance/test_distill_documentation_drift.py — ALL FAIL"
+        blocker: "Do NOT update docs until tests fail"
+      green:
+        action: |
+          1. Add /distill to copilot-instructions.md Quick Command Reference table
+          2. Add DistillationOrchestrator → 'Content Ingestor' row to Orchestrator Display Name Map
+          3. Update cortex-architect.prompt.md with DISTILL mode documentation
+          4. Run smoke gate: python3 scripts/run_tests.py smoke
+        gate: "python3 scripts/run_tests.py smoke — ≥2791 pass"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Move phase-154-*.yaml planned/ → completed/, update cortex-master.yaml"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\""
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    tdd_sequence:
+      red:
+        - "test_distill_in_copilot_instructions — '/distill' present in copilot-instructions.md"
+        - "test_distillation_orchestrator_display_name — DistillationOrchestrator in display name map"
+      green:
+        - "Add /distill entry to copilot-instructions.md slash command table"
+        - "Add DistillationOrchestrator = 'Content Ingestor' to orchestrator display name map"
+        - "Document DISTILL mode in cortex-architect.prompt.md"
+      refactor:
+        - "Verify smoke gate passes with ≥2791 tests"
+
+    acceptance_criteria:
+      - "ALL 5 sweep_catalogue GAPs have status: CLOSED"
+      - "/distill documented in copilot-instructions.md"
+      - "Smoke gate: ≥2791 tests pass, zero new failures"
+      - "phase-154 YAML moved from planned/ to completed/"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2791
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false

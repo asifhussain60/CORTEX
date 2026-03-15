@@ -1,0 +1,216 @@
+id: "phase-m12"
+title: "Documentation Re-Architecture + Final Cleanup Convergence"
+created: "2026-03-15"
+status: PLANNED
+priority: P0
+governance_authority:
+  - CORE-002
+  - CORE-035
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M12-DOCS-IA-CLEANUP"
+
+background: |
+  Source: V2 redesign reevaluation (2026-03-15)
+  This is the final convergence phase. It remaps docs/ and subfolders into an
+  org-scale information architecture while completing final cleanup to guarantee
+  zero duplicate or leftover artifacts from the CORTEX branch implementation.
+
+sweep_catalogue:
+  - id: "GAP-M12-01"
+    title: "Define docs IA blueprint for platform/domain/ops/governance"
+    severity: P0
+    action_ref: "phase-m12-a"
+    status: OPEN
+  - id: "GAP-M12-02"
+    title: "Map existing docs into new IA and identify stale/missing areas"
+    severity: P0
+    action_ref: "phase-m12-a"
+    status: OPEN
+  - id: "GAP-M12-03"
+    title: "Create extension guides for agents/skills/workflows/MCP"
+    severity: P1
+    action_ref: "phase-m12-b"
+    status: OPEN
+  - id: "GAP-M12-04"
+    title: "Create runbooks for operations, governance, and rollback"
+    severity: P1
+    action_ref: "phase-m12-b"
+    status: OPEN
+  - id: "GAP-M12-05"
+    title: "Execute final duplicate and leftover scan"
+    severity: P0
+    action_ref: "phase-m12-c"
+    status: OPEN
+  - id: "GAP-M12-06"
+    title: "Resolve all remaining duplicate ownership and stale references"
+    severity: P0
+    action_ref: "phase-m12-c"
+    status: OPEN
+  - id: "GAP-M12-07"
+    title: "Run full preflight + smoke + integrity checks"
+    severity: P0
+    action_ref: "phase-m12-d"
+    status: OPEN
+  - id: "GAP-M12-08"
+    title: "Set production_readiness CERTIFIED in cortex-master-v2"
+    severity: P0
+    action_ref: "phase-m12-d"
+    status: OPEN
+  - id: "GAP-M12-09"
+    title: "Emit final completion state and steady-state continuation"
+    severity: P0
+    action_ref: "phase-m12-final"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+autonomous_execution:
+  mode: "SILENT_AUTONOMOUS"
+  progress_format: "phase-list+bar"
+  convergence_loop_required: true
+  max_convergence_cycles: 3
+
+phase_continuation:
+  next_phase_id: "steady-state-operations"
+  final_response_contract:
+    completion_line: "✅ Phase phase-m12 complete."
+    next_block: "### 🚀 Next Phase"
+    continuation_prompt: "run steady-state-operations on CORTEX-V2: weekly /audit fix + drift-lock verification + docs integrity checks"
+
+phases:
+  - id: "phase-m12-a"
+    title: "Docs IA blueprint + migration map"
+    status: PLANNED
+    priority: P0
+    gap_refs: ["GAP-M12-01", "GAP-M12-02"]
+    depends_on: []
+    tdd_cycle:
+      red:
+        action: "Create failing checks for required IA sections and mapping completeness"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_docs_ia_blueprint.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Create docs IA blueprint and complete source-to-target mapping"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_docs_ia_blueprint.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Normalize naming and cross-link strategy"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Sub-phase COMPLETE forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m12-b"
+    title: "Guides and runbooks"
+    status: PLANNED
+    priority: P1
+    gap_refs: ["GAP-M12-03", "GAP-M12-04"]
+    depends_on: ["phase-m12-a"]
+    tdd_cycle:
+      red:
+        action: "Create failing checks for presence and structure of extension guides and runbooks"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_docs_guides_runbooks.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Write and wire extension guides and operational runbooks"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_docs_guides_runbooks.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Remove duplicated guidance and enforce single-source doc pointers"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Sub-phase COMPLETE forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m12-c"
+    title: "Final cleanup and duplication purge"
+    status: PLANNED
+    priority: P0
+    gap_refs: ["GAP-M12-05", "GAP-M12-06"]
+    depends_on: ["phase-m12-b"]
+    tdd_cycle:
+      red:
+        action: "Run duplicate, stale-reference, and leftover scans to produce failing cleanup report"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_final_cleanup_scan.py — ALL tests FAIL"
+        blocker: "Cleanup forbidden"
+      green:
+        action: "Remove all identified leftovers and resolve duplicate ownership"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_final_cleanup_scan.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Re-run scans until zero duplicates/leftovers"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Sub-phase COMPLETE forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m12-d"
+    title: "Certification and master finalization"
+    status: PLANNED
+    priority: P0
+    gap_refs: ["GAP-M12-07", "GAP-M12-08"]
+    depends_on: ["phase-m12-c"]
+    tdd_cycle:
+      red:
+        action: "Run preflight/smoke/integrity and capture failing findings"
+        gate: "python3 scripts/run_tests.py preflight"
+        blocker: "Completion forbidden"
+      green:
+        action: "Resolve findings and set production_readiness CERTIFIED in cortex-master-v2"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Validate all phase statuses and final metrics"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master-v2.yaml')); print('YAML valid')\""
+        blocker: "Sub-phase COMPLETE forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m12-final"
+    title: "Completion state + steady-state continuation"
+    status: PLANNED
+    priority: P0
+    gap_refs: ["GAP-M12-09"]
+    depends_on: ["phase-m12-d"]
+    tdd_cycle:
+      red:
+        action: "Verify all gaps in M1-M12 are closed"
+        gate: "Global gap closure check"
+        blocker: "Completion forbidden"
+      green:
+        action: "Emit completion state and steady-state continuation protocol"
+        gate: "Completion contract present"
+        blocker: "None"
+      refactor:
+        action: "Lock final state with drift-lock and hygiene checks"
+        gate: "preflight remains green"
+        blocker: "None"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py preflight"
+      min_tests_pass: 200
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false

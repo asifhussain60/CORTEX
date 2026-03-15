@@ -23,11 +23,11 @@ metadata:
   branch: CORTEX-V2
   created: '2026-03-15'
   last_updated: '2026-03-15T00:00:00Z'
-  total_phases: 9
+  total_phases: 12
   active: 0
   completed: 0
   in_progress: 0
-  planned: 9
+  planned: 12
   design_principles:
     - "LLM-native: leverage Claude/GPT native capabilities instead of reimplementing"
     - "Declarative governance: rules in YAML, enforcement in 1 engine — not 5 orchestrators"
@@ -39,8 +39,9 @@ metadata:
     total_orchestrators: "~80 (from 348)"
     total_mcp_tools: "18 registered / 6 mega-tools (from 36)"
     total_governance_yaml: "~45 (from 160)"
-    total_prompt_agent_files: "~35 (from 86) — 8 prompts, ~21 agents, 5 skills, 1 template, 6 instructions"
+    total_prompt_agent_files: "~28 (from 86) — consolidated prompts/agents/skills with zero duplicate ownership"
     total_test_files: "~600 (from 1,366)"
+    docs_information_architecture: "100% remapped to platform/domain/ops/governance extension model"
   v1_baseline:
     orchestrators: 348
     intelligence_files: 369
@@ -61,14 +62,31 @@ metadata:
 # ============================================================
 # M1 (Dead Code) → M2 (Core Consolidation) → M3 (Intelligence) → M4 (LENS)
 #                                            ↘
-#                                             M5 (MCP) → M6 (YAML) → M7 (Prompts) → M8 (Tests) → M9 (Certification)
+#                                             M5 (MCP) → M6 (YAML) → M7 (Prompts/Agents) → M8 (Tests) → M9 (Certification)
+#                                                                                               ↓
+#                                             M10 (Team Federation) → M11 (Agent/Skill Template Governance) → M12 (Docs IA + Final Cleanup)
 #
 # M1 is prerequisite for all.
 # M3/M4 can run in parallel with M5 (after M2).
 # M7 depends on M5+M6.
 # M8 mirrors all prior phases.
-# M9 is always last.
+# M12 is always last.
 # ============================================================
+
+autonomous_execution_framework:
+  execution_mode: "SILENT_AUTONOMOUS"
+  progress_contract: "phase-list+bar with stage bullets"
+  strict_phase_order: true
+  continuation_required: true
+  completion_response_contract:
+    required_final_line: "✅ Phase {id} complete."
+    required_next_block: "### 🚀 Next Phase"
+    next_phase_resolution: "first PLANNED phase in dependency-valid order"
+    continuation_prompt_template: "execute {next_phase_id} on CORTEX-V2 with strict sequential contract and autonomous progress"
+  fail_safe:
+    max_convergence_cycles: 3
+    unresolved_p0_p1_blocks_completion: true
+    rollback_required_before_retry: true
 
 phase_detail_files:
   - id: phase-m1
@@ -167,7 +185,40 @@ phase_detail_files:
     sub_phases: 3
     depends_on: ["phase-m8"]
     file: "cortex-registry/planning/phases/v2/phase-m9-certification.yaml"
-    note: "/totalrecall certification. Drift locks for all consolidations. Prompt refresh. Final smoke gate."
+    note: "/totalrecall certification. Drift locks for all consolidations. Prompt refresh. Final smoke gate for platform core."
+
+  - id: phase-m10
+    title: "Federated Team Operating Model & Domain Contracts"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M10-FEDERATED-OPERATING-MODEL
+    gaps: 7
+    sub_phases: 4
+    depends_on: ["phase-m9"]
+    file: "cortex-registry/planning/phases/v2/phase-m10-federated-team-model.yaml"
+    note: "Define platform/domain ownership boundaries, collaboration contracts, approval gates, lifecycle policy, and cross-domain interoperability wiring."
+
+  - id: phase-m11
+    title: "Agent/Skill Workflow Template Governance (MCP-First)"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M11-AGENT-SKILL-TEMPLATES
+    gaps: 8
+    sub_phases: 4
+    depends_on: ["phase-m10"]
+    file: "cortex-registry/planning/phases/v2/phase-m11-agent-skill-template-governance.yaml"
+    note: "Introduce dedicated workflow templates for agent and skill lifecycle with validation, approvals, observability, evaluation hooks, and reuse contracts."
+
+  - id: phase-m12
+    title: "Documentation Re-Architecture + Final Cleanup Convergence"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M12-DOCS-IA-CLEANUP
+    gaps: 9
+    sub_phases: 5
+    depends_on: ["phase-m11"]
+    file: "cortex-registry/planning/phases/v2/phase-m12-docs-ia-and-final-cleanup.yaml"
+    note: "Rebuild docs IA for org-scale teams, enforce discoverability map, remove leftovers/duplication from v1 implementation, certify zero-regression finish state."
 
 # ============================================================
 # LLM ADAPTABILITY CONTRACT
@@ -200,15 +251,15 @@ production_readiness:
   deployment_date: null
 
 summary:
-  total_phases: 9
+  total_phases: 12
   completed: 0
   active: 0
   in_progress: 0
-  planned: 9
+  planned: 12
   archived: 0
   completion_percentage: 0
-  consolidation_summary: "2026-03-15 — CORTEX V2 migration plan created + M7 revised with deep prompt/agent audit. 9 phases: M1 Dead Code → M2 Core Consolidation → M3 Intelligence → M4 LENS → M5 MCP Mega-Tools → M6 YAML → M7 Prompts (REVISED: 86→~35 files, 14 gaps, capability preservation verified) → M8 Tests → M9 Certification. Target: 1,422 → ~450 Python files. Branch: CORTEX-V2."
-  active_phases: "None — awaiting M1 execution."
+  consolidation_summary: "2026-03-15 — V2 plan redesigned as 12-phase autonomous chain: M1-M9 platform reduction + certification, M10 federated team model, M11 agent/skill workflow governance, M12 docs IA + final cleanup convergence. Every phase requires final continuation handoff to next phase. Target: zero regression, zero duplicate ownership, zero leftover v1 implementation artifacts."
+  active_phases: "None — awaiting M1 execution (autonomous chain enabled)."
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -316,4 +367,40 @@ phases:
     gaps: 5
     sub_phases: 3
     file: "cortex-registry/planning/phases/v2/phase-m9-certification.yaml"
-    note: "P0 — final gate. /totalrecall, drift locks, prompt refresh, smoke gate."
+    note: "P0 — platform core certification gate."
+
+  # Phase M10 — FEDERATED TEAM OPERATING MODEL (depends: M9)
+  - id: phase-m10
+    title: "Federated Team Operating Model & Domain Contracts"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-m9"]
+    sweep_id: SWEEP-M10-FEDERATED-OPERATING-MODEL
+    gaps: 7
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/v2/phase-m10-federated-team-model.yaml"
+    note: "P0 — collaboration-first architecture: platform kernel + domain capability packs + shared services contracts."
+
+  # Phase M11 — AGENT/SKILL WORKFLOW TEMPLATE GOVERNANCE (depends: M10)
+  - id: phase-m11
+    title: "Agent/Skill Workflow Template Governance (MCP-First)"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-m10"]
+    sweep_id: SWEEP-M11-AGENT-SKILL-TEMPLATES
+    gaps: 8
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/v2/phase-m11-agent-skill-template-governance.yaml"
+    note: "P0 — dedicated templates for creating and governing agents/skills with lifecycle, approval, and observability hooks."
+
+  # Phase M12 — DOCS IA + FINAL CLEANUP (depends: M11, always last)
+  - id: phase-m12
+    title: "Documentation Re-Architecture + Final Cleanup Convergence"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-m11"]
+    sweep_id: SWEEP-M12-DOCS-IA-CLEANUP
+    gaps: 9
+    sub_phases: 5
+    file: "cortex-registry/planning/phases/v2/phase-m12-docs-ia-and-final-cleanup.yaml"
+    note: "P0 — full docs IA remap + final duplicate/leftover purge + release-ready clean state with zero regression."

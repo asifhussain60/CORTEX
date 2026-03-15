@@ -309,6 +309,23 @@ sequential_execution_contract:
   gate_on_failure: HALT
   tdd_cycle_mandatory: true
 
+autonomous_execution:
+  mode: "SILENT_AUTONOMOUS"
+  progress_format: "phase-list+bar"
+  convergence_loop_required: true
+  max_convergence_cycles: 3
+  completion_requires:
+    - "all_gap_refs_closed"
+    - "completion_gate_passed"
+    - "master_index_updated"
+
+phase_continuation:
+  next_phase_id: "phase-m8"
+  final_response_contract:
+    completion_line: "✅ Phase phase-m7 complete."
+    next_block: "### 🚀 Next Phase"
+    continuation_prompt: "execute phase-m8 on CORTEX-V2 with strict sequential contract and autonomous progress"
+
 phases:
   # ═══════════════════════════════════════════════════════════
   # SUB-PHASE M7-a: PROMPT FILE REDUCTION

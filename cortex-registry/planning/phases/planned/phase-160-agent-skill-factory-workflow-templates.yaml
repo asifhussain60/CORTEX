@@ -1,0 +1,475 @@
+# CORTEX Phase 160 — Agent & Skill Factory Workflow Templates
+# Source: CORTEX architecture audit (2026-03-15) — 62 workflow templates, 50+ agents, 7 skills
+# Gap identified: Zero standardized creation pipeline for new agents or skills (ad-hoc authoring)
+
+id: "phase-160"
+title: "Agent & Skill Factory Workflow Templates — cortex-dev/ Template Category + AGENT_CREATE/SKILL_CREATE Intents + check-52 Drift Lock"
+created: "2026-03-15"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-035   # Single canonical pattern — no ad-hoc agent authoring after this phase
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-160-AGENT-SKILL-FACTORY"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Audit date: 2026-03-15
+  Source: CORTEX architecture introspection — workflow template inventory + agent file count
+
+  CURRENT STATE:
+    - 62 workflow YAML templates across cortex-registry/workflows/templates/
+    - 50 agent .md files across .github/agents/ (6 domains)
+    - 7 skill SKILL.md files in .github/skills/
+    - phase-creation-standards.md governs phase authoring
+    - WorkflowComposer routes 16 code-touching modes via WorkflowGateway
+
+  CRITICAL GAP: No equivalent of phase-creation-standards.md exists for agents or skills.
+  Every agent was hand-crafted — zero enforced naming convention, frontmatter schema,
+  domain placement rule, or AGENT-INDEX.md registration requirement.
+
+  CORTEX notices: This is a CORE-035 violation at the meta-tooling level. The pattern
+  for creating any new CORTEX artifact should itself be a CORTEX-governed workflow.
+
+  IMPACT: Phase 159 creates 5 new agents (.claude/agents/) and 3 VS Code agents
+  (.github/agents/). Without Phase 160, those agents are created ad hoc. Phase 160
+  ensures all future agents — including Phase 159's — follow a validated, drift-locked
+  authoring pattern.
+
+  Prior success patterns (from cortex_learning history):
+    - phase-creation-standards.md (authored in .github/agents/core/) → effective governance
+    - WorkflowGateway intent mode expansion (Phase 157: +1 enum) → zero regressions
+    - Drift lock pattern (check-51 in Phase 148) → self-enforcing preflight gate
+
+  SOLUTION: 4-sub-phase plan adding:
+    1. Two workflow templates in a new cortex-dev/ category
+    2. Two new IntentTypes (AGENT_CREATE, SKILL_CREATE) — enum 35→37
+    3. WorkflowGateway routing for both new intents
+    4. Drift lock check-52 + agent-creation-standards.md
+    5. Preflight test + AGENT-INDEX.md registration governance
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-160-01"
+    title: "Missing agent-creation-workflow.yaml — no governed pipeline for new .github/agents/ authoring"
+    severity: P0
+    source: "CORTEX architecture audit 2026-03-15 — 50+ ad-hoc agents, zero creation template"
+    evidence: |
+      ls cortex-registry/workflows/templates/cortex-dev/ → directory does not exist.
+      ls .github/agents/core/phase-creation-standards.md → exists (phase authoring governed).
+      ls .github/agents/core/agent-creation-standards.md → does not exist.
+      Every agent in .github/agents/ was authored without a mandatory frontmatter schema,
+      domain placement rule, AGENT-INDEX.md registration step, or naming convention check.
+      CORE-035: multiple agents violate the cortex-{domain}.md naming convention today
+      (e.g. architecture-integrity-agent.md, request-rephrase-orchestrator.md).
+    action_ref: "phase-160-a"
+    status: OPEN
+
+  - id: "GAP-160-02"
+    title: "Missing skill-creation-workflow.yaml — no governed pipeline for new SKILL.md authoring"
+    severity: P1
+    source: "CORTEX architecture audit 2026-03-15 — 7 skills added manually"
+    evidence: |
+      ls cortex-registry/workflows/templates/cortex-dev/skill-creation-workflow.yaml → does not exist.
+      All 7 skills in .github/skills/ were authored manually.
+      Phase 159 adds .claude/skills/ bridge — creates 7 additional SKILL.md wrapper files.
+      Without a governed workflow, the .claude/skills/ ←→ .github/skills/ bridge
+      can drift (wrong frontmatter, broken @import paths, missing agentskills.io compliance).
+      agentskills.io standard requires: name in frontmatter must match directory name exactly.
+    action_ref: "phase-160-b"
+    status: OPEN
+
+  - id: "GAP-160-03"
+    title: "Missing AGENT_CREATE + SKILL_CREATE IntentTypes — creation intents unroutable"
+    severity: P1
+    source: "CORTEX architecture audit 2026-03-15 — IntentRouter has no agent/skill creation keywords"
+    evidence: |
+      python3 -c "from cortex.models.canonical_enums import IntentType; print([i.name for i in IntentType])"
+      → No AGENT_CREATE or SKILL_CREATE in the 35-value enum.
+      Requests like "create a new cortex agent for X" or "add a skill for Y" fall through
+      to UNKNOWN intent (confidence < 0.60) → ConversationOrchestrator asks user to rephrase.
+      WorkflowGateway.get_mode_template_map() has no entry for these intents — resolve_template()
+      would raise TemplateNotFoundError if called.
+    action_ref: "phase-160-c"
+    status: OPEN
+
+  - id: "GAP-160-04"
+    title: "Missing cortex-dev/ template category — no structural home for developer-tooling templates"
+    severity: P1
+    source: "CORTEX architecture audit 2026-03-15 — all workflow template dirs are domain-specific"
+    evidence: |
+      ls cortex-registry/workflows/templates/ → audit/ backend/ composites/ debugging/ frontend/
+        governance/ internal/ lifecycle/ maintenance/ primitives/ quality/ rca/ sdlc/
+        security/ tdd/ testing/ — no cortex-dev/ directory.
+      Developer-tooling templates (agent creation, skill creation, future: MCP tool scaffolding)
+      have no canonical home — they don't fit audit/, sdlc/, or quality/.
+      Creating cortex-dev/ establishes the pattern for all meta-tooling workflows.
+    action_ref: "phase-160-a"
+    status: OPEN
+
+  - id: "GAP-160-05"
+    title: "Missing check-52 drift lock — no enforcement that new agents follow naming convention"
+    severity: P1
+    source: "CORTEX architecture audit 2026-03-15 — check-51 exists (knowledge path), check-52 absent"
+    evidence: |
+      ls cortex-registry/governance/drift-locks/ | grep check-52 → no results.
+      ls tests/preflight/test_drift_lock_check52.py → does not exist.
+      No preflight gate prevents a contributor from creating an agent named
+      "my_new_agent.md" instead of "cortex-{domain}.md" in .github/agents/.
+      Drift locks for check-43 through check-51 exist — check-52 is the natural next.
+    action_ref: "phase-160-d"
+    status: OPEN
+
+  - id: "GAP-160-06"
+    title: "Missing agent-creation-standards.md — no peer document to phase-creation-standards.md"
+    severity: P1
+    source: "CORTEX architecture audit 2026-03-15 — phase-creation-standards.md exists, agent equivalent absent"
+    evidence: |
+      ls .github/agents/core/phase-creation-standards.md → exists (31 authoring rules).
+      ls .github/agents/core/agent-creation-standards.md → does not exist.
+      ls .github/agents/core/skill-creation-standards.md → does not exist.
+      Without a standards document, agents cannot self-validate their own authoring process.
+      This document is what the agent-creation-workflow.yaml will reference for validation rules.
+    action_ref: "phase-160-d"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-160-a"
+    title: "cortex-dev/ Template Category + agent-creation-workflow.yaml"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-160-01", "GAP-160-04"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: []
+    prerequisite: "preflight tests GREEN (446 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests: (1) test_cortex_dev_dir_exists, (2) test_agent_creation_workflow_exists, (3) test_agent_workflow_has_5_stages, (4) test_agent_workflow_validates_naming_convention, (5) test_agent_workflow_requires_agent_index_registration, (6) test_agent_workflow_requires_domain_placement"
+        gate: "pytest tests/core/test_phase_160_agent_workflow.py — ALL 6 tests FAIL"
+        blocker: "Implementation forbidden until gate passes"
+      green:
+        action: |
+          CREATE cortex-registry/workflows/templates/cortex-dev/ directory.
+          CREATE cortex-registry/workflows/templates/cortex-dev/agent-creation-workflow.yaml:
+            metadata:
+              id: agent-creation-workflow
+              category: cortex-dev
+              mode: AGENT_CREATE
+              description: "5-stage governed pipeline for creating new CORTEX agent files"
+            stages:
+              - id: stage-1-intent
+                name: "Agent Intent Scoping"
+                steps:
+                  - Identify agent domain: core/support/docs/certification/education/orchestration
+                  - Derive canonical name: cortex-{verb}.md (imperative verb form)
+                  - Confirm placement in .github/agents/{domain}/ per AGENT-INDEX.md convention
+                  - Check for existing agents handling same responsibility (CORE-035 guard)
+              - id: stage-2-frontmatter
+                name: "Frontmatter Schema Validation"
+                steps:
+                  - Required fields: name (matches filename without .md), description, domain
+                  - Optional fields: model, permissionMode, tools, disallowedTools, skills, memory
+                  - Validate: no version fields (CORE-NO-VERSION), imperative description verbs
+                  - Validate: description triggers correct IntentRouter classification
+              - id: stage-3-body
+                name: "Agent Body Authoring"
+                steps:
+                  - Identity section: one-sentence statement of purpose
+                  - Capabilities section: bulleted list of specific actions (no hedging verbs)
+                  - Constraints section: MUST/SHALL/ALWAYS/NEVER — no 'may'/'might'/'could'
+                  - MCP tools section: list ops used (if any)
+                  - PLIP-001 scope lock declaration (if learning signals involved)
+              - id: stage-4-validation
+                name: "Pre-Registration Validation"
+                validation_checks:
+                  - name_matches_filename: "frontmatter name == filename stem"
+                  - naming_convention: "filename matches cortex-{verb}.md or cortex-{domain}-{verb}.md"
+                  - no_hedging_language: "grep -n 'may\\|might\\|could\\|optionally' {file} | wc -l == 0"
+                  - no_version_fields: "grep -n 'version:' {file} | wc -l == 0"
+                  - description_imperative: "description starts with imperative verb"
+                  - domain_valid: "parent dir is one of: core/support/docs/certification/education/orchestration"
+              - id: stage-5-registration
+                name: "AGENT-INDEX.md Registration"
+                steps:
+                  - Add entry to .github/agents/AGENT-INDEX.md in correct domain section
+                  - Entry format: "| {name} | {domain} | {one-line description} | {trigger intents} |"
+                  - Run check-13 (meta-audit: agent count + AGENT-INDEX alignment)
+                  - Smoke gate: python3 scripts/run_tests.py smoke
+        gate: "pytest tests/core/test_phase_160_agent_workflow.py — ALL 6 tests GREEN"
+        blocker: "REFACTOR forbidden until gate passes"
+      refactor:
+        action: "Validate YAML against WorkflowGateway schema. Verify stage IDs are unique. Ruff clean."
+        gate: "preflight GREEN (446), ruff clean"
+
+    completion_gate:
+      command: "pytest tests/core/test_phase_160_agent_workflow.py -v"
+      must_pass: true
+      artifacts_created:
+        - cortex-registry/workflows/templates/cortex-dev/
+        - cortex-registry/workflows/templates/cortex-dev/agent-creation-workflow.yaml
+
+  - id: "phase-160-b"
+    title: "skill-creation-workflow.yaml — agentskills.io Compliant Skill Authoring Pipeline"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-160-02"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-160-a"]
+    prerequisite: "phase-160-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests: (1) test_skill_creation_workflow_exists, (2) test_skill_workflow_has_4_stages, (3) test_skill_workflow_validates_agentskills_compliance, (4) test_skill_workflow_requires_claude_skills_sync, (5) test_skill_workflow_validates_frontmatter_name_matches_dir"
+        gate: "pytest tests/core/test_phase_160_skill_workflow.py — ALL 5 tests FAIL"
+        blocker: "Implementation forbidden until gate passes"
+      green:
+        action: |
+          CREATE cortex-registry/workflows/templates/cortex-dev/skill-creation-workflow.yaml:
+            metadata:
+              id: skill-creation-workflow
+              category: cortex-dev
+              mode: SKILL_CREATE
+              description: "4-stage governed pipeline for creating agentskills.io-compliant SKILL.md files"
+            stages:
+              - id: stage-1-scope
+                name: "Skill Domain Scoping"
+                steps:
+                  - Identify skill domain (must map to an existing CORTEX intent cluster)
+                  - Derive canonical name: cortex-{domain} (matches .github/skills/ directory name)
+                  - Verify no existing skill covers same domain (CORE-035 guard)
+                  - Confirm skill is a knowledge container, NOT an orchestrator (different tool)
+              - id: stage-2-skill-md
+                name: "SKILL.md Authoring (agentskills.io spec)"
+                steps:
+                  - Required frontmatter: name (MUST match parent directory name exactly)
+                  - description: "triggers: comma-separated user intent signals"
+                  - file: relative path to this SKILL.md (for VS Code progressive loading)
+                  - Body: domain knowledge sections, command reference, routing table
+                  - Max recommended size: 400 lines (progressive loading performance)
+              - id: stage-3-validation
+                name: "agentskills.io Compliance Validation"
+                validation_checks:
+                  - name_matches_dir: "frontmatter name == parent directory name"
+                  - file_path_correct: "frontmatter file: points to this SKILL.md"
+                  - no_hedging_language: "no 'may'/'might'/'could' in governance sections"
+                  - no_version_fields: "no 'version:' fields"
+                  - triggers_documented: "description contains 'Use when:' clause"
+              - id: stage-4-bridge-sync
+                name: ".claude/skills/ Bridge Sync"
+                steps:
+                  - Create .claude/skills/{skill-name}/ directory
+                  - Create .claude/skills/{skill-name}/SKILL.md wrapper
+                  - Wrapper frontmatter: name matches directory name (agentskills.io rule)
+                  - Wrapper body: "@import path to .github/skills/{skill-name}/SKILL.md"
+                  - Verify symlink or import resolves (no CORE-035 content duplication)
+                  - Smoke gate: python3 scripts/run_tests.py smoke
+        gate: "pytest tests/core/test_phase_160_skill_workflow.py — ALL 5 tests GREEN"
+        blocker: "REFACTOR forbidden until gate passes"
+      refactor:
+        action: "Validate YAML. Verify stage-4 bridge-sync step references match Phase 159 .claude/skills/ pattern. Ruff clean."
+        gate: "preflight GREEN (446), ruff clean"
+
+    completion_gate:
+      command: "pytest tests/core/test_phase_160_skill_workflow.py -v"
+      must_pass: true
+      artifacts_created:
+        - cortex-registry/workflows/templates/cortex-dev/skill-creation-workflow.yaml
+
+  - id: "phase-160-c"
+    title: "AGENT_CREATE + SKILL_CREATE IntentTypes + WorkflowGateway Routing"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-160-03"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-160-b"]
+    prerequisite: "phase-160-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests: (1) test_intent_type_agent_create_exists, (2) test_intent_type_skill_create_exists, (3) test_intent_router_routes_agent_create (keywords: 'create agent', 'new cortex agent', 'add agent', 'scaffold agent'), (4) test_intent_router_routes_skill_create (keywords: 'create skill', 'new skill', 'add skill', 'scaffold skill'), (5) test_workflow_gateway_resolves_agent_create_template, (6) test_workflow_gateway_resolves_skill_create_template"
+        gate: "pytest tests/core/test_phase_160_intents.py — ALL 6 tests FAIL"
+        blocker: "Implementation forbidden until gate passes"
+      green:
+        action: |
+          EDIT cortex/models/canonical_enums.py:
+            Add to IntentType enum (after SKILL_CREATE position, currently 35 values):
+              AGENT_CREATE = "AGENT_CREATE"   # enum value 36
+              SKILL_CREATE = "SKILL_CREATE"   # enum value 37
+            Total: 35 → 37 IntentTypes
+          EDIT cortex/orchestrators/core/intent_router_impl.py (or intent_router.py):
+            Add keyword mappings for AGENT_CREATE:
+              keywords: ["create agent", "new cortex agent", "add agent", "scaffold agent",
+                         "create cortex agent", "build agent", "author agent", "new agent for"]
+              confidence_threshold: 0.80
+            Add keyword mappings for SKILL_CREATE:
+              keywords: ["create skill", "new skill", "add skill", "scaffold skill",
+                         "create cortex skill", "build skill", "author skill", "new skill for"]
+              confidence_threshold: 0.80
+          EDIT cortex/orchestrators/workflow/workflow_gateway.py:
+            In get_mode_template_map() SSOT dict, add:
+              "AGENT_CREATE": "cortex-dev/agent-creation-workflow.yaml",
+              "SKILL_CREATE": "cortex-dev/skill-creation-workflow.yaml",
+        gate: "pytest tests/core/test_phase_160_intents.py — ALL 6 tests GREEN"
+        blocker: "REFACTOR forbidden until gate passes"
+      refactor:
+        action: "Type hints on any new methods (CORE-011). Docstrings on enum additions (CORE-012). Verify ruff F811/F401 clean."
+        gate: "smoke GREEN (≥2791), ruff clean"
+
+    completion_gate:
+      command: "pytest tests/core/test_phase_160_intents.py -v && python3 -c \"from cortex.models.canonical_enums import IntentType; assert 'AGENT_CREATE' in [i.name for i in IntentType]; assert 'SKILL_CREATE' in [i.name for i in IntentType]; print('enum OK')\""
+      must_pass: true
+      artifacts_modified:
+        - cortex/models/canonical_enums.py
+        - cortex/orchestrators/core/intent_router_impl.py
+        - cortex/orchestrators/workflow/workflow_gateway.py
+
+  - id: "phase-160-d"
+    title: "agent-creation-standards.md + check-52 Drift Lock + Preflight Test"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-160-05", "GAP-160-06"]
+    governance_authority: "CORE-008, CORE-064, CORE-068"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-160-c"]
+    prerequisite: "phase-160-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests: (1) test_agent_creation_standards_exists, (2) test_skill_creation_standards_exists, (3) test_drift_lock_check52_exists, (4) test_drift_lock_check52_naming_convention (detect_command returns 0 violations on current .github/agents/), (5) test_preflight_check52_runs_clean, (6) test_agent_index_has_all_agents_in_github_agents"
+        gate: "pytest tests/core/test_phase_160_drift_locks.py — ALL 6 tests FAIL"
+        blocker: "Implementation forbidden until gate passes"
+      green:
+        action: |
+          CREATE .github/agents/core/agent-creation-standards.md:
+            Identity: Standards authority for all CORTEX agent files in .github/agents/
+            Naming Rules:
+              - Canonical format: cortex-{verb}.md (e.g. cortex-executor.md, cortex-auditor.md)
+              - Extended format: cortex-{domain}-{verb}.md (e.g. cortex-review-agent.md)
+              - Never: my_agent.md, new_agent.md, {capability}_agent.md without cortex- prefix
+            Frontmatter schema (required):
+              - name: (string, MUST match filename stem)
+              - description: (string, starts with imperative verb, contains 'Use when:')
+              - domain: (one of: core/support/docs/certification/education/orchestration)
+            Governance (MUST / SHALL / NEVER — no hedging):
+              - Every new agent MUST have an AGENT-INDEX.md entry before it's considered active
+              - Every agent MUST pass the naming convention check (check-52 drift lock)
+              - Agents MUST NOT reference deleted paths (cortex/brain/, cortex_intelligence/, etc.)
+              - Agents MUST use operation-based MCP tool names (no legacy names)
+            Creation workflow: cortex-dev/agent-creation-workflow.yaml
+          CREATE .github/agents/core/skill-creation-standards.md:
+            Identity: Standards authority for all CORTEX skill files in .github/skills/
+            Naming Rules:
+              - Directory name: cortex-{domain}/ (matches CORTEX intent domain)
+              - SKILL.md frontmatter name: MUST match parent directory name exactly
+            Authoring: cortex-dev/skill-creation-workflow.yaml
+          CREATE cortex-registry/governance/drift-locks/check-52-lock.yaml:
+            lock_id: "LOCK-CHECK-52-2026-03-15"
+            check_id: "check-52"
+            domain: "agent-naming-convention"
+            detect_command: |
+              python3 -c "
+              import pathlib, re, sys
+              bad = []
+              for f in pathlib.Path('.github/agents').rglob('*.md'):
+                  stem = f.stem
+                  if stem in ('AGENT-INDEX', 'README', 'AGENTS', 'phase-creation-standards',
+                               'agent-creation-standards', 'skill-creation-standards',
+                               'cleanup-audit-guide', 'master-planner', 'CORTEX'):
+                      continue
+                  if not (stem.startswith('cortex-') or stem in ('truth-verifier',)):
+                      bad.append(str(f))
+              print('VIOLATIONS='+str(len(bad)))
+              [print(' ', b) for b in bad]
+              "
+            pass_criteria: "VIOLATIONS=0"
+            severity: P1
+            ci_gate: true
+            auto_fix: "Rename file to cortex-{verb}.md convention"
+            created: "2026-03-15"
+            source_gap: "GAP-160-05"
+          CREATE tests/preflight/test_drift_lock_check52.py:
+            @pytest.mark.preflight
+            def test_check52_agent_naming_convention():
+                result = subprocess.run(detect_command, capture_output=True, text=True, shell=True)
+                assert "VIOLATIONS=0" in result.stdout, f"Agent naming violations: {result.stdout}"
+        gate: "pytest tests/core/test_phase_160_drift_locks.py — ALL 6 tests GREEN"
+        blocker: "REFACTOR forbidden until gate passes"
+      refactor:
+        action: "Run full preflight. Validate all 6 GAPs are CLOSED. Confirm check-52 passes on current agent inventory."
+        gate: "preflight GREEN (≥446), smoke GREEN, ruff clean, all 6 GAPs CLOSED"
+
+    completion_gate:
+      command: "pytest tests/core/test_phase_160_drift_locks.py tests/preflight/test_drift_lock_check52.py -v && python3 scripts/run_tests.py smoke"
+      must_pass: true
+      artifacts_created:
+        - .github/agents/core/agent-creation-standards.md
+        - .github/agents/core/skill-creation-standards.md
+        - cortex-registry/governance/drift-locks/check-52-lock.yaml
+        - tests/preflight/test_drift_lock_check52.py
+        - tests/core/test_phase_160_agent_workflow.py
+        - tests/core/test_phase_160_skill_workflow.py
+        - tests/core/test_phase_160_intents.py
+        - tests/core/test_phase_160_drift_locks.py
+
+# ─────────────────────────────────────────────────────────────────────────────
+# HOLISTIC FINAL VERIFICATION (CORE-068)
+# ─────────────────────────────────────────────────────────────────────────────
+holistic_verification:
+  gate_id: "CORE-068-PHASE-160"
+  checks:
+    - V1: "All 6 GAPs in sweep_catalogue are CLOSED"
+    - V2: "cortex-dev/ template category exists with 2 YAML files"
+    - V3: "AGENT_CREATE + SKILL_CREATE in IntentType enum (35→37)"
+    - V4: "WorkflowGateway resolves both new intents to cortex-dev/ templates"
+    - V5: "check-52 drift lock YAML + preflight test present"
+    - V6: "agent-creation-standards.md + skill-creation-standards.md authored"
+    - V7: "check-52 passes on current .github/agents/ inventory (VIOLATIONS=0)"
+    - V8: "Preflight tests ≥446 GREEN"
+    - V9: "Smoke tests GREEN (regression: 0 new failures)"
+
+completion_criteria:
+  - "All 6 GAPs CLOSED"
+  - "All 4 sub-phases passed their completion_gate"
+  - "CORE-068 holistic verification V1-V9 all GREEN"
+  - "IntentRouter routes 'create agent' and 'create skill' with confidence ≥0.80"
+  - "WorkflowComposer can execute both new template modes end-to-end"
+  - "No regressions in preflight or smoke test suite"
+
+depends_on:
+  - phase-159  # Creates first agents governed by this workflow; validates the pattern
+
+estimated_smoke_delta: "+23 tests (6+5+6+6 across 4 sub-phases)"
+ruff_target: "0 violations"
+preflight_target: "≥446 GREEN"
+intent_enum_delta: "35 → 37 IntentTypes (AGENT_CREATE, SKILL_CREATE)"
+new_workflow_templates: 2
+new_python_files: 0
+modified_python_files: 3

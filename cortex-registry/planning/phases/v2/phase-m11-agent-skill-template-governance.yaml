@@ -1,0 +1,186 @@
+id: "phase-m11"
+title: "Agent/Skill Workflow Template Governance (MCP-First)"
+created: "2026-03-15"
+status: PLANNED
+priority: P0
+governance_authority:
+  - CORE-035
+  - CORE-048
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M11-AGENT-SKILL-TEMPLATES"
+
+background: |
+  Source: V2 redesign reevaluation (2026-03-15)
+  CORTEX needs dedicated workflow templates to create and govern agents and skills
+  with strong reuse and clear ownership boundaries. This phase creates MCP-first
+  lifecycle templates for agent and skill authoring with strict validation,
+  approval, observability, and evaluation hooks.
+
+sweep_catalogue:
+  - id: "GAP-M11-01"
+    title: "Create agent-authoring workflow template"
+    severity: P0
+    action_ref: "phase-m11-a"
+    status: OPEN
+  - id: "GAP-M11-02"
+    title: "Create skill-authoring workflow template"
+    severity: P0
+    action_ref: "phase-m11-a"
+    status: OPEN
+  - id: "GAP-M11-03"
+    title: "Define required inputs/outputs and touchpoints"
+    severity: P1
+    action_ref: "phase-m11-b"
+    status: OPEN
+  - id: "GAP-M11-04"
+    title: "Add validation and governance boundary rules"
+    severity: P0
+    action_ref: "phase-m11-b"
+    status: OPEN
+  - id: "GAP-M11-05"
+    title: "Add lifecycle state machine and change management"
+    severity: P1
+    action_ref: "phase-m11-c"
+    status: OPEN
+  - id: "GAP-M11-06"
+    title: "Add observability and evaluation hooks"
+    severity: P0
+    action_ref: "phase-m11-c"
+    status: OPEN
+  - id: "GAP-M11-07"
+    title: "Add cross-team reuse and composability contract"
+    severity: P1
+    action_ref: "phase-m11-c"
+    status: OPEN
+  - id: "GAP-M11-08"
+    title: "Sweep close + master update"
+    severity: P0
+    action_ref: "phase-m11-final"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+autonomous_execution:
+  mode: "SILENT_AUTONOMOUS"
+  progress_format: "phase-list+bar"
+  convergence_loop_required: true
+  max_convergence_cycles: 3
+
+phase_continuation:
+  next_phase_id: "phase-m12"
+  final_response_contract:
+    completion_line: "✅ Phase phase-m11 complete."
+    next_block: "### 🚀 Next Phase"
+    continuation_prompt: "execute phase-m12 on CORTEX-V2 with strict sequential contract and autonomous progress"
+
+phases:
+  - id: "phase-m11-a"
+    title: "Template creation: agents + skills"
+    status: PLANNED
+    priority: P0
+    gap_refs: ["GAP-M11-01", "GAP-M11-02"]
+    depends_on: []
+    tdd_cycle:
+      red:
+        action: "Write failing validations for required sections in agent/skill workflow templates"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_agent_skill_templates.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Create dedicated templates under workflows/templates/ for agent and skill lifecycle"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_agent_skill_templates.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Normalize schema naming with existing workflow primitives"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Sub-phase COMPLETE forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m11-b"
+    title: "Validation, governance, and approval boundaries"
+    status: PLANNED
+    priority: P0
+    gap_refs: ["GAP-M11-03", "GAP-M11-04"]
+    depends_on: ["phase-m11-a"]
+    tdd_cycle:
+      red:
+        action: "Create failing checks for mandatory inputs/outputs, orchestration touchpoints, and approval gates"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_template_governance_boundaries.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Wire validation, governance boundaries, and approvals into both templates"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_template_governance_boundaries.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Align boundary rules with MCP trust zones"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Sub-phase COMPLETE forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m11-c"
+    title: "Lifecycle, observability, and reuse contracts"
+    status: PLANNED
+    priority: P1
+    gap_refs: ["GAP-M11-05", "GAP-M11-06", "GAP-M11-07"]
+    depends_on: ["phase-m11-b"]
+    tdd_cycle:
+      red:
+        action: "Create failing checks for lifecycle transitions, evaluation hooks, and reusable packaging"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_template_lifecycle_observability.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Implement lifecycle states, change management protocol, telemetry hooks, and composability metadata"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_template_lifecycle_observability.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Ensure no duplicate ownership in reusable capability publication"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Sub-phase COMPLETE forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m11-final"
+    title: "Sweep close + master update"
+    status: PLANNED
+    priority: P0
+    gap_refs: ["GAP-M11-08"]
+    depends_on: ["phase-m11-c"]
+    tdd_cycle:
+      red:
+        action: "Verify all M11 gaps are closed"
+        gate: "Gap verification complete"
+        blocker: "Completion forbidden"
+      green:
+        action: "Run smoke gate and governance checks"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Completion forbidden"
+      refactor:
+        action: "Update cortex-master-v2.yaml phase-m11 status"
+        gate: "YAML valid"
+        blocker: "Completion forbidden"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true

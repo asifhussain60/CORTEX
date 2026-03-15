@@ -1,0 +1,346 @@
+# CORTEX Phase Plan — Phase 153
+# Content Library Facade Backport — ContentLibraryFacade + EpochShuffler + AI Spark Pool
+# Source: _workspaces/.chats/library-upgrade.md + phase-129-content-library-facade.yaml
+# Governance: CORE-008 (TDD), CORE-035 (SSOT), CORE-064 (Sweep), CORE-068 (Convergence)
+
+id: "phase-156"
+title: "Content Library Facade Backport — ContentLibraryFacade + EpochShuffler + AI Spark Pool (180/110/150)"
+created: "2026-03-15"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-008   # TDD mandatory — RED → GREEN → REFACTOR
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-035   # Single canonical implementation — no duplicates
+  - CORE-064   # Sweep Completeness Contract — no partial sweeps
+  - CORE-068   # Universal Convergence Gate — detect→fix→rescan until 0 P0/P1
+sweep_catalogue_id: "SWEEP-156-CONTENT-LIBRARY-FACADE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: _workspaces/.chats/library-upgrade.md — Phase 129 content library work was
+  implemented on origin/CORTEX (commit 6e967f0fe, 2026-03-06) but never backported
+  to this workspace. Phase 129 in THIS workspace was repurposed to the Product Owner
+  Intelligence Suite (COMPLETE 2026-03-12).
+
+  Current state (pre-phase-153):
+    - Quote library: 120 items (atom-quote.yaml)
+    - Principles library: 90 items (high-value-principles.yaml)
+    - No AI Spark library
+    - PrincipleSelector is the only selection entry point
+    - Ring buffer (n=10–20) insufficient for 500+ item corpus
+    - No ContentLibraryFacade — 3 pools have no unified interface
+
+  Target state (post-phase-153):
+    - ContentLibraryFacade: cortex/intelligence/analysis/content_library_facade.py
+    - EpochShuffler: Fisher-Yates epoch deque, O(1) pop, cross-library ring buffer (maxlen=5)
+    - AI Spark library: 150 items, 8 categories (cortex-registry/knowledge/ai/ai-adoption-sparks.yaml)
+    - Quote library: expanded to 180 items with category + audience fields
+    - Principles library: expanded to 110 items with audience field
+    - Rendering atom: atom-ai-spark.yaml in cortex-registry/templates/response/atoms/
+    - comp-query.yaml: wired with atom-ai-spark
+    - Drift lock fix: test_exactly_90_principles → assert count >= 110
+    - MasterOrchestrator Stage 4: ContentLibraryFacade wired for intent-aware pool selection
+      (INTRODUCE → ai_spark priority, QUERY/DESIGN → principle, default → quote)
+
+  Performance contract: p95 ≤ 5ms per select() at 650+ total items.
+  Backward compatibility: PrincipleSelector API unchanged (shim, not replaced).
+
+  Smoke baseline: 2791 passed (2026-03-12)
+  Preflight baseline: 446 passed
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  - id: "GAP-156-01"
+    title: "No ContentLibraryFacade — PrincipleSelector is the only selection entry point"
+    severity: P1
+    source: "library-upgrade.md (2026-03-06)"
+    evidence: |
+      cortex/intelligence/analysis/principle_selector.py — no facade layer exists.
+      cortex/intelligence/analysis/ has no content_library_facade.py.
+      No EpochShuffler implementation — ring buffer (n=20) insufficient for 440+ items.
+    action_ref: "phase-156-a"
+    status: OPEN
+
+  - id: "GAP-156-02"
+    title: "No AI Spark library (ai_spark pool) — 8-category adoption quotes missing"
+    severity: P1
+    source: "library-upgrade.md (2026-03-06)"
+    evidence: |
+      cortex-registry/knowledge/ has no ai/ subdirectory.
+      No ai-adoption-sparks.yaml file exists.
+      No atom-ai-spark.yaml rendering atom exists.
+    action_ref: "phase-156-b"
+    status: OPEN
+
+  - id: "GAP-156-03"
+    title: "Quote library stale at 120 items — target 180 with category + audience fields"
+    severity: P2
+    source: "library-upgrade.md (2026-03-06)"
+    evidence: |
+      cortex-registry/templates/response/atoms/atom-quote.yaml has 120 quotes.
+      No category or audience fields on quotes.
+      Anti-repetition relies solely on n=10 ring buffer — insufficient.
+    action_ref: "phase-156-b"
+    status: OPEN
+
+  - id: "GAP-156-04"
+    title: "Principles library stale at 90 items — target 110 with audience field"
+    severity: P2
+    source: "library-upgrade.md (2026-03-06)"
+    evidence: |
+      cortex-registry/knowledge/sdlc/high-value-principles.yaml has 90 principles.
+      Drift lock test asserts count == 90 (will fail post-expansion).
+      tests/intelligence/test_high_value_principles.py::test_exactly_90_principles
+    action_ref: "phase-156-b"
+    status: OPEN
+
+  - id: "GAP-156-05"
+    title: "ContentLibraryFacade not wired into MasterOrchestrator Stage 4"
+    severity: P1
+    source: "library-upgrade.md (2026-03-06)"
+    evidence: |
+      cortex/orchestrators/core/master_orchestrator.py — Stage 4 calls PrincipleSelector
+      directly with no facade layer and no intent-aware pool selection.
+      INTRODUCE intent should prioritise ai_spark pool (not yet implemented).
+    action_ref: "phase-156-c"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+
+  # ── SUB-PHASE 153-a: ContentLibraryFacade + EpochShuffler ─────────────────
+  - id: "phase-156-a"
+    title: "ContentLibraryFacade + EpochShuffler — Unified 3-Pool Selection"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-156-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2791 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write all failing tests in tests/intelligence/test_content_library_facade.py before any implementation"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_content_library_facade.py — ALL tests must FAIL"
+        blocker: "Do NOT write implementation until every listed test fails (import errors count as FAIL)"
+      green:
+        action: "Implement ContentLibraryFacade + EpochShuffler in cortex/intelligence/analysis/content_library_facade.py"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_content_library_facade.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), confirm CORE-035 — PrincipleSelector unchanged"
+        gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_content_library_facade_imports — facade importable from cortex.intelligence.analysis.content_library_facade"
+        - "test_epoch_shuffler_full_traversal — all items seen before any repeat (Fisher-Yates guarantee)"
+        - "test_epoch_shuffler_performance_p95 — p95 ≤ 5ms per select() at 440+ corpus"
+        - "test_cross_library_ring_buffer — same library not selected 3+ consecutive times"
+        - "test_facade_select_returns_item — ContentLibraryFacade.select(pool='quotes') returns item"
+        - "test_principle_selector_backward_compat — PrincipleSelector API unchanged after facade added"
+        - "test_facade_pool_isolation — selecting from 'quotes' does not deplete 'principles' epoch"
+        - "test_facade_singleton_loading — filesystem I/O only on first pool access"
+      green:
+        - "Implement EpochShuffler(corpus, weight_key) with Fisher-Yates deque + O(1) pop"
+        - "Implement ContentLibraryFacade.select(pool, intent=None) routing to correct EpochShuffler"
+        - "Add cross-library ring buffer (deque maxlen=5) to prevent same pool 3+ consecutive"
+        - "Register as lazy singleton — load only on first select() call per pool"
+      refactor:
+        - "Add docstrings to all public methods (CORE-012)"
+        - "Verify type hints on all signatures (CORE-011)"
+        - "Confirm no duplicate implementations — PrincipleSelector shim, not replaced (CORE-035)"
+
+    acceptance_criteria:
+      - "ContentLibraryFacade importable from cortex.intelligence.analysis.content_library_facade"
+      - "EpochShuffler guarantees full-corpus traversal before any item repeats"
+      - "p95 ≤ 5ms per select() at 440+ total items"
+      - "PrincipleSelector API unchanged — all existing tests GREEN"
+      - "All tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/intelligence/"
+      min_tests_pass: 35
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE 153-b: Library Expansion + AI Spark + Drift Lock Fix ─────────
+  - id: "phase-156-b"
+    title: "Library Expansion — AI Spark (150 items) + Quote (120→180) + Principles (90→110) + Drift Fix"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-156-02", "GAP-156-03", "GAP-156-04"]
+    governance_authority: "CORE-008, CORE-064"
+    depends_on: ["phase-156-a"]
+    prerequisite: "phase-156-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write schema tests for AI Spark library + drift lock tests for expanded counts"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_ai_spark_library.py — ALL must FAIL"
+        blocker: "Do NOT populate YAML libraries until schema tests fail first"
+      green:
+        action: |
+          1. Create cortex-registry/knowledge/ai/ai-adoption-sparks.yaml (150 items, 8 categories)
+          2. Create cortex-registry/templates/response/atoms/atom-ai-spark.yaml
+          3. Expand atom-quote.yaml 120→180 items (add category + audience fields)
+          4. Expand high-value-principles.yaml 90→110 (add audience field)
+          5. Wire atom-ai-spark into comp-query.yaml analysis_section
+          6. Fix drift lock: test_exactly_90_principles → assert count >= 110
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_ai_spark_library.py — ALL PASS"
+        blocker: "Do NOT begin REFACTOR until all schema tests pass"
+      refactor:
+        action: "Verify all 3 libraries have consistent category + audience fields across entries"
+        gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero regressions"
+        blocker: "Do NOT mark COMPLETE until zero regressions"
+
+    tdd_sequence:
+      red:
+        - "test_ai_spark_library_schema — 150 items, 8 categories, required fields present"
+        - "test_ai_spark_item_fields — each item has: id, body, author, source, category, audience, relevance_weight"
+        - "test_ai_spark_category_distribution — all 8 categories populated (≥10 items each)"
+        - "test_quote_library_count — atom-quote.yaml has ≥180 quotes"
+        - "test_principle_library_count — high-value-principles.yaml has ≥110 principles (replaces == 90 assertion)"
+        - "test_atom_ai_spark_yaml_schema — atom-ai-spark.yaml has id, label, pool, format fields"
+      green:
+        - "Populate ai-adoption-sparks.yaml: 150 items across productivity/creativity/collaboration/adoption/evolution/ethics/craftsmanship/leadership"
+        - "Add atom-ai-spark.yaml rendering atom (id: atom-ai-spark, label: AI Spark, pool: ai_spark)"
+        - "Expand atom-quote.yaml: add 60 quotes (120→180) with category + audience fields on all entries"
+        - "Expand high-value-principles.yaml: add 20 principles (90→110) with audience field on all entries"
+        - "Wire atom-ai-spark into comp-query.yaml analysis_section"
+        - "Fix test_exactly_90_principles: change assert count == 90 to assert count >= 110"
+      refactor:
+        - "Validate YAML schema consistency: all libraries have category + audience on every item"
+        - "Confirm rendering frame consistency across all 3 atoms"
+
+    acceptance_criteria:
+      - "AI Spark library: 150 items across 8 categories, all required fields present"
+      - "Quote library: ≥180 items with category + audience fields"
+      - "Principles library: ≥110 items with audience field"
+      - "atom-ai-spark.yaml rendering atom present and wired in comp-query.yaml"
+      - "Drift lock test updated: count >= 110 asserts GREEN"
+      - "All tdd_sequence.red tests GREEN, zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/intelligence/"
+      min_tests_pass: 30
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE 153-c: MasterOrchestrator Stage 4 Wiring ────────────────────
+  - id: "phase-156-c"
+    title: "MasterOrchestrator Stage 4 Wiring — Intent-Aware ContentLibraryFacade Selection"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-156-05"]
+    governance_authority: "CORE-008, CORE-035, CORE-064, CORE-068"
+    depends_on: ["phase-156-b"]
+    prerequisite: "phase-156-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write routing tests: INTRODUCE → ai_spark, QUERY/DESIGN → principle, default → quote"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/test_master_orchestrator_content_wiring.py — ALL FAIL"
+        blocker: "Do NOT modify MasterOrchestrator until tests fail"
+      green:
+        action: |
+          Wire ContentLibraryFacade into MasterOrchestrator Stage 4:
+          - INTRODUCE intent → facade.select(pool='ai_spark', intent=intent)
+          - QUERY/DESIGN intent → facade.select(pool='principles', intent=intent)
+          - all other intents → facade.select(pool='quotes', intent=intent)
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/test_master_orchestrator_content_wiring.py — ALL PASS"
+        blocker: "Do NOT begin REFACTOR until all tests pass"
+      refactor:
+        action: "Confirm no direct PrincipleSelector calls remain in MasterOrchestrator (CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/orchestrators/ — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_introduce_intent_selects_ai_spark — INTRODUCE routes to ai_spark pool"
+        - "test_query_intent_selects_principles — QUERY routes to principles pool"
+        - "test_design_intent_selects_principles — DESIGN routes to principles pool"
+        - "test_default_intent_selects_quotes — unknown intent falls back to quotes pool"
+        - "test_master_orchestrator_no_direct_principle_selector — no bare PrincipleSelector usage in Stage 4"
+      green:
+        - "Add _get_content_item(intent) private method to MasterOrchestrator Stage 4"
+        - "Route to ContentLibraryFacade.select() based on intent pool map"
+        - "Remove or wrap direct PrincipleSelector calls that bypass the facade"
+      refactor:
+        - "Type hints on _get_content_item()"
+        - "Docstring: 'Returns a content item dict for the given intent via ContentLibraryFacade'"
+        - "Confirm CORE-035: single canonical selection path through facade"
+
+    acceptance_criteria:
+      - "INTRODUCE intent → ai_spark pool selection confirmed by test"
+      - "QUERY + DESIGN intents → principles pool confirmed by test"
+      - "All other intents → quotes pool confirmed by test"
+      - "No direct PrincipleSelector calls in MasterOrchestrator Stage 4"
+      - "All tdd_sequence.red tests GREEN, zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/orchestrators/"
+      min_tests_pass: 5
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE 153-final: Smoke Gate + CORE-064 Close ──────────────────────
+  - id: "phase-156-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P0
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-156-c"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥2791 smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate, not an implementation sub-phase"
+        gate: "All 5 sweep_catalogue GAPs verified CLOSED before proceeding"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥2791 tests pass with zero regressions"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Move planning/phases/planned/phase-153-*.yaml → completed/, update cortex-master.yaml status → COMPLETE"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 5 sweep_catalogue GAPs have status: CLOSED"
+      - "Smoke gate: ≥2791 tests pass, zero new failures"
+      - "phase-153 YAML moved from planned/ to completed/"
+      - "cortex-master.yaml: status PLANNED → COMPLETE, completed_date set"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2791
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
