@@ -76,11 +76,9 @@ Total Recall delegates to 7 specialist agents under `.github/agents/certificatio
 | Agent | File | Role | Phase(s) |
 |-------|------|------|----------|
 | **Certification Coordinator** | `cortex-certification-coordinator.md` | Pipeline orchestration, state persistence, multi-session continuity | ALL |
-| **Audit Agent** | `cortex-audit-agent.md` | Git diff analysis, drift detection, registry schema cohesion, drift lock verification | 1, 2 |
-| **Regression Agent** | `cortex-regression-agent.md` | Regression identification, sweep domain validation, backward compatibility | 3 |
-| **Refactor Agent** | `cortex-refactor-agent.md` | Prompt/agent optimization, redundancy elimination, Intelligence Diamond wiring | 4, 5 |
-| **Memory Agent** | `cortex-memory-agent.md` | Adaptive learning, failure pattern tracking, document lifecycle hygiene | 6 |
-| **Vacuum Agent** | `cortex-vacuum-agent.md` | Workspace cleanup — markdown sprawl, empty dirs, orphaned files, OS/build artifacts | 7 |
+| **Audit Coordinator** | `cortex-audit-coordinator.md` | 41 checks, git diff analysis, 7 drift categories, 22 drift locks | 1, 2 |
+| **Certification Workers** | `cortex-certification-workers.md` | Regression, refactor, and memory worker responsibilities | 3, 4, 5, 6 |
+| **Vacuum Agent** | `cortex-vacuum.md` | Workspace cleanup — markdown sprawl, empty dirs, orphaned files, OS/build artifacts, backup artifacts | 7 |
 | **DB Agent** | `cortex-db-agent.md` | SQLite integrity, schema optimization, self-healing migrations, stale data cleanup | 8 |
 | **Certification Agent** | `cortex-certification-agent.md` | Final validation, scorecard generation, release sign-off | 9, 10 |
 

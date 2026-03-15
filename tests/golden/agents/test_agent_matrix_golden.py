@@ -27,16 +27,13 @@ class TestAllAgentFilesExist:
 
     # Canonical agent file paths from AGENT-INDEX.md (as of Phase 64)
     EXPECTED_AGENT_FILES: List[str] = [
-        ".github/agents/core/CORTEX.md",
         ".github/agents/core/cortex-architect.md",
-        ".github/agents/core/cortex-auditor.md",
+        ".github/agents/core/cortex-audit-coordinator.md",
         ".github/agents/core/cortex-executor.md",
         ".github/agents/core/cortex-interactive.md",
         ".github/agents/core/cortex-meta-auditor.md",
-        ".github/agents/core/cortex-master-plan-auditor.md",
-        ".github/agents/core/cortex-holistic-validator.md",
+        ".github/agents/core/cortex-master-planner.md",
         ".github/agents/core/cortex-digest.md",
-        ".github/agents/core/cortex-phase-resolver.md",
         ".github/agents/core/architecture-integrity-agent.md",
         ".github/agents/core/cortex-environment-setup.md",
         ".github/agents/core/request-rephrase-orchestrator.md",
@@ -108,8 +105,7 @@ class TestAgentIntentMappingComplete:
         """AGENT-INDEX.md IMPLEMENT row must reference cortex.md or cortex-executor.md."""
         agent_index = REPO_ROOT / ".github" / "agents" / "AGENT-INDEX.md"
         content = agent_index.read_text(encoding="utf-8")
-        # IMPLEMENT must map to executor or holistic-validator
-        assert "cortex-executor" in content or "cortex-holistic-validator" in content, (
+        assert "cortex-executor" in content, (
             "AGENT-INDEX.md must reference cortex-executor.md for IMPLEMENT intent"
         )
 
@@ -119,11 +115,11 @@ class TestEachModeHasAtLeastOneAgent:
 
     # Mapping: intent → file pattern that must appear in AGENT-INDEX.md
     INTENT_AGENT_MAP = {
-        "AUDIT": "cortex-auditor",
+        "AUDIT": "cortex-audit-coordinator",
         "FIX": "cortex-executor",
         "DEBUG": "cortex-debugger",
         "VACUUM": "cortex-vacuum",
-        "PLAN": "cortex-phase-resolver",
+        "PLAN": "cortex-master-planner",
         "DIGEST": "cortex-digest",
         "QUERY": "cortex-interactive",
     }

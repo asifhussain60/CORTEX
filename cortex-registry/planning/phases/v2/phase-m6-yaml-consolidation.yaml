@@ -1,7 +1,7 @@
 id: "phase-m6"
 title: "YAML Governance Consolidation — 160 → ~45 Files"
 created: "2026-03-15"
-status: IN_PROGRESS
+status: COMPLETE
 priority: P1
 governance_authority:
   - CORE-008
@@ -37,7 +37,7 @@ sweep_catalogue:
       A single drift-lock-manifest.yaml should be the SSOT, replacing distributed
       rule definitions with references.
     action_ref: "phase-m6-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M6-02"
     title: "Merge overlapping workflow templates"
@@ -48,7 +48,7 @@ sweep_catalogue:
       differ only in initial analysis and gap detection. Merge into parameterized
       templates with mode discriminator. Target: ~15 workflow templates.
     action_ref: "phase-m6-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M6-03"
     title: "Consolidate governance categories"
@@ -59,7 +59,7 @@ sweep_catalogue:
       certification vs operational-readiness). Merge into 3 categories:
       rules (CORE-*), gates (quality/convergence), policies (operational).
     action_ref: "phase-m6-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M6-04"
     title: "Replace cognition YAMLs with prompt instructions"
@@ -69,7 +69,7 @@ sweep_catalogue:
       cortex-registry/knowledge/cognition/ YAMLs define cognitive patterns
       that LLMs handle natively. Replace with concise prompt instructions.
     action_ref: "phase-m6-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M6-05"
     title: "Validate all YAML references post-consolidation"
@@ -79,7 +79,7 @@ sweep_catalogue:
       All Python code and prompt files referencing consolidated/deleted YAMLs
       must be updated. RegistryYAMLReader routes must be verified.
     action_ref: "phase-m6-final"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M6-06"
     title: "Sweep close and regression gate"
@@ -88,7 +88,7 @@ sweep_catalogue:
     evidence: |
       Full convergence gate pass required.
     action_ref: "phase-m6-final"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M6-07"
     title: "Preserve Workflow Composer and dedicated workflow template contract"
@@ -99,7 +99,7 @@ sweep_catalogue:
       convergence primitives, and dedicated templates for code-modifying flows.
       Merges may reduce file count but cannot collapse this contract.
     action_ref: "phase-m6-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M6-08"
     title: "Preserve Copilot response rendering and content/library injection capabilities"
@@ -112,7 +112,7 @@ sweep_catalogue:
       3) primitives/intelligence/intelligence-injection.yaml
       These may be simplified but not removed without replacement proof.
     action_ref: "phase-m6-b"
-    status: OPEN
+    status: CLOSED
 
 sequential_execution_contract:
   policy: STRICT_SEQUENTIAL
@@ -139,11 +139,46 @@ phase_continuation:
     next_block: "### 🚀 Next Phase"
     continuation_prompt: "execute phase-m7 on CORTEX-V2 with strict sequential contract and autonomous progress"
 
+execution_checkpoint:
+  checkpoint_id: "M6-CHK-2026-03-15-A"
+  timestamp: "2026-03-15"
+  status: "COMPLETE"
+  findings:
+    drift_lock_manifest:
+      path: "cortex-registry/core/drift-lock-manifest.yaml"
+      core_rules: "CORE-001..CORE-068 present"
+    governance_category_manifests:
+      - "cortex-registry/governance/rules/manifest.yaml"
+      - "cortex-registry/governance/gates/manifest.yaml"
+      - "cortex-registry/governance/policies/manifest.yaml"
+    contract_preservation:
+      workflow_composer_spec: "cortex-registry/workflows/workflow-composer-spec.yaml"
+      response_template: "cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml"
+      content_library_routing: "cortex-registry/workflows/templates/lifecycle/content-library-routing.yaml"
+      intelligence_injection: "cortex-registry/workflows/templates/primitives/intelligence/intelligence-injection.yaml"
+    cognition_yaml_directory_removed: true
+    validation_gates:
+      phase_m6_tests:
+        command: "CORTEX_WORKERS=8 .venv/bin/python -m pytest tests/v2/test_yaml_consolidation_phase_m6.py -q"
+        passed: 5
+        failed: 0
+      smoke_gate:
+        command: "CORTEX_WORKERS=8 python3 scripts/run_tests.py smoke"
+        passed: 2928
+        skipped: 81
+        xfailed: 22
+        xpassed: 1
+        failed: 0
+        warnings: 8
+  blockers: []
+  next_actions:
+    - "Activate phase-m7 and proceed with prompt/agent surface reduction"
+
 phases:
   - id: "phase-m6-a"
     title: "Create drift-lock manifest"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M6-01"]
     governance_authority: "CORE-008, CORE-035"
     duration_estimate: "3 hours"
@@ -192,7 +227,7 @@ phases:
   - id: "phase-m6-b"
     title: "Merge workflows + governance categories + retire cognition YAMLs"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M6-02", "GAP-M6-03", "GAP-M6-04", "GAP-M6-07", "GAP-M6-08"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "4 hours"
@@ -247,7 +282,7 @@ phases:
   - id: "phase-m6-final"
     title: "Reference validation + Smoke Gate + master update"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M6-05", "GAP-M6-06"]
     depends_on: ["phase-m6-b"]
     prerequisite: "ALL preceding sub-phase completion_gates PASSED"

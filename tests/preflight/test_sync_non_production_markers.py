@@ -33,7 +33,6 @@ _PRODUCTION_FILES: frozenset[pathlib.Path] = frozenset(
     [
         PROMPTS_DIR / "CORTEX.prompt.md",
         PROMPTS_DIR / "cortex-architect.prompt.md",
-        AGENTS_DIR / "core" / "CORTEX.md",
         AGENTS_DIR / "core" / "cortex-executor.md",
         AGENTS_DIR / "core" / "cortex-architect.md",
         CORTEX_ROOT / ".github" / "copilot-instructions.md",

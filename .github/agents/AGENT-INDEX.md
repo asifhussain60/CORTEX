@@ -63,26 +63,24 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Agent | Purpose | Load When |
 |-------|---------|-----------|
-| **cortex.md** | Master orchestrator — routes all requests | Any production request |
 | **cortex-architect.md** | Mode router + challenge enforcer + production readiness | Architecture, audits, design |
-| **cortex-holistic-validator.md** | Pre-implementation validation gate | Before IMPLEMENT/FIX/REFACTOR |
-| **cortex-auditor.md** | Codebase health + P0-P3 scanning | `/audit`, quality analysis |
+| **cortex-audit-coordinator.md** | Codebase health, production-readiness scanning, git delta audit coordination | `/audit`, quality analysis |
 | **cortex-executor.md** | Code execution + TDD implementation | Running tests, implementation |
 | **cortex-interactive.md** | Conversational mode | Questions, exploratory |
 | **cortex-meta-auditor.md** | Meta-level governance auditing | Governance coherence checks |
-| **cortex-master-plan-auditor.md** | Master plan validation | Plan integrity verification |
+| **cortex-master-planner.md** | Phase planning, reference resolution, THIN INDEX governance | `/plan`, plan integrity verification |
 
 ### Specialist Agents
 
 | Agent | Purpose | Load When |
 |-------|---------|-----------|
-| **cortex-trainer.md** | Gap-driven template evolution — analyze repos, detect gaps, propose changes | `/train {path}`, "learn from {repo}" |
+| **cortex-learning.md** | Gap-driven template evolution, interactive Q&A, and implementation verification | `/train {path}`, "learn from {repo}" |
 | **cortex-sync-agent.md** | 4-gate one-way sync: PULL→DIFF→SANITIZE→MERGE into company folder | `/sync target=<path>` — cross-repo privacy-safe sync |
 | **cortex-sts-refactoring.md** | STS pipeline: 7-gate refactoring for external codebases | `cortex-sts/` REFACTOR sessions, BadMonolith-style analysis |
 | **cortex-digest.md** | Learning extraction from chat history | Processing chat files |
 | **cortex-content-optimizer.md** | Multi-file content optimization — batch noise removal, compression, in-place rewrite | `/optimize`, "compress files", "batch optimize" (Phase 130) |
 | **cortex-environment-setup.md** | Environment validation | Pre-flight checks, setup issues |
-| **cortex-phase-resolver.md** | Plan phase management | `/plan` mode |
+| **cortex-learning.md** | Training, interactive Q&A, and implementation verification | `/train`, learning, educational support |
 | **cortex-review-agent.md** | PR-scoped code review: 6-stage pipeline, OWASP security, APPROVE/REQUEST_CHANGES/BLOCK verdict | `/review {pr}`, "code review", "pull request review" |
 | **cortex-feedback-agent.md** | Cross-repo capability extraction with 8 sanitization gates (G1–G8) | `/feedback`, "backport", "capability extraction" |
 ### Documentation Agents
@@ -93,29 +91,14 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Agent | Role | Pipeline Phase |
 |-------|------|----------------|
-| **git-discovery-agent.md** | Git history inspection, change classification | 1 — Discovery |
-| **drift-detection-agent.md** | Implementation vs documentation cross-reference | 2 — Drift Detection |
-| **doc-sync-agent.md** | Update `.content/`, glossary, media prompts | 3 — Synchronization |
-| **diagram-regeneration-agent.md** | Regenerate D3.js SVG diagrams | 3 — Synchronization |
-| **media-prompt-agent.md** | Maintain DALL-E image + video script prompts | 3 — Synchronization |
-| **narrative-continuity-agent.md** | Guard Awakening of CORTEX story arc | 4 — Narrative Update |
-| **comedy-enhancement-agent.md** | Apply comedic writing principles to chapters (INTERNAL ONLY — sub-agent of narrative-continuity) | 4 — Comedy Enhancement |
-| **coverage-audit-agent.md** | Validate completeness, produce certification | 5 — Certification |
-| **release-notes-agent.md** | Generate changelogs from Git diffs | 5 — Certification |
-| **html-view-designer.md** | Design + Implement mode — IA, layout proposals, semantic HTML | Design + Implement |
-| **design-system-enforcer.md** | Token validation, CSS layer assignment, theme integrity gate | Design + Implement |
-| **a11y-perf-guardian.md** | WCAG 2.1 + 2.2 gate + Core Web Vitals regression detection | Design + Implement |
-| **regression-sentinel.md** | Diff guard — no theme drift, broken links, ARIA regressions | Design + Implement |
-| **knowledge-harvester-agent.md** | Source → distilled notes → knowledge YAMLs in `.content/knowledge/` | `/doc-harvest`, `/doc-learn-session` |
-| **github-issue-harvester-agent.md** | Ingest GitHub issues (#14+), extract capabilities, feed drift/sync | 1.5 — Issue Ingestion |
-| **tetris-layout-agent.md** | Eliminate blank space in multi-column HTML panels using Tetris-Fit CSS algorithm | Design + Implement |
-| **visual-qa-agent.md** | **Screenshot-driven visual audit** — Vision API analysis, issue table, source mapping, redesign recommendation; auto-triggered by "fix this" / "redesign this" + screenshot | Visual QA → Design + Implement |
+| **doc-drift-coordinator.md** | Discovery + issue ingestion + drift classification + release signal coordination | 1/1.5/2/5 |
+| **doc-qa-guardian.md** | Coverage audit + a11y/perf + visual QA + design-system enforcement | 3/5 |
+| **doc-lifecycle-manager.md** | Sync + diagrams + media + narrative + harvesting + layout orchestration | 3/4 |
 
 ### Support Files
 
 | File | Purpose |
 |------|---------|
-| **phase-creation-standards.md** | Standards for new phases |
 | **cleanup-audit-guide.md** | Cleanup procedure reference |
 
 
@@ -128,11 +111,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | Agent | Role | Phases |
 |-------|------|--------|
 | **cortex-certification-coordinator.md** | Pipeline orchestrator, state persistence, multi-session continuity | ALL |
-| **cortex-audit-agent.md** | Git delta analysis, drift detection, duplication discovery | 1–2 |
-| **cortex-regression-agent.md** | Regression identification, dead code, bloat, backward compatibility | 3 |
-| **cortex-refactor-agent.md** | Prompt/agent optimization, Intelligence Diamond wiring validation | 4–5 |
-| **cortex-memory-agent.md** | Adaptive learning, failure patterns, document lifecycle hygiene | 6 |
-| **cortex-vacuum-agent.md** | Workspace cleanup — markdown sprawl, empty dirs, orphans, OS/build artifacts | 7 |
+| **cortex-certification-workers.md** | Regression, refactor, and memory hygiene worker responsibilities | 3–6 |
 | **cortex-db-agent.md** | SQLite integrity, schema optimization, self-healing migrations | 8 |
 | **cortex-certification-agent.md** | Production hardening, scoring, release sign-off, report generation | 9–10 |
 
@@ -186,23 +165,23 @@ are resolved or explicitly approved as WONT-FIX.
 | **IMPLEMENT** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
 | **FIX** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
 | **REFACTOR** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
-| **AUDIT** | cortex.md + cortex-architect.md + cortex-auditor.md | ~8,000 |
-| **AUDIT FIX** | cortex.md + cortex-auditor.md + architecture-integrity-agent.md + cortex-meta-auditor.md | ~12,000 |
+| **AUDIT** | cortex.md + cortex-architect.md + cortex-audit-coordinator.md | ~8,000 |
+| **AUDIT FIX** | cortex.md + cortex-audit-coordinator.md + architecture-integrity-agent.md + cortex-meta-auditor.md | ~12,000 |
 | **TOTALRECALL** | cortex-total-recall.prompt.md → certification-coordinator.md + 7 specialist agents | ~8,800 |
 | **INVESTIGATE** | cortex.md + cortex-architect.md | ~6,000 |
 | **QUERY** | cortex.md + cortex-interactive.md | ~4,500 |
 | **DESIGN** | cortex.md + cortex-architect.md | ~6,000 |
-| **PLAN** | cortex-architect.md + cortex-phase-resolver.md | ~6,000 |
+| **PLAN** | cortex-architect.md + cortex-master-planner.md | ~6,000 |
 | **DIGEST** | cortex-architect.md + cortex-digest.md | ~6,000 |
-| **TRAIN** | cortex-trainer.md + cortex-sts-refactoring.md | ~6,500 |
+| **TRAIN** | cortex-learning.md + cortex-sts-refactoring.md | ~6,500 |
 | **REPHRASE** | request-rephrase-orchestrator.md | ~2,000 |
 | **SETUP** | cortex-environment-setup.md | ~2,000 |
-| **META-AUDIT** | cortex-meta-auditor.md + cortex-auditor.md | ~6,500 |
-| **UPGRADE** | cortex-environment-setup.md + cortex-auditor.md | ~5,500 |
+| **META-AUDIT** | cortex-meta-auditor.md + cortex-audit-coordinator.md | ~6,500 |
+| **UPGRADE** | cortex-environment-setup.md + cortex-audit-coordinator.md | ~5,500 |
 | **WIRING/CI** | architecture-integrity-agent.md | ~5,000 |
 | **VACUUM** | cortex-vacuum.md | ~2,000 |
-| **DEBUG** | cortex-debugger.md + cortex-auditor.md | ~5,000 |
-| **HEALTH** | cortex-auditor.md (Check #11) | ~3,500 |
+| **DEBUG** | cortex-debugger.md + cortex-audit-coordinator.md | ~5,000 |
+| **HEALTH** | cortex-audit-coordinator.md (Check #11) | ~3,500 |
 | **SYNC** | cortex-sync.prompt.md + cortex-sync-agent.md | ~6,000 |
 | **RCA** | cortex-architect.prompt.md + `cortex_learning` op=`rca` | ~3,500 |
 | **GOLDEN_TEST** | cortex-executor.md + cortex-holistic-validator.md | ~5,500 |
@@ -217,7 +196,7 @@ are resolved or explicitly approved as WONT-FIX.
 ```
 /audit fix
   Stage 1: Stage 0 Governance Pre-Flight      → stage0-preflight-workflow.yaml
-  Stage 2: 24-Point Production Scan           → cortex-auditor.md (Checks #1–#24)
+    Stage 2: 24-Point Production Scan           → cortex-audit-coordinator.md (Checks #1–#24)
   Stage 3: Wiring Contract Validation         → architecture-integrity-agent.md (L1→L3)
   Stage 4: Orchestrator Health (all 22)       → HealthOrchestrator.run_health_check()
   Stage 5: Vacuum Cleanup                     → VacuumOrchestrator + cortex_vacuum

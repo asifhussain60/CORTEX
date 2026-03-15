@@ -4,13 +4,24 @@ scope: non-production-admin
 # CORTEX Documentation Orchestrator
 **Updated:** 2026-03-09 (Phase 109.3 — `visual-qa-agent.md` added; screenshot-triggered visual audit pipeline wired; "fix this" / "redesign this" + screenshot auto-routes to Vision API audit; Phase 109.2 — Tetris Layout Engine added; `tetris-layout-agent.md` wired; `tetris-layout-spec.yaml` in cortex-registry; trigger phrase routing added · `serve` argument added — kills port 8000, closes ALL existing Terminal windows, opens single Mac Terminal, launches Chrome) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
-**Agents:** 17 modular agents in `.github/agents/docs/`
+Agents: 3 composite agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
 **State:** `cortex-registry/config/doc-orchestrator-state.yaml` ← durable tracking (last execution timestamp, last GitHub issue ID)
 **Workflow (HTML/CSS/Web):** `cortex-registry/workflows/templates/frontend/docs-html-design-workflow.yaml` ← WorkflowComposer entry point for all `docs/` HTML work
 **Knowledge Base:** `docs/.content/knowledge/` (9 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist, visualization_standards, **motion_ux_standards**, **wcag22_delta_checklist**, **content_writing_standards**)
 **Content Sources:** `docs/.content/` (14 consolidated `.md` files + glossary + index — auto-routed per role)
 **Tetris Layout Tool:** `cortex/toolkit/tetris_layout.py` | **Agent:** `.github/agents/docs/tetris-layout-agent.md` | **Spec:** `cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml`
+
+---
+
+## Composite Agent Model (M7-b)
+
+Documentation orchestration uses three composite agents:
+- `doc-drift-coordinator.md`
+- `doc-qa-guardian.md`
+- `doc-lifecycle-manager.md`
+
+This prompt routes through the composite model while preserving all prior documentation capabilities.
 
 ---
 
@@ -1220,7 +1231,7 @@ Documentation is versioned consistently with release tags:
 | `doc-sync-agent.md` | Replaces `cortex-documentation-architect.md` — content extraction + `.content/` sync |
 | `diagram-regeneration-agent.md` + `media-prompt-agent.md` | Replaces `cortex-gitpages-builder.md` — site assets and visual generation |
 | `narrative-continuity-agent.md` | Replaces `cortex-storyteller.md` — Awakening of CORTEX narrative governance |
-| `cortex-auditor.md` | CSS/link validation (external — not replaced) |
+| `cortex-audit-coordinator.md` | CSS/link validation (external — not replaced) |
 | `cortex-vacuum.md` | Cleanup deprecated files (external — not replaced) |
 
 ---

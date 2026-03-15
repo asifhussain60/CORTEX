@@ -1,0 +1,20 @@
+metadata:
+  id: m7-prompt-reference-lessons-learned
+  created: '2026-03-15'
+  source:
+    - .github/prompts/reference/phase-0-5-dashboard.md
+    - .github/prompts/reference/chat01-lessons-learned.yaml
+    - .github/prompts/reference/chat03-lessons-learned.yaml
+  purpose: Preserve high-value planning and drift lessons while removing stale prompt reference files.
+
+high_value_patterns:
+  - id: pattern-count-alignment
+    summary: Keep architecture and governance counts synchronized across prompts to avoid drift.
+  - id: pattern-runtime-path-canonicalization
+    summary: Enforce canonical runtime paths and guard against ghost/deprecated directory references.
+  - id: pattern-phase-threshold-tolerance
+    summary: Prefer tolerance bands for phase metrics to avoid brittle exact-threshold failures.
+  - id: pattern-sweep-completeness
+    summary: Fix all instances for a detected class of issue, not only the first occurrence.
+  - id: pattern-knowledge-and-config-prereqs
+    summary: Validate runtime prerequisites early (indexes/parsers/config autoload) to prevent degraded-mode behavior.

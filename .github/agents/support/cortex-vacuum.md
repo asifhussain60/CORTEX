@@ -13,8 +13,10 @@ scope: non-production-admin
 - Safe archival of old reports, summaries, completion documents
 - Root folder cleanup (removing transient artifacts)
 - **OS artifact elimination** — `.DS_Store`, `Thumbs.db`, `.ds-store`, `desktop.ini` (Phase 104)
+- **Backup artifacts cleanup** — `.bak`, `.orig`, `.backup` and equivalent transient recovery files
 - **Build artifact purge** — `.NET bin/obj`, `__pycache__`, `.pytest_cache`, `.mypy_cache`, `.ruff_cache` (Phase 104)
 - Maintaining CORE-002 compliance (no markdown generation outside docs/)
+- Running the deterministic **8-stage pipeline** used by the Total Recall certification flow
 
 ---
 
@@ -83,6 +85,8 @@ run() pipeline:
 - Targets: `.DS_Store`, `.ds-store`, `Thumbs.db`, `desktop.ini`
 - Protected: `.git/`, `.venv/` (never touched)
 - Audit check: Check #24 in 24-Point Production Readiness Audit
+
+**Certification merge note:** The former certification vacuum worker is now consolidated here. This single agent owns workspace cleanup for support and certification contexts, including OS artifacts, backup artifacts, CORE-064 protections, and the 8-stage pipeline.
 
 ### Safe Archival Protocol
 

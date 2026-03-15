@@ -133,11 +133,9 @@ When the user invokes `/totalrecall phase={N}`:
 
 | Agent | File | Phase(s) |
 |-------|------|----------|
-| Audit Agent | `cortex-audit-agent.md` | 1, 2 |
-| Regression Agent | `cortex-regression-agent.md` | 3 |
-| Refactor Agent | `cortex-refactor-agent.md` | 4, 5 |
-| Memory Agent | `cortex-memory-agent.md` | 6 |
-| Vacuum Agent | `cortex-vacuum-agent.md` | 7 |
+| Audit Coordinator | `cortex-audit-coordinator.md` | 1, 2 |
+| Certification Workers | `cortex-certification-workers.md` | 3, 4, 5, 6 |
+| Vacuum Agent | `cortex-vacuum.md` | 7 |
 | DB Agent | `cortex-db-agent.md` | 8 |
 | Certification Agent | `cortex-certification-agent.md` | 9, 10 |
 

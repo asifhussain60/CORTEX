@@ -23,7 +23,7 @@ import pytest
 
 REPO_ROOT = Path(__file__).parents[3]
 ARCHITECT_PROMPT = REPO_ROOT / ".github" / "prompts" / "cortex-architect.prompt.md"
-AUDITOR_AGENT = REPO_ROOT / ".github" / "agents" / "core" / "cortex-auditor.md"
+AUDITOR_AGENT = REPO_ROOT / ".github" / "agents" / "core" / "cortex-audit-coordinator.md"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -133,12 +133,12 @@ class TestAuditTableCheck29:
         )
 
     def test_auditor_agent_says_29_point(self) -> None:
-        """cortex-auditor.md references '29-Point Production Readiness'."""
+        """cortex-audit-coordinator.md references '29-Point Production Readiness'."""
         if not AUDITOR_AGENT.exists():
-            pytest.skip(f"cortex-auditor.md not found at {AUDITOR_AGENT}")
+            pytest.skip(f"cortex-audit-coordinator.md not found at {AUDITOR_AGENT}")
         content = AUDITOR_AGENT.read_text(encoding="utf-8")
         assert "29-Point" in content or "Checks #1–#29" in content, (
-            "cortex-auditor.md still says '28-Point'. "
+            "cortex-audit-coordinator.md still says '28-Point'. "
             "Update to '29-Point' as part of Phase 107 Sub-phase I (GAP-107-20)."
         )
 

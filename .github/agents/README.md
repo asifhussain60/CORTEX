@@ -12,14 +12,13 @@ agents/
 │   ├── cortex.md                  # Master orchestrator
 │   ├── cortex-architect.md        # Mode router + challenge enforcer
 │   ├── cortex-holistic-validator.md # Pre-implementation gate
-│   ├── cortex-auditor.md          # Codebase health scanning
+│   ├── cortex-audit-coordinator.md # Codebase health scanning + audit coordination
 │   ├── cortex-executor.md         # Code execution + TDD
 │   ├── cortex-interactive.md      # Conversational mode
 │   ├── cortex-digest.md           # Learning extraction
 │   ├── cortex-environment-setup.md # Environment validation
 │   ├── cortex-meta-auditor.md     # Meta governance auditing
-│   ├── cortex-master-plan-auditor.md # Plan integrity
-│   ├── cortex-phase-resolver.md   # Phase management
+│   ├── cortex-master-planner.md   # Plan integrity + phase management
 │   ├── request-rephrase-orchestrator.md # Request optimization
 │   └── architecture-integrity-agent.md # Wiring enforcement
 ├── docs/                           # Documentation Governance Agents (Phase 108)
@@ -34,17 +33,13 @@ agents/
 │   └── release-notes-agent.md     # Changelog generation from Git diffs
 ├── certification/                  # Total Recall — Production Certification
 │   ├── cortex-certification-coordinator.md # Pipeline orchestrator
-│   ├── cortex-audit-agent.md      # Delta analysis + drift detection (P1-2)
-│   ├── cortex-regression-agent.md # Regression + dead code scan (P3)
-│   ├── cortex-refactor-agent.md   # Prompt optimization + intel wiring (P4-5)
-│   ├── cortex-memory-agent.md     # Adaptive learning + lifecycle (P6)
+│   ├── cortex-certification-workers.md # Regression + refactor + memory workers (P3-6)
 │   ├── cortex-db-agent.md         # SQLite integrity + migrations (P7)
 │   └── cortex-certification-agent.md # Hardening + scoring + sign-off (P8-9)
 ├── orchestration/                  # Cross-agent orchestration
 │   └── cortex-universal-orchestration.md
 ├── education/                      # Educational agents
-│   ├── cortex-ask-coordinator.md
-│   └── truth-verifier.md
+│   └── cortex-learning.md
 └── support/                        # Support utilities
 ```
 
@@ -57,7 +52,7 @@ agents/
 | **cortex.md** | Master orchestrator — routes all requests | Any production request |
 | **cortex-architect.md** | Mode router + production readiness | Architecture, audit, design |
 | **cortex-holistic-validator.md** | Pre-implementation validation | IMPLEMENT/FIX/REFACTOR |
-| **cortex-auditor.md** | P0-P3 health scanning | `/audit` |
+| **cortex-audit-coordinator.md** | P0-P3 health scanning | `/audit` |
 | **cortex-executor.md** | TDD execution | Tests, implementation |
 | **cortex-interactive.md** | Conversational Q&A | Questions, exploration |
 | **cortex-digest.md** | Chat session learning | Processing chat files |
@@ -73,11 +68,11 @@ agents/
 | IMPLEMENT | cortex.md + cortex-holistic-validator.md + cortex-executor.md |
 | FIX | cortex.md + cortex-holistic-validator.md + cortex-executor.md |
 | REFACTOR | cortex.md + cortex-holistic-validator.md |
-| AUDIT | cortex.md + cortex-architect.md + cortex-auditor.md |
+| AUDIT | cortex.md + cortex-architect.md + cortex-audit-coordinator.md |
 | INVESTIGATE | cortex.md + cortex-architect.md |
 | QUERY | cortex.md + cortex-interactive.md |
 | DESIGN | cortex.md + cortex-architect.md |
-| PLAN | cortex-architect.md + cortex-phase-resolver.md |
+| PLAN | cortex-architect.md + cortex-master-planner.md |
 | DIGEST | cortex-architect.md + cortex-digest.md |
 | REPHRASE | request-rephrase-orchestrator.md |
 | SETUP | cortex-environment-setup.md |

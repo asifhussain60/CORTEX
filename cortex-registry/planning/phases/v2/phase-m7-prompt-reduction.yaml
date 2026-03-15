@@ -1,8 +1,8 @@
 id: "phase-m7"
 title: "Prompt & Agent Surface Reduction — 86 → ~35 Files"
 created: "2026-03-15"
-updated: "2026-03-15"
-status: PLANNED
+updated: "2026-03-16"
+status: IN_PROGRESS
 priority: P0
 governance_authority:
   - CORE-008
@@ -63,7 +63,7 @@ sweep_catalogue:
       Target: ~600 lines — keep mode routing + unique orchestration logic,
       reference skills/YAMLs for detail.
     action_ref: "phase-m7-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M7-02"
     title: "Reduce cortex-response-templates.md ~75%"
@@ -77,7 +77,7 @@ sweep_catalogue:
       remove verbose anti-pattern catalogs and edge case specifications.
       CRITICAL: this is SSOT referenced by 17+ files. Keep as thin SSOT.
     action_ref: "phase-m7-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M7-03"
     title: "Reduce copilot-instructions.md ~30%"
@@ -90,7 +90,7 @@ sweep_catalogue:
       composable section assembly order, essential identity. Move architecture
       counts and MCP details to discoverable locations.
     action_ref: "phase-m7-a"
-    status: OPEN
+    status: CLOSED
 
   # ═══════════════════════════════════════════════════════════
   # AGENT DELETIONS + DOC AGENT MERGES (sub-phase M7-b)
@@ -109,7 +109,7 @@ sweep_catalogue:
       3. CORTEX.md agent (144 lines) — 100% duplicate of cortex/SKILL.md
       Total: 449 lines removed, zero capability loss.
     action_ref: "phase-m7-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M7-05"
     title: "Consolidate 17 doc agents → 3 composite agents"
@@ -129,7 +129,7 @@ sweep_catalogue:
       All 14 unique specialist capabilities preserved.
       Target: 4,617 → ~1,500 lines (3 files).
     action_ref: "phase-m7-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M7-06"
     title: "Remove stale reference/ prompt files"
@@ -143,7 +143,7 @@ sweep_catalogue:
       These are lessons-learned archives with no active references.
       Migrate valuable patterns to cortex-registry/memory/ then delete.
     action_ref: "phase-m7-b"
-    status: OPEN
+    status: CLOSED
 
   # ═══════════════════════════════════════════════════════════
   # AGENT CONSOLIDATION — CORE + CERTIFICATION + EDUCATION (sub-phase M7-c)
@@ -160,7 +160,7 @@ sweep_catalogue:
       protection, Phase 104 OS artifacts, Phase 128 backup artifacts.
       Target: single cortex-vacuum.md (~250 lines).
     action_ref: "phase-m7-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M7-08"
     title: "Merge audit agents (2→1 audit-coordinator)"
@@ -173,7 +173,7 @@ sweep_catalogue:
       Phase 0/1/2 pipeline + 7 drift categories + 22 drift locks.
       Target: single cortex-audit-coordinator.md (~280 lines).
     action_ref: "phase-m7-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M7-09"
     title: "Merge planner agents (4→1 master-planner)"
@@ -191,7 +191,7 @@ sweep_catalogue:
       Part C: THIN INDEX CONTRACT + 12 audit checks
       Target: single cortex-master-planner.md (~600 lines).
     action_ref: "phase-m7-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M7-10"
     title: "Merge certification worker agents (5→2)"
@@ -210,7 +210,7 @@ sweep_catalogue:
       cortex-db-agent.md kept (unique SQLite integrity).
       Target: 9 cert agents → 4 (coordinator, workers, db, cert).
     action_ref: "phase-m7-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M7-11"
     title: "Merge education agents (3→1 cortex-learning)"
@@ -224,7 +224,7 @@ sweep_catalogue:
       Merge into single cortex-learning.md with 3 modes.
       Target: ~400 lines.
     action_ref: "phase-m7-c"
-    status: OPEN
+    status: CLOSED
 
   # ═══════════════════════════════════════════════════════════
   # INSTRUCTION + SKILL UPDATES + CLEANUP (sub-phase M7-d)
@@ -333,7 +333,7 @@ phases:
   - id: "phase-m7-a"
     title: "Reduce prompt + template files"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M7-01", "GAP-M7-02", "GAP-M7-03"]
     governance_authority: "CORE-008, CORE-035"
     depends_on: []
@@ -393,7 +393,7 @@ phases:
   - id: "phase-m7-b"
     title: "Delete duplicate agents + merge 17 doc agents → 3"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M7-04", "GAP-M7-05", "GAP-M7-06"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     depends_on: ["phase-m7-a"]
@@ -453,7 +453,7 @@ phases:
   - id: "phase-m7-c"
     title: "Merge core/certification/education agent clusters"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
     gap_refs: ["GAP-M7-07", "GAP-M7-08", "GAP-M7-09", "GAP-M7-10", "GAP-M7-11"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     depends_on: ["phase-m7-b"]
@@ -506,6 +506,17 @@ phases:
       zero_new_failures: true
       all_gap_refs_closed: true
       blocks_next_sub_phase: true
+
+    execution_note: |
+      Merge implementation converged and targeted gates are green:
+      - tests/v2/test_agent_consolidation_c_phase_m7.py → PASS
+      - tests/golden/agents/test_agent_matrix_golden.py → PASS
+      - tests/intelligence/models/test_check29_production_readiness.py → PASS
+      - tests/golden/response/test_phase_120_response_golden.py → PASS
+      - tests/golden/response/test_phase_82_a.py → PASS
+      Sub-phase remains IN_PROGRESS because smoke still fails on
+      tests/golden/holistic_integration/test_holistic_integration_simple.py::test_s01_simple_query_without_lens
+      with degraded environment/performance symptoms (missing knowledge index and tree-sitter fallback warnings).
 
   # ═══════════════════════════════════════════════════════════
   # SUB-PHASE M7-d: INSTRUCTIONS + SKILLS + FINAL CLEANUP

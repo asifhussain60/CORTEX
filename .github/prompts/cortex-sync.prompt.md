@@ -133,7 +133,7 @@ Only these paths are eligible for sync to target runtime:
 - `.github/prompts/cortex-architect.prompt.md`
 - `.github/agents/core/CORTEX.md`
 - `.github/agents/core/cortex-executor.md`
-- `.github/agents/core/cortex-auditor.md`
+- `.github/agents/core/cortex-audit-coordinator.md`
 - `.github/agents/core/cortex-interactive.md`
 - `.github/agents/core/cortex-debugger.md`
 - `.github/agents/core/cortex-vacuum.md`
@@ -146,7 +146,7 @@ production_files:
   - ".github/prompts/cortex-architect.prompt.md"
   - ".github/agents/core/CORTEX.md"
   - ".github/agents/core/cortex-executor.md"
-  - ".github/agents/core/cortex-auditor.md"
+  - ".github/agents/core/cortex-audit-coordinator.md"
   - ".github/agents/core/cortex-interactive.md"
   - ".github/copilot-instructions.md"
 ```
@@ -165,7 +165,7 @@ target runtime path during `/sync`. This includes but is not limited to:
 | `cortex-total-recall.prompt.md` | Admin — production certification |
 | `cortex-trainer.prompt.md` | Admin — learning engine |
 | `cortex-meta-auditor.md` | Admin — meta-audit tooling |
-| `cortex-master-plan-auditor.md` | Admin — plan governance |
+| `cortex-master-planner.md` | Admin — plan governance |
 | `release-notes-agent.md` | Admin — release management |
 | `diagram-regeneration-agent.md` | Admin — docs tooling |
 | All agents under `.github/agents/docs/` | Admin — documentation |

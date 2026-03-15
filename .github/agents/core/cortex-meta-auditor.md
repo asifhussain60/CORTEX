@@ -46,7 +46,7 @@ maintainer: "Asif Hussain"
 
 ## What This Agent Audits
 
-Unlike `cortex-auditor.md` (which audits source code), this agent audits **documentation and governance artifacts**:
+Unlike `cortex-audit-coordinator.md` (which audits source code), this agent audits **documentation and governance artifacts**:
 
 | Artifact | What's Checked |
 |----------|---------------|

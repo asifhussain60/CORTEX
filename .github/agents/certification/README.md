@@ -11,10 +11,7 @@
 certification/
 ├── README.md                              # This file
 ├── cortex-certification-coordinator.md    # Pipeline orchestrator (dispatches to agents)
-├── cortex-audit-agent.md                  # Phase 1–2: Delta analysis + drift detection
-├── cortex-regression-agent.md             # Phase 3: Regression + dead code + bloat
-├── cortex-refactor-agent.md               # Phase 4–5: Prompt optimization + intelligence wiring
-├── cortex-memory-agent.md                 # Phase 6: Adaptive learning + document lifecycle
+├── cortex-certification-workers.md        # Phase 3–6: Regression + refactor + memory worker duties
 ├── cortex-db-agent.md                     # Phase 7: SQLite integrity + self-healing
 └── cortex-certification-agent.md          # Phase 8–9: Hardening + scoring + sign-off
 ```
@@ -38,9 +35,9 @@ User → /totalrecall
          │
     ┌────┼────┬────┬────┬────┬────┐
     ▼    ▼    ▼    ▼    ▼    ▼    ▼
-  audit  regr  refact  mem  vac  db  cert
-  agent  agent agent  agent agent agent agent
-  (P1-2) (P3)  (P4-5) (P6) (P7) (P8-9)
+       audit  workers  vac  db  cert
+       coord  agent    agent agent agent
+       (P1-2) (P3-6)   (P7)  (P8)  (P9-10)
 ```
 
 ## Token Budget
@@ -49,10 +46,8 @@ User → /totalrecall
 |-------|--------|
 | Prompt (total-recall.prompt.md) | ~5,500 |
 | Coordinator | ~1,200 |
-| Audit Agent | ~1,500 |
-| Regression Agent | ~1,200 |
-| Refactor Agent | ~1,500 |
-| Memory Agent | ~1,200 |
+| Audit Coordinator | ~1,600 |
+| Certification Workers | ~2,800 |
 | DB Agent | ~1,400 |
 | Certification Agent | ~1,800 |
 | **Total (all loaded)** | **~15,300** |

@@ -57,9 +57,9 @@ maintainer: "Asif Hussain"
 
 | Condition | Mode | Delegate |
 |-----------|------|----------|
-| `/audit`, audit keywords | AUDIT | cortex-auditor.md |
+| `/audit`, audit keywords | AUDIT | cortex-audit-coordinator.md |
 | File with Copilot markers (score ≥ 5) | DIGEST | cortex-digest.md |
-| `/plan`, master plan keywords | PLAN | cortex-phase-resolver.md |
+| `/plan`, master plan keywords | PLAN | cortex-master-planner.md |
 | `/investigate`, root cause | INVESTIGATE | cortex-architect (self) |
 | Question/recommendation | QUERY | cortex-interactive.md |
 | Implementation request | DESIGN | cortex-executor.md |
@@ -242,7 +242,7 @@ Execute on `/audit`:
 |----------|---------|
 | `cortex-architect.prompt.md` | Expanded execution modes (prompt) |
 | `cortex-holistic-validator.md` | Pre-implementation validation |
-| `cortex-auditor.md` | Health scanning |
+| `cortex-audit-coordinator.md` | Health scanning |
 | `cortex-response-templates.md` | Response formatting |
 
 ---

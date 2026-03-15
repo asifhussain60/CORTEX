@@ -3,7 +3,7 @@ scope: non-production-admin
 ---
 # CORTEX Trainer Prompt
 
-**Updated:** 2026-02-26 | **Agent:** `cortex-trainer.md`
+**Updated:** 2026-02-26 | **Agent:** `cortex-learning.md`
 **Orchestrator:** `TrainerOrchestrator` (`cortex/orchestrators/intelligence/trainer_orchestrator.py`)
 **MCP Tool:** `cortex_train`
 
@@ -117,4 +117,4 @@ The Unified Reinforcement Signal (URS) system closes the learning loop. When orc
 
 ## Agent Reference
 
-See `.github/agents/education/cortex-trainer.md` for full agent specification.
+See `.github/agents/education/cortex-learning.md` for full agent specification.
