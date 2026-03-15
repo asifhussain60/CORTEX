@@ -90,6 +90,30 @@ sweep_catalogue:
     action_ref: "phase-m6-final"
     status: OPEN
 
+  - id: "GAP-M6-07"
+    title: "Preserve Workflow Composer and dedicated workflow template contract"
+    severity: P0
+    source: "origin/CORTEX parity audit — workflow-composer and WorkflowGateway are core capabilities"
+    evidence: |
+      Consolidation must retain Workflow Composer architecture, mode routing,
+      convergence primitives, and dedicated templates for code-modifying flows.
+      Merges may reduce file count but cannot collapse this contract.
+    action_ref: "phase-m6-b"
+    status: OPEN
+
+  - id: "GAP-M6-08"
+    title: "Preserve Copilot response rendering and content/library injection capabilities"
+    severity: P0
+    source: "origin/CORTEX parity audit — copilot response template + content-library-routing + intelligence-injection"
+    evidence: |
+      The following must remain first-class capabilities after consolidation:
+      1) governance/copilot-chat-response-template.yaml
+      2) lifecycle/content-library-routing.yaml
+      3) primitives/intelligence/intelligence-injection.yaml
+      These may be simplified but not removed without replacement proof.
+    action_ref: "phase-m6-b"
+    status: OPEN
+
 sequential_execution_contract:
   policy: STRICT_SEQUENTIAL
   partial_completion_allowed: false
@@ -169,7 +193,7 @@ phases:
     title: "Merge workflows + governance categories + retire cognition YAMLs"
     priority: P1
     status: PLANNED
-    gap_refs: ["GAP-M6-02", "GAP-M6-03", "GAP-M6-04"]
+    gap_refs: ["GAP-M6-02", "GAP-M6-03", "GAP-M6-04", "GAP-M6-07", "GAP-M6-08"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "4 hours"
     depends_on: ["phase-m6-a"]
@@ -196,6 +220,8 @@ phases:
         - "test_parameterized_code_workflow — single code-modify template handles IMPLEMENT/FIX/REFACTOR"
         - "test_governance_3_categories — only rules/, gates/, policies/ directories"
         - "test_cognition_yamls_deleted — knowledge/cognition/ does not exist"
+        - "test_workflow_composer_contract_preserved — WorkflowGateway + workflow-composer-spec remain valid"
+        - "test_copilot_response_and_library_injection_preserved — response template, content routing, intelligence injection all present"
       green:
         - "Create parameterized workflow templates"
         - "Merge governance into 3 categories"
@@ -207,6 +233,8 @@ phases:
       - "Workflow templates: ~94 → ~15"
       - "Governance categories: 3 (rules, gates, policies)"
       - "Cognition YAMLs deleted"
+      - "Workflow Composer + dedicated template contract preserved"
+      - "Copilot response rendering + content/library injection preserved"
       - "All references updated"
 
     completion_gate:
@@ -239,7 +267,7 @@ phases:
         blocker: "Close forbidden without update"
 
     acceptance_criteria:
-      - "ALL 6 GAPs CLOSED"
+      - "ALL 8 GAPs CLOSED"
       - "YAML files: ~45 (from ~160)"
       - "All references resolve"
       - "RegistryYAMLReader routes verified"

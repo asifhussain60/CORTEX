@@ -117,6 +117,18 @@ sweep_catalogue:
     action_ref: "phase-m3-final"
     status: OPEN
 
+  - id: "GAP-M3-09"
+    title: "Preserve IntentRouter capability contract after package/path reduction"
+    severity: P0
+    source: "origin/CORTEX parity audit — intent_router package preserves routing capabilities"
+    evidence: |
+      origin/CORTEX resolves routing through cortex/orchestrators/core/intent_router/
+      package + intent_router_impl.py (not a single flat intent_router.py file).
+      M3 reductions must preserve intent classification, disambiguation, workflow
+      gating, and orchestration lookup behavior even if internals are simplified.
+    action_ref: "phase-m3-final"
+    status: OPEN
+
 sequential_execution_contract:
   policy: STRICT_SEQUENTIAL
   partial_completion_allowed: false
@@ -263,7 +275,7 @@ phases:
     title: "Import sweep + Smoke Gate + cortex-master-v2.yaml update"
     priority: P0
     status: PLANNED
-    gap_refs: ["GAP-M3-08"]
+    gap_refs: ["GAP-M3-08", "GAP-M3-09"]
     depends_on: ["phase-m3-b"]
     prerequisite: "ALL preceding sub-phase completion_gates PASSED"
 
@@ -282,10 +294,11 @@ phases:
         blocker: "Do NOT close without master update"
 
     acceptance_criteria:
-      - "ALL 8 GAPs CLOSED"
+      - "ALL 9 GAPs CLOSED"
       - "Intelligence layer: ~60 files (target met)"
       - "IntelligenceFacade functional with simplified API"
       - "RCA, URS, domain brain preserved"
+      - "IntentRouter capability contract preserved (classification, disambiguation, workflow gate, lookup)"
       - "cortex-master-v2.yaml updated"
 
     completion_gate:

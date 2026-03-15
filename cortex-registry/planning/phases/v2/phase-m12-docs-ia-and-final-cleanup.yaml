@@ -63,6 +63,12 @@ sweep_catalogue:
     action_ref: "phase-m12-final"
     status: OPEN
 
+  - id: "GAP-M12-10"
+    title: "Run origin/CORTEX capability parity reconciliation and strategic-removal ledger"
+    severity: P0
+    action_ref: "phase-m12-d"
+    status: OPEN
+
 sequential_execution_contract:
   policy: STRICT_SEQUENTIAL
   partial_completion_allowed: false
@@ -167,7 +173,7 @@ phases:
     title: "Certification and master finalization"
     status: PLANNED
     priority: P0
-    gap_refs: ["GAP-M12-07", "GAP-M12-08"]
+    gap_refs: ["GAP-M12-07", "GAP-M12-08", "GAP-M12-10"]
     depends_on: ["phase-m12-c"]
     tdd_cycle:
       red:
@@ -179,7 +185,7 @@ phases:
         gate: "python3 scripts/run_tests.py smoke"
         blocker: "REFACTOR forbidden"
       refactor:
-        action: "Validate all phase statuses and final metrics"
+        action: "Validate all phase statuses/final metrics and publish capability parity ledger (preserved | strategically replaced | intentionally removed)"
         gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master-v2.yaml')); print('YAML valid')\""
         blocker: "Sub-phase COMPLETE forbidden"
     completion_gate:

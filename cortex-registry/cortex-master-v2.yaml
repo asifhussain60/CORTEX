@@ -29,6 +29,7 @@ metadata:
   in_progress: 1
   planned: 9
   design_principles:
+    - "Collaboration-first: preserve federated team workflows, shared contracts, and cross-team reuse"
     - "LLM-native: leverage Claude/GPT native capabilities instead of reimplementing"
     - "Declarative governance: rules in YAML, enforcement in 1 engine — not 5 orchestrators"
     - "MCP mega-tools: 6 capability-grouped tools instead of 36 micro-tools"
@@ -155,7 +156,7 @@ phase_detail_files:
     priority: P1
     status: IN_PROGRESS
     sweep_id: SWEEP-M3-INTELLIGENCE-REDUCTION
-    gaps: 8
+    gaps: 9
     sub_phases: 4
     depends_on: ["phase-m2"]
     file: "cortex-registry/planning/phases/v2/phase-m3-intelligence-reduction.yaml"
@@ -177,22 +178,22 @@ phase_detail_files:
     priority: P0
     status: PLANNED
     sweep_id: SWEEP-M5-MCP-MEGA-TOOLS
-    gaps: 8
+    gaps: 10
     sub_phases: 4
     depends_on: ["phase-m2"]
     file: "cortex-registry/planning/phases/v2/phase-m5-mcp-mega-tools.yaml"
-    note: "Create 6 mega-tools (cortex_code, cortex_govern, cortex_analyze, cortex_plan, cortex_learn, cortex_ops). Backward-compat aliases. 36 → 18 registered tools."
+    note: "Create 6 mega-tools (cortex_code, cortex_govern, cortex_analyze, cortex_plan, cortex_learn, cortex_ops). Backward-compat aliases + trust-boundary allowlists + origin/CORTEX parity matrix. 36 → 18 registered tools."
 
   - id: phase-m6
     title: "Governance YAML Consolidation"
     priority: P1
     status: PLANNED
     sweep_id: SWEEP-M6-YAML-CONSOLIDATION
-    gaps: 6
+    gaps: 8
     sub_phases: 3
     depends_on: ["phase-m5"]
     file: "cortex-registry/planning/phases/v2/phase-m6-yaml-consolidation.yaml"
-    note: "18 drift-locks → 1 manifest. Merge workflow primitives. Consolidate cognition/ (6→2). Merge governance rules. 160 → ~45 YAML files."
+    note: "18 drift-locks → 1 manifest. Merge workflow primitives. Consolidate cognition/ (6→2). Preserve Workflow Composer contract + Copilot response rendering + content/library injection primitives. 160 → ~45 YAML files."
 
   - id: phase-m7
     title: "Prompt & Agent Surface Reduction"
@@ -254,11 +255,11 @@ phase_detail_files:
     priority: P0
     status: PLANNED
     sweep_id: SWEEP-M12-DOCS-IA-CLEANUP
-    gaps: 9
+    gaps: 10
     sub_phases: 5
     depends_on: ["phase-m11"]
     file: "cortex-registry/planning/phases/v2/phase-m12-docs-ia-and-final-cleanup.yaml"
-    note: "Rebuild docs IA for org-scale teams, enforce discoverability map, remove leftovers/duplication from v1 implementation, certify zero-regression finish state."
+    note: "Rebuild docs IA for org-scale teams, enforce discoverability map, remove leftovers/duplication from v1 implementation, and publish final origin/CORTEX capability parity ledger (preserved vs strategic replacement vs intentional removal)."
 
 # ============================================================
 # LLM ADAPTABILITY CONTRACT
@@ -332,10 +333,10 @@ phases:
     status: IN_PROGRESS
     depends_on: ["phase-m2"]
     sweep_id: SWEEP-M3-INTELLIGENCE-REDUCTION
-    gaps: 8
+    gaps: 9
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m3-intelligence-reduction.yaml"
-    note: "P1 — ACTIVE. Baseline established and execution started after M2 close; retires LLM-duplicating intelligence modules. 369 → ~60."
+    note: "P1 — ACTIVE. Baseline established and execution started after M2 close; retires LLM-duplicating intelligence modules with explicit IntentRouter capability preservation gate. 369 → ~60."
 
   # Phase M4 — LENS (depends: M2, parallel with M3)
   - id: phase-m4
@@ -356,10 +357,10 @@ phases:
     status: PLANNED
     depends_on: ["phase-m2"]
     sweep_id: SWEEP-M5-MCP-MEGA-TOOLS
-    gaps: 8
+    gaps: 10
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m5-mcp-mega-tools.yaml"
-    note: "P0 — 36 tools → 18 (6 mega-tools + 12 operational). Breaking MCP contract."
+    note: "P0 — 36 tools → 18 (6 mega-tools + 12 operational) with backward-compat aliases, trust-boundary allowlists, and origin/CORTEX parity validation before destructive cleanup."
 
   # Phase M6 — YAML CONSOLIDATION (depends: M5)
   - id: phase-m6
@@ -368,10 +369,10 @@ phases:
     status: PLANNED
     depends_on: ["phase-m5"]
     sweep_id: SWEEP-M6-YAML-CONSOLIDATION
-    gaps: 6
+    gaps: 8
     sub_phases: 3
     file: "cortex-registry/planning/phases/v2/phase-m6-yaml-consolidation.yaml"
-    note: "P1 — 160 → ~45 YAML files. Drift locks consolidated. Workflows simplified."
+    note: "P1 — 160 → ~45 YAML files. Drift locks consolidated. Workflows simplified while preserving Workflow Composer contract, Copilot response template governance, and content/library injection primitives."
 
   # Phase M7 — PROMPT REDUCTION (depends: M5+M6) [REVISED 2026-03-15]
   - id: phase-m7
@@ -440,7 +441,7 @@ phases:
     status: PLANNED
     depends_on: ["phase-m11"]
     sweep_id: SWEEP-M12-DOCS-IA-CLEANUP
-    gaps: 9
+    gaps: 10
     sub_phases: 5
     file: "cortex-registry/planning/phases/v2/phase-m12-docs-ia-and-final-cleanup.yaml"
-    note: "P0 — full docs IA remap + final duplicate/leftover purge + release-ready clean state with zero regression."
+    note: "P0 — full docs IA remap + final duplicate/leftover purge + release-ready clean state with zero regression, including origin/CORTEX capability parity ledger."
