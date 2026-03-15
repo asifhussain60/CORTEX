@@ -11,10 +11,12 @@ Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 0
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import List
+from typing import Any, Dict, List
+
+from cortex.lens.adapters.i_lens_adapter import ILensAdapter
 
 
-class LanguageAdapter(ABC):  # CORE-035-scoped — domain-specific variant
+class LanguageAdapter(ABC, ILensAdapter):  # CORE-035-scoped — domain-specific variant
     """
     Abstract base class for language-specific AST parsers.
 
@@ -106,3 +108,30 @@ class LanguageAdapter(ABC):  # CORE-035-scoped — domain-specific variant
         file_ext = file_path.suffix.lower()
         supported = [ext.lower() for ext in self.get_supported_extensions()]
         return file_ext in supported
+
+    def analyze(self, file_path: Path) -> Dict[str, Any]:
+        """Analyze source file through adapter parse path and normalize payload."""
+        result = self.parse_file(file_path)
+        payload: Dict[str, Any]
+        if hasattr(result, "to_dict"):
+            payload = result.to_dict()  # type: ignore[assignment]
+        elif isinstance(result, dict):
+            payload = result
+        else:
+            payload = {"result": result}
+
+        payload.setdefault("language", self.get_language_name())
+        payload.setdefault("file_path", str(file_path))
+        return payload
+
+    def get_context(self, file_path: Path) -> Dict[str, Any]:
+        """Return context envelope for orchestration-level routing."""
+        return {
+            "language": self.get_language_name(),
+            "supports": self.supports(file_path),
+            "file_path": str(file_path),
+        }
+
+    def supports(self, file_path: Path) -> bool:
+        """Canonical support predicate required by ILensAdapter."""
+        return self.supports_file(file_path)

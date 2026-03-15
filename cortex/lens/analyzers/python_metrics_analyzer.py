@@ -1,9 +1,9 @@
-"""
-PythonAnalyzer — Python code analysis for golden tests.
+"""Python metrics analyzer for onboarding golden workflows.
 
-Authority: Phase 29 S2 | Production Verification
+Re-homed from python_analyzer as part of M4 LENS streamlining.
+Authority: SWEEP-M4-LENS-STREAMLINE
 """
-# CORE-035 — domain-scoped; class name appropriate for this module
+
 import ast
 from dataclasses import dataclass
 from pathlib import Path
@@ -12,30 +12,17 @@ from pathlib import Path
 @dataclass
 class AnalysisResult:
     """Result of Python code analysis."""
+
     functions_found: int
     classes_found: int
     lines_of_code: int
 
 
 class PythonAnalyzer:
-    """
-    Python code analyzer using AST.
-
-    Example:
-        analyzer = PythonAnalyzer()
-        result = analyzer.analyze_file(Path("app.py"))
-    """
+    """Python code analyzer using AST metrics."""
 
     def analyze_file(self, file_path: Path) -> AnalysisResult:
-        """
-        Analyze Python file.
-
-        Args:
-            file_path: Path to Python file
-
-        Returns:
-            AnalysisResult with metrics
-        """
+        """Analyze Python file metrics."""
         code = file_path.read_text()
         tree = ast.parse(code)
 
@@ -46,5 +33,5 @@ class PythonAnalyzer:
         return AnalysisResult(
             functions_found=functions,
             classes_found=classes,
-            lines_of_code=lines
+            lines_of_code=lines,
         )

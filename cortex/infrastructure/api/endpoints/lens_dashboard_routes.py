@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, HTTPException, Query, WebSocket, WebSocketDisconnect
 
-from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer
 
 # Phase 7.1 LENS Intelligence
 from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer

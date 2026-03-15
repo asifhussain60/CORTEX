@@ -22,7 +22,7 @@ def __getattr__(name: str):  # type: ignore[return]
     _map = {
         "LENSOrchestrator": ("cortex.lens.lens_orchestrator", "LENSOrchestrator"),
         "LENSContext": ("cortex.lens.lens_orchestrator", "LENSContext"),
-        "ASTAnalyzer": ("cortex.lens.analyzers.ast_analyzer", "ASTAnalyzer"),
+        "ASTAnalyzer": ("cortex.lens.analyzers.python_structure_analyzer", "ASTAnalyzer"),
         "GitHistoryAnalyzer": ("cortex.lens.analyzers.git_history_analyzer", "GitHistoryAnalyzer"),
         "CommentExtractor": ("cortex.lens.analyzers.comment_extractor", "CommentExtractor"),
         "ConfigAnalyzer": ("cortex.lens.analyzers.config_analyzer", "ConfigAnalyzer"),

@@ -208,7 +208,7 @@ class LensQuickTier2:
             Dict with syntax validation results
         """
         try:
-            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+            from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer
 
             analyzer = ASTAnalyzer()
             path = Path(file_path)
@@ -247,7 +247,7 @@ class LensQuickTier2:
             Dict with type hint statistics
         """
         try:
-            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+            from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer
 
             analyzer = ASTAnalyzer()
             path = Path(file_path)
@@ -285,7 +285,7 @@ class LensQuickTier2:
             Dict with import information
         """
         try:
-            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+            from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer
 
             analyzer = ASTAnalyzer()
             path = Path(file_path)
@@ -318,7 +318,7 @@ class LensQuickTier2:
             Dict with complexity metrics
         """
         try:
-            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+            from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer
 
             analyzer = ASTAnalyzer()
             path = Path(file_path)
@@ -526,7 +526,7 @@ class LensTargetedTier3:
             Dict with documentation metrics
         """
         try:
-            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+            from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer
 
             analyzer = ASTAnalyzer()
             path = Path(file_path)

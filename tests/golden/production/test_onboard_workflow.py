@@ -63,7 +63,7 @@ class TestProductionAnalyze:
     
     def test_analyze_python_codebase(self, tmp_path: Path) -> None:
         """Golden: Analyze Python codebase for patterns."""
-        from cortex.lens.analyzers.python_analyzer import PythonAnalyzer
+        from cortex.lens.analyzers.python_metrics_analyzer import PythonAnalyzer
         
         analyzer = PythonAnalyzer()
         

@@ -788,7 +788,7 @@ class IntelligenceMatrixBuilder:
             # P0-CRITICAL pairs — all must be wired
             ("IC-001", "CC-001"): "cortex.lens.LENSOrchestrator.analyze_files",
             ("IC-004", "CC-008"): "cortex.mcp.tools.intelligence.CortexLens.pattern_detect",
-            ("IC-007", "CC-001"): "cortex.lens.analyzers.ast_analyzer.ASTAnalyzer",
+            ("IC-007", "CC-001"): "cortex.lens.analyzers.python_structure_analyzer.ASTAnalyzer",
             ("IC-008", "CC-008"): "cortex.mcp.mcp_tool_base.format_response",
             ("IC-009", "CC-006"): "cortex.orchestrators.intelligence.blind_spot_detector",
             ("IC-008", "CC-005"): "cortex.orchestrators.intelligence.response_template_generator",

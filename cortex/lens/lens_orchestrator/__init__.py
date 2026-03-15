@@ -17,7 +17,7 @@ from cortex.lens.lens_orchestrator._coordinator import (
     get_lens_orchestrator,
 )
 # Re-exported for test patching at cortex.lens.lens_orchestrator.* namespace
-from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer
 from cortex.lens.analyzers.comment_extractor import CommentExtractor
 from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
 

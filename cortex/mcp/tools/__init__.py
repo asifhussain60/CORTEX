@@ -142,6 +142,12 @@ from cortex.mcp.tools.cortex_ado import CortexAdo
 
 # Phase 132-b — PR Code Review Pipeline (6-stage OWASP-aligned review)
 from cortex.mcp.tools.cortex_review import CortexReview
+from cortex.mcp.tools.cortex_code import CortexCode
+from cortex.mcp.tools.cortex_govern import CortexGovern
+from cortex.mcp.tools.cortex_analyze import CortexAnalyze
+from cortex.mcp.tools.cortex_plan import CortexPlanMega
+from cortex.mcp.tools.cortex_learn import CortexLearn
+from cortex.mcp.tools.cortex_ops import CortexOps
 
 
 # All tool classes for registration
@@ -213,6 +219,12 @@ ALL_TOOLS = [
     CortexAdo,
     # Code Review Pipeline (1) - Phase 132-b — 6-stage OWASP-aligned PR review
     CortexReview,
+    CortexCode,
+    CortexGovern,
+    CortexAnalyze,
+    CortexPlanMega,
+    CortexLearn,
+    CortexOps,
 ]
 
 
@@ -353,6 +365,12 @@ __all__ = [
     "CortexContent",
     # ADO Context Synthesizer (Phase 131-c)
     "CortexAdo",
+    "CortexCode",
+    "CortexGovern",
+    "CortexAnalyze",
+    "CortexPlanMega",
+    "CortexLearn",
+    "CortexOps",
     # Registration
     "ALL_TOOLS",
     "register_all_tools",

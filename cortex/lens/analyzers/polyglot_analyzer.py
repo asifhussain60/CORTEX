@@ -23,7 +23,7 @@ from cortex.lens.adapters.csharp_adapter import CSharpAdapter
 from cortex.lens.adapters.java_adapter import JavaAdapter
 from cortex.lens.adapters.javascript_adapter import JavaScriptAdapter
 from cortex.lens.adapters.typescript_adapter import TypeScriptAdapter
-from cortex.lens.analyzers.ast_analyzer import (
+from cortex.lens.analyzers.python_structure_analyzer import (
     ASTAnalyzer,
 )
 

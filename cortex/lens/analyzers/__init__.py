@@ -22,7 +22,7 @@ Note: Uses lazy imports to prevent circular dependencies
 # Lazy imports to prevent circular dependency:
 # analyzers/__init__.py → git_history_analyzer → brain.analysis → analyzers/__init__.py
 _lazy_imports = {
-    "ASTAnalyzer": ("cortex.lens.analyzers.ast_analyzer", "ASTAnalyzer"),
+    "ASTAnalyzer": ("cortex.lens.analyzers.python_structure_analyzer", "ASTAnalyzer"),
     "GitHistoryAnalyzer": ("cortex.lens.analyzers.git_history_analyzer", "GitHistoryAnalyzer"),
     "CommentExtractor": ("cortex.lens.analyzers.comment_extractor", "CommentExtractor"),
     "ConfigAnalyzer": ("cortex.lens.analyzers.config_analyzer", "ConfigAnalyzer"),

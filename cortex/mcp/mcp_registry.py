@@ -25,6 +25,30 @@ import logging
 from cortex.mcp.mcp_tool_base import Tool, ToolCategory, ToolParameter
 
 
+LEGACY_MEGATOOL_ALIASES: Dict[str, Dict[str, str]] = {
+    "cortex_implement": {"tool": "cortex_code", "op": "implement"},
+    "cortex_fix": {"tool": "cortex_code", "op": "fix"},
+    "cortex_test": {"tool": "cortex_code", "op": "test"},
+    "cortex_audit": {"tool": "cortex_govern", "op": "audit"},
+    "cortex_health": {"tool": "cortex_govern", "op": "health"},
+    "cortex_enforce": {"tool": "cortex_govern", "op": "enforce"},
+    "cortex_investigate": {"tool": "cortex_analyze", "op": "investigate"},
+    "cortex_architecture": {"tool": "cortex_analyze", "op": "architecture"},
+    "cortex_complexity": {"tool": "cortex_analyze", "op": "complexity"},
+    "cortex_phase": {"tool": "cortex_plan", "op": "phase"},
+    "cortex_track": {"tool": "cortex_plan", "op": "track"},
+    "cortex_decompose": {"tool": "cortex_plan", "op": "decompose"},
+    "cortex_totalrecall": {"tool": "cortex_plan", "op": "totalrecall"},
+    "cortex_feedback": {"tool": "cortex_learn", "op": "feedback"},
+    "cortex_digest": {"tool": "cortex_learn", "op": "digest"},
+    "cortex_distill": {"tool": "cortex_learn", "op": "distill"},
+    "cortex_sync": {"tool": "cortex_ops", "op": "sync"},
+    "cortex_upgrade": {"tool": "cortex_ops", "op": "upgrade"},
+    "cortex_setup": {"tool": "cortex_ops", "op": "setup"},
+    "cortex_status": {"tool": "cortex_ops", "op": "status"},
+}
+
+
 # ============================================================================
 # PRODUCTION TOOL DEFINITIONS (36 Tools — WAVE-101 + Phase 130-132 backport)
 # Removed: cortex_process_request (deprecated), cortex_lens (deleted per architect spec)
@@ -219,14 +243,70 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         "operations": ["extract", "rename", "move", "inline", "organize"],
     },
     "cortex_plan": {
-        "description": "Planning lifecycle: create, update, complete, query, sync.",
+        "description": "Unified planning operations: plan, phase, track, decompose, totalrecall.",
         "category": ToolCategory.OPERATIONS,
         "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["create", "update", "complete", "query", "sync"], "description": "Plan operation"},
+            {"name": "op", "type": "string", "required": False, "enum": ["plan", "phase", "track", "decompose", "totalrecall"], "description": "Plan operation"},
+            {"name": "operation", "type": "string", "required": False, "enum": ["plan", "phase", "track", "decompose", "totalrecall"], "description": "Alias of op"},
             {"name": "phase_id", "type": "string", "required": False, "description": "Phase identifier"},
+            {"name": "target", "type": "string", "required": False, "description": "Target path"},
             {"name": "options", "type": "object", "required": False, "description": "Operation options"},
         ],
-        "operations": ["create", "update", "complete", "query", "sync"],
+        "operations": ["plan", "phase", "track", "decompose", "totalrecall"],
+    },
+    "cortex_code": {
+        "description": "Unified code operations: implement, fix, refactor, review, test, debug.",
+        "category": ToolCategory.OPERATIONS,
+        "parameters": [
+            {"name": "op", "type": "string", "required": False, "enum": ["implement", "fix", "refactor", "review", "test", "debug"], "description": "Code operation"},
+            {"name": "operation", "type": "string", "required": False, "enum": ["implement", "fix", "refactor", "review", "test", "debug"], "description": "Alias of op"},
+            {"name": "target", "type": "string", "required": False, "description": "Target path or symbol"},
+            {"name": "request", "type": "string", "required": False, "description": "Request payload"},
+        ],
+        "operations": ["implement", "fix", "refactor", "review", "test", "debug"],
+    },
+    "cortex_govern": {
+        "description": "Unified governance operations: audit, health, enforce, vacuum.",
+        "category": ToolCategory.GOVERNANCE,
+        "parameters": [
+            {"name": "op", "type": "string", "required": False, "enum": ["audit", "health", "enforce", "vacuum"], "description": "Governance operation"},
+            {"name": "operation", "type": "string", "required": False, "enum": ["audit", "health", "enforce", "vacuum"], "description": "Alias of op"},
+            {"name": "target", "type": "string", "required": False, "description": "Target path"},
+        ],
+        "operations": ["audit", "health", "enforce", "vacuum"],
+    },
+    "cortex_analyze": {
+        "description": "Unified analysis operations: lens, investigate, architecture, complexity.",
+        "category": ToolCategory.INTELLIGENCE,
+        "parameters": [
+            {"name": "op", "type": "string", "required": False, "enum": ["lens", "investigate", "architecture", "complexity"], "description": "Analysis operation"},
+            {"name": "operation", "type": "string", "required": False, "enum": ["lens", "investigate", "architecture", "complexity"], "description": "Alias of op"},
+            {"name": "target", "type": "string", "required": False, "description": "Target path"},
+            {"name": "query", "type": "string", "required": False, "description": "Query payload"},
+        ],
+        "operations": ["lens", "investigate", "architecture", "complexity"],
+    },
+    "cortex_learn": {
+        "description": "Unified learning operations: rca, feedback, digest, distill, onboard.",
+        "category": ToolCategory.INTELLIGENCE,
+        "parameters": [
+            {"name": "op", "type": "string", "required": False, "enum": ["rca", "feedback", "digest", "distill", "onboard"], "description": "Learning operation"},
+            {"name": "operation", "type": "string", "required": False, "enum": ["rca", "feedback", "digest", "distill", "onboard"], "description": "Alias of op"},
+            {"name": "target", "type": "string", "required": False, "description": "Target path or ID"},
+            {"name": "data", "type": "object", "required": False, "description": "Operation payload"},
+        ],
+        "operations": ["rca", "feedback", "digest", "distill", "onboard"],
+    },
+    "cortex_ops": {
+        "description": "Unified operations: sync, upgrade, setup, status.",
+        "category": ToolCategory.OPERATIONS,
+        "parameters": [
+            {"name": "op", "type": "string", "required": False, "enum": ["sync", "upgrade", "setup", "status"], "description": "Ops operation"},
+            {"name": "operation", "type": "string", "required": False, "enum": ["sync", "upgrade", "setup", "status"], "description": "Alias of op"},
+            {"name": "target", "type": "string", "required": False, "description": "Target path or service"},
+            {"name": "options", "type": "object", "required": False, "description": "Operation options"},
+        ],
+        "operations": ["sync", "upgrade", "setup", "status"],
     },
     "cortex_onboard": {
         "description": "Repository onboarding: analyze configs, full onboarding (v2/v3), security scan.",
@@ -698,3 +778,17 @@ def get_registry() -> ToolRegistry:
     if _registry is None:
         _registry = ToolRegistry()
     return _registry
+
+
+def resolve_legacy_tool_alias(tool_name: str, params: Dict[str, Any]) -> tuple[str, Dict[str, Any]]:
+    """Resolve legacy tool names to mega-tool equivalents.
+
+    Returns the original tool/params when no alias applies.
+    """
+    alias = LEGACY_MEGATOOL_ALIASES.get(tool_name)
+    if not alias:
+        return tool_name, params
+
+    resolved_params = dict(params)
+    resolved_params.setdefault("op", alias["op"])
+    return alias["tool"], resolved_params

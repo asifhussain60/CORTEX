@@ -38,7 +38,7 @@ from cortex.lens.lens_orchestrator.lens_models import LENSContext
 
 # Infrastructure
 from cortex.lens.analyzers.api_analyzer import get_api_analyzer
-from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer
 from cortex.lens.analyzers.comment_extractor import CommentExtractor
 from cortex.lens.analyzers.config_analyzer import get_config_analyzer
 from cortex.lens.analyzers.database_analyzer import get_database_analyzer

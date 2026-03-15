@@ -101,7 +101,7 @@ class TestLensAnalyzersReturnNonEmptyAnalysis:
 
     def test_ast_analyzer_importable(self) -> None:
         """ASTAnalyzer must import without errors."""
-        from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer  # noqa: F401
+        from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer  # noqa: F401
 
         assert ASTAnalyzer is not None
 
@@ -111,7 +111,7 @@ class TestLensAnalyzersReturnNonEmptyAnalysis:
         analyze_file() returns an ASTAnalysisResult dataclass.
         success=False means the analyzer failed to parse the file — P0 blocker.
         """
-        from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer, ASTAnalysisResult
+        from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer, ASTAnalysisResult
 
         # Analyze a well-known, stable production file
         target = CORTEX_ROOT / "cortex" / "orchestrators" / "workflow" / "workflow_composer.py"
@@ -340,7 +340,7 @@ class TestFullChainIoToRegistryNoStubs:
         from cortex.orchestrators.core.interaction_orchestrator import (
             InteractionOrchestrator,
         )
-        from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+        from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer
         from cortex.intelligence.facade import get_intelligence_facade
         import yaml
 
@@ -362,7 +362,7 @@ class TestFullChainIoToRegistryNoStubs:
         )
 
         # ── Link 2: LENS AST analysis ──────────────────────────────────
-        from cortex.lens.analyzers.ast_analyzer import ASTAnalysisResult
+        from cortex.lens.analyzers.python_structure_analyzer import ASTAnalysisResult
 
         target_path = CORTEX_ROOT / "cortex" / "orchestrators" / "workflow" / "workflow_composer.py"
         ast_result = ASTAnalyzer().analyze_file(target_path)  # accepts pathlib.Path

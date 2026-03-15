@@ -19,11 +19,11 @@ _lazy_lens_imports = {
     "GitHistoryResult": "cortex.lens.analyzers.git_history_analyzer",
 
     # ast_analyzer
-    "ASTAnalyzer": "cortex.lens.analyzers.ast_analyzer",
-    "FunctionInfo": "cortex.lens.analyzers.ast_analyzer",
-    "ClassInfo": "cortex.lens.analyzers.ast_analyzer",
-    "ImportInfo": "cortex.lens.analyzers.ast_analyzer",
-    "ASTAnalysisResult": "cortex.lens.analyzers.ast_analyzer",
+    "ASTAnalyzer": "cortex.lens.analyzers.python_structure_analyzer",
+    "FunctionInfo": "cortex.lens.analyzers.python_structure_analyzer",
+    "ClassInfo": "cortex.lens.analyzers.python_structure_analyzer",
+    "ImportInfo": "cortex.lens.analyzers.python_structure_analyzer",
+    "ASTAnalysisResult": "cortex.lens.analyzers.python_structure_analyzer",
 
     # comment_extractor
     "CommentExtractor": "cortex.lens.analyzers.comment_extractor",

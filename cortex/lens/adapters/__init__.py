@@ -12,13 +12,17 @@ Phase 4: TypeScriptAdapter, JavaScriptAdapter (IN PROGRESS ⏳)
 Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml
 """
 
+from cortex.lens.adapters.i_lens_adapter import ILensAdapter
 from cortex.lens.adapters.language_adapter import LanguageAdapter
 
-__all__ = ["LanguageAdapter", "CSharpAdapter", "JavaAdapter", "TypeScriptAdapter", "JavaScriptAdapter"]
+__all__ = ["ILensAdapter", "LanguageAdapter", "CSharpAdapter", "JavaAdapter", "TypeScriptAdapter", "JavaScriptAdapter"]
 
 
 def __getattr__(name: str):
     """Lazy import adapters to prevent circular dependencies."""
+    if name == "ILensAdapter":
+        from cortex.lens.adapters.i_lens_adapter import ILensAdapter
+        return ILensAdapter
     if name == "CSharpAdapter":
         from cortex.lens.adapters.csharp_adapter import CSharpAdapter
         return CSharpAdapter

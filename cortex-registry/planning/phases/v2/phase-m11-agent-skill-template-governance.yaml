@@ -17,6 +17,36 @@ background: |
   lifecycle templates for agent and skill authoring with strict validation,
   approval, observability, and evaluation hooks.
 
+claude_code_interoperability_contract:
+  objective: "Productize CORTEX as a Claude Code Governance & Orchestration Pack (control plane, not runtime replacement)."
+  packaging_scope:
+    generated_artifacts:
+      - ".claude/agents/**"
+      - ".claude/skills/**"
+      - ".claude/rules/**"
+      - ".claude/hooks/**"
+    generated_by: "MCP-first lifecycle workflows owned by phase-m11 templates"
+  architecture_boundaries:
+    - "Claude Code remains execution runtime (agents, teams, hooks, worktrees)."
+    - "CORTEX remains deterministic governance and validation authority."
+    - "No generated Claude artifact may bypass CORE-048, CORE-064, or CORE-068 gates."
+    - "Orchestrator routing integrity remains under IntentRouter and master wiring contracts."
+  mandatory_exposure:
+    mcp_first: true
+    required_tooling:
+      - "cortex_plan"
+      - "cortex_governance"
+      - "cortex_validate"
+  deliverables:
+    - "Template-driven generate/validate/publish workflow for Claude pack artifacts"
+    - "Parity matrix: generated pack outputs vs CORTEX governance contracts"
+    - "Regression block: fail-close on drift or missing lifecycle evidence"
+  acceptance_gates:
+    - "YAML + template schema validation passes"
+    - "Smoke tests pass with zero new failures"
+    - "Convergence loop clears P0/P1 before phase close"
+    - "Pack generation path is auditable end-to-end with AC markers"
+
 sweep_catalogue:
   - id: "GAP-M11-01"
     title: "Create agent-authoring workflow template"

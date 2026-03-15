@@ -24,7 +24,7 @@ from typing import Any, Dict, List, Optional
 import os
 
 from cortex.mcp.mcp_tool_base import ToolResult, ToolCategory
-from cortex.mcp.mcp_registry import ToolRegistry, get_registry
+from cortex.mcp.mcp_registry import ToolRegistry, get_registry, resolve_legacy_tool_alias
 from cortex.mcp.tenant_context_middleware import TenantContextMiddleware
 
 
@@ -227,15 +227,21 @@ class MCPServer:
         }
 
         # Get tool implementation
-        tool = self.registry.get(tool_name)
+        resolved_tool_name = tool_name
+        resolved_params = params
+        tool = self.registry.get(resolved_tool_name)
+
+        if tool is None:
+            resolved_tool_name, resolved_params = resolve_legacy_tool_alias(tool_name, params)
+            tool = self.registry.get(resolved_tool_name)
 
         if tool is None:
             # Check if tool exists in metadata (not yet implemented)
-            metadata = self.registry.get_metadata(tool_name)
+            metadata = self.registry.get_metadata(resolved_tool_name)
             if metadata:
                 return ToolResult(
                     success=False,
-                    error=f"Tool '{tool_name}' is defined but not yet implemented",
+                    error=f"Tool '{resolved_tool_name}' is defined but not yet implemented",
                     metadata={"available_operations": metadata.operations}
                 )
             return ToolResult(
@@ -245,7 +251,7 @@ class MCPServer:
             )
 
         # Validate parameters
-        validation_error = tool.validate_params(**params)
+        validation_error = tool.validate_params(**resolved_params)
         if validation_error:
             return ToolResult(
                 success=False,
@@ -254,7 +260,7 @@ class MCPServer:
 
         # Execute tool
         try:
-            result = tool.execute(**params)
+            result = tool.execute(**resolved_params)
 
             # Handle async coroutines
             if inspect.iscoroutine(result):
@@ -270,7 +276,9 @@ class MCPServer:
 
             # Add execution metadata
             result.metadata["execution_time_ms"] = int((time.time() - start_time) * 1000)
-            result.metadata["tool"] = tool_name
+            result.metadata["tool"] = resolved_tool_name
+            if resolved_tool_name != tool_name:
+                result.metadata["alias_from"] = tool_name
 
             return result
 

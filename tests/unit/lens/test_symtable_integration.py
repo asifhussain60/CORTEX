@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Dict, Any, List
 
 from cortex.core.result import Ok, Err
-from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer
 
 
 class TestSymtableIntegration:

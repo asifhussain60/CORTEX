@@ -104,7 +104,7 @@ class TestDriftLockCheck31:
         intelligence features.
         """
         try:
-            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer  # noqa: F401
+            from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer  # noqa: F401
         except ImportError as exc:
             pytest.fail(
                 "DRIFT-LOCK CHECK-31 INV-31-02 REGRESSION: ASTAnalyzer import "
@@ -118,7 +118,7 @@ class TestDriftLockCheck31:
         Regression: if analyze_file() returns a dataclass with success=False on
         a valid cortex source file, the LENS analysis layer is broken.
         """
-        from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer, ASTAnalysisResult
+        from cortex.lens.analyzers.python_structure_analyzer import ASTAnalyzer, ASTAnalysisResult
 
         target = CORTEX_ROOT / "cortex" / "orchestrators" / "workflow" / "workflow_composer.py"
         assert target.exists(), (
