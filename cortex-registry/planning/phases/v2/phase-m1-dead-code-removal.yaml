@@ -106,7 +106,7 @@ sweep_catalogue:
       brain_health_orchestrator.py — Phase 102-C shim → intelligence_health_orchestrator.py
       Both are import redirects with no logic. Safe to delete with import path updates.
     action_ref: "phase-m1-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M1-08"
     title: "Consolidate 3 complexity classifiers → prompt heuristic"
@@ -120,7 +120,7 @@ sweep_catalogue:
       CORE-035 violation: single canonical implementation only.
       LLMs judge complexity as part of reasoning — no orchestrator needed.
     action_ref: "phase-m1-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M1-09"
     title: "Baseline validation — zero regression after removals"
@@ -222,7 +222,7 @@ phases:
     title: "Delete dead orchestrator domains (persona, strategies, synthesis, tools, response)"
     priority: P0
     status: IN_PROGRESS
-    execution_note: "Domain deletions and import cleanup complete; smoke gate currently blocked by unrelated baseline failures (stub_eradication, missing tree_sitter_c_sharp, missing jinja2, protocol mixin golden checks)."
+    execution_note: "Domain deletions and import cleanup complete; targeted v2 gates pass (test_dead_domain_removal.py). Phase remains open until phase-m1-final smoke convergence is satisfied."
     gap_refs: ["GAP-M1-02", "GAP-M1-03", "GAP-M1-04", "GAP-M1-05", "GAP-M1-06"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "2 hours"
@@ -289,7 +289,8 @@ phases:
   - id: "phase-m1-c"
     title: "Delete backward-compat shims + consolidate complexity classifiers"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
+    execution_note: "Shim/classifier deletions and manifest heuristic update completed; targeted v2 gates pass (test_shim_complexity_removal.py). Sub-phase remains open pending phase-m1-final smoke convergence."
     gap_refs: ["GAP-M1-07", "GAP-M1-08"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "1.5 hours"
