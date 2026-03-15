@@ -22,12 +22,12 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-15T16:10:00Z'
+  last_updated: '2026-03-15T23:55:00Z'
   total_phases: 12
   active: 1
-  completed: 1
+  completed: 2
   in_progress: 1
-  planned: 10
+  planned: 9
   design_principles:
     - "LLM-native: leverage Claude/GPT native capabilities instead of reimplementing"
     - "Declarative governance: rules in YAML, enforcement in 1 engine — not 5 orchestrators"
@@ -123,9 +123,9 @@ session_resume_protocol:
     maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
 
 runtime_state:
-  last_completed_phase: "phase-m1"
-  next_executable_phase: "phase-m2"
-  last_session_action: "phase-m2-a-context-validator-red-green-complete"
+  last_completed_phase: "phase-m2"
+  next_executable_phase: "phase-m3"
+  last_session_action: "phase-m2-closed-after-smoke-pass-and-next-phase-advanced-to-m3"
   last_session_prompt: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
 
 phase_detail_files:
@@ -142,24 +142,24 @@ phase_detail_files:
   - id: phase-m2
     title: "Orchestrator Consolidation — Core Layer Merges"
     priority: P0
-    status: IN_PROGRESS
+    status: COMPLETE
     sweep_id: SWEEP-M2-CORE-CONSOLIDATION
     gaps: 7
     sub_phases: 5
     depends_on: ["phase-m1"]
     file: "cortex-registry/planning/phases/v2/phase-m2-core-consolidation.yaml"
-    note: "IN_PROGRESS — m2-a started: ContextValidator implemented with dedicated v2 tests; next step is consumer migration and context module consolidation."
+    note: "COMPLETE — consumer migrations + wiring updates complete for IntentGateway/ExecutionEngine, dependency parity blockers resolved (tree-sitter runtime, pytest-asyncio, prometheus-client), and smoke gate passed (2922 passed, 81 skipped, 22 xfailed, 1 xpassed)."
 
   - id: phase-m3
     title: "Intelligence Layer Reduction"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
     sweep_id: SWEEP-M3-INTELLIGENCE-REDUCTION
     gaps: 8
     sub_phases: 4
     depends_on: ["phase-m2"]
     file: "cortex-registry/planning/phases/v2/phase-m3-intelligence-reduction.yaml"
-    note: "Retire crawler/, documentation/, perception/. Retire Python AST wrappers. Merge IntelligenceProvider + IntelligenceOrchestrator into IntelligenceFacade. 369 → ~60 files."
+    note: "IN_PROGRESS — phase promoted after M2 completion. Baseline established; next execution targets obsolete intelligence subtree retirement and facade-preservation TDD sequence."
 
   - id: phase-m4
     title: "LENS Streamlining — Polyglot-Only Retention"
@@ -286,20 +286,20 @@ health_status:
   last_health_fix: null
 
 production_readiness:
-  status: "IN_PROGRESS — phase-m2 executing"
+  status: "IN_PROGRESS — phase-m3 executing"
   overall_score: null
   deployment_date: null
 
 summary:
   total_phases: 12
-  completed: 1
+  completed: 2
   active: 1
   in_progress: 1
-  planned: 10
+  planned: 9
   archived: 0
-  completion_percentage: 8
-  consolidation_summary: "2026-03-15 — V2 plan redesigned as 12-phase autonomous chain: M1-M9 platform reduction + certification, M10 federated team model, M11 agent/skill workflow governance, M12 docs IA + final cleanup convergence. Every phase requires final continuation handoff to next phase. Target: zero regression, zero duplicate ownership, zero leftover v1 implementation artifacts."
-  active_phases: "phase-m2 — Orchestrator Consolidation — Core Layer Merges"
+  completion_percentage: 17
+  consolidation_summary: "2026-03-15 — V2 autonomous execution advanced through M2 completion with smoke-gate closure and dependency parity remediation; chain now active on M3 intelligence reduction while preserving governance, orchestration integrity, and zero-regression contract."
+  active_phases: "phase-m3 — Intelligence Layer Reduction"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -317,25 +317,25 @@ phases:
   - id: phase-m2
     title: "Orchestrator Consolidation — Core Layer Merges"
     priority: P0
-    status: IN_PROGRESS
+    status: COMPLETE
     depends_on: ["phase-m1"]
     sweep_id: SWEEP-M2-CORE-CONSOLIDATION
     gaps: 7
     sub_phases: 5
     file: "cortex-registry/planning/phases/v2/phase-m2-core-consolidation.yaml"
-    note: "P0 — ACTIVE. M2 kickoff after M1 completion."
+    note: "P0 — COMPLETE. Consumer migration and wiring updates complete; smoke gate closed after dependency parity remediation."
 
   # Phase M3 — INTELLIGENCE (depends: M2, parallel with M5)
   - id: phase-m3
     title: "Intelligence Layer Reduction"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
     depends_on: ["phase-m2"]
     sweep_id: SWEEP-M3-INTELLIGENCE-REDUCTION
     gaps: 8
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m3-intelligence-reduction.yaml"
-    note: "P1 — retires LLM-duplicating intelligence modules. 369 → ~60."
+    note: "P1 — ACTIVE. Baseline established and execution started after M2 close; retires LLM-duplicating intelligence modules. 369 → ~60."
 
   # Phase M4 — LENS (depends: M2, parallel with M3)
   - id: phase-m4

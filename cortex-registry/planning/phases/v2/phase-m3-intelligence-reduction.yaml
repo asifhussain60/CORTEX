@@ -1,7 +1,7 @@
 id: "phase-m3"
 title: "Intelligence Layer Reduction — 369 → ~60 Files"
 created: "2026-03-15"
-status: PLANNED
+status: IN_PROGRESS
 priority: P0
 governance_authority:
   - CORE-008
@@ -22,7 +22,7 @@ background: |
   and governance knowledge.
   
   Baseline measurements:
-    - Post-M2 smoke tests: >= 2730
+    - Post-M2 smoke tests: 2922 passed (81 skipped, 22 xfailed, 1 xpassed)
     - Intelligence files: 369
     - Target: ~60 files
   Git prerequisite: phase-m2 COMPLETE on CORTEX-V2 branch
@@ -146,7 +146,7 @@ phases:
   - id: "phase-m3-a"
     title: "Retire obsolete intelligence subdirectories"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
     gap_refs: ["GAP-M3-01", "GAP-M3-02", "GAP-M3-03", "GAP-M3-04"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "4 hours"

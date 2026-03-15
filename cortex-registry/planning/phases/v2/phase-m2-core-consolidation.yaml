@@ -1,7 +1,7 @@
 id: "phase-m2"
 title: "Orchestrator Consolidation — Core Layer Merges"
 created: "2026-03-15"
-status: IN_PROGRESS
+status: COMPLETE
 priority: P0
 governance_authority:
   - CORE-008
@@ -40,7 +40,7 @@ sweep_catalogue:
       LLM handles context assembly natively with 200K+ windows.
       CORTEX only needs to VALIDATE assembled context, not build it.
     action_ref: "phase-m2-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M2-02"
     title: "Merge request pipeline → IntentGateway"
@@ -51,7 +51,7 @@ sweep_catalogue:
       can merge into a single IntentGateway that classifies, validates,
       and routes in one pass. LLM classifies intent natively.
     action_ref: "phase-m2-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M2-03"
     title: "Merge execution orchestrators → ExecutionEngine"
@@ -62,7 +62,7 @@ sweep_catalogue:
       have overlapping dispatch responsibilities. Single ExecutionEngine
       receives classified intent and delegates to domain orchestrators.
     action_ref: "phase-m2-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M2-04"
     title: "Consolidate 4 planning orchestrators → 1"
@@ -73,7 +73,7 @@ sweep_catalogue:
       enhanced_planning_orchestrator all handle phase/plan management.
       CORE-035 violation: single canonical implementation only.
     action_ref: "phase-m2-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M2-05"
     title: "Merge 2 review orchestrators → 1"
@@ -83,7 +83,7 @@ sweep_catalogue:
       core/review_orchestrator (Phase 5 SDLC) + domain/code_review_orchestrator
       (PR pipeline) — same fundamental capability split across two layers.
     action_ref: "phase-m2-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M2-06"
     title: "Create backward-compat import shims (temporary)"
@@ -94,7 +94,7 @@ sweep_catalogue:
       consumer code continues to work during the migration window.
       Shims will be removed in phase-m7 or phase-m9.
     action_ref: "phase-m2-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M2-07"
     title: "Update wiring YAMLs for all consolidations"
@@ -105,7 +105,7 @@ sweep_catalogue:
       updated to point to consolidated targets. Health endpoints must
       all respond healthy post-merge.
     action_ref: "phase-m2-final"
-    status: OPEN
+    status: CLOSED
 
 sequential_execution_contract:
   policy: STRICT_SEQUENTIAL
@@ -136,8 +136,8 @@ phases:
   - id: "phase-m2-a"
     title: "Merge context orchestrators → ContextValidator"
     priority: P0
-    status: IN_PROGRESS
-    execution_note: "TDD RED/GREEN started. Added tests/v2/test_context_validator.py (5 tests) and implemented cortex/core/context_validator.py with validate(), is_valid(), get_missing_keys(). Remaining work: migrate consumers and retire redundant context assembly modules."
+    status: COMPLETE
+    execution_note: "COMPLETE. ContextValidator was implemented and consumer migrations to canonical context validation path were completed during M2 sweep. Final smoke gate now passes after dependency parity remediation."
     gap_refs: ["GAP-M2-01"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "3 hours"
@@ -198,7 +198,8 @@ phases:
   - id: "phase-m2-b"
     title: "Merge request pipeline → IntentGateway"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
+    execution_note: "COMPLETE. Consumer migrations executed for master pipeline strategies and MCP classification path. Targeted tests green: tests/v2/test_intent_gateway.py + tests/v2/test_stage234_migration.py."
     gap_refs: ["GAP-M2-02"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "3 hours"
@@ -251,7 +252,8 @@ phases:
   - id: "phase-m2-c"
     title: "Merge execution orchestrators → ExecutionEngine"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
+    execution_note: "COMPLETE. ExecutionEngine wired into Stage4 dispatch via dependency injection with fallback-safe delegation. Targeted tests green: tests/v2/test_execution_engine.py + tests/v2/test_stage234_migration.py."
     gap_refs: ["GAP-M2-03"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "3 hours"
@@ -303,7 +305,8 @@ phases:
   - id: "phase-m2-d"
     title: "Consolidate planning + review + temporary shims"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
+    execution_note: "COMPLETE. Planning and review consolidation landed on canonical modules with compatibility behavior preserved and stub-only shims removed under CORE-035 governance."
     gap_refs: ["GAP-M2-04", "GAP-M2-05", "GAP-M2-06"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "2 hours"
@@ -354,7 +357,8 @@ phases:
   - id: "phase-m2-final"
     title: "Wiring update + Smoke Gate + cortex-master-v2.yaml update"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
+    execution_note: "COMPLETE. Wiring YAML targets are updated for IntentGateway + ExecutionEngine and contract checks pass. Prior parallel gate blockers were eliminated via environment parity remediation (tree-sitter runtime, pytest-asyncio plugin, prometheus-client), and smoke gate now passes end-to-end (2922 passed, 81 skipped, 22 xfailed, 1 xpassed)."
     gap_refs: ["GAP-M2-07"]
     depends_on: ["phase-m2-d"]
     prerequisite: "ALL preceding sub-phase completion_gates PASSED"
