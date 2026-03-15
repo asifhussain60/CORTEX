@@ -1,8 +1,9 @@
 id: "phase-m7"
-title: "Prompt & Agent Surface Reduction — 75 → ~20 Files"
+title: "Prompt & Agent Surface Reduction — 86 → ~35 Files"
 created: "2026-03-15"
+updated: "2026-03-15"
 status: PLANNED
-priority: P1
+priority: P0
 governance_authority:
   - CORE-008
   - CORE-035
@@ -11,110 +12,294 @@ governance_authority:
 sweep_catalogue_id: "SWEEP-M7-PROMPT-REDUCTION"
 
 background: |
-  Source: CORTEX V2 Architecture Review (2026-03-15)
-  The .github/ prompt/agent surface contains 75 files totaling ~35,000 lines:
-  - cortex-architect.prompt.md: ~8,500 lines (largest single file)
-  - cortex-response-templates.md: ~4,000 lines
-  - 56 agent files totaling ~15,046 lines
-  - 7 skill files with significant overlap
+  Source: CORTEX V2 Architecture Review + Deep Prompt/Agent Audit (2026-03-15)
   
-  Modern LLMs operate more effectively with concise, focused instructions
-  (500-1000 lines) than with massive specification documents. The response
-  template formatting rules (4,000 lines) can be replaced with a 200-line
-  golden format spec.
+  CORRECTED BASELINES (verified via actual line counts):
+  The .github/ prompt/agent surface contains 86 files totaling 24,790 lines:
+  - 14 prompts: 4,940 lines (largest: cortex-doc.prompt.md 1,317 lines)
+  - 56 agents: ~14,500 lines across 6 subdomains (core 6,413 / docs 4,617 /
+    certification 1,610 / support+education+orchestration ~1,860)
+  - 8 skills: 736 lines (7 SKILL.md + 1 reference)
+  - 2 templates: 3,499 lines (response-templates 3,308 + chat guide 191)
+  - 6 instructions: 208 lines
+  - 1 copilot-instructions.md: 361 lines
   
-  Strategy: reduce architect prompt 90% (8500 → 800 lines), reduce response
-  templates 95% (4000 → 200 lines), consolidate 56 agents to 8 agent-modes,
-  merge 7 skills to 3 domain skills.
+  Capability Preservation Verification (second pass):
+  - 20/20 execution modes preserved in surviving files
+  - 12/13 CORE governance rules covered (CORE-071 to verify)
+  - 14/15 MCP tools documented (cortex_train admin-only intentional)
+  - 3 confirmed duplicate agents safe to delete (zero capability loss)
+  - 4 merge clusters analyzed with unique capabilities preserved
+  - Overall risk: P1 LOW
+  
+  Strategy: reduce prompt files 40-75%, consolidate 56 agents to ~21 via
+  targeted merges (not aggressive 8-mode rewrite), keep domain skills intact,
+  preserve all unique specialist capabilities.
   
   Baseline measurements:
     - Post-M6 smoke tests: >= 2600
-    - Prompt/agent files: 75
-    - Total lines: ~35,000
-    - Target: ~20 files, ~3,000 lines
+    - Prompt/agent/skill/template/instruction files: 86
+    - Total lines: 24,790
+    - copilot-instructions.md: 361 lines
+    - cortex-architect.prompt.md: 1,053 lines
+    - cortex-response-templates.md: 3,308 lines
+    - Target: ~35 files, ~8,000 lines
   Git prerequisite: phase-m6 COMPLETE on CORTEX-V2 branch
 
 sweep_catalogue:
+  # ═══════════════════════════════════════════════════════════
+  # PROMPT REDUCTION (sub-phase M7-a)
+  # ═══════════════════════════════════════════════════════════
+
   - id: "GAP-M7-01"
-    title: "Reduce cortex-architect.prompt.md 90%"
+    title: "Reduce cortex-architect.prompt.md ~40%"
     severity: P0
-    source: "Architecture Review — prompt bloat"
+    source: "Deep Audit — prompt density optimization"
     evidence: |
-      8,500 lines includes inline governance rules, workflow details, and
-      orchestrator specifications that belong in YAML or are LLM-native.
-      Target: 800-line focused architectural guidance + references to
-      governance YAMLs for detail.
+      1,053 lines. Contains 13 execution modes with inline workflow detail
+      that duplicates skill files and governance YAMLs. Sections on audit
+      checks (29+12), convergence gate, sweep completeness repeat content
+      in cortex-audit/SKILL.md and cortex-tdd/SKILL.md.
+      Target: ~600 lines — keep mode routing + unique orchestration logic,
+      reference skills/YAMLs for detail.
     action_ref: "phase-m7-a"
     status: OPEN
 
   - id: "GAP-M7-02"
-    title: "Reduce cortex-response-templates.md 95%"
+    title: "Reduce cortex-response-templates.md ~75%"
     severity: P0
-    source: "Architecture Review — format overspecification"
+    source: "Deep Audit — format overspecification"
     evidence: |
-      4,000 lines of response formatting rules. LLMs follow 200 lines
-      of golden format example reliably. Excessive specification degrades
-      compliance (LLM loses focus in long specs).
+      3,308 lines of response formatting rules — SSOT for all response
+      rendering (14 rules, 3-zone header, composable sections, 120 quotes).
+      LLMs follow concise golden format examples reliably.
+      Target: ~800 lines — keep golden format spec + quote library,
+      remove verbose anti-pattern catalogs and edge case specifications.
+      CRITICAL: this is SSOT referenced by 17+ files. Keep as thin SSOT.
     action_ref: "phase-m7-a"
     status: OPEN
 
   - id: "GAP-M7-03"
-    title: "Reduce copilot-instructions.md"
+    title: "Reduce copilot-instructions.md ~30%"
     severity: P1
-    source: "Architecture Review — instruction bloat"
+    source: "Deep Audit — instruction overlap with skills"
     evidence: |
-      copilot-instructions.md (this file) contains architecture counts,
-      orchestrator lists, and MCP details that belong in skill files or
-      are discoverable by the LLM. Target: 300 lines of essential rules.
+      361 lines. Architecture counts, orchestrator display name mapping,
+      and MCP details overlap with cortex/SKILL.md and MCP-ORCHESTRATOR-MAPPING.md.
+      Target: ~250 lines — keep response header rules (P0 mandatory),
+      composable section assembly order, essential identity. Move architecture
+      counts and MCP details to discoverable locations.
     action_ref: "phase-m7-a"
     status: OPEN
 
+  # ═══════════════════════════════════════════════════════════
+  # AGENT DELETIONS + DOC AGENT MERGES (sub-phase M7-b)
+  # ═══════════════════════════════════════════════════════════
+
   - id: "GAP-M7-04"
-    title: "Consolidate 56 agents → 8 agent-modes"
-    severity: P0
-    source: "Architecture Review — agent proliferation"
+    title: "Delete 3 confirmed duplicate agents"
+    severity: P1
+    source: "Capability Preservation Audit — 100% duplication"
     evidence: |
-      56 agent files with significant overlap. Many agents duplicate
-      instructions from skills/prompts. Modern agent-mode protocol:
-      8 modes — code, govern, analyze, plan, learn, debug, review, architect.
-      Aligns with 6 mega-tools + debug + review specializations.
+      Second-pass verification confirmed zero unique content:
+      1. cortex-holistic-validator.md (122 lines) — 100% duplicate of
+         CORE-048 in cortex-architect.prompt.md § Holistic Validation Gate
+      2. cortex-universal-orchestration.md (183 lines) — 100% duplicate of
+         cortex/SKILL.md § Orchestration Architecture
+      3. CORTEX.md agent (144 lines) — 100% duplicate of cortex/SKILL.md
+      Total: 449 lines removed, zero capability loss.
     action_ref: "phase-m7-b"
     status: OPEN
 
   - id: "GAP-M7-05"
-    title: "Consolidate 7 skills → 3 domain skills"
-    severity: P1
-    source: "CORE-035 — reduce overlap"
+    title: "Consolidate 17 doc agents → 3 composite agents"
+    severity: P0
+    source: "Deep Audit — agent proliferation in docs/ domain"
     evidence: |
-      7 skills (cortex, cortex-audit, cortex-debug, cortex-governance,
-      cortex-plan, cortex-rca, cortex-tdd) can merge into 3:
-      1. cortex-core (governance + audit + tdd)
-      2. cortex-ops (plan + rca + debug)
-      3. cortex-dev (the main cortex skill, slimmed)
+      17 doc agents totaling 4,617 lines with 3-4 agents addressing drift
+      detection and moderate overlap in quality assurance.
+      Consolidation:
+      1. doc-drift-coordinator.md — merges: git-discovery, drift-detection,
+         regression-sentinel, release-notes, github-issue-harvester (5→1)
+      2. doc-qa-guardian.md — merges: coverage-audit, a11y-perf-guardian,
+         visual-qa, design-system-enforcer (4→1)
+      3. doc-lifecycle-manager.md — merges: doc-sync, media-prompt,
+         narrative-continuity, knowledge-harvester, diagram-regeneration,
+         html-view-designer, tetris-layout, comedy-enhancement (8→1)
+      All 14 unique specialist capabilities preserved.
+      Target: 4,617 → ~1,500 lines (3 files).
     action_ref: "phase-m7-b"
     status: OPEN
 
   - id: "GAP-M7-06"
-    title: "Update file-scoped instruction files"
-    severity: P1
-    source: "Migration completeness"
+    title: "Remove stale reference/ prompt files"
+    severity: P2
+    source: "Deep Audit — stale content"
     evidence: |
-      6 file-scoped instruction files (.instructions.md) need updating
-      to reflect v2 conventions, reduced orchestrator count, and
-      consolidated governance rules.
+      .github/prompts/reference/ contains 3 files (830 lines):
+      - phase-0-5-dashboard.md (125 lines) — early-phase tracking, obsolete
+      - chat01-lessons-learned.yaml (184 lines) — Phase 54, historical
+      - chat03-lessons-learned.yaml (646 lines) — historical
+      These are lessons-learned archives with no active references.
+      Migrate valuable patterns to cortex-registry/memory/ then delete.
+    action_ref: "phase-m7-b"
+    status: OPEN
+
+  # ═══════════════════════════════════════════════════════════
+  # AGENT CONSOLIDATION — CORE + CERTIFICATION + EDUCATION (sub-phase M7-c)
+  # ═══════════════════════════════════════════════════════════
+
+  - id: "GAP-M7-07"
+    title: "Merge vacuum agents (2→1)"
+    severity: P1
+    source: "Capability Preservation Audit — 85% overlap"
+    evidence: |
+      cortex-vacuum.md (support, 182 lines) + cortex-vacuum-agent.md
+      (certification, 162 lines) = 344 lines with 85% overlap.
+      UNIQUE to preserve: 8-stage pipeline, CORE-064 sweep catalogue
+      protection, Phase 104 OS artifacts, Phase 128 backup artifacts.
+      Target: single cortex-vacuum.md (~250 lines).
     action_ref: "phase-m7-c"
     status: OPEN
 
-  - id: "GAP-M7-07"
-    title: "Delete backward-compat import shims from M2"
+  - id: "GAP-M7-08"
+    title: "Merge audit agents (2→1 audit-coordinator)"
+    severity: P1
+    source: "Capability Preservation Audit — complementary agents"
+    evidence: |
+      cortex-auditor.md (core, 153 lines) + cortex-audit-agent.md
+      (certification, 148 lines) = 301 lines. Minimal deduplication
+      but complementary: auditor has 41 checks, audit-agent has
+      Phase 0/1/2 pipeline + 7 drift categories + 22 drift locks.
+      Target: single cortex-audit-coordinator.md (~280 lines).
+    action_ref: "phase-m7-c"
+    status: OPEN
+
+  - id: "GAP-M7-09"
+    title: "Merge planner agents (4→1 master-planner)"
+    severity: P1
+    source: "Capability Preservation Audit — planning domain consolidation"
+    evidence: |
+      4 planning agents totaling ~1,456 lines:
+      - master-planner.md (470 lines) — ROI scoring, renumbering strategy
+      - cortex-phase-resolver.md (484 lines) — context extraction, reference resolution
+      - phase-creation-standards.md (572 lines) — four laws, completion gate schema
+      - cortex-master-plan-auditor.md (229 lines) — THIN INDEX, 12 audit checks
+      UNIQUE capabilities in each must be preserved:
+      Part A: Creation Standards (four laws, completion gate schema)
+      Part B: Context Resolution (session continuity, reference resolution)
+      Part C: THIN INDEX CONTRACT + 12 audit checks
+      Target: single cortex-master-planner.md (~600 lines).
+    action_ref: "phase-m7-c"
+    status: OPEN
+
+  - id: "GAP-M7-10"
+    title: "Merge certification worker agents (5→2)"
+    severity: P1
+    source: "Deep Audit — certification pipeline consolidation"
+    evidence: |
+      5 certification worker agents (excluding coordinator + final cert):
+      - cortex-regression-agent.md (106 lines)
+      - cortex-refactor-agent.md (222 lines)
+      - cortex-memory-agent.md (216 lines)
+      - cortex-vacuum-agent.md (absorbed by GAP-M7-07)
+      - cortex-db-agent.md (370 lines)
+      Keep: cortex-certification-coordinator.md (144 lines, unique pipeline
+      orchestrator) + cortex-certification-agent.md (183 lines, unique sign-off).
+      Merge regression+refactor+memory → cortex-certification-workers.md.
+      cortex-db-agent.md kept (unique SQLite integrity).
+      Target: 9 cert agents → 4 (coordinator, workers, db, cert).
+    action_ref: "phase-m7-c"
+    status: OPEN
+
+  - id: "GAP-M7-11"
+    title: "Merge education agents (3→1 cortex-learning)"
+    severity: P2
+    source: "Deep Audit — education domain consolidation"
+    evidence: |
+      3 education agents totaling ~1,113 lines:
+      - cortex-trainer.md (241 lines) — gap-driven training (also has prompt)
+      - cortex-ask-coordinator.md (389 lines) — interactive Q&A
+      - truth-verifier.md (483 lines) — fact verification
+      Merge into single cortex-learning.md with 3 modes.
+      Target: ~400 lines.
+    action_ref: "phase-m7-c"
+    status: OPEN
+
+  # ═══════════════════════════════════════════════════════════
+  # INSTRUCTION + SKILL UPDATES + CLEANUP (sub-phase M7-d)
+  # ═══════════════════════════════════════════════════════════
+
+  - id: "GAP-M7-12"
+    title: "Update 6 instruction files for v2 conventions"
+    severity: P1
+    source: "Migration completeness"
+    evidence: |
+      6 file-scoped instruction files (208 total lines) need updating
+      to reflect v2 conventions: reduced orchestrator count, consolidated
+      governance rules, updated file paths. Already minimal — updates
+      are reference corrections, not rewrites.
+    action_ref: "phase-m7-d"
+    status: OPEN
+
+  - id: "GAP-M7-13"
+    title: "Consolidate skills 7→5"
+    severity: P2
+    source: "Deep Audit — skill overlap"
+    evidence: |
+      7 domain skills (736 lines) with 2 mergeable pairs:
+      1. cortex-governance/SKILL.md (91 lines) → merge into
+         cortex-audit/SKILL.md (governance rules are audit-adjacent)
+      2. cortex-rca/SKILL.md (82 lines) → merge into
+         cortex-debug/SKILL.md (RCA is debug-adjacent)
+      Remaining 5: cortex, cortex-tdd, cortex-audit, cortex-debug, cortex-plan.
+      Domain routing preserved — skills are already small (79-125 lines each).
+    action_ref: "phase-m7-d"
+    status: OPEN
+
+  - id: "GAP-M7-14"
+    title: "Delete M2 backward-compat shims + final cleanup"
     severity: P1
     source: "Cleanup from Phase M2"
     evidence: |
       Temporary backward-compat shims created in Phase M2 can now be
-      removed since all prompts/agents have been updated to use
-      canonical names.
-    action_ref: "phase-m7-c"
+      removed. Also: update AGENT-INDEX.md (335 lines) to reflect
+      consolidated agent structure, remove README.md files from
+      agents/ subdirectories (replaced by AGENT-INDEX).
+    action_ref: "phase-m7-d"
     status: OPEN
+
+capability_preservation:
+  execution_modes_verified: 20
+  execution_modes_total: 20
+  governance_rules_verified: 12
+  governance_rules_total: 13
+  governance_rules_gap: "CORE-071 — verify existence in cortex-registry/core/"
+  mcp_tools_verified: 14
+  mcp_tools_total: 15
+  mcp_tools_gap: "cortex_train — admin-only, intentional"
+  duplicate_agents_confirmed: 3
+  merge_clusters_analyzed: 5
+  overall_risk: "P1 LOW"
+
+  must_keep_files:
+    - "cortex-response-templates.md — SSOT for all response rendering"
+    - "cortex-architect.prompt.md — 13 execution mode definitions"
+    - "cortex-debugger.md — 8 unique injection strategies"
+    - "cortex-total-recall.prompt.md — 10-phase certification (unique)"
+    - "cortex-sync.prompt.md — 4-gate sync pipeline (unique)"
+    - "cortex-trainer.prompt.md — URS scoring, gap-driven training (unique)"
+    - "cortex-feedback.prompt.md — 8-gate sanitization (unique)"
+    - "cortex-doc.prompt.md — 9-knowledge synthesis, 17-agent pipeline (unique)"
+    - "cortex-review-agent.md — OWASP P0/P1 PR review (semi-unique)"
+    - "All 5 surviving domain skills — domain routing"
+
+  critical_sync_points:
+    - "copilot-instructions.md ↔ cortex-response-templates.md — response format"
+    - "cortex-architect.prompt.md ↔ cortex-architect.md agent — mode routing"
+    - "cortex-total-recall.prompt.md ↔ certification/* agents — pipeline stages"
+    - "cortex/SKILL.md ↔ AGENT-INDEX.md — intent routing dispatch"
+    - "cortex-doc.prompt.md ↔ docs/* agents — doc pipeline stages"
 
 sequential_execution_contract:
   policy: STRICT_SEQUENTIAL
@@ -125,13 +310,15 @@ sequential_execution_contract:
   tdd_cycle_mandatory: true
 
 phases:
+  # ═══════════════════════════════════════════════════════════
+  # SUB-PHASE M7-a: PROMPT FILE REDUCTION
+  # ═══════════════════════════════════════════════════════════
   - id: "phase-m7-a"
-    title: "Reduce prompt files (architect, response-templates, copilot-instructions)"
+    title: "Reduce prompt + template files"
     priority: P0
     status: PLANNED
     gap_refs: ["GAP-M7-01", "GAP-M7-02", "GAP-M7-03"]
     governance_authority: "CORE-008, CORE-035"
-    duration_estimate: "4 hours"
     depends_on: []
     prerequisite: "phase-m6 COMPLETE"
     regression_gate: "python3 scripts/run_tests.py smoke"
@@ -142,7 +329,7 @@ phases:
         gate: "tests/v2/test_prompt_reduction.py — ALL tests FAIL"
         blocker: "Prompt editing forbidden"
       green:
-        action: "Rewrite architect prompt (800 lines), response templates (200 lines), copilot-instructions (300 lines)"
+        action: "Reduce architect prompt (1053→600), response templates (3308→800), copilot-instructions (361→250)"
         gate: "tests/v2/test_prompt_reduction.py — ALL tests PASS"
         blocker: "REFACTOR forbidden"
       refactor:
@@ -152,25 +339,29 @@ phases:
 
     tdd_sequence:
       red:
-        - "test_architect_prompt_line_count — <= 1000 lines"
-        - "test_architect_prompt_has_required_sections — LENS, TDD, governance sections present"
-        - "test_response_templates_line_count — <= 300 lines"
-        - "test_response_templates_has_golden_format — 5-section format defined"
-        - "test_copilot_instructions_line_count — <= 400 lines"
-        - "test_copilot_instructions_has_essentials — architecture, MCP, entry points sections"
+        - "test_architect_prompt_line_count — <= 700 lines"
+        - "test_architect_prompt_has_13_execution_modes — all modes present"
+        - "test_architect_prompt_references_skills — delegates detail to skills"
+        - "test_response_templates_line_count — <= 1000 lines"
+        - "test_response_templates_has_golden_format — 3-zone header + 5-section format"
+        - "test_response_templates_has_quote_library — 120 quotes preserved"
+        - "test_copilot_instructions_line_count — <= 300 lines"
+        - "test_copilot_instructions_has_response_header — P0 mandatory rules"
+        - "test_copilot_instructions_has_assembly_order — composable sections"
       green:
-        - "Rewrite cortex-architect.prompt.md (8500 → 800 lines)"
-        - "Rewrite cortex-response-templates.md (4000 → 200 lines)"
-        - "Rewrite copilot-instructions.md (655 → 300 lines)"
+        - "Reduce cortex-architect.prompt.md (1,053 → ~600 lines)"
+        - "Reduce cortex-response-templates.md (3,308 → ~800 lines)"
+        - "Reduce copilot-instructions.md (361 → ~250 lines)"
       refactor:
-        - "Verify all referenced YAMLs still valid"
+        - "Verify all SSOT pointer refs still valid"
         - "Verify response header renders correctly"
+        - "Verify 13 execution modes documented"
 
     acceptance_criteria:
-      - "cortex-architect.prompt.md: <= 1000 lines"
-      - "cortex-response-templates.md: <= 300 lines"
-      - "copilot-instructions.md: <= 400 lines"
-      - "All required sections present"
+      - "cortex-architect.prompt.md: <= 700 lines, all 13 modes present"
+      - "cortex-response-templates.md: <= 1000 lines, golden format + quote library"
+      - "copilot-instructions.md: <= 300 lines, P0 response header rules"
+      - "All SSOT pointer references valid"
 
     completion_gate:
       test_runner_command: "python3 scripts/run_tests.py smoke"
@@ -179,51 +370,58 @@ phases:
       all_gap_refs_closed: true
       blocks_next_sub_phase: true
 
+  # ═══════════════════════════════════════════════════════════
+  # SUB-PHASE M7-b: DELETE DUPLICATES + MERGE DOC AGENTS
+  # ═══════════════════════════════════════════════════════════
   - id: "phase-m7-b"
-    title: "Consolidate agents (56→8) and skills (7→3)"
+    title: "Delete duplicate agents + merge 17 doc agents → 3"
     priority: P0
     status: PLANNED
-    gap_refs: ["GAP-M7-04", "GAP-M7-05"]
+    gap_refs: ["GAP-M7-04", "GAP-M7-05", "GAP-M7-06"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
-    duration_estimate: "3 hours"
     depends_on: ["phase-m7-a"]
     prerequisite: "phase-m7-a completion_gate PASSED"
     regression_gate: "python3 scripts/run_tests.py smoke"
 
     tdd_cycle:
       red:
-        action: "Write tests for 8 agent-mode files and 3 domain skills"
-        gate: "tests/v2/test_agent_skill_consolidation.py — ALL tests FAIL"
-        blocker: "Consolidation forbidden"
+        action: "Write tests: 3 duplicate agents deleted, 3 composite doc agents exist"
+        gate: "tests/v2/test_agent_consolidation_b.py — ALL tests FAIL"
+        blocker: "Agent changes forbidden"
       green:
-        action: "Create 8 agent-mode files. Create 3 domain skills. Delete old agent/skill files."
-        gate: "tests/v2/test_agent_skill_consolidation.py — ALL tests PASS"
+        action: "Delete 3 duplicates. Merge 17 doc agents to 3 composites. Archive reference/ files."
+        gate: "tests/v2/test_agent_consolidation_b.py — ALL tests PASS"
         blocker: "REFACTOR forbidden"
       refactor:
-        action: "Verify agent-mode discovery in VS Code"
-        gate: "python3 scripts/run_tests.py smoke"
+        action: "Update cortex-doc.prompt.md to reference 3 composite agents"
+        gate: "Smoke tests pass"
         blocker: "Sub-phase COMPLETE forbidden"
 
     tdd_sequence:
       red:
-        - "test_8_agent_modes_exist — code, govern, analyze, plan, learn, debug, review, architect"
-        - "test_3_domain_skills_exist — cortex-core, cortex-ops, cortex-dev"
-        - "test_old_agents_deleted — 56 old agent files removed"
-        - "test_old_skills_deleted — 7 old skill files replaced by 3"
+        - "test_duplicate_agents_deleted — holistic-validator, universal-orchestration, CORTEX.md absent"
+        - "test_3_composite_doc_agents_exist — doc-drift-coordinator, doc-qa-guardian, doc-lifecycle-manager"
+        - "test_17_old_doc_agents_deleted — original docs/ agents removed"
+        - "test_reference_dir_archived — lessons-learned migrated to cortex-registry/memory/"
+        - "test_cortex_doc_prompt_updated — references 3 composite agents"
       green:
-        - "Create 8 agent-mode .md files"
-        - "Create 3 domain skill SKILL.md files"
-        - "Delete 56 old agent files"
-        - "Delete 7 old skill files"
+        - "Delete cortex-holistic-validator.md, cortex-universal-orchestration.md, CORTEX.md"
+        - "Create doc-drift-coordinator.md (5 agents merged)"
+        - "Create doc-qa-guardian.md (4 agents merged)"
+        - "Create doc-lifecycle-manager.md (8 agents merged)"
+        - "Delete 17 old doc agent files"
+        - "Migrate reference/ valuable patterns to cortex-registry/memory/"
       refactor:
-        - "Update AGENTS.md index"
-        - "Verify VS Code agent-mode detection"
+        - "Update cortex-doc.prompt.md references"
+        - "Update AGENT-INDEX.md"
+        - "Verify all 14 doc specialist capabilities preserved"
 
     acceptance_criteria:
-      - "8 agent-mode files created and functional"
-      - "3 domain skills created"
-      - "56 old agents deleted"
-      - "7 old skills replaced"
+      - "3 duplicate agents deleted (449 lines removed)"
+      - "17 doc agents replaced by 3 composites (~1,500 lines)"
+      - "reference/ directory archived"
+      - "cortex-doc.prompt.md updated"
+      - "All 14 unique doc specialist capabilities preserved in composites"
 
     completion_gate:
       test_runner_command: "python3 scripts/run_tests.py smoke"
@@ -232,49 +430,123 @@ phases:
       all_gap_refs_closed: true
       blocks_next_sub_phase: true
 
+  # ═══════════════════════════════════════════════════════════
+  # SUB-PHASE M7-c: MERGE CORE + CERTIFICATION + EDUCATION AGENTS
+  # ═══════════════════════════════════════════════════════════
   - id: "phase-m7-c"
-    title: "Update instruction files + remove M2 shims"
+    title: "Merge core/certification/education agent clusters"
     priority: P1
     status: PLANNED
-    gap_refs: ["GAP-M7-06", "GAP-M7-07"]
-    governance_authority: "CORE-008, CORE-064"
-    duration_estimate: "2 hours"
+    gap_refs: ["GAP-M7-07", "GAP-M7-08", "GAP-M7-09", "GAP-M7-10", "GAP-M7-11"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
     depends_on: ["phase-m7-b"]
     prerequisite: "phase-m7-b completion_gate PASSED"
     regression_gate: "python3 scripts/run_tests.py smoke"
 
     tdd_cycle:
       red:
-        action: "Write tests for updated instruction files and absence of M2 shims"
-        gate: "tests/v2/test_instruction_files_v2.py — FAIL"
-        blocker: "Updates forbidden"
+        action: "Write tests: merged agents exist with all unique capabilities"
+        gate: "tests/v2/test_agent_consolidation_c.py — ALL tests FAIL"
+        blocker: "Merges forbidden"
       green:
-        action: "Update 6 instruction files. Delete M2 backward-compat shims."
-        gate: "tests/v2/test_instruction_files_v2.py — PASS"
+        action: "Execute 5 merge clusters. Delete superseded agent files."
+        gate: "tests/v2/test_agent_consolidation_c.py — ALL tests PASS"
         blocker: "REFACTOR forbidden"
       refactor:
-        action: "Final reference sweep"
+        action: "Verify all orchestrator references still discoverable"
+        gate: "Smoke tests pass"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_vacuum_agent_merged — single cortex-vacuum.md with 8-stage pipeline + CORE-064"
+        - "test_audit_coordinator_merged — cortex-audit-coordinator.md with 41 checks + 7 drift categories"
+        - "test_master_planner_merged — single planner with four laws + context resolution + THIN INDEX"
+        - "test_cert_workers_merged — cortex-certification-workers.md with regression+refactor+memory"
+        - "test_learning_agent_merged — cortex-learning.md with training+Q&A+verification modes"
+        - "test_old_agents_deleted — superseded agents removed"
+      green:
+        - "Merge cortex-vacuum.md + cortex-vacuum-agent.md → cortex-vacuum.md (250 lines)"
+        - "Merge cortex-auditor.md + cortex-audit-agent.md → cortex-audit-coordinator.md (280 lines)"
+        - "Merge 4 planner agents → cortex-master-planner.md (600 lines)"
+        - "Merge 3 cert workers → cortex-certification-workers.md (350 lines)"
+        - "Merge 3 education agents → cortex-learning.md (400 lines)"
+        - "Delete 10 superseded agent files"
+      refactor:
+        - "Update certification pipeline references in cortex-total-recall.prompt.md"
+        - "Update AGENT-INDEX.md"
+        - "Verify unique capabilities: CORE-064 sweep protection, 22 drift locks, four laws, THIN INDEX"
+
+    acceptance_criteria:
+      - "5 merge clusters completed (vacuum, audit, planner, cert workers, education)"
+      - "10 superseded agents deleted"
+      - "All unique capabilities preserved in merged files"
+      - "CORE-064, CORE-048, THIN INDEX CONTRACT accessible"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2570
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ═══════════════════════════════════════════════════════════
+  # SUB-PHASE M7-d: INSTRUCTIONS + SKILLS + FINAL CLEANUP
+  # ═══════════════════════════════════════════════════════════
+  - id: "phase-m7-d"
+    title: "Update instructions + consolidate skills + final cleanup"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M7-12", "GAP-M7-13", "GAP-M7-14"]
+    governance_authority: "CORE-008, CORE-064"
+    depends_on: ["phase-m7-c"]
+    prerequisite: "phase-m7-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke"
+
+    tdd_cycle:
+      red:
+        action: "Write tests: instruction/skill updates, M2 shim absence, AGENT-INDEX accuracy"
+        gate: "tests/v2/test_final_cleanup_m7.py — FAIL"
+        blocker: "Updates forbidden"
+      green:
+        action: "Update instructions. Merge 2 skill pairs. Delete M2 shims. Update AGENT-INDEX."
+        gate: "tests/v2/test_final_cleanup_m7.py — PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Final reference sweep — grep for any stale file paths"
         gate: "Smoke — zero regressions"
         blocker: "Sub-phase COMPLETE forbidden"
 
     tdd_sequence:
       red:
-        - "test_instruction_files_updated — reference v2 conventions"
-        - "test_m2_shims_deleted — backward-compat shims from M2 raise ImportError"
+        - "test_instructions_reference_v2 — 6 instruction files use v2 paths and conventions"
+        - "test_skills_consolidated — 5 skills exist (cortex, cortex-tdd, cortex-audit, cortex-debug, cortex-plan)"
+        - "test_governance_skill_merged — cortex-governance content in cortex-audit/SKILL.md"
+        - "test_rca_skill_merged — cortex-rca content in cortex-debug/SKILL.md"
+        - "test_m2_shims_deleted — backward-compat shims from M2 absent"
+        - "test_agent_index_updated — AGENT-INDEX.md reflects ~21 agents"
+        - "test_final_surface_area — total files <= 40, total lines <= 10,000"
       green:
-        - "Update 6 .instructions.md files"
+        - "Update 6 .instructions.md files for v2 conventions"
+        - "Merge cortex-governance/SKILL.md → cortex-audit/SKILL.md"
+        - "Merge cortex-rca/SKILL.md → cortex-debug/SKILL.md"
         - "Delete M2 backward-compat import shims"
+        - "Rewrite AGENT-INDEX.md for consolidated structure"
       refactor:
-        - "Final grep for any remaining stale references"
+        - "Final grep for stale references to deleted agents/skills"
+        - "Verify domain skill routing still works"
+        - "Run prompt refresh: python3 scripts/refresh_prompt_suite.py --dry-run"
 
     acceptance_criteria:
       - "6 instruction files updated to v2 conventions"
+      - "7 skills → 5 (governance→audit, rca→debug)"
       - "M2 backward-compat shims deleted"
-      - "Prompt/agent surface: ~20 files, ~3,000 lines"
+      - "AGENT-INDEX.md accurate for ~21 agents"
+      - "Final surface: ~35 files, ~8,000 lines"
 
     completion_gate:
       test_runner_command: "python3 scripts/run_tests.py smoke"
-      min_tests_pass: 2570
+      min_tests_pass: 2560
       zero_new_failures: true
       all_gap_refs_closed: true
       blocks_next_sub_phase: true

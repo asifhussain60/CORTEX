@@ -39,7 +39,7 @@ metadata:
     total_orchestrators: "~80 (from 348)"
     total_mcp_tools: "18 registered / 6 mega-tools (from 36)"
     total_governance_yaml: "~45 (from 160)"
-    total_prompt_agent_files: "~20 (from 75)"
+    total_prompt_agent_files: "~35 (from 86) — 8 prompts, ~21 agents, 5 skills, 1 template, 6 instructions"
     total_test_files: "~600 (from 1,366)"
   v1_baseline:
     orchestrators: 348
@@ -50,7 +50,8 @@ metadata:
     total_python: 1422
     total_tests: 1366
     governance_yaml: 160
-    prompt_agent_files: 75
+    prompt_agent_files: "86 (verified: 14 prompts, 56 agents, 8 skills, 2 templates, 6 instructions)"
+    prompt_agent_lines: 24790
     workflow_templates: 94
     test_count_smoke: 2791
     test_count_preflight: 446
@@ -140,11 +141,11 @@ phase_detail_files:
     priority: P0
     status: PLANNED
     sweep_id: SWEEP-M7-PROMPT-REDUCTION
-    gaps: 7
+    gaps: 14
     sub_phases: 4
     depends_on: ["phase-m5", "phase-m6"]
     file: "cortex-registry/planning/phases/v2/phase-m7-prompt-reduction.yaml"
-    note: "cortex-architect.prompt.md 8,500→~2,000 lines. response-templates 4,000→~200. 56 agents → 8. 7 skills → 3. Create agent-mode protocol. 75 → ~20 files."
+    note: "REVISED: 86→~35 files (24,790→~8,000 lines). architect.prompt 1,053→~600. response-templates 3,308→~800. 56→~21 agents (3 duplicates deleted, 17 doc→3, 5 merge clusters). 7→5 skills. Capability preservation verified: 20/20 modes, 12/13 rules, 14/15 tools."
 
   - id: phase-m8
     title: "Test Suite Mirror Reduction"
@@ -206,7 +207,7 @@ summary:
   planned: 9
   archived: 0
   completion_percentage: 0
-  consolidation_summary: "2026-03-15 — CORTEX V2 migration plan created. 9 phases: M1 Dead Code → M2 Core Consolidation → M3 Intelligence → M4 LENS → M5 MCP Mega-Tools → M6 YAML → M7 Prompts → M8 Tests → M9 Certification. Target: 1,422 → ~450 Python files. Branch: CORTEX-V2."
+  consolidation_summary: "2026-03-15 — CORTEX V2 migration plan created + M7 revised with deep prompt/agent audit. 9 phases: M1 Dead Code → M2 Core Consolidation → M3 Intelligence → M4 LENS → M5 MCP Mega-Tools → M6 YAML → M7 Prompts (REVISED: 86→~35 files, 14 gaps, capability preservation verified) → M8 Tests → M9 Certification. Target: 1,422 → ~450 Python files. Branch: CORTEX-V2."
   active_phases: "None — awaiting M1 execution."
 
 phases:
@@ -281,17 +282,17 @@ phases:
     file: "cortex-registry/planning/phases/v2/phase-m6-yaml-consolidation.yaml"
     note: "P1 — 160 → ~45 YAML files. Drift locks consolidated. Workflows simplified."
 
-  # Phase M7 — PROMPT REDUCTION (depends: M5+M6)
+  # Phase M7 — PROMPT REDUCTION (depends: M5+M6) [REVISED 2026-03-15]
   - id: phase-m7
     title: "Prompt & Agent Surface Reduction"
     priority: P0
     status: PLANNED
     depends_on: ["phase-m5", "phase-m6"]
     sweep_id: SWEEP-M7-PROMPT-REDUCTION
-    gaps: 7
+    gaps: 14
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m7-prompt-reduction.yaml"
-    note: "P0 — 75 → ~20 prompt/agent files. Token budget: ~16K → ~4K lines."
+    note: "REVISED: 86→~35 files (24,790→~8,000 lines). 56→~21 agents. 7→5 skills. Capability verified: 20/20 modes, 12/13 rules."
 
   # Phase M8 — TEST MIRROR (depends: M3+M4+M7)
   - id: phase-m8
