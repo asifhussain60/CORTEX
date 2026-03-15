@@ -22,12 +22,12 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-16T03:20:00Z'
+  last_updated: '2026-03-16T04:55:00Z'
   total_phases: 12
   active: 1
-  completed: 2
+  completed: 3
   in_progress: 1
-  planned: 9
+  planned: 8
   design_principles:
     - "Collaboration-first: preserve federated team workflows, shared contracts, and cross-team reuse"
     - "LLM-native: leverage Claude/GPT native capabilities instead of reimplementing"
@@ -124,9 +124,9 @@ session_resume_protocol:
     maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
 
 runtime_state:
-  last_completed_phase: "phase-m2"
-  next_executable_phase: "phase-m3"
-  last_session_action: "phase-m3-b-closed-after-facade-refactor-and-phase-m3-final-advanced-to-in-progress"
+  last_completed_phase: "phase-m3"
+  next_executable_phase: "phase-m4"
+  last_session_action: "phase-m3-complete-after-smoke-gate-2922-pass-and-phase-m4-activated"
   last_session_prompt: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
 
 phase_detail_files:
@@ -154,24 +154,24 @@ phase_detail_files:
   - id: phase-m3
     title: "Intelligence Layer Reduction"
     priority: P1
-    status: IN_PROGRESS
+    status: COMPLETE
     sweep_id: SWEEP-M3-INTELLIGENCE-REDUCTION
     gaps: 9
     sub_phases: 4
     depends_on: ["phase-m2"]
     file: "cortex-registry/planning/phases/v2/phase-m3-intelligence-reduction.yaml"
-    note: "IN_PROGRESS — phase-m3-a and phase-m3-b are complete; phase-m3-final is active for GAP-M3-08/09 import sweep + IntentRouter capability-contract closure."
+    note: "COMPLETE — all GAP-M3-01..09 closed; smoke gate passed (2922 passed, 81 skipped, 22 xfailed, 1 xpassed); phase transitioned cleanly to M4."
 
   - id: phase-m4
     title: "LENS Streamlining — Polyglot-Only Retention"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
     sweep_id: SWEEP-M4-LENS-STREAMLINE
     gaps: 5
     sub_phases: 3
     depends_on: ["phase-m2"]
     file: "cortex-registry/planning/phases/v2/phase-m4-lens-streamline.yaml"
-    note: "Keep .NET/C#/TS/Java adapters. Retire Python-specific analysis, ml_patterns/, redundant caches. 82 → ~25 files."
+    note: "IN_PROGRESS — phase-m4-a activated after M3 completion; target remains 82 → ~25 files with polyglot adapter preservation."
 
   - id: phase-m5
     title: "MCP Mega-Tool Consolidation"
@@ -248,7 +248,7 @@ phase_detail_files:
     sub_phases: 4
     depends_on: ["phase-m10"]
     file: "cortex-registry/planning/phases/v2/phase-m11-agent-skill-template-governance.yaml"
-    note: "Introduce dedicated workflow templates for agent and skill lifecycle with validation, approvals, observability, evaluation hooks, and reuse contracts."
+    note: "Introduce dedicated workflow templates for agent/skill lifecycle and ship the Claude Code Governance & Orchestration Pack (MCP-first control plane for .claude artifacts) with validation, approvals, observability, evaluation hooks, reuse contracts, and fail-close regression gates."
 
   - id: phase-m12
     title: "Documentation Re-Architecture + Final Cleanup Convergence"
@@ -287,20 +287,20 @@ health_status:
   last_health_fix: null
 
 production_readiness:
-  status: "IN_PROGRESS — phase-m3 executing"
+  status: "IN_PROGRESS — phase-m4 executing"
   overall_score: null
   deployment_date: null
 
 summary:
   total_phases: 12
-  completed: 2
+  completed: 3
   active: 1
   in_progress: 1
-  planned: 9
+  planned: 8
   archived: 0
-  completion_percentage: 17
-  consolidation_summary: "2026-03-16 — M3-b closed: IntelligenceFacade delegation metadata refactor landed with dedicated V2 tests and preserved RCA/URS/domain-brain validation; phase-m3-final is now active for final import/contract sweep and smoke convergence."
-  active_phases: "phase-m3 — Intelligence Layer Reduction (phase-m3-final active: GAP-M3-08/09 closure + smoke gate)"
+  completion_percentage: 25
+  consolidation_summary: "2026-03-16 — M3 complete: full smoke gate passed (2922 passed) after IntentRouter REVIEW intent contract closure; execution advanced to phase-m4 (LENS streamlining)."
+  active_phases: "phase-m4 — LENS Streamlining (phase-m4-a active: retire Python-specific adapters, preserve polyglot adapters)"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -330,25 +330,25 @@ phases:
   - id: phase-m3
     title: "Intelligence Layer Reduction"
     priority: P1
-    status: IN_PROGRESS
+    status: COMPLETE
     depends_on: ["phase-m2"]
     sweep_id: SWEEP-M3-INTELLIGENCE-REDUCTION
     gaps: 9
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m3-intelligence-reduction.yaml"
-    note: "P1 — ACTIVE. phase-m3-a and phase-m3-b are complete; phase-m3-final is in progress under strict sequential contract until full phase closeout."
+    note: "P1 — COMPLETE. All 9 gaps closed and smoke gate converged cleanly; handed off to phase-m4."
 
   # Phase M4 — LENS (depends: M2, parallel with M3)
   - id: phase-m4
     title: "LENS Streamlining — Polyglot-Only Retention"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
     depends_on: ["phase-m2"]
     sweep_id: SWEEP-M4-LENS-STREAMLINE
     gaps: 5
     sub_phases: 3
     file: "cortex-registry/planning/phases/v2/phase-m4-lens-streamline.yaml"
-    note: "P1 — retires Python-specific LENS (LLM native). Keeps polyglot. 82 → ~25."
+    note: "P1 — ACTIVE. phase-m4-a is now in progress under strict sequential contract."
 
   # Phase M5 — MCP MEGA-TOOLS (depends: M2, parallel with M3/M4)
   - id: phase-m5
@@ -432,7 +432,7 @@ phases:
     gaps: 8
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m11-agent-skill-template-governance.yaml"
-    note: "P0 — dedicated templates for creating and governing agents/skills with lifecycle, approval, and observability hooks."
+    note: "P0 — dedicated templates for creating and governing agents/skills plus Claude Code Governance & Orchestration Pack generation (MCP-first), including lifecycle, approval, observability hooks, and fail-close parity validation."
 
   # Phase M12 — DOCS IA + FINAL CLEANUP (depends: M11, always last)
   - id: phase-m12

@@ -250,6 +250,13 @@ class IntentKeywordRegistry:
         "feedback document", "feedback report", "feedback pipeline",
     ]
 
+    REVIEW_KEYWORDS: List[str] = [
+        "review", "/review", "code review", "review this", "review changes",
+        "review the diff", "review pr", "review pull request", "inspect changes",
+        "find bugs", "look for regressions", "quality review", "security review",
+        "behavioral regression", "risk review", "analyze this patch",
+    ]
+
     # ------------------------------------------------------------------
     # Factory
     # ------------------------------------------------------------------
@@ -293,4 +300,5 @@ class IntentKeywordRegistry:
             IntentType.DISTILL: cls.DISTILL_KEYWORDS,
             IntentType.OPTIMIZE: cls.OPTIMIZE_KEYWORDS,
             IntentType.FEEDBACK: cls.FEEDBACK_KEYWORDS,
+            IntentType.REVIEW: cls.REVIEW_KEYWORDS,
         }

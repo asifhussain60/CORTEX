@@ -252,6 +252,7 @@ class IntentRouter(
     REFACTOR_KEYWORDS = IntentKeywordRegistry.REFACTOR_KEYWORDS
     DOCUMENT_KEYWORDS = IntentKeywordRegistry.DOCUMENT_KEYWORDS
     ANALYZE_KEYWORDS = IntentKeywordRegistry.ANALYZE_KEYWORDS
+    REVIEW_KEYWORDS = IntentKeywordRegistry.REVIEW_KEYWORDS
     ONBOARD_KEYWORDS = IntentKeywordRegistry.ONBOARD_KEYWORDS
     PLAN_KEYWORDS = IntentKeywordRegistry.PLAN_KEYWORDS
     VACUUM_KEYWORDS = IntentKeywordRegistry.VACUUM_KEYWORDS

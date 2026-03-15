@@ -1,7 +1,7 @@
 id: "phase-m4"
 title: "LENS Streamline — Keep Polyglot, Retire Python-Specific"
 created: "2026-03-15"
-status: PLANNED
+status: IN_PROGRESS
 priority: P1
 governance_authority:
   - CORE-008
@@ -107,7 +107,7 @@ phases:
   - id: "phase-m4-a"
     title: "Retire Python adapters, preserve polyglot"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
     gap_refs: ["GAP-M4-01", "GAP-M4-02"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "3 hours"
