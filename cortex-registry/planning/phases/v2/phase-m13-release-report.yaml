@@ -15,4 +15,4 @@ release_report:
     - Documentation and registry are up to date
     - Repo is ready for release and org-wide adoption
   completion_marker: "✅ Phase M13 complete."
-  next_phase: "Production certification and org-wide rollout (Phase M9/M10)"
+  next_phase: "All migration phases complete — release baseline active."

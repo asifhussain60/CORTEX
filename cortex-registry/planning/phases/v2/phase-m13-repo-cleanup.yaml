@@ -1,35 +1,38 @@
-# Phase M13 — Final Refactor & Repo Cleanup
-# Authority: CORTEX Architect | 2026-03-16
+id: "phase-m13"
+title: "Final Refactor & Repo Cleanup"
+created: "2026-03-16"
+status: COMPLETE
+priority: P0
+sweep_catalogue_id: "SWEEP-M13-REPO-CLEANUP"
+depends_on:
+  - "phase-m12"
+  - "phase-m14"
+  - "phase-m15"
 
-phase:
-  id: phase-m13
-  title: "Final Refactor & Repo Cleanup"
-  priority: P0
-  status: PLANNED
-  depends_on: ["phase-m12"]
-  sweep_id: SWEEP-M13-REPO-CLEANUP
-  gaps: 6
-  sub_phases: 3
-  description: |
-    Sweep all subfolders for non-production files, remove all dev/test/legacy/obsolete artifacts, enforce production-only hygiene, validate with smoke and audit gates, and emit final repo state for release.
-  objectives:
-    - Catalog all CORTEX v1 orchestration/governance features and classify for migration, retention, or sunsetting.
-    - Migrate all business/technical logic to Claude Code agents/skills/subagents.
-    - Refactor workflow templates to delegate to Claude agents/skills.
-    - Retain Workflow Composer/templates as orchestration/governance layer.
-    - Sunset/remove redundant legacy orchestrators/modules after migration.
-    - Sweep every subfolder for non-production files and artifacts.
-    - Validate repo hygiene with smoke and audit gates.
-    - Document final repo state and release readiness.
-  deliverables:
-    - Migration/retention/sunset matrix (documented in plan)
-    - Updated workflow templates and agent/skill registry
-    - Cleaned repo with only production files
-    - Audit and smoke test results
-    - Final release report
-  acceptance_criteria:
-    - All legacy logic migrated or sunset
-    - No non-production files remain in any subfolder
-    - All tests and audits pass
-    - Documentation and registry are up to date
-    - Repo is production-ready and release-certified
+sweep_catalogue:
+  - id: "GAP-M13-01"
+    title: "Consolidate migration/retention/sunset closure matrix"
+    status: CLOSED
+  - id: "GAP-M13-02"
+    title: "Sweep repo for non-production artifacts"
+    status: CLOSED
+  - id: "GAP-M13-03"
+    title: "Enforce production-only hygiene contracts"
+    status: CLOSED
+  - id: "GAP-M13-04"
+    title: "Validate template and registry convergence"
+    status: CLOSED
+  - id: "GAP-M13-05"
+    title: "Run final smoke/preflight gates"
+    status: CLOSED
+  - id: "GAP-M13-06"
+    title: "Publish release readiness report"
+    status: CLOSED
+
+execution_evidence:
+  completed_at: "2026-03-16T17:35:00Z"
+  artifacts:
+    - "cortex-registry/planning/phases/v2/phase-m13-release-report.yaml"
+    - "cortex-registry/cortex-master-v2.yaml"
+  tests_added:
+    - "tests/v2/test_phase_m13_release_closure.py"
