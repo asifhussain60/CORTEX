@@ -74,7 +74,6 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Agent | Purpose | Load When |
 |-------|---------|-----------|
-| **cortex-learning.md** | Gap-driven template evolution, interactive Q&A, and implementation verification | `/train {path}`, "learn from {repo}" |
 | **cortex-sync-agent.md** | 4-gate one-way sync: PULL→DIFF→SANITIZE→MERGE into company folder | `/sync target=<path>` — cross-repo privacy-safe sync |
 | **cortex-sts-refactoring.md** | STS pipeline: 7-gate refactoring for external codebases | `cortex-sts/` REFACTOR sessions, BadMonolith-style analysis |
 | **cortex-digest.md** | Learning extraction from chat history | Processing chat files |
@@ -162,15 +161,15 @@ are resolved or explicitly approved as WONT-FIX.
 
 | User Intent | Load These Agents | Token Cost |
 |-------------|-------------------|-----------|
-| **IMPLEMENT** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
-| **FIX** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
-| **REFACTOR** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
-| **AUDIT** | cortex.md + cortex-architect.md + cortex-audit-coordinator.md | ~8,000 |
-| **AUDIT FIX** | cortex.md + cortex-audit-coordinator.md + architecture-integrity-agent.md + cortex-meta-auditor.md | ~12,000 |
-| **TOTALRECALL** | cortex-total-recall.prompt.md → certification-coordinator.md + 7 specialist agents | ~8,800 |
-| **INVESTIGATE** | cortex.md + cortex-architect.md | ~6,000 |
-| **QUERY** | cortex.md + cortex-interactive.md | ~4,500 |
-| **DESIGN** | cortex.md + cortex-architect.md | ~6,000 |
+| **IMPLEMENT** | cortex-architect.md + cortex-executor.md | ~5,500 |
+| **FIX** | cortex-architect.md + cortex-executor.md | ~5,500 |
+| **REFACTOR** | cortex-architect.md + cortex-executor.md | ~5,500 |
+| **AUDIT** | cortex-architect.md + cortex-audit-coordinator.md | ~6,500 |
+| **AUDIT FIX** | cortex-audit-coordinator.md + architecture-integrity-agent.md + cortex-meta-auditor.md | ~9,500 |
+| **TOTALRECALL** | cortex-total-recall.prompt.md → certification-coordinator.md + workers/db/cert agents | ~7,500 |
+| **INVESTIGATE** | cortex-architect.md + cortex-interactive.md | ~5,000 |
+| **QUERY** | cortex-interactive.md | ~2,500 |
+| **DESIGN** | cortex-architect.md + cortex-master-planner.md | ~5,000 |
 | **PLAN** | cortex-architect.md + cortex-master-planner.md | ~6,000 |
 | **DIGEST** | cortex-architect.md + cortex-digest.md | ~6,000 |
 | **TRAIN** | cortex-learning.md + cortex-sts-refactoring.md | ~6,500 |
@@ -183,11 +182,11 @@ are resolved or explicitly approved as WONT-FIX.
 | **DEBUG** | cortex-debugger.md + cortex-audit-coordinator.md | ~5,000 |
 | **HEALTH** | cortex-audit-coordinator.md (Check #11) | ~3,500 |
 | **SYNC** | cortex-sync.prompt.md + cortex-sync-agent.md | ~6,000 |
-| **RCA** | cortex-architect.prompt.md + `cortex_learning` op=`rca` | ~3,500 |
-| **GOLDEN_TEST** | cortex-executor.md + cortex-holistic-validator.md | ~5,500 |
+| **RCA** | cortex-debugger.md + `cortex_learning` op=`rca` | ~3,500 |
+| **GOLDEN_TEST** | cortex-executor.md + cortex-architect.md | ~5,000 |
 | **WORKFLOW_COMPOSE** | cortex-architect.prompt.md (§ WORKFLOW COMPOSE MODE) | ~3,000 |
 
-> **Default context:** `cortex-architect.prompt.md` only (~2,700 tokens). Load specialist agents on-demand per intent above.
+> **Default context:** `cortex-architect.prompt.md` only. Load specialist agents on-demand per intent above.
 
 ### `/audit fix` Pipeline (Canonical Production-Readiness Command)
 

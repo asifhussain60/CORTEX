@@ -318,6 +318,18 @@ templates:
     trigger: "Any operation with N≥2 phases — rendered ONCE at operation start"
     format: "📋 Phase Roadmap header + bullet list with ⚪/🔵/✅/🔴 status icons per phase"
     required_fields: ["phases"]
+
+  "BLOCK-PHASE-ROADMAP":
+    alias_for: "phase_roadmap"
+    note: "String alias for golden test lookup compatibility"
+
+  "BLOCK-ENGAGEMENT-BREADCRUMB":
+    alias_for: "handoff"
+    note: "String alias for golden test lookup compatibility"
+
+  "BLOCK-ENGAGEMENT-TIMELINE":
+    alias_for: "engagement_timeline"
+    note: "String alias for golden test lookup compatibility"
     placement: "before BLOCK-STAGE-PROGRESS, once at operation start"
     updates: "Re-emitted only when a phase transitions (not every stage)"
     distinct_from: "BLOCK-STAGE-PROGRESS (intra-phase stage progress bars)"

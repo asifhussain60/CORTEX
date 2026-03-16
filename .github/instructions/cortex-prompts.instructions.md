@@ -26,6 +26,11 @@ applyTo: ".github/**/*.md"
 - Use `python3 scripts/refresh_prompt_suite.py --counts-only` for live orchestrator/tool/test counts
 - Never hard-code counts without verifying against the live codebase first
 
+## V2 Conventions
+- Treat prompt/agent/skill references as consolidated surfaces (avoid references to retired split ownership)
+- Prefer SSOT references over duplicated policy blocks
+- Keep routing aligned with the 5-skill model (`cortex`, `cortex-tdd`, `cortex-audit`, `cortex-debug`, `cortex-plan`)
+
 ## All Output Inline (CORE-002)
 - Never create `.md` or `.txt` report files from prompt/agent operations
 - All output renders directly in Copilot Chat

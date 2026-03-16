@@ -58,12 +58,11 @@ The following 13 execution modes are mandatory and preserved:
 13. DEBUG
 
 Mode detail belongs in skills and workflow templates, not this prompt:
-- `.github/skills/cortex/SKILL.md`
-- `.github/skills/cortex-tdd/SKILL.md`
-- `.github/skills/cortex-audit/SKILL.md`
-- `.github/skills/cortex-debug/SKILL.md`
-- `.github/skills/cortex-plan/SKILL.md`
-
+ `.github/skills/cortex/SKILL.md`
+ `.github/skills/cortex-tdd/SKILL.md`
+ `.github/skills/cortex-audit/SKILL.md`
+ `.github/skills/cortex-debug/SKILL.md`
+ `.github/skills/cortex-plan/SKILL.md`
 ---
 
 ## Mode Routing Contract

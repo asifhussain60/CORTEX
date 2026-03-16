@@ -21,6 +21,7 @@ Every first response per user request must render this exact 3-zone structure:
 ---
 
 🧭 Orchestration: {DisplayName} → {DisplayName}
+**Via:** {SubOrchestrator}  # optional — include when a delegated sub-route is relevant
 ```
 
 For architect mode, replace title with:
@@ -36,6 +37,7 @@ Persona binding:
 Rules:
 - Product icon is fixed: 🧠 (CORTEX), 🛠️ (CORTEX Architect)
 - `🧭 Orchestration:` appears in Zone 3 only, omit for simple single-hop responses
+- `**Via:**` is optional and only emitted when a delegated sub-route is relevant
 - Quote block must come before orchestration line
 - No duplicate breadcrumb blocks
 - Header contract preserves Author and Orchestrator visibility requirements
@@ -71,6 +73,8 @@ Render only progress and completion state:
 - Phase-list+bar stage progress (`✅`, `🔵`, `⚪`, `🔴`)
 - No educational sections during execution
 - Keep updates concise and execution-focused
+
+Mandatory: responses in this mode must use a `phase-list` representation and must not be bar-only.
 
 Example:
 
@@ -147,6 +151,37 @@ You've asked CORTEX to {summary}:
 - Tables MUST stay at `≤4` columns; switch to bullets when a table would exceed 4 columns.
 - Avoid empty headings.
 - Use `<details>` for long optional diagnostics.
+
+## ⚠️ Copilot Chat Rendering Rules
+
+### Mandatory Rendering Rules
+
+| # | Rule | Requirement |
+|---|---|---|
+| 1 | R0 Header contract | Emit canonical 3-zone header on first response per request. |
+| 2 | R0b Section separators | Use `---` between major response zones only. |
+| 3 | R0c List density | Keep lists concise; avoid deep nesting in chat rendering. |
+| 4 | R0d Table scope | Use tables only for structured data and keep columns compact. |
+| 5 | R0e Empty section suppression | Omit sections that have no content to display. |
+| 6 | R0f Safety switch | Prefer bullets/details when table rendering would degrade readability. |
+| 7 | R0g Compact orchestration | Keep route/handoff display inline and compact near top. |
+| 8 | R0h Deterministic order | Emit composable blocks in canonical order for consistency. |
+| 9 | R1 Blank after heading | Always insert a blank line after every heading (`##`/`###`). |
+| 10 | R2 Blank around list | Insert a blank line before and after every list block. |
+| 11 | R3 Table shape | Every table needs a header row and separator row, with blank line before table. |
+| 12 | R4 Empty header rule | Never emit an empty header; omit header when section content is empty. |
+| 13 | R5 No hard-wrap paragraph | Never hard-wrap within a paragraph; avoid manual wrap breaks in prose paragraphs. |
+| 14 | R6 One H2 max | Emit one H2 maximum per response (session identity exception). |
+
+Table safety switch note:
+- If any table cell exceeds `80` chars, downgrade to a bulleted list.
+- If the downgraded list would still exceed `120` chars in a line, use `<details>`.
+
+## 📏 QUALITY CHECKLIST
+
+- Whitespace normalizer applied and rendering whitespace is stable.
+- Empty header suppression verified (no H2/H3 without content).
+- Table cell safety guard verified (no cell exceeds `80` chars without downgrade).
 
 ---
 
@@ -239,6 +274,45 @@ Never `<hr>` tags in chat rendering; always use `---`.
 🧭 Orchestration: Classifier → TDD Builder
 ```
 
+### BLOCK-PHASE-ROADMAP
+
+Trigger: multi-phase work (`N≥2` phases) at operation start.
+
+Format uses status icons (`⚪`, `🔵`, `✅`, `🔴`) with a compact phase-list.
+
+```markdown
+## 📋 Phase Roadmap
+- ⚪ phase-m8 — Test Suite Mirror Reduction
+- ⚪ phase-m9 — Production Certification & Drift Lock
+```
+
+### BLOCK-STAGE-PROGRESS
+
+Use during active execution to show stage-by-stage progress with orchestrator pulse annotation.
+
+```markdown
+---
+**📋 Phase phase-m7 — Autonomous Execution**
+- ✅ S1: Preflight and phase selection
+- 🔵 S2: Implement M7 updates (pulse: MasterOrchestrator)
+- ⚪ S3: Validation gates
+Progress: ███████░░░ 70%
+```
+
+### BLOCK-ENGAGEMENT-TIMELINE
+
+Use for optional deep routing visibility as a collapsible timeline.
+
+```markdown
+<details>
+<summary>Engagement Timeline</summary>
+
+- IntentRouter
+- MasterOrchestrator
+- TDDOrchestrator
+</details>
+```
+
 ### BLOCK-SESSION-IDENTITY
 
 Use on the first response only, once per session, to render the session identity block.
@@ -322,3 +396,180 @@ Use for security posture, threat vectors, and mitigation gates.
 - Control coverage
 - Residual risk and decision
 ```
+
+## BLOCK-DIFF-PREVIEW
+
+Use for inline change summaries after implementation or fixes.
+
+Rule:
+- Use a markdown table for diff_preview when changed files are `<=5` and cell content is concise.
+- Downgrade to `<details>` blocks when changed files are `>5` or any before/after cell would exceed ~80 chars.
+
+Required columns (table mode):
+- `file`
+- `change`
+- `before`
+- `after`
+
+```markdown
+## 🧩 Diff Preview
+| file | change | before | after |
+|---|---|---|---|
+| path/to/file.py | update | old signature | new signature |
+```
+
+Large diff mode:
+
+```markdown
+## 🧩 Diff Preview
+<details>
+<summary>path/to/file.py — update</summary>
+
+Before:
+...snippet...
+
+After:
+...snippet...
+</details>
+```
+
+## BLOCK-RESUME-BANNER
+
+Use when resuming a paused sweep or autonomous phase execution.
+
+Required resume_banner fields:
+- `sweep_id`
+- `last_completed`
+- `remaining`
+- `open_items` (P0/P1/P2 counts)
+
+```markdown
+## ▶️ Resume Banner
+- sweep_id: SWEEP-M7-PROMPT-REDUCTION
+- last_completed: phase-m7-c
+- remaining: 1 sub-phase
+- open_items: P0=0, P1=1, P2=0
+```
+
+## BLOCK-ERROR-RECOVERY
+
+Use for known failure states (blocked gates, failed tests, P0/P1/P2 violations).
+
+Severity icon map:
+- `🔴` P0 / CRITICAL
+- `🟡` P1 / HIGH
+- `⚪` or `🔵` P2 / MEDIUM
+
+Render pattern:
+- `### 🔴 Error: {category}`
+- `**What happened:** {description}`
+- `**Impact:** {scope}`
+- `**Recovery:**`
+	1. `{step}`
+	2. `{step}`
+
+```markdown
+### 🔴 Error: Regression Gate Failed
+**What happened:** Smoke gate failed in holistic integration.
+**Impact:** Current phase cannot be marked COMPLETE.
+**Recovery:**
+1. Stabilize known blocker and re-run smoke.
+2. Re-sync phase state metadata after green gate.
+```
+
+## BLOCK-METRICS-DASHBOARD
+
+Use for completion/validation metrics summaries.
+
+Format rules:
+- For `<=4 metrics`, use a single-line dashboard.
+- For `>4 metrics` (more than 4), use a compact table.
+- If any table cell would exceed ~80 chars, downgrade to a bullet list for renderer safety.
+
+Single-line example:
+
+```markdown
+✅ Tests: 1817/1822 | Coverage: 95% | Duration: 746s | Commits: 0
+```
+
+Table mode example (`>4 metrics`):
+
+```markdown
+| Metric | Value |
+|---|---|
+| Tests | 1817/1822 |
+| Coverage | 95% |
+| Duration | 746s |
+| Commits | 0 |
+| Warnings | 4 |
+```
+
+## BLOCK-HANDOFF
+
+Use for inline orchestrator routing transparency on complex requests.
+
+Placement:
+- Render inline near top of response.
+- Keep compact; do not create a standalone section.
+
+Format:
+
+```markdown
+**Route:** IntentRouter → MasterOrchestrator → {SubOrchestrator}
+```
+
+## BLOCK-EXECUTION-SPEC
+
+Use to render the compiled execution spec before implementation begins.
+
+Placement:
+- Render after `BLOCK-INTENT-REFLECTION`.
+- Render before the first implementation step.
+
+Approval gate:
+- Require explicit user approval (`proceed` / approve) before execution.
+
+Canonical table format:
+
+```markdown
+## 🧾 Execution Spec
+| Step # | Action | Target Files | Command | Validation |
+|---|---|---|---|---|
+| 1 | edit | path/to/file.md | apply_patch | targeted tests pass |
+| 2 | run | tests | scripts/run_tests.py smoke | no new failures |
+```
+
+## BLOCK-DEVIATION-ALERT
+
+Use when executor output diverges from approved execution spec.
+
+Hard requirement:
+- Executor must HALT before emitting this block.
+
+Required fields:
+- `Step`
+- `Expected`
+- `Actual`
+- `Divergence type`
+- `Action required`
+
+```markdown
+### ⚠️ Deviation Detected — Escalating to Architect
+**Step:** 2
+**Expected:** update one SSOT file and run smoke
+**Actual:** additional files changed unexpectedly
+**Divergence type:** more_files
+**Action required:** human review or re-plan before continuing
+```
+
+## Standardized Assembly Order
+
+Canonical block emission sequence (standardized assembly order):
+- `BLOCK-SESSION-IDENTITY`
+- `BLOCK-MICRO-ACK`
+- `BLOCK-HANDOFF`
+- `BLOCK-ERROR-RECOVERY`
+- `BLOCK-DIFF-PREVIEW`
+- `BLOCK-METRICS-DASHBOARD`
+- `BLOCK-NEXT-STEPS`
+- `BLOCK-RESUME-BANNER`

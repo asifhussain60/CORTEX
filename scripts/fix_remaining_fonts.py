@@ -5,7 +5,7 @@ from pathlib import Path
 
 docs = Path('/Users/asifhussain/PROJECTS/CORTEX/docs')
 files = list(docs.rglob('*.html'))
-exclude = {'index.bak.html', 'glass-samples.html'}
+exclude = {'glass-samples.html'}
 files = [f for f in files if f.name not in exclude]
 
 fixes = 0

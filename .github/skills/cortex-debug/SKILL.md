@@ -77,3 +77,35 @@ argument-hint: 'debug <file> | debug-inject <path> | debug-cleanup'
 | AutoCleanupManager | `cortex/orchestrators/support/debugging/auto_cleanup_manager.py` |
 | Debug Agent | `.github/agents/support/cortex-debugger.md` |
 | Pipeline Template | `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml` |
+
+---
+
+## RCA Engine (Merged from `cortex-rca`)
+
+Use `/rca` through the debug domain for root-cause workflows.
+
+| Methodology | When Auto-Selected | Depth |
+|---|---|---|
+| Five-Whys | TECHNOLOGY category | 5 iterative why levels |
+| Fishbone | PROCESS / PEOPLE | 6 branches |
+| Fault-Tree | Complex multi-factor failures | AND/OR causal tree |
+| Causal-Chain | DATA category | event → cause → effect |
+
+### `cortex_learning` Operations
+
+| Operation | Sub-Action | Purpose |
+|---|---|---|
+| `op=rca` | `rca_action=analyze` | Run full RCA on a failure |
+| `op=rca` | `rca_action=query` | Check prevention rules for a pattern |
+| `op=rca` | `rca_action=list` | List recent RCA analyses |
+| `op=history` | — | Surface prior failure patterns |
+| `op=emit` | `signal_type=MILD_REWARD` | Record success signal |
+| `op=emit` | `signal_type=MILD_PUNISHMENT` | Record failure signal |
+
+### RCA Entry Points
+
+| Component | Location |
+|---|---|
+| RCA Engine | `cortex/intelligence/learning/rca_engine.py` |
+| RCA Store | `cortex/intelligence/learning/rca_store.py` |
+| MCP Tool | `cortex/mcp/tools/learning_tool.py` |

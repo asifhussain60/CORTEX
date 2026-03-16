@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -204,6 +205,8 @@ class OPJWriter:
             resolution: Human-readable description of what made it succeed.
             confidence: Confidence score 0.0–1.0.
         """
+        if os.environ.get("CORTEX_OPJ_DISABLED"):
+            return
         entry = OPJEntry(
             pattern_id=_entry_id(orchestrator),
             orchestrator=orchestrator,
@@ -237,6 +240,8 @@ class OPJWriter:
             root_cause: Why it failed (optional).
             avoid_in_future: Actionable avoidance rule (optional).
         """
+        if os.environ.get("CORTEX_OPJ_DISABLED"):
+            return
         entry = OPJEntry(
             pattern_id=_entry_id(orchestrator),
             orchestrator=orchestrator,
@@ -275,6 +280,9 @@ class OPJWriter:
         else:
             entries.append(entry.to_dict())
 
+        # Cap to the most recent _MAX_SHARD_ENTRIES to prevent file bloat.
+        if len(entries) > self._MAX_SHARD_ENTRIES:
+            entries = entries[-self._MAX_SHARD_ENTRIES:]
         existing_data["entries"] = entries
         # Phase 70: Sanitize entire data structure before YAML dump to prevent infinite recursion
         safe_data = _sanitize_for_yaml(existing_data, max_depth=8)
@@ -305,6 +313,11 @@ class OPJWriter:
                 return i
         return None
 
+    # Maximum shard entries per orchestrator — prevents unbounded growth across test runs.
+    _MAX_SHARD_ENTRIES: int = 100
+    # Maximum registry index entries — prevents unbounded growth across test runs.
+    _MAX_REGISTRY_ENTRIES: int = 200
+
     def _update_registry(self, entry: OPJEntry, shard: Path) -> None:
         """Update _registry.yaml with the new entry reference."""
         registry_data: Dict[str, Any] = {
@@ -313,8 +326,11 @@ class OPJWriter:
             "entries": [],
         }
         if self._registry_file.exists():
-            loaded = yaml.safe_load(self._registry_file.read_text()) or {}
-            registry_data = loaded if isinstance(loaded, dict) else registry_data
+            try:
+                loaded = yaml.safe_load(self._registry_file.read_text()) or {}
+                registry_data = loaded if isinstance(loaded, dict) else registry_data
+            except Exception:
+                pass  # corrupted file — start fresh
 
         reg_entries: list = registry_data.get("entries", [])
         reg_entries.append({
@@ -326,6 +342,9 @@ class OPJWriter:
             "file_path": str(shard.relative_to(self._root)) if shard.is_relative_to(self._root) else str(shard),
             "recorded_at": entry.recorded_at,
         })
+        # Cap to the most recent _MAX_REGISTRY_ENTRIES to prevent file bloat.
+        if len(reg_entries) > self._MAX_REGISTRY_ENTRIES:
+            reg_entries = reg_entries[-self._MAX_REGISTRY_ENTRIES:]
         registry_data["entries"] = reg_entries
         registry_data["total_entries"] = len(reg_entries)
         registry_data["updated_at"] = datetime.now(timezone.utc).isoformat()

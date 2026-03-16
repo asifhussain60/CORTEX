@@ -47,6 +47,30 @@ claude_code_interoperability_contract:
     - "Convergence loop clears P0/P1 before phase close"
     - "Pack generation path is auditable end-to-end with AC markers"
 
+cortex_to_claude_agent_skill_mapping:
+  objective: "Codify how CORTEX enables Claude Code agent and skill development at scale."
+  mappings:
+    - id: "MAP-M11-01"
+      cortex_capability: "Agent architecture contracts"
+      claude_code_outcome: "Single-responsibility Claude agents with explicit trigger and handoff contracts"
+      implementation_anchor: "phase-m11-a"
+    - id: "MAP-M11-02"
+      cortex_capability: "Skill SSOT packaging"
+      claude_code_outcome: "Reusable .claude/skills knowledge packs referenced by prompts instead of duplicated inline logic"
+      implementation_anchor: "phase-m11-a"
+    - id: "MAP-M11-03"
+      cortex_capability: "Governance and convergence gates"
+      claude_code_outcome: "Fail-close validation for generated artifacts (TDD-first, sweep completeness, detect-fix-rescan)"
+      implementation_anchor: "phase-m11-b"
+    - id: "MAP-M11-04"
+      cortex_capability: "Workflow-template orchestration"
+      claude_code_outcome: "Deterministic generate-validate-publish lifecycle for agents/skills through MCP-first templates"
+      implementation_anchor: "phase-m11-b"
+    - id: "MAP-M11-05"
+      cortex_capability: "Drift control and consolidation"
+      claude_code_outcome: "Duplicate/overlap reduction with regression-protected capability preservation for evolving agent ecosystems"
+      implementation_anchor: "phase-m11-c"
+
 sweep_catalogue:
   - id: "GAP-M11-01"
     title: "Create agent-authoring workflow template"

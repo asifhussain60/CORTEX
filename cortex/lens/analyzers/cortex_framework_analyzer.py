@@ -185,6 +185,15 @@ class CortexFrameworkAnalyzer:
             if intent_m:
                 result["intent_type_count"] = int(intent_m.group(1))
 
+            if result["orchestrator_count"] is None:
+                result["orchestrator_count"] = self._fallback_orchestrator_count()
+
+            if result["mcp_tool_count"] is None:
+                result["mcp_tool_count"] = self._fallback_mcp_tool_count()
+
+            if result["intent_type_count"] is None:
+                result["intent_type_count"] = self._fallback_intent_type_count()
+
         except (OSError, IOError):
             pass  # Graceful degradation — returns all-None
 
@@ -241,3 +250,43 @@ class CortexFrameworkAnalyzer:
                 pass
 
         return detected, score
+
+    @staticmethod
+    def _fallback_orchestrator_count() -> Optional[int]:
+        """Best-effort orchestrator count fallback from filesystem."""
+        try:
+            root = Path("cortex") / "orchestrators"
+            if not root.is_dir():
+                return None
+            files = [
+                file for file in root.rglob("*.py")
+                if file.name not in {"__init__.py", "__main__.py"}
+            ]
+            return len(files)
+        except Exception:
+            return None
+
+    @staticmethod
+    def _fallback_mcp_tool_count() -> Optional[int]:
+        """Best-effort MCP tool count fallback from filesystem."""
+        try:
+            root = Path("cortex") / "mcp" / "tools"
+            if not root.is_dir():
+                return None
+            files = [
+                file for file in root.rglob("*.py")
+                if file.name not in {"__init__.py", "__main__.py"}
+            ]
+            return len(files)
+        except Exception:
+            return None
+
+    @staticmethod
+    def _fallback_intent_type_count() -> Optional[int]:
+        """Best-effort intent type count fallback from canonical enums."""
+        try:
+            from cortex.models.canonical_enums import IntentType
+
+            return len(IntentType)
+        except Exception:
+            return None

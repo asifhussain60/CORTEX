@@ -514,9 +514,17 @@ phases:
       - tests/intelligence/models/test_check29_production_readiness.py → PASS
       - tests/golden/response/test_phase_120_response_golden.py → PASS
       - tests/golden/response/test_phase_82_a.py → PASS
+      Additional in-session hardening completed:
+      - SSOT blocks added and validated through staged smoke progression:
+        BLOCK-DIFF-PREVIEW, BLOCK-RESUME-BANNER, BLOCK-ERROR-RECOVERY,
+        BLOCK-METRICS-DASHBOARD, BLOCK-HANDOFF, BLOCK-EXECUTION-SPEC,
+        BLOCK-DEVIATION-ALERT, BLOCK-PHASE-ROADMAP, BLOCK-STAGE-PROGRESS,
+        BLOCK-ENGAGEMENT-TIMELINE
+      - Rendering rules/table + quality checklist codified for phase-82-d/e expectations
       Sub-phase remains IN_PROGRESS because smoke still fails on
       tests/golden/holistic_integration/test_holistic_integration_simple.py::test_s01_simple_query_without_lens
-      with degraded environment/performance symptoms (missing knowledge index and tree-sitter fallback warnings).
+      and currently also encounters broader governance-path instability/timeouts
+      in master-plan/gateway execution paths under full smoke load.
 
   # ═══════════════════════════════════════════════════════════
   # SUB-PHASE M7-d: INSTRUCTIONS + SKILLS + FINAL CLEANUP

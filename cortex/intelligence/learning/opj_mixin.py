@@ -42,7 +42,7 @@ from cortex.intelligence.learning.reinforcement_signal import (
 
 logger = logging.getLogger(__name__)
 
-_WORKSPACE_ROOT = Path(__file__).resolve().parents[4]
+_WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
 _DEFAULT_REGISTRY = _WORKSPACE_ROOT / "cortex-registry"
 
 

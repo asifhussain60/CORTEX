@@ -32,3 +32,7 @@ Every workflow for IMPLEMENT, FIX, REFACTOR, AUDIT MUST inject:
 - `steps:` — ordered list of execution steps
 - `convergence:` — optional convergence configuration
 - `primitives:` — list of injected primitive references
+
+## V2 Conventions
+- Route mode detail to skills and keep workflow templates focused on execution primitives
+- Keep code-modifying workflows explicitly wired to holistic + sweep + convergence primitives

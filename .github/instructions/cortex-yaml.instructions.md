@@ -26,6 +26,10 @@ applyTo: "cortex-registry/**/*.yaml"
 - No semver strings, `v1`/`v2` markers, or release tags
 - Exception: Python package version references (`>=`, `==`)
 
+## V2 Conventions
+- Keep YAMLs thin and reference-oriented; avoid embedding implementation detail where a phase/workflow file exists
+- Keep paths aligned to consolidated `cortex` package and registry SSOT locations only
+
 ## Workflow Templates
 - Every code-modifying workflow MUST include these primitives:
   - `primitives/execution/ac-marker-emit.yaml`

@@ -38,3 +38,7 @@ applyTo: "tests/**/*.py"
 ## Dissolved Packages
 - NEVER create test directories for: `cortex_brain`, `cortex_intelligence`, `cortex_lens`
 - These packages were dissolved — their tests live under `tests/` mirroring `cortex/`
+
+## V2 Conventions
+- Prefer phase-targeted tests under `tests/v2/` for migration contracts
+- Keep smoke/preflight gates as authoritative completion checks for migration phase closure

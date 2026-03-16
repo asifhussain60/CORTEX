@@ -36,6 +36,10 @@ applyTo: "cortex/**/*.py"
 - Single canonical implementation per class — never define the same class in two files
 - If a class already exists elsewhere in `cortex/`, import it — do not redefine
 
+## V2 Conventions
+- Prefer canonical implementations over temporary compatibility shims; remove expired shims during consolidation phases
+- Keep imports and class ownership consistent with consolidated orchestrator/skill surfaces
+
 ## AC Markers
 - Every public orchestrator method MUST emit `AC_START` at entry and `AC_COMPLETE` at exit
 - Format: `AC-{DOMAIN}-{SEQUENCE}` (e.g. `AC-P89-001`)

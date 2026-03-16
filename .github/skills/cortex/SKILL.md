@@ -21,9 +21,9 @@ This is the **gateway skill** — it classifies intent and routes to the appropr
 | Implement a feature, fix a bug, or refactor | `cortex-tdd` | `/implement` `/fix` `/refactor` |
 | Find and fix all issues across the codebase | `cortex-audit` | `/audit fix` `/health` |
 | Debug a failing test, error, or UI issue | `cortex-debug` | `/debug` `/debug-inject` `/debug-cleanup` |
-| Analyse root causes of recurring failures | `cortex-rca` | `/rca` |
+| Analyse root causes of recurring failures | `cortex-debug` | `/rca` |
 | Plan phases, certify, onboard, or ingest content | `cortex-plan` | `/plan` `/totalrecall` `/digest` `/onboard` |
-| Understand governance rules or CORE enforcement | `cortex-governance` | *(auto-loaded)* |
+| Understand governance rules or CORE enforcement | `cortex-audit` | `/audit` `/audit fix` |
 
 ### Overlap Disambiguation
 
@@ -33,7 +33,7 @@ This is the **gateway skill** — it classifies intent and routes to the appropr
 | Test is failing AND you know the cause | `/fix` → `cortex-tdd` |
 | Code works but quality/structure is poor | `/refactor` → `cortex-tdd` |
 | Code has known security issues | `/audit fix` → `cortex-audit` |
-| Recurring failure with no obvious cause | `/rca` → `cortex-rca` |
+| Recurring failure with no obvious cause | `/rca` → `cortex-debug` |
 | Codebase drift between docs and code | `/totalrecall` → `cortex-plan` |
 
 ---

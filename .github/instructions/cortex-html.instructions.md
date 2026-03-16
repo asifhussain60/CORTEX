@@ -26,3 +26,7 @@ applyTo: "docs/**/*.html"
 - Lazy-load images below the fold: `loading="lazy"`
 - Minify CSS for production
 - No JavaScript frameworks — vanilla JS only if needed
+
+## V2 Conventions
+- Keep docs references aligned to current consolidated CORTEX architecture (no retired package paths)
+- Prefer shared docs components/patterns over duplicated page-specific scaffolding

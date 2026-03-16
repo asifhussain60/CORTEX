@@ -82,6 +82,41 @@ Locks are always P0 severity with `ci_gate: true` — merge blocked on violation
 
 ---
 
+## Governance Rules (Merged from `cortex-governance`)
+
+Use this section whenever governance context is required.
+
+| Rule | Description |
+|---|---|
+| CORE-002 | All output inline — never create .md/.txt report files |
+| CORE-008 | TDD mandatory — write failing test first, then implement |
+| CORE-011 | Type hints on all functions |
+| CORE-012 | Docstrings on all public APIs |
+| CORE-028 | File naming: snake_case only |
+| CORE-035 | Single canonical implementation — no duplicates |
+| CORE-048 | Holistic validation gate before IMPLEMENT/FIX/REFACTOR |
+| CORE-049 | Silent autonomous execution (progress bars only) |
+| CORE-064 | Sweep completeness — every FIX/REFACTOR/AUDIT exhausts full catalogue |
+| CORE-068 | Universal convergence gate — detect→fix→rescan until 0 P0/P1 (max 3 cycles) |
+
+### AC Marker Contract
+
+Format: `AC-{DOMAIN}-{SEQUENCE}` (example: `AC-P89-001`)
+
+- `AC_START` at entry of every public orchestrator method
+- `AC_COMPLETE` on success/failure with timing and status
+- No orphaned `AC_START` markers
+- Trace persistence: `.cortex-runtime/traces/orchestrator-traces.db`
+
+### PLIP-001 Guard
+
+Before code-modifying operations:
+1. Query history: `cortex_learning op=history`
+2. Query prevention rules: `cortex_learning op=rca rca_action=query`
+3. Emit reinforcement signal after outcome (`MILD_REWARD` or `MILD_PUNISHMENT`)
+
+---
+
 ## Key Commands
 
 ```bash

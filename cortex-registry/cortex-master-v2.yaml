@@ -1,4 +1,4 @@
-updated: '2026-03-15'
+updated: '2026-03-16'
 maintainer: CORTEX Architecture Team
 
 # ============================================================
@@ -22,14 +22,18 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-16T00:30:00Z'
+  last_updated: '2026-03-16T23:55:00Z'
   total_phases: 12
   active: 1
   completed: 6
   in_progress: 1
   planned: 5
+  architectural_decision: "HYBRID — preserve v2 reductions while recentering execution on Workflow Composer + dedicated workflow templates"
+  architecture_center: "Workflow Composer and dedicated workflow templates are first-class, mandatory execution primitives"
+  challenge_first_position: "Direct prompt-only patching is rejected as primary strategy; use Workflow Composer-governed template execution to preserve parity, reduce drift, and keep orchestrator-safe convergence."
   design_principles:
     - "Collaboration-first: preserve federated team workflows, shared contracts, and cross-team reuse"
+    - "Workflow-template centered: all operational work routes through Workflow Composer templates"
     - "LLM-native: leverage Claude/GPT native capabilities instead of reimplementing"
     - "Declarative governance: rules in YAML, enforcement in 1 engine — not 5 orchestrators"
     - "MCP mega-tools: 6 capability-grouped tools instead of 36 micro-tools"
@@ -73,6 +77,122 @@ metadata:
 # M8 mirrors all prior phases.
 # M12 is always last.
 # ============================================================
+
+preservation_contract:
+  v1_capability_parity_required: true
+  never_regress:
+    - "Workflow Composer and dedicated workflow templates remain architectural center"
+    - "All original CORTEX intent classes and execution modes remain routable"
+    - "MCP-first exposure remains mandatory for operations and governance"
+    - "Orchestrator integrity and wiring contracts remain fail-close"
+    - "SKILLS, agents, and subagents lifecycle remains first-class"
+    - "VS Code Copilot Chat inline rendering contract remains enforced"
+  parity_evidence_required_in_m12: "preserved | strategic_replacement | intentional_removal ledger"
+
+workflow_template_centrality:
+  composer_is_mandatory_gateway: true
+  dedicated_templates_required_for:
+    - development
+    - refactoring
+    - debugging
+    - documentation_generation
+    - architecture_review
+    - operations
+    - agent_creation
+    - skill_creation
+    - subagent_creation
+    - evaluation_and_validation
+  template_categories:
+    - primitives
+    - mode_workflows
+    - lifecycle_workflows
+    - governance_workflows
+    - agent_skill_workflows
+  lifecycle:
+    states: ["proposed", "active", "stabilizing", "deprecated", "retired"]
+    ownership: "single owning team per template; platform review required for shared primitives"
+    governance: "CORE-048 + CORE-064 + CORE-068 enforced for code-modifying and generation workflows"
+    composability: "primitives compose mode/lifecycle templates; inheritance allowed only via explicit primitive references"
+    dynamic_enhancement_policy: "safe additive metadata and non-breaking primitive injection only"
+
+knowledge_yaml_architecture:
+  canonical_ownership_model:
+    global_knowledge_root: "cortex-registry/knowledge/global"
+    domain_knowledge_root: "cortex-registry/knowledge/domains/<domain>"
+    workflow_guidance_root: "cortex-registry/knowledge/workflow-guidance"
+    skill_agent_guidance_root: "cortex-registry/knowledge/agent-skill-guidance"
+  taxonomy:
+    - "principles"
+    - "patterns"
+    - "anti_patterns"
+    - "contracts"
+    - "runbooks"
+    - "decision_records"
+  deduplication_strategy:
+    canonical_id_required: true
+    source_of_truth_pointer_required: true
+    duplicate_detection_gate: "hash + semantic key overlap check in preflight"
+    publication_rule: "domain YAMLs reference global canonical blocks; no copy-paste of global knowledge"
+  support_targets:
+    - documentation_rendering
+    - workflow_guidance
+    - skill_generation
+    - agent_generation
+    - architecture_reasoning
+
+smoke_test_architecture:
+  role: "Permanent platform performance and regression gate"
+  hard_requirements:
+    registry_isolation: true
+    deterministic_test_environment: true
+    opj_disk_io_disabled_in_tests: true
+    parallel_execution_required: true
+    ci_runtime_budget_seconds: 60
+  enforcement:
+    required_env:
+      CORTEX_OPJ_DISABLED: "1"
+      CORTEX_WORKERS: "8"
+    fail_conditions:
+      - "pytest-xdist unavailable"
+      - "smoke runtime budget exceeded"
+      - "smoke writes to OPJ registry paths"
+    telemetry:
+      slow_test_threshold_seconds: 2
+      regression_alert_threshold_percent: 20
+  opj_controls:
+    shard_entry_cap: 100
+    registry_entry_cap: 200
+    write_guard_in_tests: "CORTEX_OPJ_DISABLED"
+  ci_design:
+    - "smoke lane always parallel"
+    - "slow-test regression detector blocks merge on threshold breach"
+    - "registry path validation check blocks out-of-repo writes"
+
+latest_findings:
+  assessed_at: "2026-03-16"
+  validated:
+    - "Smoke performance remains within budget envelope (~31s with CORTEX_WORKERS=8)."
+    - "OPJ test-time write guard is active via CORTEX_OPJ_DISABLED=1 in pytest config."
+    - "OPJ growth controls remain active (shard cap 100, registry cap 200)."
+  active_blockers:
+    - id: "FINDING-M7-AC-001"
+      severity: P1
+      area: "Prompt governance contract"
+      summary: "Smoke fails on AC marker format documentation expectation in .github/copilot-instructions.md."
+      required_fix_path: "Workflow Composer governed prompt-governance workflow template; avoid ad hoc instruction edits outside template path."
+  non_blocking_observations:
+    - "Duplicate-class warnings remain visible in smoke output and require planned CORE-035 consolidation sweep, not emergency patching."
+
+workflow_composer_fixes:
+  mandate: "All active blocker fixes and architecture hardening tasks route through Workflow Composer templates with convergence evidence."
+  immediate_route:
+    phase: "phase-m7"
+    template_family: "workflows/templates/sdlc + workflows/templates/governance"
+    enforcement_primitives:
+      - "primitives/execution/ac-marker-emit.yaml"
+      - "primitives/governance/holistic-validation-gate.yaml"
+      - "primitives/validation/detect-fix-rescan-loop.yaml"
+    first_fix: "Restore AC marker format contract coverage in copilot-instructions path under template-governed change set."
 
 autonomous_execution_framework:
   execution_mode: "SILENT_AUTONOMOUS"
@@ -135,7 +255,7 @@ session_resume_protocol:
 runtime_state:
   last_completed_phase: "phase-m6"
   next_executable_phase: "phase-m7"
-  last_session_action: "phase-m7c-implemented-and-validated-targeted-gates-smoke-blocked-by-holistic-performance"
+  last_session_action: "phase-m7c-ssot-response-hardening complete; latest smoke run shows single governance blocker (AC marker format contract in copilot-instructions) with performance gate passing"
   last_session_prompt: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
 
 phase_detail_files:
@@ -213,7 +333,7 @@ phase_detail_files:
     sub_phases: 4
     depends_on: ["phase-m5", "phase-m6"]
     file: "cortex-registry/planning/phases/v2/phase-m7-prompt-reduction.yaml"
-    note: "IN_PROGRESS — M7-a and M7-b are complete. M7-c merge implementation and targeted validation are complete, but progression to M7-d is blocked by a smoke failure in holistic integration performance/environment readiness."
+    note: "IN_PROGRESS — M7-a and M7-b are complete. M7-c merge implementation is complete; SSOT response blocks hardened. Current blocker narrowed to AC marker format governance expectation in copilot-instructions. Fix must run via Workflow Composer-governed prompt/governance template path with convergence evidence."
 
   - id: phase-m8
     title: "Test Suite Mirror Reduction"
@@ -224,7 +344,7 @@ phase_detail_files:
     sub_phases: 3
     depends_on: ["phase-m3", "phase-m4", "phase-m7"]
     file: "cortex-registry/planning/phases/v2/phase-m8-test-mirror.yaml"
-    note: "Delete tests for removed orchestrators. Consolidate tests for merges. Update conftest fixtures. 1,366 → ~600 test files."
+    note: "Delete tests for removed orchestrators. Consolidate tests for merges. Update conftest fixtures. Enforce permanent smoke performance architecture (registry isolation + OPJ-off + parallel + runtime budget). 1,366 → ~600 test files."
 
   - id: phase-m9
     title: "Production Certification & Drift Lock"
@@ -246,7 +366,7 @@ phase_detail_files:
     sub_phases: 4
     depends_on: ["phase-m9"]
     file: "cortex-registry/planning/phases/v2/phase-m10-federated-team-model.yaml"
-    note: "Define platform/domain ownership boundaries, collaboration contracts, approval gates, lifecycle policy, and cross-domain interoperability wiring."
+    note: "Define platform/domain ownership boundaries, collaboration contracts, approval gates, lifecycle policy, and cross-domain interoperability wiring with Workflow Composer template ownership as federated collaboration backbone."
 
   - id: phase-m11
     title: "Agent/Skill Workflow Template Governance (MCP-First)"
@@ -257,7 +377,7 @@ phase_detail_files:
     sub_phases: 4
     depends_on: ["phase-m10"]
     file: "cortex-registry/planning/phases/v2/phase-m11-agent-skill-template-governance.yaml"
-    note: "Introduce dedicated workflow templates for agent/skill lifecycle and ship the Claude Code Governance & Orchestration Pack (MCP-first control plane for .claude artifacts) with validation, approvals, observability, evaluation hooks, reuse contracts, and fail-close regression gates."
+    note: "Introduce dedicated workflow templates for agent/skill/subagent lifecycle and ship the Claude Code Governance & Orchestration Pack (MCP-first control plane for .claude artifacts) with validation, approvals, observability, evaluation hooks, reuse contracts, and fail-close regression gates."
 
   - id: phase-m12
     title: "Documentation Re-Architecture + Final Cleanup Convergence"
@@ -268,7 +388,7 @@ phase_detail_files:
     sub_phases: 5
     depends_on: ["phase-m11"]
     file: "cortex-registry/planning/phases/v2/phase-m12-docs-ia-and-final-cleanup.yaml"
-    note: "Rebuild docs IA for org-scale teams, enforce discoverability map, remove leftovers/duplication from v1 implementation, and publish final origin/CORTEX capability parity ledger (preserved vs strategic replacement vs intentional removal)."
+    note: "Rebuild docs IA for org-scale teams, enforce discoverability map, remove leftovers/duplication from v1 implementation, validate safe deletions by dependency scan, and publish final origin/CORTEX capability parity ledger (preserved vs strategic replacement vs intentional removal)."
 
 # ============================================================
 # LLM ADAPTABILITY CONTRACT
@@ -308,8 +428,8 @@ summary:
   planned: 5
   archived: 0
   completion_percentage: 50
-  consolidation_summary: "2026-03-16 — M7 in progress: M7-a prompt reductions and M7-b docs/duplicate consolidation are complete with smoke green; M7-c merge-cluster execution has started under RED guardrails."
-  active_phases: "phase-m7 — Prompt & Agent Surface Reduction (M7-a/M7-b complete; M7-c active)"
+  consolidation_summary: "2026-03-16 — M7 remains in progress: M7-a and M7-b are complete; M7-c hardening completed; smoke now within performance budget with one remaining governance blocker (AC marker format contract in copilot-instructions) queued for Workflow Composer-governed fix."
+  active_phases: "phase-m7 — Prompt & Agent Surface Reduction (M7-a/M7-b complete; M7-c hardening complete; governance contract fix path active)"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -393,7 +513,7 @@ phases:
     gaps: 14
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m7-prompt-reduction.yaml"
-    note: "REVISED: 86→~35 files (24,790→~8,000 lines). 56→~21 agents. 7→5 skills. Capability verified: 20/20 modes, 12/13 rules."
+    note: "REVISED: 86→~35 files (24,790→~8,000 lines). 56→~21 agents. 7→5 skills. Capability verified: 20/20 modes. Remaining governance gap: AC marker format contract documentation, to be fixed via Workflow Composer-governed prompt path."
 
   # Phase M8 — TEST MIRROR (depends: M3+M4+M7)
   - id: phase-m8

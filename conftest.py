@@ -112,6 +112,7 @@ def pytest_configure(config):
     os.environ["CORTEX_TRACE_DB"] = ".cortex-runtime/traces/test-orchestrator-traces.db"
     os.environ["CORTEX_TRACE_MAX_ROWS"] = "50000"  # Higher limit for tests
     os.environ["CORTEX_TRACE_ASYNC_FLUSH"] = "true"
+    os.environ["CORTEX_OPJ_DISABLED"] = "1"  # Disable OPJ disk I/O in tests (perf: no YAML reads/writes)
     # Phase 07b: Quality gate — default=warn; set CORTEX_QUALITY_GATE=strict for CI blocking
     try:
         from cortex.testing.pytest_quality_plugin import make_plugin

@@ -370,7 +370,7 @@ def main():
     html_files = sorted(docs.rglob('*.html'))
 
     # Exclude files that should not be touched
-    exclude = {'index.bak.html', 'glass-samples.html'}
+    exclude = {'glass-samples.html'}
     html_files = [f for f in html_files if f.name not in exclude]
 
     print(f"CORTEX Font-Size Standardisation — Phase 109.3")
