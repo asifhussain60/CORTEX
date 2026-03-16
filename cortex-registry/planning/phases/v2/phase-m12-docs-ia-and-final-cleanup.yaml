@@ -16,6 +16,59 @@ background: |
   org-scale information architecture while completing final cleanup to guarantee
   zero duplicate or leftover artifacts from the CORTEX branch implementation.
 
+chat_digest_cleanup_ledger:
+  source: "DIGEST #file:chat01.md (2026-03-16 review of deferred M8 removals)"
+  intent: "Mark skipped obsolete areas for deletion during phase-m12-c final cleanup."
+  evidence_summary:
+    - "chat01 recorded that M8 stopped after a low-risk deletion slice even though static filesystem import audit still reported 238 unresolved cortex.* imports across legacy mirror tests."
+    - "Confirmed missing legacy module families from the current codebase: cortex.phase_38.*, cortex.mcp.tools.brain_health_tool, cortex.mcp.tools.consolidated, cortex.mcp.tools.planning_tools, cortex.orchestrators.persona/strategies/synthesis/tools/response, cortex.intelligence.crawler/documentation/perception, cortex.lens.python."
+  deletion_candidates:
+    - id: "CHAT01-DEL-01"
+      action_ref: "phase-m12-c"
+      status: "MARKED_FOR_DELETION"
+      area: "Remaining phase_38 mirror tests and phase_38-specific governance integrations"
+      rationale: "The underlying cortex.phase_38 implementation modules are gone; chat01 removed only two phase_38 test files and left the remaining mirror/integration coverage behind."
+      examples:
+        - "tests/unit/phase_38/test_readiness_validator.py"
+        - "tests/unit/governance/test_phase_38_audit_integration.py"
+        - "tests/unit/governance/test_phase_38_audit_integration_clean.py"
+    - id: "CHAT01-DEL-02"
+      action_ref: "phase-m12-c"
+      status: "MARKED_FOR_DELETION"
+      area: "Dead mirror tests for retired orchestrator domain packages"
+      rationale: "The persona, strategies, synthesis, tools, and response orchestrator packages were removed earlier, but chat01 deferred the remaining cleanup after inventory refresh."
+      legacy_modules:
+        - "cortex.orchestrators.persona"
+        - "cortex.orchestrators.strategies"
+        - "cortex.orchestrators.synthesis"
+        - "cortex.orchestrators.tools"
+        - "cortex.orchestrators.response"
+    - id: "CHAT01-DEL-03"
+      action_ref: "phase-m12-c"
+      status: "MARKED_FOR_DELETION"
+      area: "Dead mirror tests for retired intelligence surfaces"
+      rationale: "Crawler, documentation, and perception legacy packages are absent from the repo and were explicitly named in the M8 deletion sweep catalogue, but the chat stopped before purging their remaining mirrors."
+      legacy_modules:
+        - "cortex.intelligence.crawler"
+        - "cortex.intelligence.documentation"
+        - "cortex.intelligence.perception"
+    - id: "CHAT01-DEL-04"
+      action_ref: "phase-m12-c"
+      status: "MARKED_FOR_DELETION"
+      area: "Dead mirror tests for retired Python LENS adapters"
+      rationale: "The cortex.lens.python surface no longer exists and any test coverage that still mirrors it is obsolete rather than migratable."
+      legacy_modules:
+        - "cortex.lens.python"
+    - id: "CHAT01-DEL-05"
+      action_ref: "phase-m12-c"
+      status: "MARKED_FOR_DELETION"
+      area: "Historical MCP-path mirror tests for removed helper modules"
+      rationale: "chat01 already removed or migrated a small subset, but the missing-module audit still identified deleted MCP helper surfaces that should be cleaned out in the final purge instead of preserved."
+      legacy_modules:
+        - "cortex.mcp.tools.brain_health_tool"
+        - "cortex.mcp.tools.consolidated"
+        - "cortex.mcp.tools.planning_tools"
+
 sweep_catalogue:
   - id: "GAP-M12-01"
     title: "Define docs IA blueprint for platform/domain/ops/governance"
@@ -151,15 +204,15 @@ phases:
     depends_on: ["phase-m12-b"]
     tdd_cycle:
       red:
-        action: "Run duplicate, stale-reference, and leftover scans to produce failing cleanup report"
+        action: "Run duplicate, stale-reference, leftover, and chat_digest_cleanup_ledger scans to produce failing cleanup report"
         gate: "python3 scripts/run_tests.py file tests/v2/test_final_cleanup_scan.py — ALL tests FAIL"
         blocker: "Cleanup forbidden"
       green:
-        action: "Remove all identified leftovers and resolve duplicate ownership"
+        action: "Remove all identified leftovers, execute the chat_digest_cleanup_ledger deletions, and resolve duplicate ownership"
         gate: "python3 scripts/run_tests.py file tests/v2/test_final_cleanup_scan.py — ALL tests PASS"
         blocker: "REFACTOR forbidden"
       refactor:
-        action: "Re-run scans until zero duplicates/leftovers"
+        action: "Re-run scans until zero duplicates/leftovers and zero marked chat01 obsolete surfaces remain"
         gate: "python3 scripts/run_tests.py smoke"
         blocker: "Sub-phase COMPLETE forbidden"
     completion_gate:

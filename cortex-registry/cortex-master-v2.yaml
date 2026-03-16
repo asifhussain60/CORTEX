@@ -24,11 +24,11 @@ metadata:
   created: '2026-03-15'
   last_updated: '2026-03-16T23:59:59Z'
   autonomous_chain_updated: '2026-03-16 — stop_policy added; all continuation prompts, proceed gates, and 🚀 Next Phase blocks prohibited; CORE-RESP-001 overridden for autonomous phase chaining.'
-  total_phases: 14
+  total_phases: 15
   active: 1
   completed: 7
   in_progress: 1
-  planned: 6
+  planned: 7
   architectural_decision: "HYBRID — preserve v2 reductions while recentering execution on Workflow Composer + dedicated workflow templates"
   architecture_center: "Workflow Composer and dedicated workflow templates are first-class, mandatory execution primitives"
   challenge_first_position: "Direct prompt-only patching is rejected as primary strategy; use Workflow Composer-governed template execution to preserve parity, reduce drift, and keep orchestrator-safe convergence."
@@ -72,14 +72,17 @@ metadata:
 #                                                                                                               ↓
 #                                             M10 (Team Federation) → M11 (Agent/Skill Template Governance) → M12 (Docs IA)
 #                                                                              ↓                                    ↘
-#                                                                      M14 (ADLC, Issue #19)                         M13 (Cleanup — always last, depends M12+M14)
+#                                                                      M14 (ADLC, Issue #19)                         M13 (Cleanup — always last, depends M12+M14+M15)
+#                                                                              ↓
+#                                                                      M15 (Tutorial Mode, optional mentor layer)
 #
 # M1 is prerequisite for all.
 # M3/M4 can run in parallel with M5 (after M2).
 # M7 depends on M5+M6.
 # M8 mirrors all prior phases.
 # M14 (ADLC) depends on M11; runs in parallel with M12.
-# M13 is always last — depends on M12 + M14.
+# M15 (Tutorial Mode) depends on M11; runs in parallel with M12 and M14.
+# M13 is always last — depends on M12 + M14 + M15.
 # ============================================================
 
 
@@ -141,6 +144,30 @@ workflow_template_centrality:
     - "No direct code or ad hoc script execution outside YAML-governed workflows."
     - "All agent/skill/subagent invocations must be referenced in workflow templates."
     - "All migration, retention, and sunsetting actions must be tracked and executed via phase YAML."
+
+tutorial_mode_contract:
+  owning_phase: "phase-m15"
+  objective: "Introduce an optional teaching layer that explains completed work (what/why/how) without changing operational execution behavior."
+  architecture_pattern: "Layered tutorial explanation surface attached after orchestration execution and before final response rendering."
+  activation:
+    states: ["on", "auto", "off"]
+    default_state: "auto"
+    state_behavior:
+      on: "Always emit concise tutorial explanation blocks aligned to workflow/knowledge YAML references."
+      auto: "Emit tutorial explanations for onboarding, learning, and explicit explain/teach intents; otherwise suppress."
+      off: "Disable tutorial explanation layer and return operational response only."
+    toggle_surfaces:
+      - "session setting"
+      - "user profile preference"
+      - "per-request override flag"
+  expert_user_deactivation:
+    expert_default: "off"
+    persistence: "Sticky profile preference — remains off across sessions until user explicitly re-enables."
+    override: "Experts can temporarily enable with per-request tutorial_mode=on."
+  guardrails:
+    - "Tutorial output is post-execution only and cannot mutate orchestration decisions."
+    - "Response token/length budgets apply; tutorial block truncates first under Copilot rendering constraints."
+    - "Tutorial rendering failures are non-blocking and never prevent operational completion."
 
 knowledge_yaml_architecture:
   canonical_ownership_model:
@@ -323,7 +350,7 @@ session_resume_protocol:
 runtime_state:
   last_completed_phase: "phase-m7"
   next_executable_phase: "phase-m8"
-  last_session_action: "phase-m8 advanced: one additional dead mirror test was deleted, stale consolidated/planning MCP test imports were migrated into current v2 mega-tool coverage, and smoke reconverged green (2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 30.84s)."
+  last_session_action: "phase-m8 advanced: five additional dead support/core orchestrator mirror tests were deleted (test_*.py count 1208), and smoke reconverged green (2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 32.46s) while low-risk preflight v2 import migrations remain active."
   last_session_prompt: "AUTO_RESUME_FROM_ACTIVE_PLAN"
 
 phase_detail_files:
@@ -412,7 +439,7 @@ phase_detail_files:
     sub_phases: 3
     depends_on: ["phase-m3", "phase-m4", "phase-m7"]
     file: "cortex-registry/planning/phases/v2/phase-m8-test-mirror.yaml"
-    note: "IN_PROGRESS — M8-a GREEN reconverged after an additional dead-test deletion (tests/test_*.py=1222), and M8-b has started by migrating stale MCP import checks into v2 mega-tool coverage."
+    note: "IN_PROGRESS — M8-a GREEN reconverged after deleting additional dead support/core orchestrator mirror tests (tests/test_*.py=1208); M8-b low-risk v2 preflight import migrations remain active."
 
   - id: phase-m9
     title: "Production Certification & Drift Lock"
@@ -465,7 +492,7 @@ phase_detail_files:
     sweep_id: SWEEP-M13-REPO-CLEANUP
     gaps: 6
     sub_phases: 3
-    depends_on: ["phase-m12", "phase-m14"]
+    depends_on: ["phase-m12", "phase-m14", "phase-m15"]
     file: "cortex-registry/planning/phases/v2/phase-m13-repo-cleanup.yaml"
     note: "Sweep all subfolders for non-production files, remove all dev/test/legacy/obsolete artifacts, enforce production-only hygiene, validate with smoke and audit gates, and emit final repo state for release. Always last — gates on M12 + M14."
 
@@ -481,6 +508,17 @@ phase_detail_files:
     source_commit: "324733f"
     file: "cortex-registry/planning/phases/v2/phase-m14-adlc-lifecycle.yaml"
     note: "ADLC (Agentic Development Lifecycle Cycle) as a first-class CORTEX mode — 5 P0 capabilities from Issue #19: (1) IntentType.ADLC #35 + ADLC_KEYWORDS routing, (2) adlc-cycle-workflow.yaml Tier-2 template with 7 stages + 2 feedback loops, (3) ADLCOrchestrator with CORE-068 max_cycles=3 cap, (4) ADLCFeedbackBridge Stage7→Stage2 auto-fix loop with MaxCyclesExceeded, (5) agentic-sdlc-patterns.yaml knowledge YAML. Delivery order: enums→knowledge→template→orchestrator→bridge. Parallel with M12; M13 gates on M14+M12."
+
+  - id: phase-m15
+    title: "Tutorial Mode — Optional Collaborative Teaching Layer"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M15-TUTORIAL-MODE
+    gaps: 6
+    sub_phases: 4
+    depends_on: ["phase-m11"]
+    file: "cortex-registry/planning/phases/v2/phase-m15-tutorial-mode-integration.yaml"
+    note: "PLANNED — Add a layered post-execution tutorial explanation system integrated with workflow and response templates. Activation states: on|auto|off; expert users default to off with sticky preference and per-request override. M13 gates on M15+M14+M12."
 # ============================================================
 # CORTEX v2 is designed to ADAPT to evolving LLM capabilities.
 # The LLM Capability Manifest (cortex-registry/core/llm-capabilities.yaml)
@@ -509,15 +547,15 @@ production_readiness:
   overall_score: null
   deployment_date: null
 
-  total_phases: 14
+  total_phases: 15
   active: 1
   completed: 7
   in_progress: 1
-  planned: 6
+  planned: 7
   archived: 0
   completion_percentage: 54
-  consolidation_summary: "2026-03-16 — M8 continued through a second validated sweep: one more dead mirror test was deleted, stale MCP missing-module imports were removed or migrated into v2 mega-tool coverage, and smoke reconverged green at 2925 passed in 30.84s."
-  active_phases: "phase-m8 — Test Suite Mirror Reduction (M8-a GREEN reconverged after another low-risk deletion; M8-b has begun through MCP import migration and consolidated v2 alias coverage)"
+  consolidation_summary: "2026-03-16 — M8 continued through another validated sweep: five dead support/core orchestrator mirror tests were deleted (test_*.py=1208), and smoke reconverged green at 2925 passed in 32.46s while low-risk preflight v2 import migrations remain active."
+  active_phases: "phase-m8 — Test Suite Mirror Reduction (M8-a GREEN reconverged after additional dead-test removals to test_*.py=1208; M8-b low-risk preflight v2 import migration remains active)"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -613,7 +651,7 @@ phases:
     gaps: 4
     sub_phases: 3
     file: "cortex-registry/planning/phases/v2/phase-m8-test-mirror.yaml"
-    note: "P1 — ACTIVE. M8-a GREEN reconverged after deleting one more dead mirror test, and M8-b started by migrating stale MCP-path checks into v2 mega-tool/alias coverage; smoke remains green."
+    note: "P1 — ACTIVE. M8-a GREEN reconverged after deleting additional dead support/core orchestrator mirror tests; M8-b low-risk preflight v2 import migration remains in progress and smoke stays green."
 
   # Phase M9 — CERTIFICATION (depends: M8, always last)
   - id: phase-m9
@@ -668,7 +706,7 @@ phases:
     title: "Final Refactor & Repo Cleanup"
     priority: P0
     status: PLANNED
-    depends_on: ["phase-m12", "phase-m14"]
+    depends_on: ["phase-m12", "phase-m14", "phase-m15"]
     sweep_id: SWEEP-M13-REPO-CLEANUP
     gaps: 6
     sub_phases: 3
@@ -688,3 +726,15 @@ phases:
     source_commit: "324733f"
     file: "cortex-registry/planning/phases/v2/phase-m14-adlc-lifecycle.yaml"
     note: "P0 — Thread 7 existing CORTEX stages into the named ADLC paradigm. 5 capabilities (Issue #19): IntentType.ADLC (#35) + ADLC_KEYWORDS, adlc-cycle-workflow.yaml (7-stage Tier-2 template + 2 feedback loops), ADLCOrchestrator (CORE-068 max_cycles=3), ADLCFeedbackBridge (Stage7→2 auto-fix + MaxCyclesExceeded), agentic-sdlc-patterns.yaml knowledge YAML. Zero new package deps. Compresses delivery weeks-months→hours-days. Parallel with M12; M13 gates on M14+M12."
+
+  # Phase M15 — TUTORIAL MODE (depends: M11, parallel with M12/M14)
+  - id: phase-m15
+    title: "Tutorial Mode — Optional Collaborative Teaching Layer"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-m11"]
+    sweep_id: SWEEP-M15-TUTORIAL-MODE
+    gaps: 6
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/v2/phase-m15-tutorial-mode-integration.yaml"
+    note: "P0 — Add an optional tutorial explanation layer that teaches what CORTEX did and why without changing execution behavior. Activation on|auto|off; expert users default off with sticky preference and per-request override. M13 gates on M15+M14+M12."

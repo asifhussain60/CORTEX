@@ -107,7 +107,7 @@ phase_continuation:
 
 execution_log:
   last_updated: "2026-03-16"
-  current_focus: "phase-m8-a GREEN validated; phase-m8-b MCP import migration/consolidation started"
+  current_focus: "phase-m8-a GREEN validated with additional dead support/core orchestrator mirror cleanup; M8-b preflight v2 core import migrations remain active"
   evidence:
     - "Test files currently detected: 1356"
     - "Current test_*.py count after first deletion sweep: 1223"
@@ -122,9 +122,30 @@ execution_log:
     - "Migrated legacy planning_tools availability assertion to canonical v2 mega-tool imports (cortex_code, cortex_plan, cortex_ops) plus alias routing via mcp_registry."
     - "Expanded tests/v2/test_mcp_mega_tools_phase_m5.py to consolidate current v2 alias-routing coverage for all six mega-tools."
     - "Second smoke reconvergence passed: 2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 30.84s."
+    - "Static filesystem import audit now reports 238 unresolved cortex.* imports across legacy mirror tests (phase_38, retired orchestrator surfaces, and historical MCP paths)."
+    - "Deleted dead phase_38 mirror tests for removed modules: tests/unit/phase_38/test_orchestrator_inventory_auditor.py and tests/unit/phase_38/test_baseline_metrics_collector.py."
+    - "Current test_*.py count after latest M8-a deletion slice: 1220."
+    - "Latest smoke reconvergence passed: 2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 32.40s."
+    - "Deleted unresolved phase_38 mirror tests: tests/unit/governance/test_phase_38_audit_integration.py and tests/regression/test_phase_38_safety.py."
+    - "Current test_*.py count after latest M8-a deletion slice: 1218."
+    - "Latest smoke reconvergence passed: 2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 31.66s."
+    - "Deleted remaining phase_38 mirror tests: tests/unit/phase_38/test_readiness_validator.py and tests/unit/governance/test_phase_38_audit_integration_clean.py."
+    - "Current test_*.py count after latest M8-a deletion slice: 1216."
+    - "Low-risk M8-b migration applied: tests/preflight/test_orchestrator_wiring.py now validates v2 IntentGateway import (cortex.core.intent_gateway) instead of legacy IntentRouter import."
+    - "Latest smoke reconvergence passed with CORTEX_WORKERS=8: 2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 32.07s."
+    - "Post-update smoke reconvergence passed with CORTEX_WORKERS=8: 2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 32.25s."
+    - "Deleted dead mirror tests for removed super-orchestrator surfaces: tests/unit/orchestrators/test_selenium_playwright_orchestrator.py, tests/unit/orchestrators/test_super_orchestrator_integration.py, and tests/unit/orchestrators/test_super_orchestrator_integration_simplified.py."
+    - "Current test_*.py count after latest M8-a deletion slice: 1213."
+    - "Latest smoke reconvergence passed with CORTEX_WORKERS=8: 2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 32.52s."
+    - "Additional low-risk M8-b migration applied: tests/preflight/test_orchestrator_wiring.py now validates v2 ExecutionEngine import (cortex.core.execution_engine) instead of legacy MasterOrchestrator import."
+    - "Post-migration smoke reconvergence passed with CORTEX_WORKERS=8: 2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 32.28s."
+    - "Filesystem check confirms no remaining phase_38 test files under tests/."
+    - "Deleted dead mirror tests for removed support/core orchestrator surfaces: tests/unit/orchestrators/support/test_instrumentation_orchestrator.py, tests/unit/orchestrators/support/test_brain_health_orchestrator.py, tests/unit/orchestrators/core/test_phase_resolver_collaboration.py, tests/unit/orchestrators/core/test_deployment_orchestrator.py, and tests/orchestrators/test_debugging_orchestrator.py."
+    - "Current test_*.py count after latest M8-a deletion slice: 1208."
+    - "Latest smoke reconvergence passed with CORTEX_WORKERS=8: 2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 32.46s."
   next_actions:
-    - "Continue phase-m8-a GREEN: audit and remove the next low-risk missing-module mirror tests beyond the brain_health/consolidated/planning_tools surfaces."
-    - "Continue phase-m8-b: migrate low-risk legacy test imports toward context_validator, intent_gateway, and execution_engine v2 paths."
+    - "Continue phase-m8-a GREEN: remove additional low-risk dead mirror tests for other retired module families in static missing-module inventory (beyond phase_38)."
+    - "Continue phase-m8-b: migrate additional low-risk legacy test imports toward context_validator, intent_gateway, execution_engine, and canonical v2 mega-tools where modules still exist."
     - "Run coverage verification and close GAP-M8-04 in phase-m8-final"
 
 phases:

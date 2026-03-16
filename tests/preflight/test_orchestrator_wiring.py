@@ -13,15 +13,15 @@ import pytest
 class TestCoreOrchestratorImports:
     """Validate core tier orchestrator imports."""
 
-    def test_master_orchestrator_importable(self) -> None:
-        """MasterOrchestrator — the top-level coordinator."""
-        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-        assert hasattr(MasterOrchestrator, "health_check")
+    def test_execution_engine_importable(self) -> None:
+        """ExecutionEngine — v2 top-level execution coordinator."""
+        from cortex.core.execution_engine import ExecutionEngine
+        assert ExecutionEngine is not None
 
-    def test_intent_router_importable(self) -> None:
-        """IntentRouter — classifies user intent."""
-        from cortex.orchestrators.core.intent_router import IntentRouter
-        assert IntentRouter is not None
+    def test_intent_gateway_importable(self) -> None:
+        """IntentGateway — classifies user intent via v2 core surface."""
+        from cortex.core.intent_gateway import IntentGateway
+        assert IntentGateway is not None
 
     def test_tdd_orchestrator_importable(self) -> None:
         """TDDOrchestrator — RED/GREEN/REFACTOR cycles."""

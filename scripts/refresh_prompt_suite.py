@@ -9,6 +9,7 @@ Usage:
     python3 scripts/refresh_prompt_suite.py              # Full refresh
     python3 scripts/refresh_prompt_suite.py --dry-run     # Preview changes only
     python3 scripts/refresh_prompt_suite.py --db-cleanup   # SQLite cleanup only
+    python3 scripts/refresh_prompt_suite.py --db-cleanup-loop --loop-interval-seconds 300
     python3 scripts/refresh_prompt_suite.py --counts-only  # Just show live counts
 
 Governance: CORE-002 (inline output), CORE-049 (silent autonomous)
@@ -23,6 +24,7 @@ import re
 import sqlite3
 import subprocess
 import sys
+import time
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -335,6 +337,54 @@ def cleanup_sqlite_databases(dry_run: bool = False) -> Dict[str, Any]:
     return results
 
 
+def run_cleanup_loop(
+    interval_seconds: int,
+    dry_run: bool = False,
+    max_cycles: int = 0,
+) -> int:
+    """Run continuous SQLite cleanup loop.
+
+    Args:
+        interval_seconds: Delay between cleanup cycles.
+        dry_run: If True, report what would change.
+        max_cycles: Number of cycles to run (0 = infinite).
+
+    Returns:
+        Number of cleanup cycles completed.
+    """
+    if interval_seconds < 5:
+        raise ValueError("loop interval must be >= 5 seconds")
+    if max_cycles < 0:
+        raise ValueError("max_cycles must be >= 0")
+
+    cycle = 0
+    while True:
+        cycle += 1
+        started = datetime.now().isoformat(timespec="seconds")
+        print(f"\n🔁 DB cleanup loop cycle {cycle} started at {started}")
+
+        results = cleanup_sqlite_databases(dry_run=dry_run)
+        if not results:
+            print("   No cleanup actions needed.")
+        else:
+            for name, info in results.items():
+                if name == "_stray":
+                    print(f"   ⚠️  Stray databases: {info}")
+                    continue
+                print(f"   📦 {name}:")
+                for action in info.get("actions", []):
+                    print(f"      {action}")
+                if "error" in info:
+                    print(f"      ❌ Error: {info['error']}")
+
+        if max_cycles > 0 and cycle >= max_cycles:
+            print(f"\n✅ DB cleanup loop completed {cycle} cycle(s).")
+            return cycle
+
+        print(f"   Sleeping {interval_seconds}s before next cycle...")
+        time.sleep(interval_seconds)
+
+
 # ─── Architecture Snapshot ───────────────────────────────────────────────────
 
 
@@ -404,6 +454,18 @@ def main() -> None:
         help="Run SQLite cleanup only (skip prompt refresh)"
     )
     parser.add_argument(
+        "--db-cleanup-loop", action="store_true",
+        help="Run continuous SQLite cleanup loop"
+    )
+    parser.add_argument(
+        "--loop-interval-seconds", type=int, default=300,
+        help="Interval between cleanup loop cycles (default: 300)"
+    )
+    parser.add_argument(
+        "--loop-max-cycles", type=int, default=0,
+        help="Max cleanup loop cycles (0 = infinite, default: 0)"
+    )
+    parser.add_argument(
         "--counts-only", action="store_true",
         help="Show live architecture counts and exit"
     )
@@ -458,6 +520,15 @@ def main() -> None:
                     print(f"     {action}")
                 if "error" in info:
                     print(f"     ❌ Error: {info['error']}")
+        return
+
+    if args.db_cleanup_loop:
+        print("\n♻️  Starting continuous SQLite cleanup loop...")
+        run_cleanup_loop(
+            interval_seconds=args.loop_interval_seconds,
+            dry_run=args.dry_run,
+            max_cycles=args.loop_max_cycles,
+        )
         return
 
     # Full refresh
