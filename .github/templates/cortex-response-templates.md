@@ -95,6 +95,13 @@ Progress: ███████░░░ 70%
 
 Every actionable response must end with exactly one of:
 
+### End-State Decision Gate (CORE-RESP-001)
+
+- Non-autonomous responses with pending work MUST end with `⚡ Proceed Gate`.
+- `✅ **All work is complete.**` is allowed ONLY when all requested actions are finished and no pending remediation, validation failure, or unresolved next action remains.
+- If any `Next Steps` item is still actionable by CORTEX, treat work as pending and end with `⚡ Proceed Gate`.
+- Autonomous override applies only when an active autonomous contract explicitly suppresses proceed gates.
+
 ### ⚡ Proceed Gate
 
 ```markdown
@@ -191,7 +198,7 @@ This file points to canonical quote source:
 - `cortex-registry/templates/response/atoms/atom-quote.yaml`
 
 Requirements:
-- Maintain 120 approved quotes in the canonical quote atom
+- Maintain 120 quotes in the canonical quote atom
 - Rotate quotes and avoid consecutive reuse
 - Match quote theme to user intent
 

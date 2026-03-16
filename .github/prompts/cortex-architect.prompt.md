@@ -125,6 +125,10 @@ After explicit user continuation (`proceed`, `continue`, `implement`, `yes`):
 - Keep stage state explicit (`✅`, `🔵`, `⚪`, `🔴`).
 - Conclude with completion state or next-phase gate.
 
+End-state decision rule (non-autonomous):
+- If pending work remains, MUST end with a proceed gate.
+- `✅ All work is complete.` is allowed ONLY when no pending work remains.
+
 ---
 
 ## Required References

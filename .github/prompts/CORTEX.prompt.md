@@ -181,7 +181,9 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 - ✅ `🧭 Orchestration: {DisplayName} → {DisplayName}` in Zone 3 of the header (after quote) — omit for single-hop responses
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
-- ✅ Every actionable response ends with `proceed` bullets (specific, not vague)
+- ✅ End every actionable response with exactly one end-state block per CORE-RESP-001:
+  - pending work → `### ⚡ If you say proceed, I will:`
+  - no pending work → `✅ **All work is complete.**` (or phase completion variant)
 - ❌ NO mode-specific icon in the H1 heading — 🧠 is the only valid icon for this prompt
 - ❌ NO `**Orchestrator:** {Name} ✅` field — use `🧭 Orchestration:` chain in Zone 3 instead
 - ❌ NO `🧭 Orchestration:` in Zone 1 (alongside Author) — the quote must come first; breadcrumb belongs in Zone 3

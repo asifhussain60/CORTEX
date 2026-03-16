@@ -151,6 +151,42 @@ class TestPromptGovernanceDeterminism:
             "copilot-instructions.md must reference the mandatory CORTEX response header format."
         )
 
+    def test_copilot_instructions_has_pending_work_end_state_rule(self) -> None:
+        """End-state contract must forbid completion state while pending work remains."""
+        instructions = CORTEX_ROOT / ".github" / "copilot-instructions.md"
+        if not instructions.exists():
+            pytest.skip("copilot-instructions.md not found")
+        content = instructions.read_text(encoding="utf-8")
+        assert "All work is complete" in content, (
+            "copilot-instructions.md must define completion-state text."
+        )
+        assert "pending work" in content.lower(), (
+            "copilot-instructions.md must define pending-work gate behavior."
+        )
+        assert "Proceed Gate" in content or "If you say proceed" in content, (
+            "copilot-instructions.md must route pending work to proceed approval gate."
+        )
+
+    def test_cortex_prompt_has_core_resp_001_end_state_contract(self) -> None:
+        """CORTEX.prompt.md must support proceed gate OR completion state based on pending work."""
+        prompt = CORTEX_ROOT / ".github" / "prompts" / "CORTEX.prompt.md"
+        if not prompt.exists():
+            pytest.skip("CORTEX.prompt.md not found")
+
+        content = prompt.read_text(encoding="utf-8")
+        assert "CORE-RESP-001" in content, (
+            "CORTEX.prompt.md must reference CORE-RESP-001 end-state contract."
+        )
+        assert "pending work" in content.lower(), (
+            "CORTEX.prompt.md must define pending-work routing."
+        )
+        assert "All work is complete" in content, (
+            "CORTEX.prompt.md must allow completion state when no pending work remains."
+        )
+        assert "If you say proceed" in content or "Proceed Gate" in content, (
+            "CORTEX.prompt.md must route pending work to proceed gate."
+        )
+
 
 class TestPromptDeterminismDriftLock:
     """Permanent CI drift lock — Check #36 invariants."""

@@ -82,6 +82,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **cortex-learning.md** | Training, interactive Q&A, and implementation verification | `/train`, learning, educational support |
 | **cortex-review-agent.md** | PR-scoped code review: 6-stage pipeline, OWASP security, APPROVE/REQUEST_CHANGES/BLOCK verdict | `/review {pr}`, "code review", "pull request review" |
 | **cortex-feedback-agent.md** | Cross-repo capability extraction with 8 sanitization gates (G1–G8) | `/feedback`, "backport", "capability extraction" |
+| **cortex-claude-readiness-agent.md** | Claude-primary production-readiness verification + remediation with dual-surface continuity gate | `/claude-ready audit`, `/claude-ready fix`, `/claude-ready certify` |
 ### Documentation Agents
 
 **Directory:** `.github/agents/docs/`
@@ -182,6 +183,7 @@ are resolved or explicitly approved as WONT-FIX.
 | **DEBUG** | cortex-debugger.md + cortex-audit-coordinator.md | ~5,000 |
 | **HEALTH** | cortex-audit-coordinator.md (Check #11) | ~3,500 |
 | **SYNC** | cortex-sync.prompt.md + cortex-sync-agent.md | ~6,000 |
+| **CLAUDE_READY** | cortex-claude-readiness-agent.md + cortex-audit-coordinator.md | ~6,500 |
 | **RCA** | cortex-debugger.md + `cortex_learning` op=`rca` | ~3,500 |
 | **GOLDEN_TEST** | cortex-executor.md + cortex-architect.md | ~5,000 |
 | **WORKFLOW_COMPOSE** | cortex-architect.prompt.md (§ WORKFLOW COMPOSE MODE) | ~3,000 |
@@ -195,7 +197,7 @@ are resolved or explicitly approved as WONT-FIX.
 ```
 /audit fix
   Stage 1: Stage 0 Governance Pre-Flight      → stage0-preflight-workflow.yaml
-    Stage 2: 24-Point Production Scan           → cortex-audit-coordinator.md (Checks #1–#24)
+    Stage 2: 29-Point Production Scan (+12 hardening) → cortex-audit-coordinator.md (Checks #1–#41)
   Stage 3: Wiring Contract Validation         → architecture-integrity-agent.md (L1→L3)
   Stage 4: Orchestrator Health (all 22)       → HealthOrchestrator.run_health_check()
   Stage 5: Vacuum Cleanup                     → VacuumOrchestrator + cortex_vacuum

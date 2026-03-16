@@ -62,6 +62,11 @@ Canonical sequence:
 
 Always end with exactly one:
 
+- Decision gate:
+  - If pending work remains and autonomous override is NOT active, MUST end with `### ⚡ If you say proceed, I will:`
+  - `✅ **All work is complete.**` is valid ONLY when all requested work is finished with no pending remediation, no failed validation gate, and no unresolved next action
+  - Never emit `✅ **All work is complete.**` when a `Next Steps` section still contains actionable implementation or remediation work
+
 - Pending user confirmation:
   - `### ⚡ If you say proceed, I will:` + numbered actions
 - Work complete:

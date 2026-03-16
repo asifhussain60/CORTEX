@@ -225,6 +225,18 @@ class TestResponseTemplateMarkdown:
             "'Completion State' section not found in cortex-response-templates.md"
         )
 
+    def test_template_has_pending_work_end_state_guardrail(self, template_content: str) -> None:
+        """Template must forbid completion state when pending work remains."""
+        assert "All work is complete" in template_content, (
+            "Completion state phrase missing from cortex-response-templates.md"
+        )
+        assert "pending work" in template_content.lower(), (
+            "Template must define pending-work decision gate for completion vs proceed."
+        )
+        assert "Proceed Gate" in template_content, (
+            "Template must route pending work to Proceed Gate."
+        )
+
     def test_template_references_atom_quote_ssot(self, template_content: str) -> None:
         """Template must reference atom-quote.yaml as the SSOT for quotes."""
         assert "atom-quote.yaml" in template_content, (

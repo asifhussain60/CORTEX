@@ -1,0 +1,55 @@
+{
+  "model": "claude-sonnet-4-6",
+  "autoMemoryEnabled": true,
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Glob(**)",
+      "Grep(**)",
+      "LS(**)",
+      "Bash(python3 scripts/run_tests.py *)",
+      "Bash(make test-*)",
+      "Bash(git status)",
+      "Bash(git diff)",
+      "Bash(git log *)",
+      "Bash(ruff check *)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(secrets/**)",
+      "Read(**/credentials*)",
+      "Bash(rm -rf /)",
+      "Bash(curl * | sh)",
+      "Bash(wget * | sh)",
+      "Bash(git push --force*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/scripts/validate-bash-command.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/scripts/run-linter.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "sandbox": {
+    "enabled": false
+  }
+}

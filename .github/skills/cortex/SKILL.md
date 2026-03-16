@@ -20,6 +20,7 @@ This is the **gateway skill** — it classifies intent and routes to the appropr
 |---|---|---|
 | Implement a feature, fix a bug, or refactor | `cortex-tdd` | `/implement` `/fix` `/refactor` |
 | Find and fix all issues across the codebase | `cortex-audit` | `/audit fix` `/health` |
+| Verify/fix Claude-primary backbone readiness | `cortex-claude-readiness` | `/claude-ready audit` `/claude-ready fix` `/claude-ready certify` |
 | Debug a failing test, error, or UI issue | `cortex-debug` | `/debug` `/debug-inject` `/debug-cleanup` |
 | Analyse root causes of recurring failures | `cortex-debug` | `/rca` |
 | Plan phases, certify, onboard, or ingest content | `cortex-plan` | `/plan` `/totalrecall` `/digest` `/onboard` |
@@ -44,6 +45,7 @@ This is the **gateway skill** — it classifies intent and routes to the appropr
 |---|---|
 | `/audit fix` | Full 9-stage production-readiness scan + auto-fix |
 | `/audit` | Scan only, no auto-fix |
+| `/claude-ready fix` | Claude-primary readiness scan + remediation + convergence |
 | `/vacuum` | Markdown sprawl + root clutter + OS artifacts cleanup |
 | `/health` | All 22 orchestrator health endpoints |
 | `/healthcheck` | Full test suite (parallel) |

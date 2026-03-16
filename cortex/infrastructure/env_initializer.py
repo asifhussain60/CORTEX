@@ -133,8 +133,8 @@ _TRACES_DDL: List[Tuple[str, str]] = [
         CREATE TABLE IF NOT EXISTS audit_stage_log (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
             session_id      TEXT NOT NULL,
-            stage_num       INTEGER NOT NULL,
-            stage_label     TEXT NOT NULL,
+            stage           INTEGER NOT NULL,
+            stage_name      TEXT NOT NULL,
             orchestrator    TEXT,
             started_at      TEXT NOT NULL,
             completed_at    TEXT,
@@ -152,7 +152,7 @@ _TRACES_DDL: List[Tuple[str, str]] = [
         "audit_stage_log",
     ),
     (
-        "CREATE INDEX IF NOT EXISTS idx_audit_stage_session ON audit_stage_log(session_id, stage_num)",
+        "CREATE INDEX IF NOT EXISTS idx_audit_stage_session ON audit_stage_log(session_id, stage)",
         "idx_audit_stage_session",
     ),
     (
@@ -1050,6 +1050,12 @@ class EnvironmentInitializer:
             if not existing_cols:
                 continue
 
+            if table_name == "audit_stage_log":
+                added += EnvironmentInitializer._migrate_audit_stage_log_alias_columns(
+                    conn,
+                    existing_cols,
+                )
+
             # Parse column definitions (simple: each line with a "name type" pattern)
             for line in columns_block.splitlines():
                 line = line.strip().rstrip(",")
@@ -1078,6 +1084,45 @@ class EnvironmentInitializer:
                     except sqlite3.OperationalError as e:
                         if "duplicate column" not in str(e).lower():
                             logger.debug(f"Column migration skipped ({table_name}.{col_name}): {e}")
+        return added
+
+    @staticmethod
+    def _migrate_audit_stage_log_alias_columns(
+        conn: sqlite3.Connection,
+        existing_cols: set,
+    ) -> int:
+        """Backfill canonical audit_stage_log columns from legacy aliases.
+
+        Legacy environments used `stage_num` and `stage_label` in `audit_stage_log`.
+        Golden tests and canonical schema require `stage` and `stage_name`.
+
+        Args:
+            conn: Active sqlite connection.
+            existing_cols: Lowercased column names currently in audit_stage_log.
+
+        Returns:
+            Number of columns added.
+        """
+        added = 0
+
+        if "stage" not in existing_cols and "stage_num" in existing_cols:
+            conn.execute("ALTER TABLE audit_stage_log ADD COLUMN stage INTEGER")
+            conn.execute(
+                "UPDATE audit_stage_log SET stage = stage_num "
+                "WHERE stage IS NULL"
+            )
+            existing_cols.add("stage")
+            added += 1
+
+        if "stage_name" not in existing_cols and "stage_label" in existing_cols:
+            conn.execute("ALTER TABLE audit_stage_log ADD COLUMN stage_name TEXT")
+            conn.execute(
+                "UPDATE audit_stage_log SET stage_name = stage_label "
+                "WHERE stage_name IS NULL"
+            )
+            existing_cols.add("stage_name")
+            added += 1
+
         return added
 
     def _log(self, db_result: DBResult) -> None:
