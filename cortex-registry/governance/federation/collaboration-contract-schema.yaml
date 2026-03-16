@@ -1,0 +1,38 @@
+id: "federated-collaboration-contract-schema"
+status: "ACTIVE"
+scope: "phase-m10"
+description: |
+  Required contract shape for cross-team collaboration on capability
+  packs and shared workflow/template assets.
+
+required_fields:
+  - contract_id
+  - requesting_team
+  - owning_team
+  - capability_scope
+  - change_type
+  - approval_policy
+  - handoff_artifacts
+  - rollback_strategy
+  - sla
+
+allowed_change_types:
+  - "new_capability_pack"
+  - "capability_pack_update"
+  - "cross_domain_integration"
+  - "deprecation"
+
+approval_policy:
+  required_approvers:
+    - "owning_team_representative"
+    - "platform_kernel_reviewer"
+  optional_approvers:
+    - "shared_services_reviewer"
+  fail_close_on_missing_approvals: true
+
+handoff_artifacts:
+  required:
+    - "workflow_template_reference"
+    - "test_evidence"
+    - "risk_assessment"
+    - "rollback_steps"

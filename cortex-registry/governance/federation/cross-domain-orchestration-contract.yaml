@@ -1,0 +1,33 @@
+id: "cross-domain-orchestration-contract"
+status: "ACTIVE"
+scope: "phase-m10"
+description: |
+  Contract for orchestration across platform, domain, and shared service
+  boundaries with deterministic conflict detection and resolution.
+
+routing_contract:
+  mandatory_gateway: "Workflow Composer"
+  forbidden:
+    - "direct_domain_to_domain_bypass"
+    - "ad_hoc_cross_domain_execution_without_template"
+  required_references:
+    - "workflow_template_id"
+    - "owning_domain"
+    - "dependent_domains"
+
+ownership_conflict_detection:
+  enabled: true
+  checks:
+    - "single_owner_per_capability"
+    - "platform_reserved_area_protection"
+    - "shared_service_contract_compliance"
+  fail_on_conflict: true
+
+resolution_precedence:
+  - "platform-kernel"
+  - "domain-teams"
+  - "shared-services"
+
+violation_actions:
+  conflict_detected: "block_merge"
+  unresolved_after_review: "escalate_to_platform_architecture_review"

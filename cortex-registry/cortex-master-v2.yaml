@@ -22,13 +22,13 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-16T12:53:36Z'
+  last_updated: '2026-03-16T13:45:00Z'
   autonomous_chain_updated: '2026-03-16 — stop_policy added; all continuation prompts, proceed gates, and 🚀 Next Phase blocks prohibited; CORE-RESP-001 overridden for autonomous phase chaining.'
   total_phases: 15
   active: 0
-  completed: 9
+  completed: 10
   in_progress: 0
-  planned: 6
+  planned: 5
   architectural_decision: "HYBRID — preserve v2 reductions while recentering execution on Workflow Composer + dedicated workflow templates"
   architecture_center: "Workflow Composer and dedicated workflow templates are first-class, mandatory execution primitives"
   challenge_first_position: "Direct prompt-only patching is rejected as primary strategy; use Workflow Composer-governed template execution to preserve parity, reduce drift, and keep orchestrator-safe convergence."
@@ -348,9 +348,9 @@ session_resume_protocol:
     maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
 
 runtime_state:
-  last_completed_phase: "phase-m9"
-  next_executable_phase: "phase-m10"
-  last_session_action: "phase-m9 completed: prompt suite refreshed, smoke passed (2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 31.41s), preflight passed (459 passed, 10 skipped in 5.40s), database health verifier all_ok=True, and production validator reached 99.2% with zero critical/high issues."
+  last_completed_phase: "phase-m10"
+  next_executable_phase: "phase-m11"
+  last_session_action: "phase-m10 completed: federated ownership/collaboration/lifecycle/cross-domain contracts added, targeted M10 tests passed (6/6), and smoke gate passed (2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 32.23s)."
   last_session_prompt: "AUTO_RESUME_FROM_ACTIVE_PLAN"
 
 phase_detail_files:
@@ -455,13 +455,13 @@ phase_detail_files:
   - id: phase-m10
     title: "Federated Team Operating Model & Domain Contracts"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-M10-FEDERATED-OPERATING-MODEL
     gaps: 7
     sub_phases: 4
     depends_on: ["phase-m9"]
     file: "cortex-registry/planning/phases/v2/phase-m10-federated-team-model.yaml"
-    note: "Define platform/domain ownership boundaries, collaboration contracts, approval gates, lifecycle policy, and cross-domain interoperability wiring with Workflow Composer template ownership as federated collaboration backbone."
+    note: "COMPLETE — federated ownership matrix, collaboration contract schema, lifecycle/approval model, and cross-domain conflict detection contracts implemented with M10 targeted tests passing and smoke convergence green."
 
   - id: phase-m11
     title: "Agent/Skill Workflow Template Governance (MCP-First)"
@@ -558,19 +558,19 @@ production_readiness:
     github_skill_files: 5
     github_instruction_files: 6
     master_v2_lines: 740
-    latest_smoke: "2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 31.41s"
+    latest_smoke: "2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 32.23s"
     latest_preflight: "459 passed, 10 skipped in 5.40s"
     production_validator: "99.2% readiness; 0 critical; 0 high; deployment ready"
 
   total_phases: 15
   active: 0
-  completed: 9
+  completed: 10
   in_progress: 0
-  planned: 6
+  planned: 5
   archived: 0
-  completion_percentage: 60
-  consolidation_summary: "2026-03-16 — M9 completed: certification/drift-lock convergence achieved with refreshed prompts, smoke green (2855 passed in 31.41s), preflight green (459 passed in 5.40s), health verifier all_ok=True, and production validator at 99.2% with no critical/high issues."
-  active_phases: "none — next executable phase is phase-m10 (PLANNED)"
+  completion_percentage: 67
+  consolidation_summary: "2026-03-16 — M10 completed: federated team operating model contracts delivered (ownership matrix, collaboration schema, lifecycle approvals, cross-domain conflict policy), M10 targeted tests green (6 passed), and smoke gate green (2855 passed in 32.23s)."
+  active_phases: "none — next executable phase is phase-m11 (PLANNED)"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -684,13 +684,13 @@ phases:
   - id: phase-m10
     title: "Federated Team Operating Model & Domain Contracts"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     depends_on: ["phase-m9"]
     sweep_id: SWEEP-M10-FEDERATED-OPERATING-MODEL
     gaps: 7
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m10-federated-team-model.yaml"
-    note: "P0 — collaboration-first architecture: platform kernel + domain capability packs + shared services contracts."
+    note: "P0 — COMPLETE. Federated ownership/collaboration/lifecycle/cross-domain contracts implemented; M10 targeted tests and smoke gate converged."
 
   # Phase M11 — AGENT/SKILL WORKFLOW TEMPLATE GOVERNANCE (depends: M10)
   - id: phase-m11

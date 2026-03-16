@@ -11,4 +11,8 @@ entries:
   - path: "cortex-registry/governance/data-rules.yaml"
   - path: "cortex-registry/governance/development-rules.yaml"
   - path: "cortex-registry/governance/operations-rules.yaml"
+  - path: "cortex-registry/governance/federation/ownership-matrix.yaml"
+  - path: "cortex-registry/governance/federation/collaboration-contract-schema.yaml"
+  - path: "cortex-registry/governance/federation/capability-pack-lifecycle.yaml"
+  - path: "cortex-registry/governance/federation/cross-domain-orchestration-contract.yaml"
   - path: "cortex-registry/core/drift-lock-manifest.yaml"

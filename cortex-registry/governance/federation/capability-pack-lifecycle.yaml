@@ -1,0 +1,50 @@
+id: "federated-capability-pack-lifecycle"
+status: "ACTIVE"
+scope: "phase-m10"
+description: |
+  Lifecycle and approval transitions for domain capability packs under
+  the federated operating model.
+
+lifecycle_states:
+  - "proposed"
+  - "active"
+  - "stabilizing"
+  - "deprecated"
+  - "retired"
+
+default_state: "proposed"
+terminal_states:
+  - "retired"
+
+transitions:
+  - from: "proposed"
+    to: "active"
+    approvals_required:
+      - "domain_team"
+      - "platform_kernel"
+    handoff_required: true
+  - from: "active"
+    to: "stabilizing"
+    approvals_required:
+      - "domain_team"
+    handoff_required: true
+  - from: "stabilizing"
+    to: "deprecated"
+    approvals_required:
+      - "domain_team"
+      - "shared_services"
+    handoff_required: true
+  - from: "deprecated"
+    to: "retired"
+    approvals_required:
+      - "domain_team"
+      - "platform_kernel"
+    handoff_required: true
+
+handoff_flow:
+  required_steps:
+    - "ownership_confirmation"
+    - "approval_capture"
+    - "workflow_template_linkage"
+    - "rollback_validation"
+  rejection_behavior: "fail_close"

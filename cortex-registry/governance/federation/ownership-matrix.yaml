@@ -1,0 +1,46 @@
+id: "federated-ownership-matrix"
+status: "ACTIVE"
+scope: "phase-m10"
+description: |
+  Ownership matrix defining canonical responsibility boundaries for
+  platform kernel, domain capability packs, and shared services.
+
+teams:
+  - id: "platform-kernel"
+    name: "Platform Kernel Team"
+    owns:
+      - "workflow-composer-core"
+      - "governance-kernel"
+      - "mcp-gateway-and-tool-registry"
+      - "core-runtime-and-wiring"
+    must_not_own:
+      - "domain-capability-packs"
+      - "domain-owned-agent-implementations"
+  - id: "domain-teams"
+    name: "Domain Capability Teams"
+    owns:
+      - "domain-orchestrators"
+      - "domain-agents-and-skills"
+      - "domain-workflow-templates"
+      - "domain-knowledge-yamls"
+    must_not_own:
+      - "platform-kernel-core"
+      - "shared-observability-baseline"
+  - id: "shared-services"
+    name: "Shared Services Team"
+    owns:
+      - "shared-template-primitives"
+      - "evaluation-baselines"
+      - "observability-standards"
+      - "cross-domain-runbooks"
+    must_not_own:
+      - "platform-governance-kernel"
+      - "domain-business-logic"
+
+ownership_constraints:
+  single_canonical_owner_required: true
+  duplicate_owner_for_same_capability_forbidden: true
+  escalation_owner: "platform-kernel"
+  enforcement_reference:
+    - "CORE-035"
+    - "CORE-064"
