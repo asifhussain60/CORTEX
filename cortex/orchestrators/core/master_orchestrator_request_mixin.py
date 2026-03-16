@@ -140,12 +140,14 @@ class MasterOrchestratorRequestMixin:
         # AC_START: {_ac_id}
         _ac_start_ms = _time.monotonic() * 1000
         try:
+            _session_id = str(getattr(self, "_session_id", None) or id(self))
+            _runtime_context = dict(context or {})
+
             # Phase 113-B: Pre-API request persistence (CORE-064 audit trail)
             _request_id: Optional[str] = None
             _rlm = getattr(self, "_request_log_manager", None)
             if _rlm is not None:
                 try:
-                    _session_id = str(getattr(self, "_session_id", None) or id(self))
                     _request_id = _rlm.log_request(
                         session_id=_session_id,
                         user_request=user_request,
@@ -154,6 +156,22 @@ class MasterOrchestratorRequestMixin:
                     _rlm.update_status(_request_id, "PROCESSING")
                 except Exception:
                     pass  # Non-blocking — logging failure must never prevent execution
+
+            # Phase 151-A: Build holistic runtime context (brain tiers + registry + governance)
+            _hbi = getattr(self, "_holistic_brain_integrator", None)
+            if _hbi is not None:
+                try:
+                    _hbi_payload = _hbi.build_unified_context(
+                        current_request=user_request,
+                        session_id=_session_id,
+                        intent=str(_runtime_context.get("intent", "QUERY")),
+                        execution_stages=list(getattr(self, "_execution_stages", [])),
+                        request_log_manager=_rlm,
+                        file_path=str(_runtime_context.get("file_path", "")),
+                    )
+                    _runtime_context["holistic_brain_context"] = _hbi_payload
+                except Exception:
+                    pass
 
             # AC-PHASE-35-001: PRE-FLIGHT - Detect autonomous continuation
             # R1: Continuation detection, R3: Skip verbose status, R4: Single decision gate
@@ -194,7 +212,7 @@ class MasterOrchestratorRequestMixin:
                 # R4: Single decision gate (no mid-execution prompts)
                 return self.execute_operation(
                     operation_name="process_request",
-                    parameters={"request": user_request, "context": context or {}, "autonomous": True}
+                    parameters={"request": user_request, "context": _runtime_context, "autonomous": True}
                 )
 
             # AC-PERMANENT-FIX-006: Stage 1 - Challenge-driven comprehension
@@ -215,13 +233,13 @@ class MasterOrchestratorRequestMixin:
                 # Process directly via execute_operation (degraded path)
                 return self.execute_operation(
                     operation_name="process_request",
-                    parameters={"request": user_request, "context": context or {}}
+                    parameters={"request": user_request, "context": _runtime_context}
                 )
 
             # Build RoundContext for InteractionOrchestrator
             from cortex.orchestrators.core.master_orchestrator import RoundContext
             if RoundContext:
-                _rc_metadata = dict(context or {})
+                _rc_metadata = dict(_runtime_context)
                 if _request_id is not None:
                     _rc_metadata["request_id"] = _request_id  # Phase 113-final: FK linkage
                 round_context = RoundContext(
@@ -265,7 +283,7 @@ class MasterOrchestratorRequestMixin:
                     # No challenge, proceed to Stage 2+ execution
                     _exec_result = self.execute_operation(
                         operation_name="process_request",
-                        parameters={"request": user_request, "context": context or {}}
+                        parameters={"request": user_request, "context": _runtime_context}
                     )
                     # Phase 113-B: mark COMPLETED / FAILED based on pipeline result
                     if _rlm is not None and _request_id is not None:
@@ -284,7 +302,7 @@ class MasterOrchestratorRequestMixin:
                 # Fallback if RoundContext not available
                 _exec_result = self.execute_operation(
                     operation_name="process_request",
-                    parameters={"request": user_request, "context": context or {}}
+                    parameters={"request": user_request, "context": _runtime_context}
                 )
                 # Phase 113-B: mark COMPLETED / FAILED based on pipeline result
                 if _rlm is not None and _request_id is not None:

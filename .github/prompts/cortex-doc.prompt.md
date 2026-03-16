@@ -519,6 +519,26 @@ WorkflowComposer → frontend/docs-html-design-workflow.yaml
 - Quality gates: wcag_font_floor_audit, theme_integrity, dom_validation, a11y_gate, regression_guard, diagram_a11y_gate
 - Learning signal emission (PLIP-001, scope_lock: `documentation`)
 
+### Architecture and Explainer Page Enhancement Standard (MANDATORY)
+
+Apply this standard whenever the target is an architecture page, system explainer, capability landing page, workflow explainer, or any long-form documentation page intended to teach structure rather than merely announce features.
+
+| Rule | Requirement |
+|------|-------------|
+| ✅ Preserve live page language | When enhancing an existing page, keep its established visual language, CSS theme, card system, and motion identity unless the user explicitly requests a redesign. |
+| ✅ Minimum explanation depth | Every newly added major explanatory block must contain at least **150 words** of original synthesis. Short blurbs, captions, or marketing fragments do not count. |
+| ✅ Visualization pairing | Every key concept added to an architecture or explainer page must be paired with a **high-value D3.js v7 diagram** that clarifies relationships, sequencing, boundaries, or flow. Decorative charts are not sufficient. |
+| ✅ Diagram intent | Prefer diagrams that explain control flow, layer separation, delegation boundaries, request lifecycle, system topology, and evidence return paths. |
+| ✅ Video placement | If a page has intro, hero, or tour videos, place them near the top of the reading flow before deep navigation or dense analysis sections unless the user explicitly asks otherwise. |
+| ✅ Glassmorphism continuity | New content must match the page's existing glassmorphism language: token-consistent panel backgrounds, borders, glow hierarchy, and typography rhythm. |
+| ✅ Human readability | Long-form architecture copy must explain what a component is, what responsibility it owns, what crosses its boundary, and how control returns. |
+| ❌ No shallow diagrams | Do not add charts that only repeat counts or labels without improving comprehension. |
+| ❌ No visual drift | Do not introduce a second design language into an existing page that already has an established docs identity. |
+
+**Definition of a key concept:** any newly introduced section that explains an architectural layer, lifecycle, execution surface, delegation contract, memory model, or major platform abstraction.
+
+**Definition of high-value D3:** a diagram that reduces ambiguity about relationships, not just a diagram that occupies space.
+
 **Visualization library policy (P0 — IMMUTABLE):**
 - ✅ **D3.js v7** — sole visualization engine for ALL diagrams, charts, and interactive visuals
 - ✅ **CSS/HTML** — hand-crafted flexbox/grid pipelines for static flow diagrams

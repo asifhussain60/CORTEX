@@ -17,6 +17,7 @@ Core responsibilities:
 - Ingest GitHub issue capability records and map to documentation impact.
 - Classify drift by severity and emit actionable remediation sets.
 - Produce release-signal summaries for downstream sync and certification.
+- Detect architecture-page drift where top-level media, explanatory depth, or key D3 diagrams no longer match the current documentation enhancement standard.
 
 Outputs:
 - Drift catalogue grouped by P0/P1/P2.

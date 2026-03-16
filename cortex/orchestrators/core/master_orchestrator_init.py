@@ -92,6 +92,26 @@ class MasterOrchestratorInitialiser:
                 details={"error": str(_rlm_err), "fallback": "request logging disabled"},
             )
 
+        # Phase 151-A: Holistic brain integration service (request + intelligence + registry + governance)
+        try:
+            from cortex.intelligence.holistic_brain_integrator import HolisticBrainIntegrator
+
+            h._holistic_brain_integrator = HolisticBrainIntegrator()
+            h.logger.log_operation_complete(
+                ac_id="AC-P151-001",
+                operation="HOLISTIC_BRAIN_INTEGRATOR_INIT",
+                success=True,
+                details={"service": "HolisticBrainIntegrator initialized"},
+            )
+        except Exception as _hbi_err:
+            h._holistic_brain_integrator = None
+            h.logger.log_operation_complete(
+                ac_id="AC-P151-001",
+                operation="HOLISTIC_BRAIN_INTEGRATOR_INIT",
+                success=False,
+                details={"error": str(_hbi_err), "fallback": "holistic context disabled"},
+            )
+
         # Stage placeholder attributes used throughout coordinate_operation
         h.interaction_orchestrator = None
         h.intent_router = None

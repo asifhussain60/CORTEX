@@ -1108,6 +1108,63 @@
         </div>
     </header>
 
+    <!-- ═══════════════════ FEATURED VIDEOS — ABOVE TABS ═══════════════════ -->
+    <section class="max-w-7xl mx-auto px-4 md:px-6 pb-4 md:pb-6">
+        <div class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-cyan-950/60 via-slate-900/80 to-violet-950/60 border border-cyan-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative px-4 md:px-8 space-y-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[12px] font-bold tracking-widest uppercase">
+                        <i data-lucide="monitor-play" class="w-3.5 h-3.5"></i> Architecture Media
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">Watch the Architecture Before You Read the Architecture</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">The introduction and architecture tour now sit at the top of the page, ahead of the tabbed deep dive, so readers can get an immediate narrative overview before entering the more detailed system explanation below.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-6 md:gap-8">
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-600/25 to-blue-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-90 transition-opacity"></div>
+                        <div class="glass-card p-4 md:p-5 relative border-2 border-cyan-500/25 bg-gradient-to-br from-cyan-950/45 to-slate-900/85 hover:border-cyan-400/45 transition-all space-y-4">
+                            <div class="flex items-center justify-between gap-3 flex-wrap">
+                                <div>
+                                    <div class="text-[12px] font-black uppercase tracking-widest text-cyan-300">Intro Video</div>
+                                    <h3 class="text-xl font-black tracking-tighter text-cyan-100">What CORTEX Is</h3>
+                                </div>
+                                <div class="px-3 py-1 rounded-full border border-cyan-500/20 bg-cyan-500/10 text-[11px] font-bold uppercase tracking-widest text-cyan-300">Orientation</div>
+                            </div>
+                            <div class="rounded-2xl overflow-hidden border border-cyan-500/20 bg-slate-950/90 shadow-[0_20px_40px_-20px_rgba(0,212,255,0.35)]">
+                                <video controls preload="metadata" playsinline class="w-full aspect-video object-cover" aria-label="CORTEX introduction video">
+                                    <source src="assets/videos/01-what-is-cortex.mp4" type="video/mp4"/>
+                                </video>
+                            </div>
+                            <p class="text-[14px] text-slate-400 leading-relaxed">This introduction gives a fast, business-to-technical framing of the platform so the diagrams and architectural concepts below land with context rather than abstraction.</p>
+                        </div>
+                    </div>
+
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-violet-600/25 to-purple-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-90 transition-opacity"></div>
+                        <div class="glass-card p-4 md:p-5 relative border-2 border-violet-500/25 bg-gradient-to-br from-violet-950/45 to-slate-900/85 hover:border-violet-400/45 transition-all space-y-4">
+                            <div class="flex items-center justify-between gap-3 flex-wrap">
+                                <div>
+                                    <div class="text-[12px] font-black uppercase tracking-widest text-violet-300">Hero Video</div>
+                                    <h3 class="text-xl font-black tracking-tighter text-violet-100">How the Architecture Works</h3>
+                                </div>
+                                <div class="px-3 py-1 rounded-full border border-violet-500/20 bg-violet-500/10 text-[11px] font-bold uppercase tracking-widest text-violet-300">System Tour</div>
+                            </div>
+                            <div class="rounded-2xl overflow-hidden border border-violet-500/20 bg-slate-950/90 shadow-[0_20px_40px_-20px_rgba(123,97,255,0.35)]">
+                                <video controls preload="metadata" playsinline class="w-full aspect-video object-cover" aria-label="CORTEX architecture tour video">
+                                    <source src="assets/videos/03-how-cortex-works-architecture-tour.mp4" type="video/mp4"/>
+                                </video>
+                            </div>
+                            <p class="text-[14px] text-slate-400 leading-relaxed">The architecture tour now leads the experience, which is the right order for a page whose job is to explain system structure, execution boundaries, and platform behavior clearly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ═══════════════════ TAB HINT PANEL ═══════════════════ -->
     <div class="tab-hint-panel" aria-label="Navigation hint">
         <i class="fas fa-hand-point-down tab-hint-icon" aria-hidden="true"></i>
@@ -1248,6 +1305,115 @@
                         <div class="sdlc-phase" style="--phase-color:#06b6d4;--phase-glow:rgba(6,182,212,0.15);"><div class="sdlc-icon">🛡️</div><div class="sdlc-label">Governance</div><div class="sdlc-desc">10 agents check compliance — pass, advise, or block</div></div>
                         <div class="sdlc-phase" style="--phase-color:#10b981;--phase-glow:rgba(16,185,129,0.15);"><div class="sdlc-icon">⚡</div><div class="sdlc-label">Execute</div><div class="sdlc-desc">TDD cycle with rollback points at every step</div></div>
                         <div class="sdlc-phase" style="--phase-color:#059669;--phase-glow:rgba(5,150,105,0.2);border-color:rgba(5,150,105,0.35);background:linear-gradient(160deg,rgba(5,150,105,0.08),rgba(5,150,105,0.03));"><div class="sdlc-icon">✅</div><div class="sdlc-label">Deliver</div><div class="sdlc-desc">Inline results + tamper-evident audit trail</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="relative py-8 my-4">
+                <div class="absolute inset-0 bg-gradient-to-br from-fuchsia-950/60 via-slate-900/80 to-cyan-950/60 border border-fuchsia-500/20 rounded-3xl"></div>
+                <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+                <div class="relative space-y-10 px-4 md:px-8">
+                    <div class="text-center space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-300 text-[12px] font-bold tracking-widest uppercase">
+                            <i data-lucide="workflow" class="w-3.5 h-3.5"></i> Detailed Request Orchestration
+                        </div>
+                        <h2 class="section-title font-black tracking-tighter">User Request Processing Flow — Holistic Brain Integration to SDLC Delivery</h2>
+                        <p class="section-desc max-w-4xl mx-auto font-light leading-relaxed">This view reflects the implementation path: RequestLogManager persistence in SQLite, InteractionOrchestrator prior-context synthesis, HolisticBrainIntegrator unifying intelligence + governance + registry artifacts, then Master Orchestrator execution through SDLC with quality and security gates.</p>
+                    </div>
+
+                    <div class="max-w-6xl mx-auto space-y-8">
+                        <div class="glass-card p-5 md:p-6 border-2 border-fuchsia-500/25 bg-gradient-to-br from-fuchsia-950/35 to-slate-900/85 space-y-4">
+                            <div class="space-y-2">
+                                <h3 class="text-xl font-black tracking-tight text-fuchsia-100">Vertical Flowchart: Control Path + Delegation Path</h3>
+                                <p class="text-[14px] text-slate-400 leading-relaxed">Single-column, max-width swimlane flow showing the runtime-owned sequence from SQLite request history through holistic context integration to SDLC execution, with prompt-layer capabilities shown as guidance/delegation boundaries.</p>
+                            </div>
+                            <div class="rounded-2xl border border-fuchsia-500/20 bg-slate-950/70 p-2">
+                                <div id="request-processing-flowchart" style="width:100%;height:780px;"></div>
+                            </div>
+                            <div class="text-[13px] text-slate-400 leading-relaxed">CORTEX Orchestrators own classification, routing, and completion decisions. Claude agents shape specialist behavior, skills contribute reusable capability guidance, and subagents execute scoped delegated work before returning control.</div>
+                        </div>
+
+                        <div class="glass-card p-5 md:p-6 border-2 border-cyan-500/25 bg-gradient-to-br from-cyan-950/35 to-slate-900/85 space-y-4">
+                            <div class="space-y-2">
+                                <h3 class="text-xl font-black tracking-tight text-cyan-100">Request Sequence Diagram: SQLite + Holistic Integrator → SDLC</h3>
+                                <p class="text-[14px] text-slate-400 leading-relaxed">Expanded, high-detail sequence view with clearer actor lanes and larger typography to avoid label collisions while preserving full stage detail and governance gates.</p>
+                            </div>
+                            <div class="rounded-2xl border border-cyan-500/20 bg-slate-950/70 p-2">
+                                <div id="request-sequence-diagram" style="width:100%;height:860px;"></div>
+                            </div>
+                            <ul class="space-y-2 text-[13px] text-slate-400 leading-relaxed list-disc list-inside">
+                                <li>Step 1: RequestLogManager persists request and serves prior chain from SQLite conversations state.</li>
+                                <li>Step 2: InteractionOrchestrator synthesizes prior context and HolisticBrainIntegrator composes runtime context.</li>
+                                <li>Step 3: Master Orchestrator executes with governance policy + registry artifacts + SDLC quality/security gates.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-10">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[12px] font-bold tracking-widest uppercase">
+                        <i data-lucide="layers-3" class="w-3.5 h-3.5"></i> Current Implementation View
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">CORTEX Today — The Control Plane Behind the Metaphor</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">The sections below explain the current repository-backed architecture directly. They complement the page’s established visual language with clearer descriptions of the execution surfaces that matter in practice today.</p>
+                </div>
+
+                <div class="relative py-8 my-4">
+                    <div class="absolute inset-0 bg-gradient-to-br from-amber-950/60 via-slate-900/80 to-orange-950/60 border border-amber-500/20 rounded-3xl"></div>
+                    <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+                    <div class="relative px-4 md:px-8 py-2">
+                        <div class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                            <div class="space-y-5">
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[12px] font-bold tracking-widest uppercase">
+                                    <i data-lucide="network" class="w-3.5 h-3.5"></i> Control Plane
+                                </div>
+                                <h3 class="text-2xl md:text-3xl font-black tracking-tighter text-amber-100">The current system is a layered control plane, not a single monolithic brain.</h3>
+                                <p class="text-[15px] md:text-[16px] text-slate-300/90 leading-8 font-light">The most useful way to understand modern CORTEX is to start with its layered operating model. The prompt surface provides policy, tone, and routing contracts; the Python control plane in <span class="text-amber-300 font-mono">cortex/</span> handles orchestration and execution decisions; the registry in <span class="text-amber-300 font-mono">cortex-registry/</span> holds canonical workflow, governance, and planning artifacts; and the supporting prompt, agent, and skill surfaces in <span class="text-amber-300 font-mono">.github/</span> and <span class="text-amber-300 font-mono">.claude/</span> define how that system behaves across host environments. This matters because the older shorthand of “brain” can be helpful as metaphor, but it is no longer sufficient as an architectural explanation. The real implementation separates orchestration, reusable guidance, runtime tools, and evidence stores so the platform can route work, apply policy, delegate specialized tasks, and return a traceable result. That separation is what makes CORTEX maintainable, auditable, and adaptable as more commands, agents, workflows, and runtime surfaces are added over time.</p>
+                            </div>
+                            <div class="flex justify-center py-4 md:py-6">
+                                <div id="current-architecture-stack" style="width:100%;max-width:420px;height:420px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative py-8 my-4">
+                    <div class="absolute inset-0 bg-gradient-to-br from-cyan-950/60 via-slate-900/80 to-sky-950/60 border border-cyan-500/20 rounded-3xl"></div>
+                    <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+                    <div class="relative px-4 md:px-8 py-2">
+                        <div class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                            <div class="flex justify-center order-2 lg:order-1 py-4 md:py-6">
+                                <div id="delegation-boundary-map" style="width:100%;max-width:430px;height:430px;"></div>
+                            </div>
+                            <div class="space-y-5 order-1 lg:order-2">
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[12px] font-bold tracking-widest uppercase">
+                                    <i data-lucide="orbit" class="w-3.5 h-3.5"></i> Execution Boundaries
+                                </div>
+                                <h3 class="text-2xl md:text-3xl font-black tracking-tighter text-cyan-100">Orchestration, Claude agents, subagents, and skills are different layers with different jobs.</h3>
+                                <p class="text-[15px] md:text-[16px] text-slate-300/90 leading-8 font-light">One of the biggest sources of confusion in AI-engineering systems is treating every control artifact as if it were the same thing. CORTEX has moved beyond that. Orchestration is the traffic-control layer: it classifies the request, loads the right execution route, opens governance gates, and decides when work is complete. Claude-facing agents are specialist operating profiles: they define how audit, planning, documentation, debugging, or readiness work should behave when loaded. Subagents are narrower delegated workers that execute scoped tasks and then hand control back to the parent route. Skills are not runtime engines at all; they are reusable capability packs that describe domain knowledge, workflow expectations, and command semantics that prompts and agents can reuse. Shared infrastructure then ties all of this together through tools, registries, trace stores, and learning services. When those boundaries are clear, the system is easier to reason about, easier to document, and much less likely to drift into duplicated logic or contradictory behavior across Copilot and Claude execution surfaces.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative py-8 my-4">
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/60 via-slate-900/80 to-teal-950/60 border border-emerald-500/20 rounded-3xl"></div>
+                    <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+                    <div class="relative px-4 md:px-8 py-2">
+                        <div class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                            <div class="space-y-5">
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[12px] font-bold tracking-widest uppercase">
+                                    <i data-lucide="git-branch-plus" class="w-3.5 h-3.5"></i> Shared Runtime and Return Flow
+                                </div>
+                                <h3 class="text-2xl md:text-3xl font-black tracking-tighter text-emerald-100">Requests only make sense when you can see what crosses a boundary and how control returns.</h3>
+                                <p class="text-[15px] md:text-[16px] text-slate-300/90 leading-8 font-light">A practical architecture page has to explain more than the names of components; it has to explain movement. In CORTEX, a request begins as user intent at the host surface, is classified by orchestration, enriched with repository and registry context, and then passed into a route that may load agents, skills, workflow templates, and tool calls. If delegation is needed, the parent route passes scoped work to a subagent and later receives a condensed result back rather than surrendering end-to-end ownership. Meanwhile, shared infrastructure keeps the whole system coherent: MCP tools execute actions, validation scripts confirm gates, the intelligence facade provides a unified entry point for analysis and registry access, and trace databases capture AC markers, RCA history, and reinforcement signals. The important architectural fact is that control always returns to the orchestrating path. That is how the platform keeps completion logic centralized, preserves auditability, and prevents delegated workers from becoming untracked side channels.</p>
+                            </div>
+                            <div class="flex justify-center py-4 md:py-6">
+                                <div id="return-flow-diagram" style="width:100%;max-width:460px;height:420px;"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -2377,6 +2543,11 @@
             buildDiamondChart();
             buildBrainTierSvg();
             buildUrsLoopSvg();
+            buildCurrentArchitectureStack();
+            buildDelegationBoundaryMap();
+            buildReturnFlowDiagram();
+            buildRequestProcessingFlowchart();
+            buildRequestSequenceDiagram();
             animatePcbBars();
         };
 
@@ -2392,7 +2563,16 @@
             }
 
             function scrollToNavTop() {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                const tabNav = document.querySelector('.tab-nav');
+                if (!tabNav) return;
+
+                const siteHeader = document.querySelector('.cortex-site-header');
+                const headerHeight = siteHeader ? siteHeader.getBoundingClientRect().height : 0;
+                const navTopOffset = parseFloat(getComputedStyle(tabNav).top || '0') || 0;
+                const mobileOffset = window.matchMedia('(max-width: 768px)').matches ? 12 : 8;
+                const navTop = window.pageYOffset + tabNav.getBoundingClientRect().top;
+                const targetTop = Math.max(0, navTop - headerHeight - navTopOffset - mobileOffset);
+                window.scrollTo({ top: targetTop, behavior: 'smooth' });
             }
 
             function activateTab(idx) {
@@ -2615,6 +2795,371 @@
             }, { threshold: 0.3 });
             const section = document.getElementById('pcb-bars');
             if (section) observer.observe(section);
+        }
+
+        function buildCurrentArchitectureStack() {
+            const container = document.getElementById('current-architecture-stack');
+            if (!container) return;
+            const w = 420, h = 420;
+            const svg = d3.select(container).append('svg')
+                .attr('viewBox', `0 0 ${w} ${h}`)
+                .attr('width', '100%').attr('height', '100%');
+
+            const layers = [
+                { y: 24, label: 'Prompt Surface', sub: 'Copilot · Claude · docs', color: '#f59e0b' },
+                { y: 98, label: 'Orchestration', sub: 'MasterOrchestrator · IntentRouter', color: '#00d4ff' },
+                { y: 172, label: 'Guidance Assets', sub: 'Agents · Skills · Workflows', color: '#7b61ff' },
+                { y: 246, label: 'Runtime Tools', sub: 'MCP · tests · validators', color: '#10b981' },
+                { y: 320, label: 'Evidence Layer', sub: 'RCA · traces · sweep catalogues', color: '#f43f5e' },
+            ];
+
+            layers.forEach((layer, index) => {
+                const g = svg.append('g').attr('transform', `translate(34,${layer.y})`);
+                g.append('rect')
+                    .attr('width', 352).attr('height', 54).attr('rx', 14)
+                    .attr('fill', 'rgba(10,15,30,0.76)')
+                    .attr('stroke', layer.color + '55').attr('stroke-width', 1.8);
+                g.append('rect')
+                    .attr('x', 12).attr('y', 12).attr('width', 12).attr('height', 30).attr('rx', 6)
+                    .attr('fill', layer.color).attr('opacity', 0.85);
+                g.append('text')
+                    .attr('x', 42).attr('y', 24)
+                    .attr('fill', '#f8fafc').attr('font-size', FS_BODY).attr('font-weight', 800)
+                    .attr('font-family', 'Space Grotesk, Inter, sans-serif')
+                    .text(layer.label);
+                g.append('text')
+                    .attr('x', 42).attr('y', 40)
+                    .attr('fill', '#94a3b8').attr('font-size', FS_SMALL)
+                    .attr('font-family', 'Inter, sans-serif')
+                    .text(layer.sub);
+
+                if (index < layers.length - 1) {
+                    svg.append('line')
+                        .attr('x1', 210).attr('y1', layer.y + 54).attr('x2', 210).attr('y2', layers[index + 1].y)
+                        .attr('stroke', 'rgba(148,163,184,0.35)').attr('stroke-width', 2).attr('stroke-dasharray', '5,4');
+                    svg.append('polygon')
+                        .attr('points', `204,${layers[index + 1].y - 8} 216,${layers[index + 1].y - 8} 210,${layers[index + 1].y + 2}`)
+                        .attr('fill', 'rgba(148,163,184,0.5)');
+                }
+            });
+        }
+
+        function buildDelegationBoundaryMap() {
+            const container = document.getElementById('delegation-boundary-map');
+            if (!container) return;
+            const w = 430, h = 430, cx = w / 2, cy = h / 2;
+            const svg = d3.select(container).append('svg')
+                .attr('viewBox', `0 0 ${w} ${h}`)
+                .attr('width', '100%').attr('height', '100%');
+
+            const nodes = [
+                { label: 'Claude Agents', sub: 'Specialist behavior', x: cx, y: 56, color: '#00d4ff' },
+                { label: 'Subagents', sub: 'Scoped delegation', x: 360, y: 170, color: '#a855f7' },
+                { label: 'Skills', sub: 'Reusable capability packs', x: 320, y: 330, color: '#10b981' },
+                { label: 'Shared Infra', sub: 'Tools and traces', x: 110, y: 330, color: '#f59e0b' },
+                { label: 'User Surface', sub: 'Copilot or Claude', x: 70, y: 170, color: '#f43f5e' },
+            ];
+
+            svg.append('circle')
+                .attr('cx', cx).attr('cy', cy).attr('r', 78)
+                .attr('fill', 'rgba(123,97,255,0.12)')
+                .attr('stroke', 'rgba(123,97,255,0.35)').attr('stroke-width', 2);
+            svg.append('text')
+                .attr('x', cx).attr('y', cy - 6).attr('text-anchor', 'middle')
+                .attr('fill', '#e9d5ff').attr('font-size', '13px').attr('font-weight', 900)
+                .attr('font-family', 'Space Grotesk, Inter, sans-serif')
+                .text('ORCHESTRATION');
+            svg.append('text')
+                .attr('x', cx).attr('y', cy + 16).attr('text-anchor', 'middle')
+                .attr('fill', '#94a3b8').attr('font-size', FS_SMALL)
+                .attr('font-family', 'Inter, sans-serif')
+                .text('Classify · route · return');
+
+            nodes.forEach(node => {
+                svg.append('line')
+                    .attr('x1', cx).attr('y1', cy).attr('x2', node.x).attr('y2', node.y)
+                    .attr('stroke', node.color + '55').attr('stroke-width', 2);
+
+                const g = svg.append('g').attr('transform', `translate(${node.x},${node.y})`);
+                g.append('circle').attr('r', 42).attr('fill', node.color + '14').attr('stroke', node.color + '60').attr('stroke-width', 1.6);
+                g.append('text')
+                    .attr('y', -2).attr('text-anchor', 'middle')
+                    .attr('fill', '#f8fafc').attr('font-size', '12px').attr('font-weight', 800)
+                    .attr('font-family', 'Inter, sans-serif')
+                    .text(node.label);
+                g.append('text')
+                    .attr('y', 14).attr('text-anchor', 'middle')
+                    .attr('fill', '#94a3b8').attr('font-size', '11px')
+                    .attr('font-family', 'Inter, sans-serif')
+                    .text(node.sub);
+            });
+        }
+
+        function buildReturnFlowDiagram() {
+            const container = document.getElementById('return-flow-diagram');
+            if (!container) return;
+            const w = 460, h = 420;
+            const svg = d3.select(container).append('svg')
+                .attr('viewBox', `0 0 ${w} ${h}`)
+                .attr('width', '100%').attr('height', '100%');
+
+            const steps = [
+                { x: 28, y: 66, label: 'User Request', color: '#f59e0b' },
+                { x: 160, y: 66, label: 'Intent Routing', color: '#00d4ff' },
+                { x: 292, y: 66, label: 'Guidance Load', color: '#7b61ff' },
+                { x: 160, y: 184, label: 'Runtime Tools', color: '#10b981' },
+                { x: 292, y: 184, label: 'Evidence Store', color: '#f43f5e' },
+                { x: 160, y: 302, label: 'Return Path', color: '#14b8a6' },
+            ];
+
+            const links = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 1]];
+
+            links.forEach(([a, b]) => {
+                const s = steps[a], t = steps[b];
+                svg.append('line')
+                    .attr('x1', s.x + 64).attr('y1', s.y + 26).attr('x2', t.x + 64).attr('y2', t.y + 26)
+                    .attr('stroke', 'rgba(148,163,184,0.34)').attr('stroke-width', 2).attr('stroke-dasharray', '5,4');
+            });
+
+            steps.forEach(step => {
+                const g = svg.append('g').attr('transform', `translate(${step.x},${step.y})`);
+                g.append('rect')
+                    .attr('width', 128).attr('height', 52).attr('rx', 14)
+                    .attr('fill', 'rgba(10,15,30,0.76)').attr('stroke', step.color + '55').attr('stroke-width', 1.6);
+                g.append('text')
+                    .attr('x', 64).attr('y', 30).attr('text-anchor', 'middle')
+                    .attr('fill', '#f8fafc').attr('font-size', FS_BODY).attr('font-weight', 800)
+                    .attr('font-family', 'Space Grotesk, Inter, sans-serif')
+                    .text(step.label);
+            });
+
+            svg.append('text')
+                .attr('x', 230).attr('y', 385).attr('text-anchor', 'middle')
+                .attr('fill', '#94a3b8').attr('font-size', FS_CAPTION)
+                .attr('font-family', 'Inter, sans-serif')
+                .text('Delegated work returns to the orchestrating path before completion is reported');
+        }
+
+        function buildRequestProcessingFlowchart() {
+            const container = document.getElementById('request-processing-flowchart');
+            if (!container) return;
+            const w = 980, h = 780;
+            const svg = d3.select(container).append('svg')
+                .attr('viewBox', `0 0 ${w} ${h}`)
+                .attr('width', '100%').attr('height', '100%');
+
+            const lanes = [
+                { x: 20, y: 20,  w: 940, h: 440, label: 'CORTEX Orchestrators', color: '#7b61ff' },
+                { x: 20, y: 480, w: 940, h: 280, label: 'Claude Layer (Agents · Skills · Subagents)', color: '#00d4ff' }
+            ];
+
+            lanes.forEach(lane => {
+                svg.append('rect')
+                    .attr('x', lane.x).attr('y', lane.y).attr('width', lane.w).attr('height', lane.h).attr('rx', 16)
+                    .attr('fill', 'rgba(10,15,30,0.60)').attr('stroke', lane.color + '44').attr('stroke-width', 1.2);
+                svg.append('text')
+                    .attr('x', lane.x + 16).attr('y', lane.y + 28)
+                    .attr('fill', lane.color).attr('font-size', '15px').attr('font-weight', 800)
+                    .attr('font-family', 'Space Grotesk, Inter, sans-serif')
+                    .text(lane.label);
+            });
+
+            const topNodes = [
+                { x: 250, y: 62,  w: 480, h: 56, label: '1) User Request Intake' },
+                { x: 250, y: 138, w: 480, h: 56, label: '2) RequestLogManager + SQLite Prior Request Chain' },
+                { x: 250, y: 214, w: 480, h: 56, label: '3) InteractionOrchestrator Prior-Context Synthesis (Stage 1)' },
+                { x: 250, y: 290, w: 480, h: 56, label: '4) HolisticBrainIntegrator (Intelligence + Governance + Registry)' },
+                { x: 250, y: 366, w: 480, h: 56, label: '5) MasterOrchestrator Execution Stages → SDLC Gates' }
+            ];
+
+            const bottomNodes = [
+                { x: 70,  y: 530, w: 260, h: 62, label: 'Claude Agents\n(Specialist Orchestration Profiles)' },
+                { x: 360, y: 530, w: 260, h: 62, label: 'Skills\n(Reusable Capability Guidance)' },
+                { x: 650, y: 530, w: 260, h: 62, label: 'Subagents\n(Scoped Delegated Execution)' },
+                { x: 250, y: 642, w: 480, h: 62, label: 'Delegation Result Return → CORTEX Orchestrator Completion Path' }
+            ];
+
+            function drawNode(node, color) {
+                const g = svg.append('g').attr('transform', `translate(${node.x},${node.y})`);
+                g.append('rect')
+                    .attr('width', node.w).attr('height', node.h).attr('rx', 12)
+                    .attr('fill', 'rgba(2,6,23,0.82)').attr('stroke', color + '66').attr('stroke-width', 1.3);
+                const lines = node.label.split('\n');
+                lines.forEach((line, index) => {
+                    g.append('text')
+                        .attr('x', node.w / 2)
+                        .attr('y', lines.length === 1 ? (node.h / 2 + 5) : (24 + index * 16))
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', '#e2e8f0').attr('font-size', '12px').attr('font-weight', 700)
+                        .attr('font-family', 'Inter, sans-serif')
+                        .text(line);
+                });
+            }
+
+            topNodes.forEach(node => drawNode(node, '#a855f7'));
+            bottomNodes.forEach(node => drawNode(node, '#00d4ff'));
+
+            const topChain = [[0,1],[1,2],[2,3],[3,4]];
+            topChain.forEach(([from, to]) => {
+                const s = topNodes[from], t = topNodes[to];
+                const x1 = s.x + s.w / 2;
+                const y1 = s.y + s.h;
+                const x2 = t.x + t.w / 2;
+                const y2 = t.y;
+                svg.append('line')
+                    .attr('x1', x1).attr('y1', y1).attr('x2', x2).attr('y2', y2)
+                    .attr('stroke', 'rgba(168,85,247,0.45)').attr('stroke-width', 1.8);
+                svg.append('polygon')
+                    .attr('points', `${x2},${y2} ${x2-5},${y2-9} ${x2+5},${y2-9}`)
+                    .attr('fill', 'rgba(168,85,247,0.7)');
+            });
+
+            svg.append('line')
+                .attr('x1', 730).attr('y1', 394).attr('x2', 780).attr('y2', 530)
+                .attr('stroke', 'rgba(0,212,255,0.55)').attr('stroke-width', 2).attr('stroke-dasharray', '5,4');
+            svg.append('text')
+                .attr('x', 792).attr('y', 464)
+                .attr('fill', '#67e8f9').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
+                .text('delegate scoped tasks');
+
+            [[0,3],[1,3],[2,3]].forEach(([from,to]) => {
+                const s = bottomNodes[from], t = bottomNodes[to];
+                svg.append('line')
+                    .attr('x1', s.x + s.w / 2).attr('y1', s.y + s.h)
+                    .attr('x2', t.x + t.w / 2).attr('y2', t.y)
+                    .attr('stroke', 'rgba(0,212,255,0.45)').attr('stroke-width', 1.6).attr('stroke-dasharray', '5,4');
+            });
+
+            svg.append('line')
+                .attr('x1', 490).attr('y1', 642).attr('x2', 490).attr('y2', 422)
+                .attr('stroke', 'rgba(16,185,129,0.55)').attr('stroke-width', 2).attr('stroke-dasharray', '6,4');
+            svg.append('text')
+                .attr('x', 500).attr('y', 530)
+                .attr('fill', '#34d399').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
+                .text('returns for final CORTEX completion');
+
+            svg.append('rect')
+                .attr('x', 30).attr('y', 430).attr('width', 300).attr('height', 24).attr('rx', 8)
+                .attr('fill', 'rgba(123,97,255,0.14)').attr('stroke', 'rgba(123,97,255,0.35)');
+            svg.append('text')
+                .attr('x', 180).attr('y', 446).attr('text-anchor', 'middle')
+                .attr('fill', '#c4b5fd').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif')
+                .text('CORTEX orchestration ownership boundary');
+
+            svg.append('rect')
+                .attr('x', 340).attr('y', 430).attr('width', 300).attr('height', 24).attr('rx', 8)
+                .attr('fill', 'rgba(0,212,255,0.12)').attr('stroke', 'rgba(0,212,255,0.35)');
+            svg.append('text')
+                .attr('x', 490).attr('y', 446).attr('text-anchor', 'middle')
+                .attr('fill', '#67e8f9').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif')
+                .text('Claude capability execution boundary');
+        }
+
+        function buildRequestSequenceDiagram() {
+            const container = document.getElementById('request-sequence-diagram');
+            if (!container) return;
+            const w = 980, h = 860;
+            const svg = d3.select(container).append('svg')
+                .attr('viewBox', `0 0 ${w} ${h}`)
+                .attr('width', '100%').attr('height', '100%');
+
+            const actors = [
+                { x: 90,  label: 'User' },
+                { x: 270, label: 'SQLite Context\nStore' },
+                { x: 450, label: 'Master\nOrchestrator' },
+                { x: 630, label: 'HolisticBrain\nIntegrator' },
+                { x: 810, label: 'SDLC +\nQuality/Security' }
+            ];
+
+            actors.forEach(actor => {
+                const lines = actor.label.split('\n');
+                lines.forEach((line, idx) => {
+                    svg.append('text')
+                        .attr('x', actor.x).attr('y', 26 + idx * 16).attr('text-anchor', 'middle')
+                        .attr('fill', '#cbd5e1').attr('font-size', '12px').attr('font-weight', 700)
+                        .attr('font-family', 'Inter, sans-serif')
+                        .text(line);
+                });
+                svg.append('text')
+                    .attr('x', actor.x).attr('y', 56).attr('text-anchor', 'middle')
+                    .attr('fill', 'rgba(148,163,184,0.6)').attr('font-size', '10px')
+                    .attr('font-family', 'Inter, sans-serif')
+                    .text('lifeline');
+                svg.append('line')
+                    .attr('x1', actor.x).attr('y1', 64).attr('x2', actor.x).attr('y2', 770)
+                    .attr('stroke', 'rgba(148,163,184,0.28)').attr('stroke-width', 1.2).attr('stroke-dasharray', '4,4');
+            });
+
+            svg.append('rect')
+                .attr('x', 24).attr('y', 70).attr('width', 520).attr('height', 700).attr('rx', 12)
+                .attr('fill', 'rgba(123,97,255,0.05)').attr('stroke', 'rgba(123,97,255,0.25)').attr('stroke-width', 1);
+            svg.append('text')
+                .attr('x', 36).attr('y', 92)
+                .attr('fill', '#c4b5fd').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
+                .text('CORTEX orchestrator-controlled path');
+
+            svg.append('rect')
+                .attr('x', 550).attr('y', 70).attr('width', 406).attr('height', 700).attr('rx', 12)
+                .attr('fill', 'rgba(0,212,255,0.04)').attr('stroke', 'rgba(0,212,255,0.25)').attr('stroke-width', 1);
+            svg.append('text')
+                .attr('x', 566).attr('y', 92)
+                .attr('fill', '#67e8f9').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
+                .text('Holistic integration + execution domain');
+
+            const events = [
+                { y: 136, from: 0, to: 2, color: '#a855f7', text: '1) submit current request' },
+                { y: 192, from: 2, to: 1, color: '#f59e0b', text: '2) RequestLogManager fetches prior requests from SQLite state' },
+                { y: 248, from: 1, to: 2, color: '#f59e0b', text: '3) Interaction stage synthesizes current + prior context' },
+                { y: 304, from: 2, to: 3, color: '#00d4ff', text: '4) HolisticBrainIntegrator composes intelligence + governance + registry context' },
+                { y: 360, from: 3, to: 3, color: '#22d3ee', text: '5) prompt-layer skills/agents contribute guidance metadata' },
+                { y: 416, from: 3, to: 3, color: '#67e8f9', text: '6) scoped delegated execution may run via subagent path' },
+                { y: 472, from: 3, to: 4, color: '#10b981', text: '7) SDLC plan executes with built-in quality/security gates' },
+                { y: 528, from: 4, to: 2, color: '#10b981', text: '8) validated result returns to Master Orchestrator' },
+                { y: 584, from: 2, to: 0, color: '#7b61ff', text: '9) final response + audit trace delivered' }
+            ];
+
+            events.forEach(event => {
+                const x1 = actors[event.from].x;
+                const x2 = actors[event.to].x;
+                svg.append('line')
+                    .attr('x1', x1).attr('y1', event.y).attr('x2', x2).attr('y2', event.y)
+                    .attr('stroke', event.color + 'cc').attr('stroke-width', 2.1);
+
+                const dir = x2 >= x1 ? 1 : -1;
+                if (x1 !== x2) {
+                    svg.append('polygon')
+                        .attr('points', `${x2},${event.y} ${x2 - (9 * dir)},${event.y - 6} ${x2 - (9 * dir)},${event.y + 6}`)
+                        .attr('fill', event.color + 'dd');
+                }
+
+                svg.append('text')
+                    .attr('x', (x1 + x2) / 2)
+                    .attr('y', event.y - 10)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#94a3b8').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
+                    .text(event.text);
+            });
+
+            svg.append('rect')
+                .attr('x', 82).attr('y', 672).attr('width', 816).attr('height', 140).attr('rx', 14)
+                .attr('fill', 'rgba(15,23,42,0.72)').attr('stroke', 'rgba(16,185,129,0.45)').attr('stroke-width', 1.2);
+            svg.append('text')
+                .attr('x', 490).attr('y', 702).attr('text-anchor', 'middle')
+                .attr('fill', '#34d399').attr('font-size', '13px').attr('font-weight', 800)
+                .attr('font-family', 'Inter, sans-serif')
+                .text('Capability guidance usage inside the flow');
+            svg.append('text')
+                .attr('x', 490).attr('y', 732).attr('text-anchor', 'middle')
+                .attr('fill', '#94a3b8').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
+                .text('Skills and agent profiles provide guidance while orchestration retains runtime ownership');
+            svg.append('text')
+                .attr('x', 490).attr('y', 756).attr('text-anchor', 'middle')
+                .attr('fill', '#94a3b8').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
+                .text('Subagent paths are scoped delegation branches that return to orchestrator-controlled completion');
+            svg.append('text')
+                .attr('x', 490).attr('y', 780).attr('text-anchor', 'middle')
+                .attr('fill', '#94a3b8').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
+                .text('CORTEX orchestrators keep ownership of routing, completion, and final response delivery');
         }
 
         // ─── D3: Intelligence Diamond ───
