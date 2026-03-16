@@ -1,0 +1,33 @@
+id: "phase-m14"
+title: "ADLC — Agentic Development Lifecycle Cycle"
+created: "2026-03-16"
+status: COMPLETE
+priority: P0
+sweep_catalogue_id: "SWEEP-M14-ADLC"
+
+sweep_catalogue:
+  - id: "GAP-M14-01"
+    title: "IntentType ADLC routing support"
+    status: CLOSED
+  - id: "GAP-M14-02"
+    title: "ADLC cycle workflow template"
+    status: CLOSED
+  - id: "GAP-M14-03"
+    title: "ADLCOrchestrator with max_cycles"
+    status: CLOSED
+  - id: "GAP-M14-04"
+    title: "ADLCFeedbackBridge stage7-to-stage2 loop"
+    status: CLOSED
+  - id: "GAP-M14-05"
+    title: "Agentic SDLC knowledge YAML"
+    status: CLOSED
+
+execution_evidence:
+  completed_at: "2026-03-16T16:20:00Z"
+  artifacts:
+    - "cortex-registry/workflows/templates/lifecycle/adlc-cycle-workflow.yaml"
+    - "cortex-registry/knowledge/sdlc/agentic-sdlc-patterns.yaml"
+    - "cortex/tools/adlc_orchestrator.py"
+    - "cortex/tools/adlc_feedback_bridge.py"
+  tests_added:
+    - "tests/v2/test_adlc_lifecycle_phase_m14.py"

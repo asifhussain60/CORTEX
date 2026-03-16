@@ -1,0 +1,13 @@
+id: "agentic-sdlc-patterns"
+status: "ACTIVE"
+domain: "sdlc"
+patterns:
+  - id: "adlc-loop-01"
+    name: "Feedback-to-scope re-entry"
+    description: "Route stage-7 feedback into stage-2 for targeted remediation planning."
+  - id: "adlc-loop-02"
+    name: "Validation-to-implementation loop"
+    description: "Route failed validation to implementation with cycle accounting."
+  - id: "adlc-governance-gate"
+    name: "Fail-close convergence gate"
+    description: "Block completion when convergence cycles exceed max_cycles."

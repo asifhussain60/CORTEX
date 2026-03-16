@@ -1,0 +1,39 @@
+id: "lifecycle/adlc-cycle-workflow"
+workflow:
+  id: "lifecycle/adlc-cycle-workflow"
+  name: "ADLC Cycle Workflow"
+  category: "lifecycle"
+  mode: "ADLC"
+  status: "ACTIVE"
+  description: |
+    Seven-stage agentic development lifecycle with two feedback loops and
+    convergence cap enforcement.
+
+  stages:
+    - "intent_capture"
+    - "scope_and_risk"
+    - "implementation"
+    - "validation"
+    - "integration"
+    - "deployment_readiness"
+    - "feedback_and_learning"
+
+  feedback_loops:
+    - from_stage: "feedback_and_learning"
+      to_stage: "scope_and_risk"
+      trigger: "defect_or_regression_detected"
+    - from_stage: "validation"
+      to_stage: "implementation"
+      trigger: "validation_failure"
+
+  convergence:
+    strategy: "detect_fix_rescan"
+    max_cycles: 3
+
+  primitives:
+    - "primitives/execution/ac-marker-emit.yaml"
+    - "primitives/execution/git-checkpoint.yaml"
+    - "primitives/governance/holistic-validation-gate.yaml"
+    - "primitives/governance/sweep-catalogue-open.yaml"
+    - "primitives/governance/sweep-catalogue-close.yaml"
+    - "primitives/validation/detect-fix-rescan-loop.yaml"
