@@ -1,0 +1,11 @@
+id: "architecture-best-practices"
+title: "Architecture Best Practices"
+owner: "CORTEX Architecture Council"
+source_of_truth: "CORTEX Architecture Principles"
+summary: "Cross-cutting architectural principles for maintainable platform evolution."
+practices:
+  - "Prefer clear boundaries and stable interfaces"
+  - "Keep orchestration deterministic and observable"
+  - "Design for failure isolation and graceful degradation"
+  - "Centralize invariants in canonical sources of truth"
+  - "Enforce validation gates before release transitions"

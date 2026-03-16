@@ -27,7 +27,7 @@ from cortex.intelligence.action.execution_planner import ExecutionPlanner
 logger = logging.getLogger(__name__)
 
 
-class PatternRegistry:  # CORE-035-scoped lightweight replacement for M3 reduction
+class OnboardingPatternRegistry:  # CORE-035-scoped lightweight replacement for M3 reduction
     """Minimal in-module pattern registry used during M3 intelligence reduction.
 
     Keeps the mixin contract stable while `cortex.intelligence.perception` is retired.
@@ -62,7 +62,7 @@ class KnowledgePersistenceMixin:
         super().__init__()  # type: ignore
         self.learning_loop = UniversalLearningLoop()
         self.knowledge_synthesizer = KnowledgeSynthesizer()
-        self.pattern_registry = PatternRegistry()
+        self.pattern_registry = OnboardingPatternRegistry()
         self.strategy_selector = StrategySelector()
         self.execution_planner = ExecutionPlanner()
 

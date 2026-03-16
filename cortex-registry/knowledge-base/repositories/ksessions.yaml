@@ -1,0 +1,8 @@
+id: "repo-ksessions"
+title: "KSessions Repository Profile"
+owner: "CORTEX Repository Profiles"
+source_of_truth: "Repository Knowledge Registry"
+characteristics:
+  - "session and identity lifecycle patterns"
+  - "security and access-control workflows"
+  - "integration-focused service boundaries"

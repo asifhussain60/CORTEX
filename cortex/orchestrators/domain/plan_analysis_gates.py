@@ -22,7 +22,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, List
 
 # ---------------------------------------------------------------------------
-# GateVerdict — result produced by every gate
+# PlanGateVerdict — result produced by every gate
 # ---------------------------------------------------------------------------
 
 _BLOCKING_SEVERITIES = frozenset({"P0", "p0"})
@@ -33,7 +33,7 @@ _RCA_MAX_ADJUSTMENT: float = 0.3
 
 
 @dataclass
-class GateVerdict:
+class PlanGateVerdict:
     """Result returned by a single analysis gate.
 
     Attributes:
@@ -58,24 +58,24 @@ class ThreatModelGate:
 
     name: str = "ThreatModel"
 
-    def evaluate(self, *, threats: List[Dict[str, Any]]) -> GateVerdict:
+    def evaluate(self, *, threats: List[Dict[str, Any]]) -> PlanGateVerdict:
         """Evaluate the threat model gate.
 
         Args:
             threats: List of threat dicts with a ``"severity"`` key.
 
         Returns:
-            :class:`GateVerdict` with ``blocking=True`` if any P0 threat found.
+            :class:`PlanGateVerdict` with ``blocking=True`` if any P0 threat found.
         """
         p0_threats = [t for t in threats if t.get("severity") in _BLOCKING_SEVERITIES]
         if p0_threats:
             names = ", ".join(t.get("name", "unnamed") for t in p0_threats)
-            return GateVerdict(
+            return PlanGateVerdict(
                 gate=self.name,
                 blocking=True,
                 reason=f"P0 threats detected: {names}",
             )
-        return GateVerdict(gate=self.name, blocking=False, reason="No P0 threats")
+        return PlanGateVerdict(gate=self.name, blocking=False, reason="No P0 threats")
 
 
 class QualityAnalysisGate:
@@ -83,22 +83,22 @@ class QualityAnalysisGate:
 
     name: str = "Quality"
 
-    def evaluate(self, *, quality_score: float) -> GateVerdict:
+    def evaluate(self, *, quality_score: float) -> PlanGateVerdict:
         """Evaluate the quality analysis gate.
 
         Args:
             quality_score: Numeric quality score (0–10 scale).
 
         Returns:
-            :class:`GateVerdict` with ``blocking=True`` if score below threshold.
+            :class:`PlanGateVerdict` with ``blocking=True`` if score below threshold.
         """
         if quality_score < _QUALITY_THRESHOLD:
-            return GateVerdict(
+            return PlanGateVerdict(
                 gate=self.name,
                 blocking=True,
                 reason=f"Quality score {quality_score} below threshold {_QUALITY_THRESHOLD}",
             )
-        return GateVerdict(
+        return PlanGateVerdict(
             gate=self.name,
             blocking=False,
             reason=f"Quality score {quality_score} ≥ {_QUALITY_THRESHOLD}",
@@ -110,24 +110,24 @@ class SecurityAssessmentGate:
 
     name: str = "Security"
 
-    def evaluate(self, *, vulnerabilities: List[Dict[str, Any]]) -> GateVerdict:
+    def evaluate(self, *, vulnerabilities: List[Dict[str, Any]]) -> PlanGateVerdict:
         """Evaluate the security assessment gate.
 
         Args:
             vulnerabilities: List of vulnerability dicts with a ``"severity"`` key.
 
         Returns:
-            :class:`GateVerdict` with ``blocking=True`` if any P0 vuln found.
+            :class:`PlanGateVerdict` with ``blocking=True`` if any P0 vuln found.
         """
         p0_vulns = [v for v in vulnerabilities if v.get("severity") in _BLOCKING_SEVERITIES]
         if p0_vulns:
             cves = ", ".join(v.get("cve", "unknown") for v in p0_vulns)
-            return GateVerdict(
+            return PlanGateVerdict(
                 gate=self.name,
                 blocking=True,
                 reason=f"P0 vulnerabilities: {cves}",
             )
-        return GateVerdict(gate=self.name, blocking=False, reason="No P0 vulnerabilities")
+        return PlanGateVerdict(gate=self.name, blocking=False, reason="No P0 vulnerabilities")
 
 
 class RCAHistoryGate:
@@ -139,7 +139,7 @@ class RCAHistoryGate:
 
     name: str = "RCAHistory"
 
-    def evaluate(self, *, rca_failures: int, cdr_score: float) -> GateVerdict:
+    def evaluate(self, *, rca_failures: int, cdr_score: float) -> PlanGateVerdict:
         """Evaluate the RCA history gate.
 
         Args:
@@ -148,13 +148,13 @@ class RCAHistoryGate:
                           calculation but provided for context).
 
         Returns:
-            :class:`GateVerdict` with ``blocking=False`` and a negative
+            :class:`PlanGateVerdict` with ``blocking=False`` and a negative
             ``cdr_adjustment`` proportional to failure count.
         """
         ratio = min(1.0, rca_failures / max(1, _RCA_MAX_FAILURES))
         adjustment = -round(ratio * _RCA_MAX_ADJUSTMENT, 4)
         adjustment = max(-_RCA_MAX_ADJUSTMENT, min(0.0, adjustment))
-        return GateVerdict(
+        return PlanGateVerdict(
             gate=self.name,
             blocking=False,
             reason=f"RCA failures: {rca_failures} → CDR adjustment {adjustment:+.4f}",
@@ -171,20 +171,20 @@ class OPJConsultationGate:
 
     name: str = "OPJConsultation"
 
-    def evaluate(self, *, opj_score: float) -> GateVerdict:
+    def evaluate(self, *, opj_score: float) -> PlanGateVerdict:
         """Evaluate the OPJ consultation gate.
 
         Args:
             opj_score: OPJ history signal in ``[−1.0, 1.0]``.
 
         Returns:
-            :class:`GateVerdict` with ``blocking=False`` and a
+            :class:`PlanGateVerdict` with ``blocking=False`` and a
             ``cdr_adjustment`` in ``[−0.3, +0.3]``.
         """
         raw = opj_score * _OPJ_MAX_ADJUSTMENT
         adjustment = max(-_OPJ_MAX_ADJUSTMENT, min(_OPJ_MAX_ADJUSTMENT, raw))
         adjustment = round(adjustment, 4)
-        return GateVerdict(
+        return PlanGateVerdict(
             gate=self.name,
             blocking=False,
             reason=f"OPJ score {opj_score} → CDR adjustment {adjustment:+.4f}",
@@ -232,7 +232,7 @@ class PlanAnalysisGateRunner:
         rca_failures: int,
         cdr_score: float,
         opj_score: float,
-    ) -> Dict[str, GateVerdict]:
+    ) -> Dict[str, PlanGateVerdict]:
         """Execute all 5 gates and return an ordered dict of verdicts.
 
         Args:
@@ -255,7 +255,7 @@ class PlanAnalysisGateRunner:
         }
 
     @staticmethod
-    def overall_approved(verdicts: Dict[str, GateVerdict]) -> bool:
+    def overall_approved(verdicts: Dict[str, PlanGateVerdict]) -> bool:
         """Return True only if no blocking gate fired.
 
         Args:

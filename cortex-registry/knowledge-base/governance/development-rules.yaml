@@ -1,0 +1,10 @@
+id: "development-rules"
+title: "Development Rules"
+owner: "CORTEX Governance"
+source_of_truth: "Engineering Standards"
+summary: "Development guardrails for quality, consistency, and maintainability."
+rules:
+  - "Use canonical package paths and naming conventions"
+  - "Preserve single canonical implementation ownership"
+  - "Keep tests aligned with source structure"
+  - "Avoid undocumented compatibility shims"

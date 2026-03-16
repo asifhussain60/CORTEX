@@ -1,0 +1,8 @@
+id: "profile-security-ops"
+title: "Security Operations Profile"
+owner: "CORTEX Domain Profiles"
+source_of_truth: "Domain Profile Registry"
+focus:
+  - "threat detection and triage"
+  - "incident response playbooks"
+  - "security telemetry and containment"

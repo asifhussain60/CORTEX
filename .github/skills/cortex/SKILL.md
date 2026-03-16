@@ -6,7 +6,7 @@ argument-hint: 'Optional: name the command or intent (e.g. "audit", "debug", "im
 
 # CORTEX — Intent Classification Gateway
 
-**Package:** `cortex` | **Orchestrators:** 314 across 14 domains | **MCP Tools:** 36 registered | **Tests:** ~21,269
+**Package:** `cortex` | **Orchestrators:** 302 across 10 domains | **MCP Tools:** 81 registered | **Tests:** ~20,043
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework that orchestrates GitHub Copilot as the AI engine via a Pylance-style MCP stdio server.
 
