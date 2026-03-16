@@ -1,0 +1,49 @@
+id: "phase-m16"
+title: "SSOT Unification & Legacy Surface Retirement"
+created: "2026-03-16"
+status: COMPLETE
+priority: P0
+sweep_catalogue_id: "SWEEP-M16-SSOT-UNIFICATION"
+depends_on:
+  - "phase-m13"
+
+sweep_catalogue:
+  - id: "GAP-M16-01"
+    title: "Unify master-plan runtime readers to v2 SSOT contract"
+    status: CLOSED
+  - id: "GAP-M16-02"
+    title: "Retire deprecated MCP contract references from active governance paths"
+    status: CLOSED
+  - id: "GAP-M16-03"
+    title: "Consolidate duplicated planned phase artifacts into canonical backlog entries"
+    status: CLOSED
+  - id: "GAP-M16-04"
+    title: "Align CI/hook guards with v2 authority and thin-index policy"
+    status: CLOSED
+  - id: "GAP-M16-05"
+    title: "Emit drift-lock coverage for SSOT and deprecated-surface regression prevention"
+    status: CLOSED
+  - id: "GAP-M16-06"
+    title: "Converge smoke/preflight gates after cleanup with zero regression"
+    status: CLOSED
+
+execution_contract:
+  mode: "STRICT_SEQUENTIAL"
+  tdd_required: true
+  convergence_required: true
+  max_convergence_cycles: 3
+
+completion_gate:
+  required:
+    - "All GAP-M16-01..06 status CLOSED"
+    - "CORTEX_WORKERS=8 python3 scripts/run_tests.py smoke"
+    - "CORTEX_WORKERS=8 python3 scripts/run_tests.py preflight"
+
+execution_evidence:
+  completed_at: "2026-03-16T19:10:00Z"
+  artifacts:
+    - "cortex-registry/cortex-master-v2.yaml"
+    - "cortex-registry/planning/phases/v2/phase-m16-ssot-unification-and-legacy-retirement.yaml"
+  validation:
+    - "CORTEX_WORKERS=8 python3 scripts/run_tests.py smoke => 2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 30.47s"
+    - "CORTEX_WORKERS=8 python3 scripts/run_tests.py preflight => 459 passed, 10 skipped in 6.06s"

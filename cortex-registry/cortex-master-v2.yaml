@@ -22,11 +22,11 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-16T16:20:00Z'
+  last_updated: '2026-03-16T19:10:00Z'
   autonomous_chain_updated: '2026-03-16 — stop_policy added; all continuation prompts, proceed gates, and 🚀 Next Phase blocks prohibited; CORE-RESP-001 overridden for autonomous phase chaining.'
-  total_phases: 15
+  total_phases: 16
   active: 0
-  completed: 15
+  completed: 16
   in_progress: 0
   planned: 0
   architectural_decision: "HYBRID — preserve v2 reductions while recentering execution on Workflow Composer + dedicated workflow templates"
@@ -348,9 +348,9 @@ session_resume_protocol:
     maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
 
 runtime_state:
-  last_completed_phase: "phase-m13"
+  last_completed_phase: "phase-m16"
   next_executable_phase: "none"
-  last_session_action: "phase-m13 completed: final cleanup/release contracts closed with M13 targeted tests and converged smoke/preflight gates; migration plan now fully complete."
+  last_session_action: "phase-m16 completed: SSOT unification and legacy-surface retirement closed with converged smoke/preflight gates and no regression."
   last_session_prompt: "AUTO_RESUME_FROM_ACTIVE_PLAN"
 
 phase_detail_files:
@@ -519,6 +519,17 @@ phase_detail_files:
     depends_on: ["phase-m11"]
     file: "cortex-registry/planning/phases/v2/phase-m15-tutorial-mode-integration.yaml"
     note: "COMPLETE — tutorial mode settings and post-execution renderer shipped with on|auto|off activation semantics, expert-default off behavior, sticky preference/override contract, and passing targeted + smoke gates."
+
+  - id: phase-m16
+    title: "SSOT Unification & Legacy Surface Retirement"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-M16-SSOT-UNIFICATION
+    gaps: 6
+    sub_phases: 4
+    depends_on: ["phase-m13"]
+    file: "cortex-registry/planning/phases/v2/phase-m16-ssot-unification-and-legacy-retirement.yaml"
+    note: "COMPLETE — SSOT/runtime convergence and legacy-surface retirement closure recorded with drift-lock coverage and converged smoke/preflight gates."
 # ============================================================
 # CORTEX v2 is designed to ADAPT to evolving LLM capabilities.
 # The LLM Capability Manifest (cortex-registry/core/llm-capabilities.yaml)
@@ -558,18 +569,18 @@ production_readiness:
     github_skill_files: 5
     github_instruction_files: 6
     master_v2_lines: 740
-    latest_smoke: "2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 30.15s"
-    latest_preflight: "459 passed, 10 skipped in 6.03s"
+    latest_smoke: "2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 30.47s"
+    latest_preflight: "459 passed, 10 skipped in 6.06s"
     production_validator: "99.2% readiness; 0 critical; 0 high; deployment ready"
 
-  total_phases: 15
+  total_phases: 16
   active: 0
-  completed: 15
+  completed: 16
   in_progress: 0
   planned: 0
   archived: 0
   completion_percentage: 100
-  consolidation_summary: "2026-03-16 — M13 completed: final cleanup/release closure recorded and all 15 migration phases are now COMPLETE."
+  consolidation_summary: "2026-03-16 — M16 closed: SSOT unification and legacy-surface retirement completed with converged smoke/preflight validation."
   active_phases: "none — all migration phases complete"
 
 phases:
@@ -753,3 +764,15 @@ phases:
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m15-tutorial-mode-integration.yaml"
     note: "P0 — COMPLETE. Tutorial explanation layer shipped as post-execution-only behavior with on|auto|off states, expert default off, sticky preference + per-request override, and green targeted/smoke gates."
+
+  # Phase M16 — SSOT UNIFICATION & LEGACY RETIREMENT (depends: M13)
+  - id: phase-m16
+    title: "SSOT Unification & Legacy Surface Retirement"
+    priority: P0
+    status: COMPLETE
+    depends_on: ["phase-m13"]
+    sweep_id: SWEEP-M16-SSOT-UNIFICATION
+    gaps: 6
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/v2/phase-m16-ssot-unification-and-legacy-retirement.yaml"
+    note: "P0 — COMPLETE. Runtime/master-plan SSOT convergence, deprecated-contract retirement, duplicate-planned-asset consolidation, and zero-regression release-hardening gates converged."
