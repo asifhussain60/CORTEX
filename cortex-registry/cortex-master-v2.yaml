@@ -334,7 +334,7 @@ session_resume_protocol:
     - "PROHIBITED: 🚀 Next Phase blocks — do not emit under any circumstance during autonomous execution"
     - "CHAIN RULE: Upon phase completion, immediately begin next dependency-valid phase in the same response turn"
   session_end_contract:
-    required_final_output: "✅ Phase {id} complete. + Progress line only; full completion state only when all 13 phases are COMPLETE"
+    required_final_output: "✅ Phase {id} complete. + Progress line only; full completion state only when all 16 phases are COMPLETE"
     final_output_format:
       - "✅ Phase {completed_phase_id} complete."
       - "Progress: {completed}/{total} phases ({completion_percentage}%)"
@@ -568,7 +568,7 @@ production_readiness:
     github_prompt_files: 7
     github_skill_files: 5
     github_instruction_files: 6
-    master_v2_lines: 740
+    master_v2_lines: 778
     latest_smoke: "2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 30.47s"
     latest_preflight: "459 passed, 10 skipped in 6.06s"
     production_validator: "99.2% readiness; 0 critical; 0 high; deployment ready"
@@ -724,7 +724,7 @@ phases:
     sweep_id: SWEEP-M12-DOCS-IA
     gaps: 10
     sub_phases: 5
-    file: "cortex-registry/planning/phases/v2/phase-m12-docs-ia.yaml"
+    file: "cortex-registry/planning/phases/v2/phase-m12-docs-ia-and-final-cleanup.yaml"
     note: "P0 — COMPLETE. Docs IA remap artifacts, cleanup report, and parity ledger delivered with passing targeted/smoke/preflight gates."
 
   # Phase M13 — FINAL REFACTOR & CLEANUP (depends: M12, always last)

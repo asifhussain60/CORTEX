@@ -179,7 +179,7 @@ class CortexMasterPlanTool(ConsolidatedTool):
             "Manage CORTEX phase lifecycle via CortexMasterPlanOrchestrator. "
             "Operations: create (new sequential phase), sync (folder status), "
             "next_sequence (compute next phase number), load_template (workflow YAML). "
-            "Authority: cortex-master.yaml is SSOT for all phase status."
+            "Authority: master-plan registry is SSOT for all phase status."
         )
 
     @property

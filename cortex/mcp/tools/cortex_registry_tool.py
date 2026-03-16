@@ -6,7 +6,7 @@ Exposes all 5 IntelligenceFacade registry methods as a single MCP tool:
   - query_governance : load governance rules (optionally filtered by severity)
   - query_workflows  : load workflow templates (optionally filtered by category)
   - query_patterns   : load custom patterns (optionally filtered by tag)
-  - query_plans      : load cortex-master.yaml phase index (optionally filtered by status)
+    - query_plans      : load master-plan phase index (v2-first, status-filterable)
   - registry_index   : full cortex-registry/ tree scan (optionally filtered by domain)
 
 CORE Rules: CORE-008 (TDD-first), CORE-011 (type hints), CORE-012 (docstrings),
@@ -192,7 +192,7 @@ class CortexRegistry(ConsolidatedTool):
         return ToolResult(success=True, data={"patterns": patterns})
 
     def _query_plans(self, status: Optional[str]) -> ToolResult:
-        """Return phases from cortex-master.yaml, optionally filtered by status."""
+        """Return phases from master-plan index, optionally filtered by status."""
         facade = self._get_facade()
         plan_index = facade.load_plans(status=status)
         phases = [asdict(p) for p in plan_index.phases]

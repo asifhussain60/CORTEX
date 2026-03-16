@@ -21,6 +21,7 @@ CORE Rules: CORE-008, CORE-011, CORE-012, CORE-035 (single canonical)
 from __future__ import annotations
 
 import logging
+import os
 from pathlib import Path
 import threading
 from typing import Any, Dict, List, Optional
@@ -297,11 +298,16 @@ class IntelligenceFacade:
         self,
         status: Optional[str] = None,
     ) -> "Any":
-        """Parse ``cortex-master.yaml`` and return a typed ``MasterPlanIndex``.
+        """Parse master-plan YAML and return a typed ``MasterPlanIndex``.
 
-        Reads the THIN INDEX (CORE: ≤500 lines) and constructs a
-        ``MasterPlanIndex`` containing one ``PhaseEntry`` per phase.  When
-        ``status`` is provided, the index is filtered before return.
+        Resolution order is v2-first for CORTEX-V2 alignment:
+
+        1. ``$CORTEX_MASTER_PLAN_PATH`` when set
+        2. ``cortex-registry/cortex-master-v2.yaml``
+        3. ``cortex-registry/cortex-master.yaml`` (compat fallback)
+
+        The first parseable source is returned. When ``status`` is provided,
+        the index is filtered before return.
 
         Args:
             status: Optional status filter (e.g. ``'PLANNED'``, ``'COMPLETE'``).
@@ -314,30 +320,60 @@ class IntelligenceFacade:
         from cortex.intelligence.models.master_plan_index import MasterPlanIndex, PhaseEntry
         try:
             import yaml as _yaml
-            master_path = (
-                Path(__file__).resolve().parent.parent.parent
-                / "cortex-registry"
-                / "cortex-master.yaml"
-            )
-            raw_text = master_path.read_text(encoding="utf-8")
-            source_line_count = raw_text.count("\n") + 1
-            data = _yaml.safe_load(raw_text) or {}
+            registry_root = Path(__file__).resolve().parent.parent.parent / "cortex-registry"
+            override_path = os.getenv("CORTEX_MASTER_PLAN_PATH", "").strip()
 
-            phases_raw: List[Any] = data.get("phases", [])
-            phase_entries: List[PhaseEntry] = []
-            for entry in phases_raw:
-                if isinstance(entry, dict) and entry.get("id"):
-                    phase_entries.append(PhaseEntry.from_dict(entry))
-
-            index = MasterPlanIndex(
-                phases=phase_entries,
-                source_line_count=source_line_count,
-                source_path=str(master_path),
-                metadata={k: v for k, v in data.items() if k != "phases"},
+            candidate_paths: List[Path] = []
+            if override_path:
+                candidate_paths.append(Path(override_path))
+            candidate_paths.extend(
+                [
+                    registry_root / "cortex-master-v2.yaml",
+                    registry_root / "cortex-master.yaml",
+                ]
             )
-            if status is not None:
-                index = index.filter_by_status(status)
-            return index
+
+            seen: set[str] = set()
+            deduped_candidates: List[Path] = []
+            for candidate in candidate_paths:
+                key = str(candidate)
+                if key not in seen:
+                    deduped_candidates.append(candidate)
+                    seen.add(key)
+
+            for master_path in deduped_candidates:
+                try:
+                    if not master_path.exists():
+                        continue
+
+                    raw_text = master_path.read_text(encoding="utf-8")
+                    source_line_count = raw_text.count("\n") + 1
+                    data = _yaml.safe_load(raw_text) or {}
+
+                    phases_raw: List[Any] = data.get("phases", [])
+                    phase_entries: List[PhaseEntry] = []
+                    for entry in phases_raw:
+                        if isinstance(entry, dict) and entry.get("id"):
+                            phase_entries.append(PhaseEntry.from_dict(entry))
+
+                    index = MasterPlanIndex(
+                        phases=phase_entries,
+                        source_line_count=source_line_count,
+                        source_path=str(master_path),
+                        metadata={k: v for k, v in data.items() if k != "phases"},
+                    )
+                    if status is not None:
+                        index = index.filter_by_status(status)
+                    return index
+                except Exception as per_file_exc:
+                    logger.debug(
+                        "IntelligenceFacade.load_plans candidate failed (%s): %s",
+                        master_path,
+                        per_file_exc,
+                    )
+                    continue
+
+            return MasterPlanIndex()
         except Exception as exc:
             logger.debug("IntelligenceFacade.load_plans: %s", exc)
             from cortex.intelligence.models.master_plan_index import MasterPlanIndex
