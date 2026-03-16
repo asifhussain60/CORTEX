@@ -7,7 +7,7 @@ entries:
   recorded_at: '2026-03-16T10:17:38.929610+00:00'
   context: {}
   _context_hash: d7517139
-  occurrence_count: 22
+  occurrence_count: 24
   error: '2 governance violation(s): CORE-030 VIOLATION: Pre-execution discovery not
     performed. Run cortex_discover before IMPLEMENT/DESIGN/REFACTOR operations.; CORE-008
     VIOLATION: TDD required - tests must exist before code implementation'

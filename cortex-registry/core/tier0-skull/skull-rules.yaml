@@ -2376,7 +2376,7 @@ rules:
           - ".github/prompts/cortex-architect.prompt.md (IMPLEMENT/FIX/REFACTOR modes)"
           - ".github/prompts/CORTEX.prompt.md (FIX mode + operation checklist)"
           - ".github/agents/core/cortex-executor.md (execution flow)"
-          - ".github/agents/support/cortex-vacuum.md (cleanup flow)"
+          - ".claude/agents/cortex-vacuum.md (cleanup flow)"
           - ".github/agents/support/cortex-debugger.md (debug flow)"
         action: "Convergence step explicitly listed in mode sequence"
       pre_commit:

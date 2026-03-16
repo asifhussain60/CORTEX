@@ -148,11 +148,9 @@ pypdf>=3.0.0               # PDF document reading [OPTIONAL]
 # Tree-sitter for multi-language parsing
 tree-sitter>=0.21.0        # Universal parser generator — ≥0.21 required by tree-sitter-c-sharp 0.23+ [OPTIONAL]
 # tree-sitter-languages>=1.10.2  # INSTALLED (1.10.2) — keep for backwards compat but prefer individual grammars below
-tree-sitter-python>=0.21.0     # Python grammar for LENS Python adapter [OPTIONAL]
 tree-sitter-javascript>=0.21.0 # JavaScript/TypeScript grammar for LENS adapters [OPTIONAL]
 tree-sitter-c-sharp>=0.21.0    # C# grammar for LENS CSharp adapter — installed 0.23.1 [OPTIONAL]
-tree-sitter-typescript>=0.21.0 # TypeScript grammar for LENS TypeScript adapter — installed 0.23.2 [OPTIONAL]
-# tree-sitter-java>=0.21.0       # Java grammar — not yet needed [OPTIONAL]
+# tree-sitter-java>=0.21.0       # Java grammar — optional until Java adapter dependency is enabled [OPTIONAL]
 
 # ============================================================================
 # DATA SCIENCE & ANALYSIS (Optional but recommended) [OPTIONAL]
@@ -230,8 +228,6 @@ sqlalchemy==2.0.23        # ORM and database abstraction (query builder; CORTEX 
 # ============================================================================
 
 cryptography==41.0.7      # Cryptographic library (hash chains, encryption)
-python-jose==3.3.0        # JWT token handling
-pycryptodome==3.19.0      # Additional crypto primitives
 
 # ============================================================================
 # LOGGING & OBSERVABILITY [PREFLIGHT]
@@ -239,7 +235,6 @@ pycryptodome==3.19.0      # Additional crypto primitives
 
 structlog==23.2.0         # Structured logging (audit trails) [PREFLIGHT]
 python-json-logger==2.0.7 # JSON-formatted logging [PREFLIGHT]
-py-zipkin==1.2.8          # Distributed tracing [OPTIONAL]
 opentelemetry-api>=1.20.0 # OpenTelemetry tracing API — used by cortex/opentelemetry_tracing.py [OPTIONAL]
 opentelemetry-sdk>=1.20.0 # OpenTelemetry SDK for span/trace export [OPTIONAL]
 

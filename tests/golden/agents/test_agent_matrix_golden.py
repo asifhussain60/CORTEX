@@ -38,7 +38,7 @@ class TestAllAgentFilesExist:
         ".github/agents/core/cortex-environment-setup.md",
         ".github/agents/core/request-rephrase-orchestrator.md",
         ".github/agents/support/cortex-debugger.md",
-        ".github/agents/support/cortex-vacuum.md",
+        ".claude/agents/cortex-vacuum.md",
         ".github/agents/AGENT-INDEX.md",
     ]
 

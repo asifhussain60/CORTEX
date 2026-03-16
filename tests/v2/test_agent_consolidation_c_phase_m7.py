@@ -10,7 +10,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 def test_m7c_vacuum_agent_merged() -> None:
     """Vacuum capabilities consolidate into a single support agent."""
-    merged_path = REPO_ROOT / ".github/agents/support/cortex-vacuum.md"
+    merged_path = REPO_ROOT / ".claude/agents/cortex-vacuum.md"
     assert merged_path.exists(), "Merged vacuum agent missing"
 
     content = merged_path.read_text(encoding="utf-8")

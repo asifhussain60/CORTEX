@@ -136,7 +136,7 @@ Only these paths are eligible for sync to target runtime:
 - `.github/agents/core/cortex-audit-coordinator.md`
 - `.github/agents/core/cortex-interactive.md`
 - `.github/agents/core/cortex-debugger.md`
-- `.github/agents/core/cortex-vacuum.md`
+- `.claude/agents/cortex-vacuum.md`
 - `.github/copilot-instructions.md`
 
 ```yaml

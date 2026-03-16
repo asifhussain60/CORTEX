@@ -28,9 +28,9 @@ def _make_workspace(tmp_path: Path) -> Path:
         sub.mkdir()
         (sub / "keep_me.py").write_text("# protected\n")
 
-    # cortex-docs (may not exist on disk — protect by name)
-    (tmp_path / "cortex-docs").mkdir()
-    (tmp_path / "cortex-docs" / "index.html").write_text("<html/>")
+    # docs (canonical documentation root)
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "docs" / "index.html").write_text("<html/>")
 
     # Unprotected clutter that may be touched
     (tmp_path / "junk_orphan").mkdir()
@@ -58,7 +58,7 @@ def test_vacuum_protected_roots_contains_tests() -> None:
 
 def test_vacuum_protected_roots_contains_required_entries() -> None:
     """GV-033: All mandatory roots must be present."""
-    required = {"cortex", "cortex-registry", "tests", ".github", "scripts", "cortex-docs"}
+    required = {"cortex", "cortex-registry", "tests", ".github", "scripts", "docs"}
     assert required.issubset(VACUUM_PROTECTED_ROOTS)
 
 
