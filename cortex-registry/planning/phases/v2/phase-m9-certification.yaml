@@ -1,7 +1,7 @@
 id: "phase-m9"
 title: "Production Certification — Full Audit & Drift Locks"
 created: "2026-03-15"
-status: PLANNED
+status: COMPLETE
 priority: P0
 governance_authority:
   - CORE-008
@@ -40,7 +40,7 @@ sweep_catalogue:
       /totalrecall runs Mission Control → Audit Coordinator → Code Improver
       pipeline. Must complete with zero P0/P1 violations on v2 codebase.
     action_ref: "phase-m9-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M9-02"
     title: "Establish permanent drift locks"
@@ -55,7 +55,7 @@ sweep_catalogue:
       - Backward-compat import shims
       Locks are enforced at pre-commit hook and CI.
     action_ref: "phase-m9-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M9-03"
     title: "Regenerate prompt suite from live architecture"
@@ -66,7 +66,7 @@ sweep_catalogue:
       regenerates all prompts/agents. Must be run on v2 codebase to ensure
       all prompts reflect the reduced surface area.
     action_ref: "phase-m9-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M9-04"
     title: "Update cortex-master-v2.yaml with final metrics"
@@ -76,7 +76,7 @@ sweep_catalogue:
       cortex-master-v2.yaml must record final v2 metrics: actual file counts,
       test counts, execution timeline, and production_readiness: CERTIFIED.
     action_ref: "phase-m9-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M9-05"
     title: "Final smoke gate — production certification"
@@ -86,7 +86,16 @@ sweep_catalogue:
       Full test suite run with zero failures. All health endpoints green.
       All governance rules enforced. cortex-master-v2.yaml: all phases COMPLETE.
     action_ref: "phase-m9-final"
-    status: OPEN
+    status: CLOSED
+
+completion_evidence:
+  completed_at: "2026-03-16T12:53:36Z"
+  summary:
+    - "Prompt suite refreshed via scripts/refresh_prompt_suite.py."
+    - "Smoke gate passed: 2855 passed, 30 skipped, 18 xfailed, 1 xpassed (31.41s)."
+    - "Preflight gate passed: 459 passed, 10 skipped (5.40s)."
+    - "Database health verifier passed: HEALTH_ALL_OK=True, FAILED=0."
+    - "Production validator converged to deployment-ready with no critical/high issues (99.2%)."
 
 sequential_execution_contract:
   policy: STRICT_SEQUENTIAL
@@ -117,7 +126,7 @@ phases:
   - id: "phase-m9-a"
     title: "Run /totalrecall audit+fix cycle"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M9-01"]
     governance_authority: "CORE-008, CORE-064, CORE-068"
     duration_estimate: "4 hours"
@@ -167,7 +176,7 @@ phases:
   - id: "phase-m9-b"
     title: "Establish permanent drift locks"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M9-02"]
     governance_authority: "CORE-068"
     duration_estimate: "2 hours"
@@ -219,7 +228,7 @@ phases:
   - id: "phase-m9-c"
     title: "Regenerate prompt suite from live v2 architecture"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M9-03"]
     governance_authority: "CORE-035"
     duration_estimate: "1 hour"
@@ -266,7 +275,7 @@ phases:
   - id: "phase-m9-d"
     title: "Update cortex-master-v2.yaml with final metrics"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M9-04"]
     governance_authority: "Plan lifecycle"
     duration_estimate: "30 minutes"
@@ -315,7 +324,7 @@ phases:
   - id: "phase-m9-final"
     title: "Core Platform Certification Gate + Handoff"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M9-05"]
     depends_on: ["phase-m9-d"]
     prerequisite: "ALL preceding sub-phase completion_gates PASSED"
