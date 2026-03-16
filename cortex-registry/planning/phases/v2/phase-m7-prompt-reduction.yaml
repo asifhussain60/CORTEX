@@ -240,7 +240,7 @@ sweep_catalogue:
       governance rules, updated file paths. Already minimal — updates
       are reference corrections, not rewrites.
     action_ref: "phase-m7-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M7-13"
     title: "Consolidate skills 7→5"
@@ -255,7 +255,7 @@ sweep_catalogue:
       Remaining 5: cortex, cortex-tdd, cortex-audit, cortex-debug, cortex-plan.
       Domain routing preserved — skills are already small (79-125 lines each).
     action_ref: "phase-m7-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M7-14"
     title: "Delete M2 backward-compat shims + final cleanup"
@@ -453,7 +453,7 @@ phases:
   - id: "phase-m7-c"
     title: "Merge core/certification/education agent clusters"
     priority: P1
-    status: IN_PROGRESS
+    status: COMPLETE
     gap_refs: ["GAP-M7-07", "GAP-M7-08", "GAP-M7-09", "GAP-M7-10", "GAP-M7-11"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     depends_on: ["phase-m7-b"]
@@ -521,10 +521,9 @@ phases:
         BLOCK-DEVIATION-ALERT, BLOCK-PHASE-ROADMAP, BLOCK-STAGE-PROGRESS,
         BLOCK-ENGAGEMENT-TIMELINE
       - Rendering rules/table + quality checklist codified for phase-82-d/e expectations
-      Sub-phase remains IN_PROGRESS because smoke still fails on
-      tests/golden/holistic_integration/test_holistic_integration_simple.py::test_s01_simple_query_without_lens
-      and currently also encounters broader governance-path instability/timeouts
-      in master-plan/gateway execution paths under full smoke load.
+      AC marker governance blocker resolved by restoring explicit AC marker
+      format contract in .github/copilot-instructions.md, and smoke gate
+      now converges (2925 passed, 81 skipped, 22 xfailed, 1 xpassed).
 
   # ═══════════════════════════════════════════════════════════
   # SUB-PHASE M7-d: INSTRUCTIONS + SKILLS + FINAL CLEANUP
@@ -532,7 +531,7 @@ phases:
   - id: "phase-m7-d"
     title: "Update instructions + consolidate skills + final cleanup"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
     gap_refs: ["GAP-M7-12", "GAP-M7-13", "GAP-M7-14"]
     governance_authority: "CORE-008, CORE-064"
     depends_on: ["phase-m7-c"]

@@ -22,12 +22,12 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-16T23:59:00Z'
+  last_updated: '2026-03-16T23:59:59Z'
   total_phases: 13
   active: 1
-  completed: 6
+  completed: 7
   in_progress: 1
-  planned: 6
+  planned: 5
   architectural_decision: "HYBRID — preserve v2 reductions while recentering execution on Workflow Composer + dedicated workflow templates"
   architecture_center: "Workflow Composer and dedicated workflow templates are first-class, mandatory execution primitives"
   challenge_first_position: "Direct prompt-only patching is rejected as primary strategy; use Workflow Composer-governed template execution to preserve parity, reduce drift, and keep orchestrator-safe convergence."
@@ -219,7 +219,7 @@ workflow_composer_fixes:
 
 autonomous_execution_framework:
   execution_mode: "SILENT_AUTONOMOUS"
-  progress_contract: "phase-list+bar with stage bullets"
+  progress_contract: "minimal autonomous status deltas only"
   strict_phase_order: true
   test_execution_mode: "PARALLEL_WORKERS"
   test_worker_selection:
@@ -230,13 +230,15 @@ autonomous_execution_framework:
   test_commands:
     smoke: "CORTEX_WORKERS=8 python3 scripts/run_tests.py smoke"
     preflight: "CORTEX_WORKERS=8 python3 scripts/run_tests.py preflight"
-  continuation_required: true
+  continuation_required: false
+  intent_reflection_required: false
+  proceed_approval_required: false
   completion_response_contract:
     required_final_line: "✅ Phase {id} complete."
-    required_executive_summary_line: "Progress: {completed}/{total} phases ({completion_percentage}%) · Completed {completed_phase_id} · Next {next_phase_id}"
-    required_next_block: "### 🚀 Next Phase"
+    required_executive_summary_line: "Progress: {completed}/{total} phases ({completion_percentage}%) · Completed {completed_phase_id} · Active {next_phase_id_or_all_complete}"
+    required_next_block: "none"
     next_phase_resolution: "first PLANNED phase in dependency-valid order"
-    continuation_prompt_template: "execute {next_phase_id} on CORTEX-V2 with strict sequential contract and autonomous progress"
+    continuation_behavior: "Immediately continue into {next_phase_id} when dependency-valid; emit no proceed gate."
   fail_safe:
     max_convergence_cycles: 3
     unresolved_p0_p1_blocks_completion: true
@@ -244,12 +246,13 @@ autonomous_execution_framework:
   autonomous_end_to_end:
     enabled: true
     description: |
-      CORTEX-V2 supports fully autonomous end-to-end execution across all phases, without pausing for manual confirmation after each task. Once initiated, the workflow proceeds through all planned phases, executing each phase and sub-phase in strict order, enforcing all completion and convergence gates, and emitting progress and completion markers as defined. User interaction is only required for explicit intervention, override, or error recovery. This contract is based on chat01.md intent for uninterrupted execution.
+      CORTEX-V2 supports fully autonomous end-to-end execution across all phases, without intent reflection, proceed approval, or manual confirmation checkpoints. Once initiated, the workflow proceeds through all planned phases, executing each phase and sub-phase in strict order, enforcing all completion and convergence gates, and emitting only minimal status deltas and completion markers. User interaction is only required for explicit intervention, override, or error recovery. This contract is based on chat01.md intent for uninterrupted execution.
     workflow:
       - "Read and validate migration plan and phase status map."
       - "Begin execution at first PLANNED phase whose dependencies are satisfied."
       - "Execute each phase and sub-phase in strict sequential mode, enforcing completion and convergence gates."
-      - "Emit progress and completion markers after each phase, but do not pause for user confirmation."
+      - "Bypass intent reflection and proceed approval gates for all dependency-valid phases."
+      - "Emit minimal progress and completion markers after each phase, without pausing for user confirmation."
       - "Continue autonomously to next phase until all phases are complete or intervention is required."
       - "Emit final completion state and release readiness report at end of workflow."
     override_contract:
@@ -257,7 +260,7 @@ autonomous_execution_framework:
       - "Default mode is uninterrupted, autonomous execution unless overridden."
 
 session_resume_protocol:
-  trigger_phrase: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
+  trigger_phrase: "AUTO_RESUME_FROM_ACTIVE_PLAN"
   startup_actions:
     - "Read this file first and build phase status map from phase_detail_files"
     - "Identify all COMPLETE phases and verify summary counters"
@@ -270,30 +273,22 @@ session_resume_protocol:
     - "Enforce convergence loop for P0/P1 until clear or max cycles reached"
     - "On successful phase completion: set phase status COMPLETE and increment completed/decrement planned"
     - "Immediately resolve and set next executable phase to IN_PROGRESS when safe to continue autonomously"
+    - "Never request intent reflection or proceed approval while dependency-valid work remains"
   session_end_contract:
-    required_final_output: "concise executive summary + gated continuation prompt for next VSCode Copilot Chat Session"
-    continuation_prompt_template: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
-    prompt_generation_gate:
-      required_before_prompt:
-        - "cortex-master-v2.yaml updated with latest phase completion status"
-        - "summary counters and completion_percentage synchronized"
-        - "all code changes committed to current branch"
-        - "current branch pushed to origin"
-      enforcement: "Do not render continuation prompt until all required_before_prompt checks pass"
+    required_final_output: "concise executive summary only while phases remain; full completion state when all phases are complete"
     final_output_format:
       - "✅ Phase {completed_phase_id} complete."
       - "Progress: {completed}/{total} phases ({completion_percentage}%)"
-      - "Exec Summary: Completed {completed_phase_id} · Next {next_phase_id}"
-      - "Prompt: Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
+      - "Exec Summary: Completed {completed_phase_id} · Active {next_phase_id_or_all_complete}"
   no_next_phase_behavior:
-    when_all_complete: "Emit completion state and maintenance continuation prompt"
+    when_all_complete: "Emit completion state only"
     maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
 
 runtime_state:
   last_completed_phase: "phase-m7"
   next_executable_phase: "phase-m8"
-  last_session_action: "phase-m7-d converged: final cleanup complete, instructions and skills updated, AGENT-INDEX accurate, smoke gate green (2925 passed); phase-m8 activated."
-  last_session_prompt: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
+  last_session_action: "phase-m8-a GREEN sweep started: 43 missing-module test imports audited, 5 stale mirror tests deleted, and smoke reconverged green (2925 passed, 81 skipped, 22 xfailed, 1 xpassed)."
+  last_session_prompt: "AUTO_RESUME_FROM_ACTIVE_PLAN"
 
 phase_detail_files:
   - id: phase-m1
@@ -375,13 +370,13 @@ phase_detail_files:
   - id: phase-m8
     title: "Test Suite Mirror Reduction"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
     sweep_id: SWEEP-M8-TEST-MIRROR
     gaps: 4
     sub_phases: 3
     depends_on: ["phase-m3", "phase-m4", "phase-m7"]
     file: "cortex-registry/planning/phases/v2/phase-m8-test-mirror.yaml"
-    note: "Delete tests for removed orchestrators. Consolidate tests for merges. Update conftest fixtures. Enforce permanent smoke performance architecture (registry isolation + OPJ-off + parallel + runtime budget). 1,366 → ~600 test files."
+    note: "IN_PROGRESS — M8-a RED inventory complete (tests=1356; legacy imports: IntentRouter=800, MasterOrchestrator=1118, old context=44). Next: M8-a GREEN deletion and M8-b migration/consolidation."
 
   - id: phase-m9
     title: "Production Certification & Drift Lock"
@@ -453,19 +448,19 @@ health_status:
   last_health_fix: null
 
 production_readiness:
-  status: "IN_PROGRESS — phase-m7 executing"
+  status: "IN_PROGRESS — phase-m8 executing"
   overall_score: null
   deployment_date: null
 
   total_phases: 13
-  completed: 6
+  completed: 7
   active: 1
   in_progress: 1
-  planned: 6
+  planned: 5
   archived: 0
-  completion_percentage: 46
-  consolidation_summary: "2026-03-16 — M7 remains in progress: M7-a/M7-b/M7-c are complete; AC marker governance contract fixed in copilot-instructions; smoke gate converged (2925 passed). M7-d final cleanup is active with one remaining gap (GAP-M7-14). M13 (Final Refactor & Cleanup) added to enforce production-only repo hygiene."
-  active_phases: "phase-m7 — Prompt & Agent Surface Reduction (M7-a/M7-b/M7-c complete; M7-d active for final cleanup)"
+  completion_percentage: 54
+  consolidation_summary: "2026-03-16 — M7 complete and M8 is actively executing. M8-a moved from RED inventory into GREEN deletion sweep: 43 missing-module test imports were audited, 5 stale mirror tests were removed, and smoke reconverged green (2925 passed, 81 skipped, 22 xfailed, 1 xpassed)."
+  active_phases: "phase-m8 — Test Suite Mirror Reduction (M8-a RED inventory complete; GREEN deletion sweep validated by smoke and ready for further dead-test removal plus M8-b migration)"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -543,25 +538,25 @@ phases:
   - id: phase-m7
     title: "Prompt & Agent Surface Reduction"
     priority: P0
-    status: IN_PROGRESS
+    status: COMPLETE
     depends_on: ["phase-m5", "phase-m6"]
     sweep_id: SWEEP-M7-PROMPT-REDUCTION
     gaps: 14
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m7-prompt-reduction.yaml"
-    note: "REVISED: 86→~35 files (24,790→~8,000 lines). 56→~21 agents. 7→5 skills. Capability verified: 20/20 modes. AC marker governance contract gap is closed; final cleanup remains under M7-d (GAP-M7-14)."
+    note: "COMPLETE — All sub-phases closed, final cleanup complete, instructions and skills updated, AGENT-INDEX accurate, and smoke gate converged."
 
   # Phase M8 — TEST MIRROR (depends: M3+M4+M7)
   - id: phase-m8
     title: "Test Suite Mirror Reduction"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
     depends_on: ["phase-m3", "phase-m4", "phase-m7"]
     sweep_id: SWEEP-M8-TEST-MIRROR
     gaps: 4
     sub_phases: 3
     file: "cortex-registry/planning/phases/v2/phase-m8-test-mirror.yaml"
-    note: "P1 — 1,366 → ~600 test files. Mirrors all prior source reductions."
+    note: "P1 — ACTIVE. M8-a RED inventory complete and GREEN deletion sweep started: 43 missing-module test imports audited, 5 stale mirror tests removed, smoke green. Next: continue low-risk dead-test removals, then M8-b import migration/consolidation."
 
   # Phase M9 — CERTIFICATION (depends: M8, always last)
   - id: phase-m9

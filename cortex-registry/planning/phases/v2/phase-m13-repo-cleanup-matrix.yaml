@@ -1,0 +1,23 @@
+# Phase M13 — Migration/Retention/Sunset Matrix
+# Authority: CORTEX Architect | 2026-03-16
+
+matrix:
+  retain:
+    - Workflow Composer (YAML-governed orchestration/routing)
+    - Dedicated workflow templates (declarative contracts, delegate to Claude agents/skills)
+    - Governance, audit, compliance wrappers (CORTEX-native)
+    - User response rendering (VSCode Copilot Chat, response templates)
+    - Agent/skill registry and discoverability mechanisms
+  migrate:
+    - All business/technical logic from legacy orchestrators/modules to Claude-style agents, skills, subagents
+    - Workflow template steps to invoke Claude agents/skills, not direct Python logic
+    - Legacy orchestrators: migrate core logic to agents/skills; retain orchestration shell only for governance/routing if needed
+  sunset:
+    - Monolithic orchestrators/modules after migration is validated
+    - Direct Python implementations of workflow steps (replace with agent/skill calls)
+    - Ad hoc/hardcoded workflow logic (remove in favor of template-driven, agent/skill-based execution)
+notes:
+  - All migration, retention, and sunsetting actions must be tracked and executed via phase YAML.
+  - No direct code or ad hoc script execution outside YAML-governed workflows.
+  - All agent/skill/subagent invocations must be referenced in workflow templates.
+  - All operational work, migration, and cleanup must be executed via YAML-governed workflow templates and phase plans.

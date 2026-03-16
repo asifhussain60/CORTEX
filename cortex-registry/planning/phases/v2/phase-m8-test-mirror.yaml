@@ -1,7 +1,7 @@
 id: "phase-m8"
 title: "Test Suite Mirror — Delete, Consolidate, Update"
 created: "2026-03-15"
-status: PLANNED
+status: IN_PROGRESS
 priority: P1
 governance_authority:
   - CORE-008
@@ -105,11 +105,28 @@ phase_continuation:
     next_block: "### 🚀 Next Phase"
     continuation_prompt: "execute phase-m9 on CORTEX-V2 with strict sequential contract and autonomous progress"
 
+execution_log:
+  last_updated: "2026-03-16"
+  current_focus: "phase-m8-a GREEN deletion sweep"
+  evidence:
+    - "Test files currently detected: 1356"
+    - "Current test_*.py count after first deletion sweep: 1223"
+    - "Legacy import signals: IntentRouter=800, MasterOrchestrator=1118, old context modules=44"
+    - "V2 import signals: intent_gateway=4, execution_engine=4, context_validator=1"
+    - "Smoke gate already green in session using CORTEX_WORKERS=8 (exit code 0)"
+    - "Filesystem import audit found 43 test files importing missing cortex.* modules."
+    - "Deleted stale RED-phase mirror tests for retired modules: lens_synthesis, planning strategies, domain enhancement, enhanced refactoring, brain flush."
+    - "Post-sweep smoke gate passed: 2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 31.22s."
+  next_actions:
+    - "Continue phase-m8-a GREEN: sweep remaining missing-module tests and remove low-risk dead mirrors"
+    - "Execute phase-m8-b: migrate legacy imports and consolidate v2 integration suites"
+    - "Run coverage verification and close GAP-M8-04 in phase-m8-final"
+
 phases:
   - id: "phase-m8-a"
     title: "Delete test files for deleted modules"
     priority: P0
-    status: PLANNED
+    status: IN_PROGRESS
     gap_refs: ["GAP-M8-01"]
     governance_authority: "CORE-008, CORE-064"
     duration_estimate: "3 hours"

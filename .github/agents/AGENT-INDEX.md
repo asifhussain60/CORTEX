@@ -1,6 +1,6 @@
 # CORTEX Agent Index
 
-**Updated:** 2026-03-14 (System Check Sync) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
+**Updated:** 2026-03-16 (M7-c governance convergence) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
 **Phases:** 147 completed, 0 planned | **Tests:** ~21,269 | **Intent Types:** 33
 
@@ -229,10 +229,10 @@ are resolved or explicitly approved as WONT-FIX.
 
 | Category | Owner Agent |
 |----------|------------|
-| Challenge gate logic | cortex-holistic-validator.md |
+| Challenge gate logic | cortex-audit-coordinator.md |
 | Mode detection | cortex-architect.md |
 | Response formats | cortex-response-templates.md |
-| Validation sequences | cortex-holistic-validator.md |
+| Validation sequences | cortex-executor.md |
 
 ---
 
@@ -243,7 +243,7 @@ are resolved or explicitly approved as WONT-FIX.
 ```
 User Request
     ↓
-Load: cortex-holistic-validator.md
+Load: cortex-audit-coordinator.md
     ↓
 Execute holistic-validation-gate.yaml primitive (5 steps)
     ↓

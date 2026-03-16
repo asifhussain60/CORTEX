@@ -102,6 +102,13 @@ Never emit both. Never emit neither.
 - CORE-064: sweep completeness is required
 - CORE-068: detect-fix-rescan convergence loop is required
 
+### AC Marker Standard
+
+- ALL orchestrator traces MUST emit paired markers: `AC_START` and `AC_COMPLETE`
+- AC IDs MUST follow the canonical format: `AC-{DOMAIN}-{SEQUENCE}`
+- Example IDs: `AC-P89-001`, `AC-DOCGEN-20260224T000000`
+- Never emit orphaned `AC_START` markers without matching `AC_COMPLETE`
+
 ---
 
 ## 📦 CORTEX Snapshot (v2 Migration Context)
