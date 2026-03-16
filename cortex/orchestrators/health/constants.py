@@ -156,7 +156,7 @@ VACUUM_PROTECTED_ROOTS: FrozenSet[str] = frozenset({
     # Cross-platform scripts
     "scripts",
     # User-facing HTML documentation
-    "cortex-docs",
+    "docs",
 })
 """Canonical root-level protection guard (GV-028, GV-033) — Phase 151.
 

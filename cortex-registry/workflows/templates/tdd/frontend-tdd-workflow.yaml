@@ -373,7 +373,7 @@ parameters:
     - name: 'target_file'
       type: 'path'
       description: 'HTML file to analyze and modify'
-      example: 'cortex-docs/index.html'
+      example: 'docs/index.html'
       validation: 'must_exist'
     
     - name: 'screenshot_path'

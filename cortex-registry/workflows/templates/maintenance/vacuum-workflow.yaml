@@ -36,7 +36,7 @@ workflow:
     - 'README.md'
     - '.github/**/*.md'
     - '_workspaces/**'
-    - 'cortex-docs/archive/**'
+    - 'docs/archive/**'
 
   steps:
     - id: ac_start
@@ -58,8 +58,8 @@ workflow:
             exempt: '{{exempt_paths}}'
           root_artifacts:
             patterns: ['*.log', '*.tmp', '*.bak', '*_v2.*', '*_v3.*', '.DS_Store']
-          cortex_docs_violations:
-            location: 'cortex-docs/'
+          docs_violations:
+            location: 'docs/'
             forbidden: ['*.md']
             allowed: ['*.html', '*.css', '*.js', '*.ico', '*.json', '.nojekyll', 'robots.txt']
       outputs: ['cleanup_candidates']
@@ -74,9 +74,9 @@ workflow:
         candidates: '{{scan_sprawl.cleanup_candidates}}'
         age_threshold_days: 30
         categories:
-          - { type: 'phase', archive_to: 'cortex-docs/archive/phases/' }
-          - { type: 'report', archive_to: 'cortex-docs/archive/reports/' }
-          - { type: 'test_doc', archive_to: 'cortex-docs/archive/testing/' }
+          - { type: 'phase', archive_to: 'docs/archive/phases/' }
+          - { type: 'report', archive_to: 'docs/archive/reports/' }
+          - { type: 'test_doc', archive_to: 'docs/archive/testing/' }
           - { type: 'transient', action: 'delete' }
       outputs: ['cleanup_plan']
 
@@ -129,12 +129,12 @@ workflow:
         success_predicate: 'no_new_sprawl AND link_check_passed'
         max_cycles: 3
 
-    # Step 7: cortex-docs/ validation
-    - id: cortex_docs_validation
-      name: 'Validate cortex-docs/ — only HTML/CSS/JS/config'
+    # Step 7: docs/ validation
+    - id: docs_validation
+      name: 'Validate docs/ — only HTML/CSS/JS/config'
       depends_on: ['convergence_gate']
       action: 'command'
-      command: 'find cortex-docs/ -name "*.md" -not -name "ARCHITECTURE-RECOMMENDATION.md" -not -name "security.md" | wc -l'
+      command: 'find docs/ -name "*.md" -not -name "ARCHITECTURE-RECOMMENDATION.md" -not -name "SECURITY.md" | wc -l'
       gate:
         predicate: 'md_file_count == 0'
 

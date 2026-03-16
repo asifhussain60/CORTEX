@@ -6,8 +6,8 @@
 # Created: 2026-02-23
 # CORE Rules: CORE-002, CORE-028, CORE-035, CORE-049, CORE-064
 #
-# Purpose: Synchronise cortex-docs/.content/<category>/ files into a
-#   single flat directory at cortex-docs/.content/flat-files/, applying
+# Purpose: Synchronise docs/.content/<category>/ files into a
+#   single flat directory at docs/.content/flat-files/, applying
 #   the canonical naming convention:
 #
 #     nn-{foldername}-{descriptive-name}.md
@@ -48,8 +48,8 @@ workflow:
   name: "Documentation Flat-File Sync"
   category: "maintenance"
   description: |
-    Mirrors every file in cortex-docs/.content/<nn-category>/ folders into
-    cortex-docs/.content/flat-files/ using the naming convention:
+    Mirrors every file in docs/.content/<nn-category>/ folders into
+    docs/.content/flat-files/ using the naming convention:
 
       nn-{foldername}-{descriptive-name}.md
 
