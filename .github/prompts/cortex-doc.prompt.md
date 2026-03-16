@@ -511,6 +511,7 @@ WorkflowComposer → frontend/docs-html-design-workflow.yaml
 - Glassmorphism theme identity contract (page bg, card bg, accent tokens, hover states)
 - Typography rules (Inter / Space Grotesk / JetBrains Mono — immutable)
 - WCAG font size floor rules (P0 a11y gate — enforced before emitting any markup)
+- Global readability baseline: base copy MUST render at 16px minimum, and SHOULD scale to 18px on desktop-class viewports for long-form reading comfort
 - Visualisation rules (CSS flexbox pipelines, bubble grids, donut charts, D3.js SVG diagrams)
 - Layout rules (card width, padding, icon sizing, alternating panels, equal-height grids)
 - Card border & glow system, pipeline step cards, feature pills
@@ -602,6 +603,17 @@ Apply this standard whenever the target is an architecture page, system explaine
 | **Tooltip text** | `13px` | Inter (`var(--font-family-body)`) | 400 | < 11px |
 | **Annotation text** | `12px` | Inter (`var(--font-family-body)`) | 400 | < 10px |
 | **Badge/count text** | `16px` | Space Grotesk (`var(--font-family-heading)`) | 700 | < 14px |
+
+### Global Docs Typography Floor (P0 — Readability)
+
+| Context | Required Size |
+|---------|---------------|
+| Root/base page text | `16px` minimum |
+| Desktop long-form pages | `18px` preferred base |
+| Paragraphs, list items, table cells, labels, controls | MUST NOT render below `16px` |
+
+Enforcement directive:
+- All `docs/**/*.html` views SHALL inherit a global typography floor that guarantees readable text at `16px` minimum while allowing `18px` base scaling on larger screens.
 
 #### SVG Colour & Contrast Rules
 

@@ -5,6 +5,30 @@
   --cortex-enhance-text: #e2e8f0;
   --cortex-enhance-muted: #94a3b8;
   --cortex-enhance-accent: #22d3ee;
+  --cortex-font-min: 16px;
+  --cortex-font-desktop: 18px;
+}
+
+html {
+  font-size: var(--cortex-font-min) !important;
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: var(--cortex-font-desktop) !important;
+  }
+}
+
+body {
+  font-size: 1rem !important;
+}
+
+body :where(p, li, td, th, label, input, textarea, select, button, figcaption, summary, blockquote) {
+  font-size: 1rem !important;
+}
+
+body :where(.d3-tooltip, [class*="tooltip"]) {
+  font-size: 1rem !important;
 }
 
 .cortex-enhance-wrap {
