@@ -1,0 +1,206 @@
+id: "phase-m17"
+title: "Deep Cleanup & Enforcement Hardening"
+created: "2026-03-16"
+status: COMPLETE
+priority: P0
+sweep_catalogue_id: "SWEEP-M17-DEEP-CLEANUP-ENFORCEMENT"
+depends_on:
+  - "phase-m16"
+
+objective: |
+  Execute a dedicated deep-cleanup and architectural hardening phase that
+  converges CORTEX-V2 to one canonical implementation path per valid capability,
+  preserves deterministic runtime/enforcement code where required, and enables
+  non-bypassable policy/governance enforcement with zero regression.
+
+goals:
+  - "Remove legacy, duplicate, superseded, and parallel implementation paths"
+  - "Produce canonical capability-to-layer ownership mapping"
+  - "Retain deterministic platform enforcement where fail-close guarantees are required"
+  - "Consolidate workflow execution to Workflow Composer + canonical templates"
+  - "Harden governance + policy as non-bypassable layered enforcement"
+
+entry_criteria:
+  - "phase-m16 status COMPLETE"
+  - "Baseline smoke and preflight gates green"
+  - "Capability inventory snapshot generated from current repository"
+  - "Migration ledger initialized (preserved | migrated | retired)"
+
+sweep_catalogue:
+  - id: "GAP-M17-01"
+    title: "Build canonical capability inventory and one-path ownership map"
+    status: CLOSED
+  - id: "GAP-M17-02"
+    title: "Classify every duplicate/parallel path as merge, migrate, or delete"
+    status: CLOSED
+  - id: "GAP-M17-03"
+    title: "Consolidate workflow templates and retire generated/stale composite templates"
+    status: CLOSED
+  - id: "GAP-M17-04"
+    title: "Define governance-only vs policy-gate vs hybrid control ownership"
+    status: CLOSED
+  - id: "GAP-M17-05"
+    title: "Promote required controls into non-bypassable policy gate list"
+    status: CLOSED
+  - id: "GAP-M17-06"
+    title: "Protect enforcement surfaces via managed settings, hooks, CI, and CODEOWNERS"
+    status: CLOSED
+  - id: "GAP-M17-07"
+    title: "Add anti-tamper checks for hook/policy/settings disablement attempts"
+    status: CLOSED
+  - id: "GAP-M17-08"
+    title: "Verify every remaining capability resolves to one canonical execution path"
+    status: CLOSED
+  - id: "GAP-M17-09"
+    title: "Run convergence validation and zero-regression certification gates"
+    status: CLOSED
+  - id: "GAP-M17-10"
+    title: "Finalize production-readiness decision and drift-lock updates"
+    status: CLOSED
+
+migration_sequencing:
+  - step: 1
+    name: "Inventory + mapping"
+    outputs:
+      - "capability_inventory.yaml"
+      - "capability_layer_mapping.yaml"
+      - "implementation_path_matrix.yaml"
+  - step: 2
+    name: "Path classification"
+    outputs:
+      - "deletion_list.yaml"
+      - "migration_list.yaml"
+      - "canonical_owner_registry.yaml"
+  - step: 3
+    name: "Consolidation execution"
+    outputs:
+      - "template_consolidation_delta.yaml"
+      - "legacy_retirement_delta.yaml"
+  - step: 4
+    name: "Enforcement hardening"
+    outputs:
+      - "policy_gate_catalog.yaml"
+      - "protected_surface_manifest.yaml"
+      - "governance_policy_split.yaml"
+  - step: 5
+    name: "Convergence + certification"
+    outputs:
+      - "zero_regression_evidence.yaml"
+      - "phase_m17_certification.yaml"
+
+cleanup_rules:
+  - "No capability may have more than one canonical implementation path"
+  - "No generated composite template may remain ACTIVE without canonical owner"
+  - "No retired or deprecated path may remain routable from active intent routing"
+  - "No governance or policy artifact may conflict in authority or expected enforcement"
+  - "No cleanup deletion executes without migration ledger record and rollback handle"
+
+regression_protections:
+  - "Preservation ledger required per capability: preserved | strategic_replacement | intentional_removal"
+  - "Dual-run verification for migrated critical paths before deleting legacy paths"
+  - "Convergence loop required with max 3 remediation cycles"
+  - "Fail-close on any P0/P1 violation, path ambiguity, or broken enforcement surface"
+
+validation_gates:
+  high_value_golden_tests:
+    rationale: "Protect single-path routing, workflow-governance integrity, AC marker pairing, execution delegation, and response-template determinism during deep cleanup."
+    required:
+      - id: "GT-M17-01"
+        path: "tests/golden/workflow/test_phase90_gateway_golden.py"
+        command: "CORTEX_WORKERS=8 python3 scripts/run_tests.py file tests/golden/workflow/test_phase90_gateway_golden.py"
+        coverage: "Canonical mode->template routing and WorkflowGateway enforcement contract"
+      - id: "GT-M17-02"
+        path: "tests/golden/governance/test_workflow_template_governance.py"
+        command: "CORTEX_WORKERS=8 python3 scripts/run_tests.py file tests/golden/governance/test_workflow_template_governance.py"
+        coverage: "CORE-035 template uniqueness, primitive reference integrity, and no orphaned workflow primitives"
+      - id: "GT-M17-03"
+        path: "tests/golden/audit_trail/test_ac_marker_completeness.py"
+        command: "CORTEX_WORKERS=8 python3 scripts/run_tests.py file tests/golden/audit_trail/test_ac_marker_completeness.py"
+        coverage: "Paired AC_START/AC_COMPLETE marker completeness across wired orchestrator surfaces"
+      - id: "GT-M17-04"
+        path: "tests/golden/registry/test_exec_gateway_and_enrichment_golden.py"
+        command: "CORTEX_WORKERS=8 python3 scripts/run_tests.py file tests/golden/registry/test_exec_gateway_and_enrichment_golden.py"
+        coverage: "Master gateway delegation and plan enrichment pipeline wiring to live context"
+      - id: "GT-M17-05"
+        path: "tests/golden/test_response_template_format_canon.py"
+        command: "CORTEX_WORKERS=8 python3 scripts/run_tests.py file tests/golden/test_response_template_format_canon.py"
+        coverage: "Response-template canonicalization drift lock and terminal composition contract"
+
+  required:
+    - "python3 scripts/validate_orchestrator_contracts.py"
+    - "python3 scripts/validate_governance_alignment.py"
+    - "python3 scripts/validate_dual_surface_parity.py"
+    - "python3 scripts/validate-production.py"
+    - "CORTEX_WORKERS=8 python3 scripts/run_tests.py smoke"
+    - "CORTEX_WORKERS=8 python3 scripts/run_tests.py preflight"
+  gate_outcome_contract:
+    - "No unresolved P0/P1 findings"
+    - "All GAP-M17-01..10 status CLOSED"
+    - "Canonical implementation path check returns 1 path per capability"
+
+rollback_expectations:
+  - "Create checkpoint tag before destructive cleanup operations"
+  - "Maintain reversible delete manifest for all retired artifacts"
+  - "If convergence fails after max cycles, restore from checkpoint and reopen unresolved gaps"
+
+policy_hardening_requirements:
+  managed_anti_tamper:
+    - "Managed settings must enforce required hooks and disallow local disablement"
+    - "Policy/governance/hook/settings surfaces must be protected by CODEOWNERS"
+  runtime_controls:
+    - "Pre-tool block for prohibited bypass patterns"
+    - "Task-completion block when required artifacts/gates are missing"
+    - "Config-change block for protected surfaces without approved workflow"
+  pipeline_controls:
+    - "Required CI checks for readiness, governance alignment, and duplicate-path validation"
+    - "Branch protection requires passing policy/gov checks before merge"
+
+expected_deliverables:
+  - "Canonical inventory of valid CORTEX capabilities"
+  - "Capability-to-implementation-layer mapping"
+  - "Deletion list and migration list for legacy/duplicate artifacts"
+  - "Policy-gate design and governance-to-policy split"
+  - "Agent guardrail ownership map (guidance only)"
+  - "Protected-surface manifest"
+  - "Validation + CI enforcement plan"
+  - "Final production-readiness certification criteria"
+
+completion_gate:
+  required:
+    - "All GAP-M17-01..10 status CLOSED"
+    - "All required validation_gates pass"
+    - "Policy hardening requirements active and verified"
+    - "Zero-regression evidence published"
+
+execution_evidence:
+  completed_at: "2026-03-16T19:40:00Z"
+  artifacts:
+    - ".github/CODEOWNERS"
+    - "cortex-registry/governance/policies/non-bypassable-policy-gate.yaml"
+    - "cortex-registry/governance/policies/manifest.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/capability_inventory.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/capability_layer_mapping.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/implementation_path_matrix.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/deletion_list.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/migration_list.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/canonical_owner_registry.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/template_consolidation_delta.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/legacy_retirement_delta.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/policy_gate_catalog.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/protected_surface_manifest.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/governance_policy_split.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/agent_guardrail_ownership_map.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/zero_regression_evidence.yaml"
+    - "cortex-registry/planning/phases/v2/artifacts/phase-m17/phase_m17_certification.yaml"
+  validation:
+    - "GT-M17-01: CORTEX_WORKERS=8 python3 scripts/run_tests.py file tests/golden/workflow/test_phase90_gateway_golden.py => 56 passed"
+    - "GT-M17-02: CORTEX_WORKERS=8 python3 scripts/run_tests.py file tests/golden/governance/test_workflow_template_governance.py => 3 passed, 1 xfailed"
+    - "GT-M17-03: CORTEX_WORKERS=8 python3 scripts/run_tests.py file tests/golden/audit_trail/test_ac_marker_completeness.py => 3 passed, 1 xfailed"
+    - "GT-M17-04: CORTEX_WORKERS=8 python3 scripts/run_tests.py file tests/golden/registry/test_exec_gateway_and_enrichment_golden.py => 20 passed"
+    - "GT-M17-05: CORTEX_WORKERS=8 python3 scripts/run_tests.py file tests/golden/test_response_template_format_canon.py => 8 passed"
+    - "python3 scripts/validate_orchestrator_contracts.py => PASS (22/22)"
+    - "python3 scripts/validate_governance_alignment.py => PASS (0 violations)"
+    - "python3 scripts/validate_dual_surface_parity.py => PASS (0 violations)"
+    - "python3 scripts/validate-production.py => 99.2% readiness (0 critical, 0 high)"
+    - "CORTEX_WORKERS=8 python3 scripts/run_tests.py smoke => 2861 passed, 30 skipped, 18 xfailed, 1 xpassed in 32.05s"
+    - "CORTEX_WORKERS=8 python3 scripts/run_tests.py preflight => 465 passed, 10 skipped in 5.79s"

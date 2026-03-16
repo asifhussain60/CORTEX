@@ -1,0 +1,13 @@
+id: "phase-m17-migration-list"
+authority: "phase-m17"
+generated_at: "2026-03-16"
+entries:
+  - source: "Governance controls without explicit policy-gate catalog"
+    target: "cortex-registry/governance/policies/non-bypassable-policy-gate.yaml"
+    status: "COMPLETE"
+  - source: "Unprotected enforcement ownership surfaces"
+    target: ".github/CODEOWNERS"
+    status: "COMPLETE"
+  - source: "Policy category index missing hard gate"
+    target: "cortex-registry/governance/policies/manifest.yaml"
+    status: "COMPLETE"

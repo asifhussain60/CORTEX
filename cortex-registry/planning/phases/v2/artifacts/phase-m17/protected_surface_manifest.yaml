@@ -1,0 +1,16 @@
+id: "phase-m17-protected-surface-manifest"
+authority: "phase-m17"
+generated_at: "2026-03-16"
+protected_surfaces:
+  - ".github/CODEOWNERS"
+  - ".github/copilot-instructions.md"
+  - "cortex-registry/governance/"
+  - "cortex-registry/workflows/templates/"
+  - "cortex-registry/cortex-master-v2.yaml"
+  - "scripts/validate_orchestrator_contracts.py"
+  - "scripts/validate_governance_alignment.py"
+  - "scripts/validate_dual_surface_parity.py"
+protection_mode:
+  ownership: "CODEOWNERS enforced"
+  ci_required: true
+  bypass_allowed: false

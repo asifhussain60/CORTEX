@@ -1,0 +1,22 @@
+id: "phase-m17-zero-regression-evidence"
+authority: "phase-m17"
+generated_at: "2026-03-16T19:40:00Z"
+results:
+  golden_tests:
+    - "GT-M17-01: 56 passed"
+    - "GT-M17-02: 3 passed, 1 xfailed (expected)"
+    - "GT-M17-03: 3 passed, 1 xfailed (expected)"
+    - "GT-M17-04: 20 passed"
+    - "GT-M17-05: 8 passed"
+  validators:
+    - "validate_orchestrator_contracts.py: PASS (22/22)"
+    - "validate_governance_alignment.py: PASS (0 violations)"
+    - "validate_dual_surface_parity.py: PASS (0 violations)"
+    - "validate-production.py: 99.2% readiness, 0 critical, 0 high"
+  convergence_gates:
+    - "smoke: 2861 passed, 30 skipped, 18 xfailed, 1 xpassed in 32.05s"
+    - "preflight: 465 passed, 10 skipped in 5.79s"
+assertions:
+  unresolved_p0_p1_findings: 0
+  canonical_one_path_contract: "PASS"
+  regression_detected: false

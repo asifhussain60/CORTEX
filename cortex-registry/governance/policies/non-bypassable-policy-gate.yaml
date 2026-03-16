@@ -1,0 +1,103 @@
+id: "non-bypassable-policy-gate"
+category: "policy-gate"
+status: "ACTIVE"
+authority: "phase-m17"
+description: |
+  Deterministic policy gate catalog for controls that must fail-close and cannot
+  rely on skills/prompts/agent guidance alone.
+
+enforcement_contract:
+  mode: "BLOCKING"
+  override_allowed: false
+  applies_to_intents:
+    - IMPLEMENT
+    - FIX
+    - REFACTOR
+    - AUDIT
+    - PLAN
+    - DESIGN
+
+control_classification:
+  governance_only:
+    - id: "GOV-ARCH-INTENT"
+      title: "Architecture intent and design guidance"
+      rationale: "Standards and guidance remain in governance artifacts"
+
+  policy_gate:
+    - id: "POL-001"
+      title: "Required workflow-template routing for code-modifying work"
+      requirement: "All IMPLEMENT/FIX/REFACTOR requests must route through Workflow Composer canonical mode templates"
+      enforcement_plane: ["runtime", "ci"]
+    - id: "POL-002"
+      title: "Required convergence + validation before completion"
+      requirement: "Completion blocked unless smoke + preflight + required validators pass"
+      enforcement_plane: ["runtime", "ci"]
+    - id: "POL-003"
+      title: "Protected enforcement surfaces"
+      requirement: "Governance/policy/hooks/settings/workflow-template surfaces require protected ownership and cannot be modified bypassing policy workflow"
+      enforcement_plane: ["repo", "ci"]
+    - id: "POL-004"
+      title: "Anti-tamper managed hook/settings integrity"
+      requirement: "Disabling managed hooks/settings is blocked"
+      enforcement_plane: ["managed", "runtime"]
+    - id: "POL-005"
+      title: "No parallel implementation introduction"
+      requirement: "New capability path creation blocked unless canonical-owner analysis proves no existing reusable implementation"
+      enforcement_plane: ["runtime", "ci"]
+
+  hybrid:
+    - id: "HYB-001"
+      title: "Capability registry uniqueness"
+      governance_scope: "Defines canonical ownership semantics"
+      policy_scope: "Blocks merge when one capability maps to >1 active implementation path"
+    - id: "HYB-002"
+      title: "Agent/skill/subagent creation governance"
+      governance_scope: "Defines reuse-first and specialization standards"
+      policy_scope: "Blocks creation without reuse analysis artifact"
+    - id: "HYB-003"
+      title: "Knowledge YAML compliance"
+      governance_scope: "Defines taxonomy and SSOT ownership"
+      policy_scope: "Blocks completion if required knowledge YAML contracts are missing"
+
+layer_model:
+  managed_anti_tamper:
+    role: "Non-overrideable org controls"
+    controls:
+      - "Managed settings integrity"
+      - "Managed hooks mandatory"
+      - "Permission-rule hardening"
+  runtime_controls:
+    role: "Execution-time blocking/remediation"
+    controls:
+      - "Prompt blocking for prohibited bypass patterns"
+      - "Pre-tool blocking for policy violations"
+      - "Task-completion blocking for missing gates/artifacts"
+      - "Config-change blocking on protected surfaces"
+  governance_rules:
+    role: "Architecture standards and operational contracts"
+  policy_gate:
+    role: "Hard-stop compliance and approval plane"
+  guidance_surfaces:
+    role: "Workflow helpers only"
+    controls:
+      - "Skills"
+      - "Prompts"
+      - "Agent playbooks"
+  pipeline_enforcement:
+    role: "Final merge-time enforcement"
+    controls:
+      - "Required CI checks"
+      - "Branch protection"
+      - "CODEOWNERS on protected surfaces"
+
+minimum_required_artifacts:
+  - "capability_layer_mapping.yaml"
+  - "implementation_path_matrix.yaml"
+  - "governance_policy_split.yaml"
+  - "protected_surface_manifest.yaml"
+  - "zero_regression_evidence.yaml"
+
+non_bypassable_assertions:
+  - "Skills and instructions are guidance only; they are not accepted as sole enforcement evidence"
+  - "Hook disablement or bypass attempts are treated as blocking policy violations"
+  - "Policy gate verdict is authoritative for completion and merge eligibility"

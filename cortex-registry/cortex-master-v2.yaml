@@ -22,11 +22,11 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-16T19:10:00Z'
+  last_updated: '2026-03-16T19:40:00Z'
   autonomous_chain_updated: '2026-03-16 — stop_policy added; all continuation prompts, proceed gates, and 🚀 Next Phase blocks prohibited; CORE-RESP-001 overridden for autonomous phase chaining.'
-  total_phases: 16
+  total_phases: 17
   active: 0
-  completed: 16
+  completed: 17
   in_progress: 0
   planned: 0
   architectural_decision: "HYBRID — preserve v2 reductions while recentering execution on Workflow Composer + dedicated workflow templates"
@@ -348,9 +348,9 @@ session_resume_protocol:
     maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
 
 runtime_state:
-  last_completed_phase: "phase-m16"
+  last_completed_phase: "phase-m17"
   next_executable_phase: "none"
-  last_session_action: "phase-m16 completed: SSOT unification and legacy-surface retirement closed with converged smoke/preflight gates and no regression."
+  last_session_action: "phase-m17 completed: deep cleanup and enforcement hardening converged with canonical one-path validation, policy-gate activation, and green smoke/preflight gates."
   last_session_prompt: "AUTO_RESUME_FROM_ACTIVE_PLAN"
 
 phase_detail_files:
@@ -530,6 +530,17 @@ phase_detail_files:
     depends_on: ["phase-m13"]
     file: "cortex-registry/planning/phases/v2/phase-m16-ssot-unification-and-legacy-retirement.yaml"
     note: "COMPLETE — SSOT/runtime convergence and legacy-surface retirement closure recorded with drift-lock coverage and converged smoke/preflight gates."
+
+  - id: phase-m17
+    title: "Deep Cleanup & Enforcement Hardening"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-M17-DEEP-CLEANUP-ENFORCEMENT
+    gaps: 10
+    sub_phases: 5
+    depends_on: ["phase-m16"]
+    file: "cortex-registry/planning/phases/v2/phase-m17-deep-cleanup-and-enforcement-hardening.yaml"
+    note: "COMPLETE — canonical capability mapping, governance/policy split hardening, protected-surface controls (CODEOWNERS + policy gate), and converged golden/validator/smoke/preflight gates with zero-regression evidence."
 # ============================================================
 # CORTEX v2 is designed to ADAPT to evolving LLM capabilities.
 # The LLM Capability Manifest (cortex-registry/core/llm-capabilities.yaml)
@@ -569,18 +580,18 @@ production_readiness:
     github_skill_files: 5
     github_instruction_files: 6
     master_v2_lines: 778
-    latest_smoke: "2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 30.47s"
-    latest_preflight: "459 passed, 10 skipped in 6.06s"
+    latest_smoke: "2861 passed, 30 skipped, 18 xfailed, 1 xpassed in 32.05s"
+    latest_preflight: "465 passed, 10 skipped in 5.79s"
     production_validator: "99.2% readiness; 0 critical; 0 high; deployment ready"
 
-  total_phases: 16
+  total_phases: 17
   active: 0
-  completed: 16
+  completed: 17
   in_progress: 0
   planned: 0
   archived: 0
   completion_percentage: 100
-  consolidation_summary: "2026-03-16 — M16 closed: SSOT unification and legacy-surface retirement completed with converged smoke/preflight validation."
+  consolidation_summary: "2026-03-16 — M17 closed: deep cleanup and enforcement hardening complete with policy-gate activation and zero-regression certification evidence."
   active_phases: "none — all migration phases complete"
 
 phases:
@@ -776,3 +787,15 @@ phases:
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m16-ssot-unification-and-legacy-retirement.yaml"
     note: "P0 — COMPLETE. Runtime/master-plan SSOT convergence, deprecated-contract retirement, duplicate-planned-asset consolidation, and zero-regression release-hardening gates converged."
+
+  # Phase M17 — DEEP CLEANUP & ENFORCEMENT HARDENING (depends: M16)
+  - id: phase-m17
+    title: "Deep Cleanup & Enforcement Hardening"
+    priority: P0
+    status: COMPLETE
+    depends_on: ["phase-m16"]
+    sweep_id: SWEEP-M17-DEEP-CLEANUP-ENFORCEMENT
+    gaps: 10
+    sub_phases: 5
+    file: "cortex-registry/planning/phases/v2/phase-m17-deep-cleanup-and-enforcement-hardening.yaml"
+    note: "P0 — COMPLETE. Deep cleanup and enforcement hardening delivered with canonical one-path mapping, governance/policy hard-split, anti-tamper protected surfaces, and zero-regression evidence."

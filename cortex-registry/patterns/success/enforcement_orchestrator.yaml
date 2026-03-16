@@ -9,7 +9,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 55
+  occurrence_count: 58
   resolution: All 11 agents passed in 0.5ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316101644388207
   orchestrator: EnforcementOrchestrator
@@ -81,7 +81,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 50
+  occurrence_count: 52
   resolution: All 11 agents passed in 0.6ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316101943825028
   orchestrator: EnforcementOrchestrator
@@ -93,7 +93,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 610
+  occurrence_count: 697
   resolution: All 11 agents passed in 0.8ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316101943951270
   orchestrator: EnforcementOrchestrator
@@ -105,7 +105,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 289
+  occurrence_count: 351
   resolution: All 11 agents passed in 0.7ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316102245134539
   orchestrator: EnforcementOrchestrator
@@ -141,7 +141,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 122
+  occurrence_count: 130
   resolution: All 11 agents passed in 1.1ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316103242197416
   orchestrator: EnforcementOrchestrator
@@ -153,7 +153,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 50
+  occurrence_count: 54
   resolution: All 11 agents passed in 1.4ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316103242360816
   orchestrator: EnforcementOrchestrator
@@ -165,7 +165,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 399
+  occurrence_count: 441
   resolution: All 11 agents passed in 0.9ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316103242981848
   orchestrator: EnforcementOrchestrator
@@ -177,7 +177,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 189
+  occurrence_count: 204
   resolution: All 11 agents passed in 1.0ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316103243239876
   orchestrator: EnforcementOrchestrator
@@ -213,7 +213,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 97
+  occurrence_count: 100
   resolution: All 11 agents passed in 1.2ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316103247568078
   orchestrator: EnforcementOrchestrator
@@ -225,7 +225,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 20
+  occurrence_count: 21
   resolution: All 11 agents passed in 1.7ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316103250265332
   orchestrator: EnforcementOrchestrator
@@ -249,7 +249,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 64
+  occurrence_count: 67
   resolution: All 11 agents passed in 1.3ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316103955764508
   orchestrator: EnforcementOrchestrator
@@ -273,7 +273,7 @@ entries:
     intent: QUERY
     agent_count: 11
   _context_hash: 3eedafe9
-  occurrence_count: 2
+  occurrence_count: 3
   resolution: All 11 agents passed in 0.9ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316103957302243
   orchestrator: EnforcementOrchestrator
@@ -285,7 +285,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 25
+  occurrence_count: 26
   resolution: All 11 agents passed in 1.5ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316103958680560
   orchestrator: EnforcementOrchestrator
@@ -321,7 +321,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 15
+  occurrence_count: 17
   resolution: All 11 agents passed in 1.8ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316110746696781
   orchestrator: EnforcementOrchestrator
@@ -357,7 +357,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 22
+  occurrence_count: 24
   resolution: All 11 agents passed in 1.6ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316111544534196
   orchestrator: EnforcementOrchestrator
@@ -381,7 +381,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 9
+  occurrence_count: 10
   resolution: All 11 agents passed in 2.0ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316111556518911
   orchestrator: EnforcementOrchestrator
@@ -501,7 +501,7 @@ entries:
     intent: UNKNOWN
     agent_count: 11
   _context_hash: a3de9556
-  occurrence_count: 4
+  occurrence_count: 5
   resolution: All 11 agents passed in 2.3ms
 - pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316122047089079
   orchestrator: EnforcementOrchestrator

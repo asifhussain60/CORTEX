@@ -1,0 +1,24 @@
+# CORTEX Protected Surfaces — Phase M17 enforcement hardening
+
+# Default owner
+* @asifhussain60
+
+# Governance / policy / architecture controls
+/cortex-registry/governance/ @asifhussain60
+/cortex-registry/core/ @asifhussain60
+/cortex-registry/workflows/templates/ @asifhussain60
+/cortex-registry/planning/phases/v2/ @asifhussain60
+/cortex-registry/cortex-master-v2.yaml @asifhussain60
+
+# Prompt and agent enforcement surfaces
+/.github/copilot-instructions.md @asifhussain60
+/.github/prompts/ @asifhussain60
+/.github/agents/ @asifhussain60
+/.github/skills/ @asifhussain60
+/.claude/settings.json @asifhussain60
+/.claude/scripts/ @asifhussain60
+
+# Validation and merge-control surfaces
+/.github/workflows/ @asifhussain60
+/scripts/validate*.py @asifhussain60
+/scripts/run_tests.py @asifhussain60

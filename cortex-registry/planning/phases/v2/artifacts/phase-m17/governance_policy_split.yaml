@@ -1,0 +1,16 @@
+id: "phase-m17-governance-policy-split"
+authority: "phase-m17"
+generated_at: "2026-03-16"
+classification:
+  governance_only:
+    purpose: "Standards, architecture intent, operational guidance"
+    authoritative_surface: "cortex-registry/governance/"
+  policy_gate:
+    purpose: "Non-bypassable fail-close controls"
+    authoritative_surface: "cortex-registry/governance/policies/non-bypassable-policy-gate.yaml"
+  hybrid:
+    purpose: "Governance-defined semantics + policy-enforced completion/merge blocking"
+    authoritative_surface: "governance manifests + policy gate catalog"
+assertion:
+  overlap_conflict_count: 0
+  split_contract: "PASS"

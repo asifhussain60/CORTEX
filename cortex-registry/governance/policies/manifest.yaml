@@ -9,3 +9,4 @@ entries:
   - path: "cortex-registry/governance/inventory.yaml"
   - path: "cortex-registry/governance/duplicate_detection_schedule.yaml"
   - path: "cortex-registry/governance/test-promotion-manifest.yaml"
+  - path: "cortex-registry/governance/policies/non-bypassable-policy-gate.yaml"

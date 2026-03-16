@@ -1,0 +1,16 @@
+id: "phase-m17-agent-guardrail-ownership-map"
+authority: "phase-m17"
+generated_at: "2026-03-16"
+roles:
+  guidance_owners:
+    - surface: ".github/skills/"
+      role: "Best-practice guidance, non-authoritative enforcement"
+    - surface: ".github/prompts/"
+      role: "Prompt composition guidance, non-authoritative enforcement"
+  enforcement_owners:
+    - surface: "policy-gate manifests"
+      role: "Hard-stop authority"
+    - surface: "validation scripts"
+      role: "Execution-time and CI gate enforcement"
+    - surface: "CODEOWNERS"
+      role: "Protected surface ownership enforcement"

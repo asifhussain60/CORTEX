@@ -1,0 +1,14 @@
+id: "phase-m17-template-consolidation-delta"
+authority: "phase-m17"
+generated_at: "2026-03-16"
+summary:
+  active_model: "Workflow Composer + canonical template families"
+  stale_composite_templates_active: 0
+delta:
+  - action: "affirm"
+    target: "cortex-registry/workflows/templates/"
+    result: "Canonical template family remains sole active orchestration path"
+  - action: "restrict"
+    target: "ad hoc template drift"
+    result: "Governed by policy gate + governance validation"
+status: "COMPLETE"

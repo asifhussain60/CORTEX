@@ -1,0 +1,11 @@
+id: "phase-m17-legacy-retirement-delta"
+authority: "phase-m17"
+generated_at: "2026-03-16"
+retirement_actions:
+  - area: "Parallel governance-only enforcement interpretation"
+    change: "Retired as sole enforcement mechanism"
+    replacement: "Non-bypassable policy gate contract"
+  - area: "Unowned protected-surface policy"
+    change: "Retired"
+    replacement: "CODEOWNERS protected surface ownership"
+status: "COMPLETE"

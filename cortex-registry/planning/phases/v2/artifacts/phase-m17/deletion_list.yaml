@@ -1,0 +1,14 @@
+id: "phase-m17-deletion-list"
+authority: "phase-m17"
+generated_at: "2026-03-16"
+entries:
+  - item: "Generated/stale composite workflow templates"
+    action: "retire"
+    status: "NO_ACTIVE_TARGET_FOUND"
+    rollback_handle: "N/A - no delete executed"
+  - item: "Parallel capability execution paths"
+    action: "retire"
+    status: "NO_ACTIVE_TARGET_FOUND"
+    rollback_handle: "N/A - no delete executed"
+notes:
+  - "Phase M17 executed as hardening + enforcement closure with no destructive deletions required in this cycle."

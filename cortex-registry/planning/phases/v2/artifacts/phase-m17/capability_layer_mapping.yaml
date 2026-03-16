@@ -1,0 +1,32 @@
+id: "phase-m17-capability-layer-mapping"
+authority: "phase-m17"
+generated_at: "2026-03-16"
+layer_mapping:
+  orchestration:
+    - capability: "Intent routing"
+      owner: "IntentRouter"
+      source: "cortex/orchestrators/intent_router.py"
+    - capability: "Workflow composition"
+      owner: "WorkflowComposer"
+      source: "cortex/orchestrators/workflow_composer.py"
+  registry:
+    - capability: "YAML registry access"
+      owner: "RegistryYAMLReader"
+      source: "cortex/registry/registry_yaml_reader.py"
+    - capability: "Plan lifecycle"
+      owner: "cortex-master-v2 index"
+      source: "cortex-registry/cortex-master-v2.yaml"
+  governance:
+    - capability: "Policy controls"
+      owner: "Policy gate manifests"
+      source: "cortex-registry/governance/policies/"
+    - capability: "Governance standards"
+      owner: "Governance manifests"
+      source: "cortex-registry/governance/"
+  execution:
+    - capability: "Workflow execution gateway"
+      owner: "WorkflowGateway"
+      source: "cortex/core/workflow_gateway.py"
+    - capability: "Validation/test gates"
+      owner: "Validation scripts + test runner"
+      source: "scripts/validate_*.py, scripts/run_tests.py"

@@ -1,0 +1,27 @@
+id: "phase-m17-implementation-path-matrix"
+authority: "phase-m17"
+generated_at: "2026-03-16"
+contract:
+  rule: "Exactly one canonical active path per capability"
+paths:
+  - capability: "Intent routing"
+    canonical_path: "cortex/orchestrators/intent_router.py"
+    alternates_active: []
+  - capability: "Workflow composition"
+    canonical_path: "cortex/orchestrators/workflow_composer.py"
+    alternates_active: []
+  - capability: "Registry YAML read"
+    canonical_path: "cortex/registry/registry_yaml_reader.py"
+    alternates_active: []
+  - capability: "Policy-gate registry"
+    canonical_path: "cortex-registry/governance/policies/non-bypassable-policy-gate.yaml"
+    alternates_active: []
+  - capability: "Master plan indexing"
+    canonical_path: "cortex-registry/cortex-master-v2.yaml"
+    alternates_active: []
+  - capability: "Validation execution"
+    canonical_path: "scripts/run_tests.py"
+    alternates_active: []
+result:
+  ambiguous_capability_count: 0
+  canonical_one_path_contract: PASS

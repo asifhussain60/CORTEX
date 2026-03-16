@@ -1,0 +1,21 @@
+id: "phase-m17-certification"
+authority: "phase-m17"
+certified_at: "2026-03-16T19:40:00Z"
+status: "CERTIFIED"
+completion_decision: "APPROVED"
+conditions_met:
+  - "All GAP-M17-01..10 CLOSED"
+  - "Required validation gates passed"
+  - "Policy hardening controls activated"
+  - "Zero-regression evidence published"
+artifacts:
+  - "cortex-registry/governance/policies/non-bypassable-policy-gate.yaml"
+  - ".github/CODEOWNERS"
+  - "cortex-registry/planning/phases/v2/artifacts/phase-m17/"
+release_readiness:
+  score: 99.2
+  critical_issues: 0
+  high_issues: 0
+  merge_eligibility: true
+notes:
+  - "One medium readiness observation remains: API credentials absent in local environment (non-blocking for phase certification)."

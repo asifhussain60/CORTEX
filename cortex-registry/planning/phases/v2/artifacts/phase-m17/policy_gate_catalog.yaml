@@ -1,0 +1,11 @@
+id: "phase-m17-policy-gate-catalog"
+authority: "phase-m17"
+generated_at: "2026-03-16"
+source_of_truth: "cortex-registry/governance/policies/non-bypassable-policy-gate.yaml"
+controls:
+  - "POL-001 workflow-template routing"
+  - "POL-002 convergence and validation completion"
+  - "POL-003 protected enforcement surfaces"
+  - "POL-004 anti-tamper hook/settings integrity"
+  - "POL-005 no parallel implementation introduction"
+status: "ACTIVE"
