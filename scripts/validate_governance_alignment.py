@@ -14,11 +14,12 @@ Phase: 110
 AC-ID: AC-P110-002
 """
 
-import os
 import re
 import sys
 from pathlib import Path
 from typing import NamedTuple, Optional
+
+from validate_dual_surface_parity import validate_dual_surface_parity
 
 
 class GovernanceViolation(NamedTuple):
@@ -45,6 +46,24 @@ SKIP_DIRS = {"__pycache__", ".git", "node_modules", ".cortex-runtime", ".venv", 
 
 # snake_case pattern: lowercase letters, digits, underscores only
 SNAKE_CASE_RE = re.compile(r"^[a-z_][a-z0-9_]*$")
+
+# Canonical root-level files that are governance artifacts, not generated reports.
+CORE_002_ALLOWED_ROOT_FILES = {
+    "README.MD",
+    "CHANGELOG.MD",
+    "LICENSE.MD",
+    "LICENSE",
+    "CONTRIBUTING.MD",
+    "SECURITY.MD",
+    "CODEOWNERS",
+    "CLAUDE.MD",
+    "REQUIREMENTS.TXT",
+}
+
+# Legacy naming exceptions pending file-rename migration.
+CORE_028_LEGACY_FILE_EXCEPTIONS = {
+    "tests/unit/core/orchestrator/test_4stage_integration.py",
+}
 
 
 def validate_governance_alignment(
@@ -98,6 +117,24 @@ def validate_governance_alignment(
     # ── CHECK 3: CORE-028 — Python file snake_case naming ──────────────
     violations.extend(_check_core_028(workspace_root, verbose))
 
+    # ── CHECK 4: Claude-primary dual-surface parity contract ───────────
+    parity_ok, parity_violations = validate_dual_surface_parity(
+        workspace_root,
+        verbose=False,
+    )
+    for issue in parity_violations:
+        violations.append(
+            GovernanceViolation(
+                rule=issue.rule,
+                file=issue.path,
+                message=issue.message,
+                severity=issue.severity,
+            )
+        )
+
+    if verbose and parity_ok:
+        print("   ✓ CLAUDE-PRIMARY: Dual-surface parity contract clean")
+
     # ── REPORT ──────────────────────────────────────────────────────────
     p0_violations = [v for v in violations if v.severity == "P0"]
     p1_violations = [v for v in violations if v.severity == "P1"]
@@ -136,16 +173,7 @@ def _check_core_002(workspace_root: Path, verbose: bool) -> list[GovernanceViola
         if item.name in SKIP_DIRS or item.name in CORE_002_ALLOWED_DIRS:
             continue
         if item.is_file() and item.suffix in (".md", ".txt"):
-            # Root-level .md files: README.md, CHANGELOG.md, LICENSE are OK
-            if item.name.upper() in (
-                "README.MD",
-                "CHANGELOG.MD",
-                "LICENSE.MD",
-                "LICENSE",
-                "CONTRIBUTING.MD",
-                "SECURITY.MD",
-                "CODEOWNERS",
-            ):
+            if item.name.upper() in CORE_002_ALLOWED_ROOT_FILES:
                 continue
             violations.append(GovernanceViolation(
                 rule="CORE-002",
@@ -173,6 +201,10 @@ def _check_core_028(workspace_root: Path, verbose: bool) -> list[GovernanceViola
         for py_file in search_dir.rglob("*.py"):
             # Skip __pycache__ and hidden dirs
             if any(part.startswith(".") or part in SKIP_DIRS for part in py_file.parts):
+                continue
+
+            rel_path = str(py_file.relative_to(workspace_root)).replace("\\", "/")
+            if rel_path in CORE_028_LEGACY_FILE_EXCEPTIONS:
                 continue
 
             stem = py_file.stem

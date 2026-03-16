@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Updated:** 2026-03-14 | **Architecture:** 314 Orchestrator files · 36 MCP Tools (59 tool files) · 61 Governance YAMLs · 33 Intent Types · 1 Package
+**Updated:** 2026-03-14 | **Architecture:** 314 Orchestrator files · 36 MCP Tools (36 registered; 59 tool files) · 61 Governance YAMLs · 33 Intent Types · 1 Package
 
 ---
 

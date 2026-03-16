@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX Total Recall — Production Certification Authority
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-14 | **Phases Complete:** 152 | **Architecture:** 314 Orchestrators · 36 MCP Tools (59 tool files) · 61 Governance YAMLs · 33 Intent Types
+**Updated:** 2026-03-14 | **Phases Complete:** 152 | **Architecture:** 314 Orchestrators · 36 MCP Tools (36 registered; 59 tool files) · 61 Governance YAMLs · 33 Intent Types
 **Authority:** `.github/prompts/cortex-total-recall.prompt.md`
 
 ---

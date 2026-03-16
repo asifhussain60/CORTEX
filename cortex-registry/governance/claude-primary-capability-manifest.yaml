@@ -1,0 +1,72 @@
+# Claude-primary control-plane contract
+# SSOT for dual-surface capability parity and role coverage.
+# Governance: CORE-035 (single canonical contract), CORE-064 (sweep completeness)
+
+control_plane:
+  canonical_surface: claude
+  compatibility_surface: github
+  orchestration_center: workflow-composer
+  collaboration_model: multi-team
+
+skills:
+  shared:
+    - cortex
+    - cortex-audit
+    - cortex-claude-readiness
+    - cortex-debug
+    - cortex-plan
+    - cortex-tdd
+    - cortex-governance
+    - cortex-rca
+  claude_only: []
+  github_only: []
+
+agents:
+  shared:
+    - cortex-claude-readiness
+  claude_only: []
+  github_only:
+    - AGENT-INDEX
+
+roles:
+  - id: software-engineer
+    capabilities:
+      - implement
+      - fix
+      - refactor
+      - test-generation
+  - id: site-reliability-engineer
+    capabilities:
+      - health-audit
+      - incident-debug
+      - reliability-validation
+  - id: technical-architect
+    capabilities:
+      - architecture-review
+      - workflow-routing
+      - governance-design
+  - id: refactor-debug-engine
+    capabilities:
+      - convergence-refactor
+      - marker-debug
+      - root-cause-analysis
+  - id: documentation-engineer
+    capabilities:
+      - doc-synthesis
+      - drift-detection
+      - onboarding-docs
+  - id: test-engineer
+    capabilities:
+      - preflight-gate
+      - smoke-gate
+      - regression-detection
+  - id: devops-platform-engineer
+    capabilities:
+      - deployment-validation
+      - mcp-runtime-validation
+      - environment-governance
+  - id: codebase-tutor
+    capabilities:
+      - repo-explanations
+      - workflow-guidance
+      - capability-mentoring
