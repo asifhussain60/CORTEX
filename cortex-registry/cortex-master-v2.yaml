@@ -22,13 +22,13 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-16T15:05:00Z'
+  last_updated: '2026-03-16T15:45:00Z'
   autonomous_chain_updated: '2026-03-16 — stop_policy added; all continuation prompts, proceed gates, and 🚀 Next Phase blocks prohibited; CORE-RESP-001 overridden for autonomous phase chaining.'
   total_phases: 15
   active: 0
-  completed: 11
+  completed: 12
   in_progress: 0
-  planned: 4
+  planned: 3
   architectural_decision: "HYBRID — preserve v2 reductions while recentering execution on Workflow Composer + dedicated workflow templates"
   architecture_center: "Workflow Composer and dedicated workflow templates are first-class, mandatory execution primitives"
   challenge_first_position: "Direct prompt-only patching is rejected as primary strategy; use Workflow Composer-governed template execution to preserve parity, reduce drift, and keep orchestrator-safe convergence."
@@ -348,9 +348,9 @@ session_resume_protocol:
     maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
 
 runtime_state:
-  last_completed_phase: "phase-m11"
-  next_executable_phase: "phase-m12"
-  last_session_action: "phase-m11 completed: agent/skill authoring lifecycle templates delivered with governance boundaries, lifecycle/observability/reuse contracts, targeted tests passed (6/6), and smoke gate passed (2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 32.06s)."
+  last_completed_phase: "phase-m12"
+  next_executable_phase: "phase-m14"
+  last_session_action: "phase-m12 completed: docs IA blueprint/migration map, extension guides/runbooks, final cleanup report, and capability parity ledger delivered; targeted M12 tests passed (6/6), smoke passed (2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 32.37s), preflight passed (459 passed, 10 skipped in 6.03s)."
   last_session_prompt: "AUTO_RESUME_FROM_ACTIVE_PLAN"
 
 phase_detail_files:
@@ -477,13 +477,13 @@ phase_detail_files:
   - id: phase-m12
     title: "Documentation Re-Architecture + Final Cleanup Convergence"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-M12-DOCS-IA-CLEANUP
     gaps: 10
     sub_phases: 5
     depends_on: ["phase-m11"]
     file: "cortex-registry/planning/phases/v2/phase-m12-docs-ia-and-final-cleanup.yaml"
-    note: "Rebuild docs IA for org-scale teams, enforce discoverability map, remove leftovers/duplication from v1 implementation, validate safe deletions by dependency scan, and publish final origin/CORTEX capability parity ledger (preserved vs strategic replacement vs intentional removal)."
+    note: "COMPLETE — docs IA blueprint and migration map published with extension guides/runbooks, final cleanup scan report, and capability parity ledger; targeted M12 tests plus smoke/preflight converged."
 
   - id: phase-m13
     title: "Final Refactor & Repo Cleanup"
@@ -558,19 +558,19 @@ production_readiness:
     github_skill_files: 5
     github_instruction_files: 6
     master_v2_lines: 740
-    latest_smoke: "2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 32.06s"
-    latest_preflight: "459 passed, 10 skipped in 5.40s"
+    latest_smoke: "2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 32.37s"
+    latest_preflight: "459 passed, 10 skipped in 6.03s"
     production_validator: "99.2% readiness; 0 critical; 0 high; deployment ready"
 
   total_phases: 15
   active: 0
-  completed: 11
+  completed: 12
   in_progress: 0
-  planned: 4
+  planned: 3
   archived: 0
-  completion_percentage: 73
-  consolidation_summary: "2026-03-16 — M11 completed: MCP-first agent/skill lifecycle template governance delivered with fail-close approvals, lifecycle/observability/reuse contracts, targeted M11 tests green (6 passed), and smoke gate green (2855 passed in 32.06s)."
-  active_phases: "none — next executable phase is phase-m12 (PLANNED)"
+  completion_percentage: 80
+  consolidation_summary: "2026-03-16 — M12 completed: documentation IA + cleanup convergence delivered with blueprint/migration map, extension/runbook contracts, cleanup scan + parity ledger, targeted tests green (6 passed), smoke green (2855 passed in 32.37s), and preflight green (459 passed in 6.03s)."
+  active_phases: "none — next executable phase is phase-m14 (PLANNED)"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -708,13 +708,13 @@ phases:
   - id: phase-m12
     title: "Documentation Re-Architecture"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     depends_on: ["phase-m11"]
     sweep_id: SWEEP-M12-DOCS-IA
     gaps: 10
     sub_phases: 5
     file: "cortex-registry/planning/phases/v2/phase-m12-docs-ia.yaml"
-    note: "P0 — full docs IA remap, discoverability map, and release-ready documentation."
+    note: "P0 — COMPLETE. Docs IA remap artifacts, cleanup report, and parity ledger delivered with passing targeted/smoke/preflight gates."
 
   # Phase M13 — FINAL REFACTOR & CLEANUP (depends: M12, always last)
   - id: phase-m13

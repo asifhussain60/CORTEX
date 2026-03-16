@@ -1,0 +1,17 @@
+id: "phase-m12-docs-migration-map"
+status: "ACTIVE"
+mappings:
+  - source: "docs/architecture.html"
+    target_section: "platform"
+  - source: "docs/workflow-composer.html"
+    target_section: "platform"
+  - source: "docs/getting-started.html"
+    target_section: "domains"
+  - source: "docs/faq.html"
+    target_section: "operations"
+  - source: "docs/SECURITY.md"
+    target_section: "governance"
+coverage:
+  stale_areas_identified: true
+  missing_areas_identified: true
+  mapping_complete: true

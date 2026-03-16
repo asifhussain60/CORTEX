@@ -1,0 +1,13 @@
+id: "phase-m12-capability-parity-ledger"
+status: "ACTIVE"
+categories:
+  preserved:
+    - "workflow-composer-routing"
+    - "core-governance-gates"
+    - "mcp-first-operations"
+  strategic_replacement:
+    - "legacy-orchestrator-inline-logic -> agent/skill template contracts"
+    - "ad-hoc workflows -> template-governed lifecycle execution"
+  intentional_removal:
+    - "retired phase_38 module family"
+    - "retired cortex.lens.python surface"

@@ -1,0 +1,21 @@
+id: "phase-m12-final-cleanup-report"
+status: "ACTIVE"
+scan_scope:
+  includes:
+    - "tests/**/*.py"
+    - "cortex/**/*.py"
+    - "cortex-registry/**/*.yaml"
+legacy_module_scan:
+  unresolved_count: 0
+  unresolved_entries: []
+chat_digest_cleanup_ledger:
+  - id: "CHAT01-DEL-01"
+    status: "CLOSED"
+  - id: "CHAT01-DEL-02"
+    status: "CLOSED"
+  - id: "CHAT01-DEL-03"
+    status: "CLOSED"
+  - id: "CHAT01-DEL-04"
+    status: "CLOSED"
+  - id: "CHAT01-DEL-05"
+    status: "CLOSED"
