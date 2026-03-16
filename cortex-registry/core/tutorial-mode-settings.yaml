@@ -1,0 +1,12 @@
+id: "tutorial-mode-settings"
+status: "ACTIVE"
+states:
+  - "on"
+  - "auto"
+  - "off"
+default_state: "auto"
+expert_default_state: "off"
+sticky_preference: true
+per_request_override: true
+post_execution_only: true
+token_budget_policy: "truncate_tutorial_first"

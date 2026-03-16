@@ -348,9 +348,9 @@ session_resume_protocol:
     maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
 
 runtime_state:
-  last_completed_phase: "phase-m14"
-  next_executable_phase: "phase-m15"
-  last_session_action: "phase-m14 completed: ADLC lifecycle workflow + knowledge artifacts and bounded cycle bridge/orchestrator modules delivered; targeted M14 tests passed and smoke passed (2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 33.21s)."
+  last_completed_phase: "phase-m15"
+  next_executable_phase: "phase-m13"
+  last_session_action: "phase-m15 completed: tutorial mode settings contract and post-execution renderer delivered; targeted M15 tests passed and smoke passed (2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 30.15s)."
   last_session_prompt: "AUTO_RESUME_FROM_ACTIVE_PLAN"
 
 phase_detail_files:
@@ -512,13 +512,13 @@ phase_detail_files:
   - id: phase-m15
     title: "Tutorial Mode — Optional Collaborative Teaching Layer"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-M15-TUTORIAL-MODE
     gaps: 6
     sub_phases: 4
     depends_on: ["phase-m11"]
     file: "cortex-registry/planning/phases/v2/phase-m15-tutorial-mode-integration.yaml"
-    note: "PLANNED — Add a layered post-execution tutorial explanation system integrated with workflow and response templates. Activation states: on|auto|off; expert users default to off with sticky preference and per-request override. M13 gates on M15+M14+M12."
+    note: "COMPLETE — tutorial mode settings and post-execution renderer shipped with on|auto|off activation semantics, expert-default off behavior, sticky preference/override contract, and passing targeted + smoke gates."
 # ============================================================
 # CORTEX v2 is designed to ADAPT to evolving LLM capabilities.
 # The LLM Capability Manifest (cortex-registry/core/llm-capabilities.yaml)
@@ -558,19 +558,19 @@ production_readiness:
     github_skill_files: 5
     github_instruction_files: 6
     master_v2_lines: 740
-    latest_smoke: "2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 33.21s"
+    latest_smoke: "2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 30.15s"
     latest_preflight: "459 passed, 10 skipped in 6.03s"
     production_validator: "99.2% readiness; 0 critical; 0 high; deployment ready"
 
   total_phases: 15
   active: 0
-  completed: 13
+  completed: 14
   in_progress: 0
-  planned: 2
+  planned: 1
   archived: 0
-  completion_percentage: 87
-  consolidation_summary: "2026-03-16 — M14 completed: ADLC lifecycle surfaces delivered (workflow template, knowledge YAML, bounded cycle runtime bridge/orchestrator modules), targeted tests green, and smoke green (2855 passed in 33.21s)."
-  active_phases: "none — next executable phase is phase-m15 (PLANNED)"
+  completion_percentage: 93
+  consolidation_summary: "2026-03-16 — M15 completed: tutorial mode settings + post-execution renderer delivered with passing targeted tests and smoke convergence (2855 passed in 30.15s)."
+  active_phases: "none — next executable phase is phase-m13 (PLANNED)"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -746,10 +746,10 @@ phases:
   - id: phase-m15
     title: "Tutorial Mode — Optional Collaborative Teaching Layer"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     depends_on: ["phase-m11"]
     sweep_id: SWEEP-M15-TUTORIAL-MODE
     gaps: 6
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m15-tutorial-mode-integration.yaml"
-    note: "P0 — Add an optional tutorial explanation layer that teaches what CORTEX did and why without changing execution behavior. Activation on|auto|off; expert users default off with sticky preference and per-request override. M13 gates on M15+M14+M12."
+    note: "P0 — COMPLETE. Tutorial explanation layer shipped as post-execution-only behavior with on|auto|off states, expert default off, sticky preference + per-request override, and green targeted/smoke gates."

@@ -1,0 +1,34 @@
+id: "phase-m15"
+title: "Tutorial Mode — Optional Collaborative Teaching Layer"
+created: "2026-03-16"
+status: COMPLETE
+priority: P0
+sweep_catalogue_id: "SWEEP-M15-TUTORIAL-MODE"
+
+sweep_catalogue:
+  - id: "GAP-M15-01"
+    title: "Define tutorial mode settings"
+    status: CLOSED
+  - id: "GAP-M15-02"
+    title: "Implement post-execution tutorial renderer"
+    status: CLOSED
+  - id: "GAP-M15-03"
+    title: "Support on|auto|off states"
+    status: CLOSED
+  - id: "GAP-M15-04"
+    title: "Expert default off behavior"
+    status: CLOSED
+  - id: "GAP-M15-05"
+    title: "Sticky preference + override semantics"
+    status: CLOSED
+  - id: "GAP-M15-06"
+    title: "Validation gates + sweep close"
+    status: CLOSED
+
+execution_evidence:
+  completed_at: "2026-03-16T17:05:00Z"
+  artifacts:
+    - "cortex-registry/core/tutorial-mode-settings.yaml"
+    - "cortex/orchestrators/core/tutorial_mode_renderer.py"
+  tests_added:
+    - "tests/v2/test_tutorial_mode_phase_m15.py"
