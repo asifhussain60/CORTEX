@@ -610,16 +610,19 @@ class TestPhaseCompletionVerification:
     def test_phase_7_mcp_tools_available(self):
         """Test: Phase 7 MCP Tools are wired"""
         try:
-            from cortex.mcp.tools.planning_tools import (
-                cortex_generate_code_plan,
-                cortex_validate_plan_coherence,
-                cortex_execute_phase_review,
-            )
+            from cortex.mcp.mcp_registry import resolve_legacy_tool_alias
+            from cortex.mcp.tools.cortex_code import CortexCode
+            from cortex.mcp.tools.cortex_ops import CortexOps
+            from cortex.mcp.tools.cortex_plan import CortexPlanMega
 
             # Assert
-            assert cortex_generate_code_plan is not None
-            assert cortex_validate_plan_coherence is not None
-            assert cortex_execute_phase_review is not None
+            assert CortexCode is not None
+            assert CortexPlanMega is not None
+            assert CortexOps is not None
+
+            resolved_tool, resolved_params = resolve_legacy_tool_alias("cortex_phase", {})
+            assert resolved_tool == "cortex_plan"
+            assert resolved_params["op"] == "phase"
         except ImportError as e:
             pytest.skip(f"Phase 7 MCP Tools not fully available (expected in production): {e}")
 

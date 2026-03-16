@@ -40,32 +40,6 @@ class TestMCPServerInitialization:
         assert len(tools) > 0, "No tools registered after server init"
         assert len(tools) >= 18, f"Expected >= 18 tools, got {len(tools)}"
     
-    @pytest.mark.skip(reason="MCP core tools infrastructure under development - Phase 82+")
-    def test_mcp_consolidated_tool_count(self) -> None:
-        """Verify consolidated tool count matches target (18)."""
-        from cortex.mcp.tools.consolidated import get_consolidated_tool_count
-        
-        count = get_consolidated_tool_count()
-        assert count == 18, f"Expected 18 consolidated tools, got {count}"
-    
-    @pytest.mark.skip(reason="MCP core tools infrastructure under development - Phase 82+")
-    def test_mcp_tool_aliases_resolve_correctly(self) -> None:
-        """Verify old tool names resolve to consolidated equivalents."""
-        from cortex.mcp.tools.consolidated import resolve_tool_alias
-        
-        # Debug tools should resolve to cortex_debug
-        alias = resolve_tool_alias("cortex_debug_inject")
-        assert alias is not None
-        assert alias["tool"] == "cortex_debug"
-        assert alias["operation"] == "inject"
-        
-        # Governance tools should resolve to cortex_governance
-        alias = resolve_tool_alias("query_governance_context")
-        assert alias is not None
-        assert alias["tool"] == "cortex_governance"
-        assert alias["operation"] == "query"
-
-
 # =============================================================================
 # REGRESSION TESTS: CORE-050 Tiered Blocking
 # =============================================================================
@@ -279,48 +253,6 @@ class TestPostCheckoutHook:
 
 class TestToolConsolidation:
     """Unit tests for tool consolidation aliases."""
-    
-    @pytest.mark.skip(reason="MCP tool consolidation infrastructure under development - Phase 82+")
-    def test_debug_tools_consolidated(self) -> None:
-        """Verify 13 debug tools consolidate to 1."""
-        from cortex.mcp.tools.consolidated import TOOL_ALIASES
-        
-        debug_aliases = [k for k in TOOL_ALIASES if k.startswith("cortex_debug_")]
-        
-        # All should map to cortex_debug
-        for alias_name in debug_aliases:
-            alias = TOOL_ALIASES[alias_name]
-            assert alias["tool"] == "cortex_debug", \
-                f"{alias_name} should consolidate to cortex_debug"
-    
-    @pytest.mark.skip(reason="MCP tool consolidation infrastructure under development - Phase 82+")
-    def test_governance_tools_consolidated(self) -> None:
-        """Verify governance tools consolidate to 1."""
-        from cortex.mcp.tools.consolidated import TOOL_ALIASES
-        
-        governance_aliases = [
-            "cortex_query_governance",
-            "query_governance_context",
-            "cortex_validate_compliance",
-            "validate_governance_compliance",
-            "cortex_execute_governance",
-            "execute_governance_check",
-        ]
-        
-        for alias_name in governance_aliases:
-            if alias_name in TOOL_ALIASES:
-                alias = TOOL_ALIASES[alias_name]
-                assert alias["tool"] == "cortex_governance", \
-                    f"{alias_name} should consolidate to cortex_governance"
-    
-    @pytest.mark.skip(reason="MCP tool consolidation infrastructure under development - Phase 82+")
-    def test_dev_tools_removed(self) -> None:
-        """Verify dev-only tools are marked as removed."""
-        from cortex.mcp.tools.consolidated import is_tool_removed
-        
-        assert is_tool_removed("echo_tool"), "echo_tool should be removed"
-        assert is_tool_removed("sample_tool"), "sample_tool should be removed"
-        assert is_tool_removed("transform_tool"), "transform_tool should be removed"
 
 
 # =============================================================================

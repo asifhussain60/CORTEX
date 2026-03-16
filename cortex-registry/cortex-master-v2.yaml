@@ -23,11 +23,12 @@ metadata:
   branch: CORTEX-V2
   created: '2026-03-15'
   last_updated: '2026-03-16T23:59:59Z'
-  total_phases: 13
+  autonomous_chain_updated: '2026-03-16 — stop_policy added; all continuation prompts, proceed gates, and 🚀 Next Phase blocks prohibited; CORE-RESP-001 overridden for autonomous phase chaining.'
+  total_phases: 14
   active: 1
   completed: 7
   in_progress: 1
-  planned: 5
+  planned: 6
   architectural_decision: "HYBRID — preserve v2 reductions while recentering execution on Workflow Composer + dedicated workflow templates"
   architecture_center: "Workflow Composer and dedicated workflow templates are first-class, mandatory execution primitives"
   challenge_first_position: "Direct prompt-only patching is rejected as primary strategy; use Workflow Composer-governed template execution to preserve parity, reduce drift, and keep orchestrator-safe convergence."
@@ -68,14 +69,17 @@ metadata:
 # M1 (Dead Code) → M2 (Core Consolidation) → M3 (Intelligence) → M4 (LENS)
 #                                            ↘
 #                                             M5 (MCP) → M6 (YAML) → M7 (Prompts/Agents) → M8 (Tests) → M9 (Certification)
-#                                                                                               ↓
-#                                             M10 (Team Federation) → M11 (Agent/Skill Template Governance) → M12 (Docs IA + Final Cleanup)
+#                                                                                                               ↓
+#                                             M10 (Team Federation) → M11 (Agent/Skill Template Governance) → M12 (Docs IA)
+#                                                                              ↓                                    ↘
+#                                                                      M14 (ADLC, Issue #19)                         M13 (Cleanup — always last, depends M12+M14)
 #
 # M1 is prerequisite for all.
 # M3/M4 can run in parallel with M5 (after M2).
 # M7 depends on M5+M6.
 # M8 mirrors all prior phases.
-# M12 is always last.
+# M14 (ADLC) depends on M11; runs in parallel with M12.
+# M13 is always last — depends on M12 + M14.
 # ============================================================
 
 
@@ -233,12 +237,37 @@ autonomous_execution_framework:
   continuation_required: false
   intent_reflection_required: false
   proceed_approval_required: false
+
+  # ── STOP POLICY (hard contract — all stops prohibited) ───────────────────
+  stop_policy:
+    all_stops_prohibited: true
+    proceed_gate_prohibited: true           # ⚡ Proceed Gate block MUST NOT be emitted
+    next_phase_prompt_prohibited: true      # 🚀 Next Phase block MUST NOT be emitted
+    intent_reflection_prohibited: true      # Intent Reflection block MUST NOT be emitted
+    mid_phase_pause_prohibited: true        # No pausing between sub-phases
+    auto_chain_next_phase: true             # Immediately begin next dependency-valid phase
+    core_resp_001_override: "AUTONOMOUS_PHASE_CHAIN"  # Overrides CORE-RESP-001 end-state contract for this plan
+    core_resp_001_suppressed_blocks:
+      - "### ⚡ If you say proceed, I will:"
+      - "### 🚀 Next Phase"
+      - "⚡ Proceed Gate"
+    permitted_output_after_phase:
+      - "✅ Phase {id} complete. — one line only"
+      - "Progress: {completed}/{total} lines — one line only"
+      - "Immediate continuation into next phase with no user prompt"
+  # ─────────────────────────────────────────────────────────────────────────
+
   completion_response_contract:
     required_final_line: "✅ Phase {id} complete."
     required_executive_summary_line: "Progress: {completed}/{total} phases ({completion_percentage}%) · Completed {completed_phase_id} · Active {next_phase_id_or_all_complete}"
     required_next_block: "none"
+    prohibited_blocks:
+      - "### ⚡ If you say proceed, I will:"
+      - "### 🚀 Next Phase"
+      - "⚡ Proceed Gate"
+      - "Intent Reflection"
     next_phase_resolution: "first PLANNED phase in dependency-valid order"
-    continuation_behavior: "Immediately continue into {next_phase_id} when dependency-valid; emit no proceed gate."
+    continuation_behavior: "Upon phase completion emit the required_final_line and required_executive_summary_line only, then immediately begin the next dependency-valid phase — no proceed gate, no user prompt, no next phase block."
   fail_safe:
     max_convergence_cycles: 3
     unresolved_p0_p1_blocks_completion: true
@@ -246,18 +275,18 @@ autonomous_execution_framework:
   autonomous_end_to_end:
     enabled: true
     description: |
-      CORTEX-V2 supports fully autonomous end-to-end execution across all phases, without intent reflection, proceed approval, or manual confirmation checkpoints. Once initiated, the workflow proceeds through all planned phases, executing each phase and sub-phase in strict order, enforcing all completion and convergence gates, and emitting only minimal status deltas and completion markers. User interaction is only required for explicit intervention, override, or error recovery. This contract is based on chat01.md intent for uninterrupted execution.
+      CORTEX-V2 executes fully autonomously end-to-end across all M phases without any stops, continuation prompts, proceed gates, intent reflection blocks, or 🚀 Next Phase confirmation blocks. Each M phase chains immediately into the next upon completion. User interaction is required only for explicit intervention or error recovery that cannot be self-resolved within max_convergence_cycles.
     workflow:
-      - "Read and validate migration plan and phase status map."
-      - "Begin execution at first PLANNED phase whose dependencies are satisfied."
-      - "Execute each phase and sub-phase in strict sequential mode, enforcing completion and convergence gates."
-      - "Bypass intent reflection and proceed approval gates for all dependency-valid phases."
-      - "Emit minimal progress and completion markers after each phase, without pausing for user confirmation."
-      - "Continue autonomously to next phase until all phases are complete or intervention is required."
-      - "Emit final completion state and release readiness report at end of workflow."
+      - "Read and validate migration plan. Build phase status map."
+      - "Begin execution at first PLANNED phase whose depends_on are all COMPLETE."
+      - "Execute each phase and sub-phase sequentially. Enforce completion and convergence gates."
+      - "On completion: emit ✅ Phase {id} complete. + Progress line. Begin next phase immediately."
+      - "Never emit ⚡ Proceed Gate, 🚀 Next Phase, or Intent Reflection blocks — these are prohibited by stop_policy."
+      - "Continue until all phases are COMPLETE or an unrecoverable error forces intervention."
+      - "At plan completion emit final ✅ All work is complete. state and release readiness report."
     override_contract:
-      - "User may intervene, override, or pause execution at any point via explicit command."
-      - "Default mode is uninterrupted, autonomous execution unless overridden."
+      - "User may intervene or override at any point via explicit command."
+      - "Default mode is uninterrupted continuous autonomous execution — no stops, no prompts."
 
 session_resume_protocol:
   trigger_phrase: "AUTO_RESUME_FROM_ACTIVE_PLAN"
@@ -272,22 +301,29 @@ session_resume_protocol:
     - "Enforce sub-phase completion_gate before advancing"
     - "Enforce convergence loop for P0/P1 until clear or max cycles reached"
     - "On successful phase completion: set phase status COMPLETE and increment completed/decrement planned"
-    - "Immediately resolve and set next executable phase to IN_PROGRESS when safe to continue autonomously"
+    - "Immediately resolve and set next executable phase to IN_PROGRESS — begin execution without user prompt"
     - "Never request intent reflection or proceed approval while dependency-valid work remains"
+    - "PROHIBITED: ⚡ Proceed Gate blocks — do not emit under any circumstance during autonomous execution"
+    - "PROHIBITED: 🚀 Next Phase blocks — do not emit under any circumstance during autonomous execution"
+    - "CHAIN RULE: Upon phase completion, immediately begin next dependency-valid phase in the same response turn"
   session_end_contract:
-    required_final_output: "concise executive summary only while phases remain; full completion state when all phases are complete"
+    required_final_output: "✅ Phase {id} complete. + Progress line only; full completion state only when all 13 phases are COMPLETE"
     final_output_format:
       - "✅ Phase {completed_phase_id} complete."
       - "Progress: {completed}/{total} phases ({completion_percentage}%)"
       - "Exec Summary: Completed {completed_phase_id} · Active {next_phase_id_or_all_complete}"
+    prohibited_output_blocks:
+      - "### ⚡ If you say proceed, I will:"
+      - "### 🚀 Next Phase"
+      - "⚡ Proceed Gate"
   no_next_phase_behavior:
-    when_all_complete: "Emit completion state only"
+    when_all_complete: "Emit ✅ All work is complete. and final release readiness report only"
     maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
 
 runtime_state:
   last_completed_phase: "phase-m7"
   next_executable_phase: "phase-m8"
-  last_session_action: "phase-m8-a GREEN sweep started: 43 missing-module test imports audited, 5 stale mirror tests deleted, and smoke reconverged green (2925 passed, 81 skipped, 22 xfailed, 1 xpassed)."
+  last_session_action: "phase-m8 advanced: one additional dead mirror test was deleted, stale consolidated/planning MCP test imports were migrated into current v2 mega-tool coverage, and smoke reconverged green (2925 passed, 81 skipped, 22 xfailed, 1 xpassed in 30.84s)."
   last_session_prompt: "AUTO_RESUME_FROM_ACTIVE_PLAN"
 
 phase_detail_files:
@@ -376,7 +412,7 @@ phase_detail_files:
     sub_phases: 3
     depends_on: ["phase-m3", "phase-m4", "phase-m7"]
     file: "cortex-registry/planning/phases/v2/phase-m8-test-mirror.yaml"
-    note: "IN_PROGRESS — M8-a RED inventory complete (tests=1356; legacy imports: IntentRouter=800, MasterOrchestrator=1118, old context=44). Next: M8-a GREEN deletion and M8-b migration/consolidation."
+    note: "IN_PROGRESS — M8-a GREEN reconverged after an additional dead-test deletion (tests/test_*.py=1222), and M8-b has started by migrating stale MCP import checks into v2 mega-tool coverage."
 
   - id: phase-m9
     title: "Production Certification & Drift Lock"
@@ -422,8 +458,29 @@ phase_detail_files:
     file: "cortex-registry/planning/phases/v2/phase-m12-docs-ia-and-final-cleanup.yaml"
     note: "Rebuild docs IA for org-scale teams, enforce discoverability map, remove leftovers/duplication from v1 implementation, validate safe deletions by dependency scan, and publish final origin/CORTEX capability parity ledger (preserved vs strategic replacement vs intentional removal)."
 
-# ============================================================
-# LLM ADAPTABILITY CONTRACT
+  - id: phase-m13
+    title: "Final Refactor & Repo Cleanup"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M13-REPO-CLEANUP
+    gaps: 6
+    sub_phases: 3
+    depends_on: ["phase-m12", "phase-m14"]
+    file: "cortex-registry/planning/phases/v2/phase-m13-repo-cleanup.yaml"
+    note: "Sweep all subfolders for non-production files, remove all dev/test/legacy/obsolete artifacts, enforce production-only hygiene, validate with smoke and audit gates, and emit final repo state for release. Always last — gates on M12 + M14."
+
+  - id: phase-m14
+    title: "ADLC — Agentic Development Lifecycle Cycle (Phase 151)"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M14-ADLC
+    gaps: 5
+    sub_phases: 5
+    depends_on: ["phase-m11"]
+    source_issue: "https://github.com/asifhussain60/CORTEX/issues/19"
+    source_commit: "324733f"
+    file: "cortex-registry/planning/phases/v2/phase-m14-adlc-lifecycle.yaml"
+    note: "ADLC (Agentic Development Lifecycle Cycle) as a first-class CORTEX mode — 5 P0 capabilities from Issue #19: (1) IntentType.ADLC #35 + ADLC_KEYWORDS routing, (2) adlc-cycle-workflow.yaml Tier-2 template with 7 stages + 2 feedback loops, (3) ADLCOrchestrator with CORE-068 max_cycles=3 cap, (4) ADLCFeedbackBridge Stage7→Stage2 auto-fix loop with MaxCyclesExceeded, (5) agentic-sdlc-patterns.yaml knowledge YAML. Delivery order: enums→knowledge→template→orchestrator→bridge. Parallel with M12; M13 gates on M14+M12."
 # ============================================================
 # CORTEX v2 is designed to ADAPT to evolving LLM capabilities.
 # The LLM Capability Manifest (cortex-registry/core/llm-capabilities.yaml)
@@ -452,15 +509,15 @@ production_readiness:
   overall_score: null
   deployment_date: null
 
-  total_phases: 13
-  completed: 7
+  total_phases: 14
   active: 1
+  completed: 7
   in_progress: 1
-  planned: 5
+  planned: 6
   archived: 0
   completion_percentage: 54
-  consolidation_summary: "2026-03-16 — M7 complete and M8 is actively executing. M8-a moved from RED inventory into GREEN deletion sweep: 43 missing-module test imports were audited, 5 stale mirror tests were removed, and smoke reconverged green (2925 passed, 81 skipped, 22 xfailed, 1 xpassed)."
-  active_phases: "phase-m8 — Test Suite Mirror Reduction (M8-a RED inventory complete; GREEN deletion sweep validated by smoke and ready for further dead-test removal plus M8-b migration)"
+  consolidation_summary: "2026-03-16 — M8 continued through a second validated sweep: one more dead mirror test was deleted, stale MCP missing-module imports were removed or migrated into v2 mega-tool coverage, and smoke reconverged green at 2925 passed in 30.84s."
+  active_phases: "phase-m8 — Test Suite Mirror Reduction (M8-a GREEN reconverged after another low-risk deletion; M8-b has begun through MCP import migration and consolidated v2 alias coverage)"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -556,7 +613,7 @@ phases:
     gaps: 4
     sub_phases: 3
     file: "cortex-registry/planning/phases/v2/phase-m8-test-mirror.yaml"
-    note: "P1 — ACTIVE. M8-a RED inventory complete and GREEN deletion sweep started: 43 missing-module test imports audited, 5 stale mirror tests removed, smoke green. Next: continue low-risk dead-test removals, then M8-b import migration/consolidation."
+    note: "P1 — ACTIVE. M8-a GREEN reconverged after deleting one more dead mirror test, and M8-b started by migrating stale MCP-path checks into v2 mega-tool/alias coverage; smoke remains green."
 
   # Phase M9 — CERTIFICATION (depends: M8, always last)
   - id: phase-m9
@@ -611,9 +668,23 @@ phases:
     title: "Final Refactor & Repo Cleanup"
     priority: P0
     status: PLANNED
-    depends_on: ["phase-m12"]
+    depends_on: ["phase-m12", "phase-m14"]
     sweep_id: SWEEP-M13-REPO-CLEANUP
     gaps: 6
     sub_phases: 3
     file: "cortex-registry/planning/phases/v2/phase-m13-repo-cleanup.yaml"
     note: "P0 — Sweep all subfolders for non-production files, remove all dev/test/legacy/obsolete artifacts, enforce production-only hygiene, validate with smoke and audit gates, and emit final repo state for release."
+
+  # Phase M14 — ADLC AGENTIC DEVELOPMENT LIFECYCLE CYCLE (depends: M11, parallel with M12)
+  - id: phase-m14
+    title: "ADLC — Agentic Development Lifecycle Cycle"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-m11"]
+    sweep_id: SWEEP-M14-ADLC
+    gaps: 5
+    sub_phases: 5
+    source_issue: "https://github.com/asifhussain60/CORTEX/issues/19"
+    source_commit: "324733f"
+    file: "cortex-registry/planning/phases/v2/phase-m14-adlc-lifecycle.yaml"
+    note: "P0 — Thread 7 existing CORTEX stages into the named ADLC paradigm. 5 capabilities (Issue #19): IntentType.ADLC (#35) + ADLC_KEYWORDS, adlc-cycle-workflow.yaml (7-stage Tier-2 template + 2 feedback loops), ADLCOrchestrator (CORE-068 max_cycles=3), ADLCFeedbackBridge (Stage7→2 auto-fix + MaxCyclesExceeded), agentic-sdlc-patterns.yaml knowledge YAML. Zero new package deps. Compresses delivery weeks-months→hours-days. Parallel with M12; M13 gates on M14+M12."
