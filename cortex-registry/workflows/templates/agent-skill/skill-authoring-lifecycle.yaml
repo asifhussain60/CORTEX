@@ -1,0 +1,65 @@
+id: "agent-skill/skill-authoring-lifecycle"
+workflow:
+  id: "agent-skill/skill-authoring-lifecycle"
+  name: "Skill Authoring Lifecycle Workflow"
+  category: "agent_skill_workflows"
+  status: "ACTIVE"
+  description: |
+    MCP-first lifecycle workflow for generating, validating, approving,
+    and publishing Claude-compatible skill packs with reusable SSOT guidance.
+
+  mcp_first: true
+  lifecycle_type: "skill"
+
+  required_inputs:
+    - "skill_id"
+    - "owner_team"
+    - "scope_contract"
+    - "knowledge_sources"
+    - "governance_scope"
+
+  required_outputs:
+    - ".claude/skills/{skill_id}/SKILL.md"
+    - "validation_report"
+    - "approval_record"
+    - "publication_record"
+
+  touchpoints:
+    plan_tool: "cortex_plan"
+    governance_tool: "cortex_governance"
+    validation_tool: "cortex_validate"
+
+  approvals:
+    required:
+      - "domain_owner"
+      - "platform_governance"
+    optional:
+      - "shared_services"
+    fail_close: true
+
+  lifecycle_states:
+    - "proposed"
+    - "active"
+    - "stabilizing"
+    - "deprecated"
+    - "retired"
+
+  observability:
+    ac_markers_required: true
+    telemetry_events:
+      - "skill_generation_started"
+      - "skill_validation_completed"
+      - "skill_published"
+
+  composability:
+    reusable: true
+    publication_scope: "cross-team"
+    canonical_owner_required: true
+
+  primitives:
+    - "primitives/execution/ac-marker-emit.yaml"
+    - "primitives/execution/git-checkpoint.yaml"
+    - "primitives/governance/holistic-validation-gate.yaml"
+    - "primitives/governance/sweep-catalogue-open.yaml"
+    - "primitives/governance/sweep-catalogue-close.yaml"
+    - "primitives/validation/detect-fix-rescan-loop.yaml"

@@ -1,7 +1,7 @@
 id: "phase-m11"
 title: "Agent/Skill Workflow Template Governance (MCP-First)"
 created: "2026-03-15"
-status: PLANNED
+status: COMPLETE
 priority: P0
 governance_authority:
   - CORE-035
@@ -76,42 +76,42 @@ sweep_catalogue:
     title: "Create agent-authoring workflow template"
     severity: P0
     action_ref: "phase-m11-a"
-    status: OPEN
+    status: CLOSED
   - id: "GAP-M11-02"
     title: "Create skill-authoring workflow template"
     severity: P0
     action_ref: "phase-m11-a"
-    status: OPEN
+    status: CLOSED
   - id: "GAP-M11-03"
     title: "Define required inputs/outputs and touchpoints"
     severity: P1
     action_ref: "phase-m11-b"
-    status: OPEN
+    status: CLOSED
   - id: "GAP-M11-04"
     title: "Add validation and governance boundary rules"
     severity: P0
     action_ref: "phase-m11-b"
-    status: OPEN
+    status: CLOSED
   - id: "GAP-M11-05"
     title: "Add lifecycle state machine and change management"
     severity: P1
     action_ref: "phase-m11-c"
-    status: OPEN
+    status: CLOSED
   - id: "GAP-M11-06"
     title: "Add observability and evaluation hooks"
     severity: P0
     action_ref: "phase-m11-c"
-    status: OPEN
+    status: CLOSED
   - id: "GAP-M11-07"
     title: "Add cross-team reuse and composability contract"
     severity: P1
     action_ref: "phase-m11-c"
-    status: OPEN
+    status: CLOSED
   - id: "GAP-M11-08"
     title: "Sweep close + master update"
     severity: P0
     action_ref: "phase-m11-final"
-    status: OPEN
+    status: CLOSED
 
 sequential_execution_contract:
   policy: STRICT_SEQUENTIAL
@@ -134,10 +134,26 @@ phase_continuation:
     next_block: "### 🚀 Next Phase"
     continuation_prompt: "execute phase-m12 on CORTEX-V2 with strict sequential contract and autonomous progress"
 
+execution_evidence:
+  completed_at: "2026-03-16T15:05:00Z"
+  artifacts:
+    - "cortex-registry/workflows/templates/agent-skill/agent-authoring-lifecycle.yaml"
+    - "cortex-registry/workflows/templates/agent-skill/skill-authoring-lifecycle.yaml"
+  tests_added:
+    - "tests/v2/test_agent_skill_templates.py"
+    - "tests/v2/test_template_governance_boundaries.py"
+    - "tests/v2/test_template_lifecycle_observability.py"
+  targeted_gates:
+    - "python3 scripts/run_tests.py file tests/v2/test_agent_skill_templates.py -> 2 passed"
+    - "python3 scripts/run_tests.py file tests/v2/test_template_governance_boundaries.py -> 2 passed"
+    - "python3 scripts/run_tests.py file tests/v2/test_template_lifecycle_observability.py -> 2 passed"
+  completion_gate:
+    smoke: "2855 passed, 30 skipped, 18 xfailed, 1 xpassed in 32.06s"
+
 phases:
   - id: "phase-m11-a"
     title: "Template creation: agents + skills"
-    status: PLANNED
+    status: COMPLETE
     priority: P0
     gap_refs: ["GAP-M11-01", "GAP-M11-02"]
     depends_on: []
@@ -163,7 +179,7 @@ phases:
 
   - id: "phase-m11-b"
     title: "Validation, governance, and approval boundaries"
-    status: PLANNED
+    status: COMPLETE
     priority: P0
     gap_refs: ["GAP-M11-03", "GAP-M11-04"]
     depends_on: ["phase-m11-a"]
@@ -189,7 +205,7 @@ phases:
 
   - id: "phase-m11-c"
     title: "Lifecycle, observability, and reuse contracts"
-    status: PLANNED
+    status: COMPLETE
     priority: P1
     gap_refs: ["GAP-M11-05", "GAP-M11-06", "GAP-M11-07"]
     depends_on: ["phase-m11-b"]
@@ -215,7 +231,7 @@ phases:
 
   - id: "phase-m11-final"
     title: "Sweep close + master update"
-    status: PLANNED
+    status: COMPLETE
     priority: P0
     gap_refs: ["GAP-M11-08"]
     depends_on: ["phase-m11-c"]

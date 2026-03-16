@@ -1,0 +1,63 @@
+id: "agent-skill/agent-authoring-lifecycle"
+workflow:
+  id: "agent-skill/agent-authoring-lifecycle"
+  name: "Agent Authoring Lifecycle Workflow"
+  category: "agent_skill_workflows"
+  status: "ACTIVE"
+  description: |
+    MCP-first lifecycle workflow for generating, validating, approving,
+    and publishing Claude-compatible agent artifacts under CORTEX governance.
+
+  mcp_first: true
+  lifecycle_type: "agent"
+
+  required_inputs:
+    - "agent_id"
+    - "owner_team"
+    - "trigger_contract"
+    - "handoff_contract"
+    - "governance_scope"
+
+  required_outputs:
+    - ".claude/agents/{agent_id}.md"
+    - "validation_report"
+    - "approval_record"
+    - "publication_record"
+
+  touchpoints:
+    plan_tool: "cortex_plan"
+    governance_tool: "cortex_governance"
+    validation_tool: "cortex_validate"
+
+  approvals:
+    required:
+      - "domain_owner"
+      - "platform_governance"
+    fail_close: true
+
+  lifecycle_states:
+    - "proposed"
+    - "active"
+    - "stabilizing"
+    - "deprecated"
+    - "retired"
+
+  observability:
+    ac_markers_required: true
+    telemetry_events:
+      - "agent_generation_started"
+      - "agent_validation_completed"
+      - "agent_published"
+
+  composability:
+    reusable: true
+    publication_scope: "cross-team"
+    canonical_owner_required: true
+
+  primitives:
+    - "primitives/execution/ac-marker-emit.yaml"
+    - "primitives/execution/git-checkpoint.yaml"
+    - "primitives/governance/holistic-validation-gate.yaml"
+    - "primitives/governance/sweep-catalogue-open.yaml"
+    - "primitives/governance/sweep-catalogue-close.yaml"
+    - "primitives/validation/detect-fix-rescan-loop.yaml"
