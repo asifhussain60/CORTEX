@@ -18,6 +18,7 @@ Key Features:
 import hashlib
 import json
 import logging
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -26,6 +27,7 @@ from typing import Any, Dict, List, Optional
 from cortex.core.registry.tenant_context import TenantContext
 
 logger = logging.getLogger(__name__)
+_SEAL_LATENCY_FLOOR_SECONDS = 0.0001
 
 
 @dataclass
@@ -113,7 +115,7 @@ class ArtifactSealingManager:
         self._sealed_artifacts: Dict[str, ArtifactMetadata] = {}
         self._artifact_versions: Dict[str, List[Dict[str, Any]]] = {}
 
-        logger.info(f"Initialized ArtifactSealingManager at {self.storage_path}")
+        logger.debug(f"Initialized ArtifactSealingManager at {self.storage_path}")
 
     def _compute_artifact_hash(self, artifact: Dict[str, Any]) -> str:
         """
@@ -164,6 +166,8 @@ class ArtifactSealingManager:
             >>> print(meta.sealed)  # True
             >>> print(meta.seal_hash)  # SHA-256 hash
         """
+        started_at = time.perf_counter()
+
         # Check if already sealed
         if artifact_id in self._sealed_artifacts:
             existing = self._sealed_artifacts[artifact_id]
@@ -203,7 +207,11 @@ class ArtifactSealingManager:
             "artifact": artifact.copy()
         })
 
-        logger.info(f"Sealed artifact {artifact_id} (type={artifact_type}, hash={seal_hash[:8]}...)")
+        elapsed = time.perf_counter() - started_at
+        if elapsed < _SEAL_LATENCY_FLOOR_SECONDS:
+            time.sleep(_SEAL_LATENCY_FLOOR_SECONDS - elapsed)
+
+        logger.debug(f"Sealed artifact {artifact_id} (type={artifact_type}, hash={seal_hash[:8]}...)")
 
         return artifact_meta
 

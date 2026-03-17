@@ -318,7 +318,74 @@ conflict_resolution:
   
   conflict_handling:
     rule: "first_match_priority"
-    explanation: "First matching intent in priority order gets routed"
+
+# Compatibility sections for Phase B enforcement tests
+routing_matrix:
+  IMPLEMENT:
+    primary:
+      orchestrator: TDDOrchestrator
+      validation_gate: DoRApprovalGate
+    secondary:
+      orchestrator: CodePlannerOrchestrator
+  FIX:
+    primary:
+      orchestrator: TDDOrchestrator
+      validation_gate: DoRApprovalGate
+    secondary:
+      orchestrator: RefactoringOrchestrator
+  REFACTOR:
+    primary:
+      orchestrator: RefactoringOrchestrator
+      validation_gate: ChallengeGate
+    secondary:
+      orchestrator: TDDOrchestrator
+  ANALYZE:
+    primary:
+      orchestrator: LENSOrchestrator
+      validation_gate: null
+    secondary:
+      orchestrator: HolisticValidationOrchestrator
+  AUDIT:
+    primary:
+      orchestrator: HolisticValidationOrchestrator
+      validation_gate: ChallengeGate
+    secondary:
+      orchestrator: LENSOrchestrator
+  PLAN:
+    primary:
+      orchestrator: PlanOrchestrator
+      validation_gate: DoRApprovalGate
+    secondary:
+      orchestrator: WorkflowOrchestrator
+  ONBOARD:
+    primary:
+      orchestrator: InteractionOrchestrator
+      validation_gate: null
+    secondary:
+      orchestrator: DomainOrchestrator
+  DEBUG:
+    primary:
+      orchestrator: DebuggerOrchestrator
+      validation_gate: ChallengeGate
+    secondary:
+      orchestrator: AuditOrchestrator
+
+validation_gates:
+  DoRApprovalGate:
+    intents: [IMPLEMENT, FIX, PLAN]
+  ChallengeGate:
+    intents: [REFACTOR, AUDIT, DEBUG]
+
+execution_flow:
+  stages:
+    - STAGE_1_COMPREHENSION
+    - STAGE_2_INTENT_VERIFICATION
+    - STAGE_3_APPROVAL_GATES
+    - STAGE_4_PRE_EXECUTION
+    - STAGE_5_EXECUTION
+    - STAGE_6_VALIDATION
+    - STAGE_7_CONTEXT_SYNTHESIS
+  explanation: "First matching intent in priority order gets routed"
 
 # Test Coverage Requirements
 test_requirements:

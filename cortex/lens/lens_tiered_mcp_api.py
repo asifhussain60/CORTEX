@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, AsyncIterator, Dict, List, Optional, Sequence, Set, Union
 
 
 class LensTier(Enum):
@@ -615,11 +615,11 @@ class LensStreamTier3:
         self.registry = LensCapabilityRegistry()
         self._cancelled: bool = False
 
-    def stream_analysis(
+    async def stream_analysis(
         self,
-        file_paths: List[str],
+        file_paths: Union[Path, Sequence[Union[str, Path]]],
         batch_size: int = 10,
-    ) -> None:
+    ) -> AsyncIterator[StreamEvent]:
         """
         Stream analysis results for batch of files.
 
@@ -633,48 +633,88 @@ class LensStreamTier3:
             Dict with batch results and real findings
         """
         # AC_START: AC-PHASE65-S7-STREAM-001 Real batch streaming
-        from pathlib import Path
+        files = self._normalize_stream_inputs(file_paths)
+        effective_batch_size = max(1, batch_size or self.batch_size)
+        total_files = len(files)
 
-        # Process in batches (even if orchestrator fails, still yield per batch)
-        for i in range(0, len(file_paths), batch_size):
-            batch = file_paths[i : i + batch_size]
-            batch_findings = []
+        yield StreamEvent(
+            event_type="progress",
+            data={
+                "total_files": total_files,
+                "processed_files": 0,
+                "batch_size": effective_batch_size,
+            },
+        )
+
+        if total_files == 0:
+            yield StreamEvent(
+                event_type="complete",
+                data={"total_files": 0, "processed_files": 0, "results": []},
+            )
+            return
+
+        processed_files = 0
+        for index in range(0, total_files, effective_batch_size):
+            if self._cancelled:
+                break
+
+            batch = files[index : index + effective_batch_size]
+            results: List[Dict[str, Any]] = []
 
             for file_path in batch:
-                try:
-                    # Lazy import to handle missing dependencies gracefully
-                    from cortex.lens.lens_orchestrator import LENSOrchestrator
+                analysis = await LensTargetedTier3().analyze(file_path)
+                results.append(analysis.to_dict())
 
-                    # Initialize orchestrator per file
-                    path_obj = Path(file_path)
-                    repo_path = path_obj.parent
-                    orchestrator = LENSOrchestrator(repo_path=repo_path)
+            processed_files += len(batch)
 
-                    # Call real LENSOrchestrator
-                    result = orchestrator.analyze_file(path_obj)
-                    batch_findings.append({
-                        "file": file_path,
-                        "analysis": result,
-                        "status": "success",
-                    })
-                except Exception as e:
-                    batch_findings.append({
-                        "file": file_path,
-                        "error": str(e),
-                        "status": "error",
-                    })
-
-            # Yield batch result
-            yield {
-                "files": batch,
-                "findings": batch_findings,
-                "analysis": {
-                    "batch_number": i // batch_size + 1,
-                    "batch_size": len(batch),
-                    "total_batches": (len(file_paths) + batch_size - 1) // batch_size,
+            yield StreamEvent(
+                event_type="result",
+                data={
+                    "results": results,
+                    "batch_number": (index // effective_batch_size) + 1,
+                    "processed_files": processed_files,
+                    "total_files": total_files,
                 },
-            }
+            )
+
+            if processed_files < total_files:
+                yield StreamEvent(
+                    event_type="progress",
+                    data={
+                        "total_files": total_files,
+                        "processed_files": processed_files,
+                        "batch_size": effective_batch_size,
+                    },
+                )
+
+        yield StreamEvent(
+            event_type="complete",
+            data={
+                "total_files": total_files,
+                "processed_files": processed_files,
+                "cancelled": self._cancelled,
+            },
+        )
         # AC_COMPLETE: AC-PHASE65-S7-STREAM-001
+
+    def _normalize_stream_inputs(
+        self,
+        file_paths: Union[Path, Sequence[Union[str, Path]]],
+    ) -> List[Path]:
+        """Normalize a repo path or explicit file list into Python source files."""
+        if isinstance(file_paths, Path):
+            if file_paths.is_dir():
+                return sorted(path for path in file_paths.rglob("*.py") if path.is_file())
+            return [file_paths]
+
+        normalized: List[Path] = []
+        for item in file_paths:
+            path = Path(item)
+            if path.is_dir():
+                normalized.extend(sorted(candidate for candidate in path.rglob("*.py") if candidate.is_file()))
+            else:
+                normalized.append(path)
+        return normalized
 
     async def cancel_analysis(self) -> None:
         """Cancel ongoing streaming analysis by setting the cancellation flag."""
@@ -689,6 +729,27 @@ class LensAnalyzerTier4:
     def __init__(self) -> None:
         """Initialize Tier 4 full analyzer"""
         self.registry = LensCapabilityRegistry()
+
+    async def analyze(self, file_path: Path) -> LensAnalysisResult:
+        """Run the legacy Tier 4 async contract and return a typed result."""
+        capabilities = [capability.name for capability in self.registry.get_all()]
+        findings = [
+            {
+                "capability": capability.name,
+                "status": "analyzed",
+                "priority": capability.priority,
+            }
+            for capability in self.registry.get_all()
+        ]
+
+        return LensAnalysisResult(
+            tier=LensTier.TIER_4_FULL,
+            file_path=file_path,
+            timestamp=datetime.utcnow().isoformat(),
+            findings=findings,
+            capabilities_used=capabilities,
+            analysis_time_ms=0.0,
+        )
 
     def full_analysis(self, file_path: str) -> Dict[str, Any]:
         """
@@ -741,10 +802,10 @@ class LensOrchestratorIntegration:
         self.tier3_stream = LensStreamTier3()
         self.tier4 = LensAnalyzerTier4()
 
-    def interaction_orchestrator_quick_analysis(
+    async def interaction_orchestrator_quick_analysis(
         self,
         file_path: Path,
-    ) -> Dict[str, Any]:
+    ) -> LensAnalysisResult:
         """
         Quick analysis for InteractionOrchestrator.
 
@@ -757,29 +818,21 @@ class LensOrchestratorIntegration:
             Combined Tier 2 analysis results
         """
         # AC_START: AC-PHASE65-S7-INT-001
-        try:
-            file_str = str(file_path)
-            return {
-                "syntax": self.tier2.syntax_check(file_str),
-                "type_hints": self.tier2.type_hints_analysis(file_str),
-                "imports": self.tier2.import_analysis(file_str),
-                "complexity": self.tier2.function_complexity(file_str),
-                "file": file_str,
-                "tier": "tier_2_quick",
-            }
-        except Exception as e:
-            return {
-                "error": f"Quick analysis failed: {e}",
-                "file": str(file_path),
-                "tier": "tier_2_quick",
-            }
+        return await self.tier2.analyze(file_path)
         # AC_COMPLETE: AC-PHASE65-S7-INT-001
 
-    def plan_orchestrator_validation(
+    async def tdd_orchestrator_context_enrichment(
+        self,
+        file_path: Path,
+    ) -> LensAnalysisResult:
+        """Backward-compatible Tier 2 entry point for the TDD orchestrator."""
+        return await self.tier2.analyze(file_path)
+
+    async def plan_orchestrator_validation(
         self,
         file_path: Path,
         capabilities: Optional[List[str]] = None,
-    ) -> Dict[str, Any]:
+    ) -> LensAnalysisResult:
         """
         Validation analysis for PlanOrchestrator.
 
@@ -793,35 +846,13 @@ class LensOrchestratorIntegration:
             Tier 3 targeted analysis results
         """
         # AC_START: AC-PHASE65-S7-INT-002
-        try:
-            file_str = str(file_path)
-
-            # Default to security, performance, documentation
-            if capabilities is None:
-                capabilities = ["security", "performance", "documentation"]
-
-            # Use analyze_with_capabilities for custom selection
-            result = self.tier3_targeted.analyze_with_capabilities(file_str, capabilities)
-
-            return {
-                "analysis": result,
-                "file": file_str,
-                "tier": "tier_3_targeted",
-                "capabilities": capabilities,
-            }
-
-        except Exception as e:
-            return {
-                "error": f"Validation failed: {e}",
-                "file": str(file_path),
-                "tier": "tier_3_targeted",
-            }
+        return await self.tier3_targeted.analyze(file_path, capabilities=capabilities)
         # AC_COMPLETE: AC-PHASE65-S7-INT-002
 
-    def onboarding_orchestrator_full_analysis(
+    async def onboarding_orchestrator_full_analysis(
         self,
         file_path: Path,
-    ) -> Dict[str, Any]:
+    ) -> LensAnalysisResult:
         """
         Full analysis for RepositoryOnboardingOrchestrator.
 
@@ -834,14 +865,7 @@ class LensOrchestratorIntegration:
             Tier 4 full analysis result
         """
         # AC_START: AC-PHASE65-S7-INT-003
-        try:
-            return self.tier4.full_analysis(str(file_path))
-        except Exception as e:
-            return {
-                "error": f"Full analysis failed: {e}",
-                "file": str(file_path),
-                "tier": "tier_4_full",
-            }
+        return await self.tier4.analyze(file_path)
         # AC_COMPLETE: AC-PHASE65-S7-INT-003
 
 

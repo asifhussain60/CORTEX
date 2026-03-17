@@ -1,0 +1,318 @@
+/* =============================================================================
+   CORTEX Dashboard — Responsive Design System
+   Mobile-first responsive layout with breakpoint utilities
+   ============================================================================= */
+
+/* ---------------------------------------------------------------------------
+   CSS Custom Properties — Breakpoints & Touch Targets
+   --------------------------------------------------------------------------- */
+:root {
+  --breakpoint-mobile: 320px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-large: 1920px;
+
+  --touch-target-min: 44px;
+
+  /* Responsive spacing */
+  --spacing-mobile: 0.75rem;
+  --spacing-tablet: 1rem;
+  --spacing-desktop: 1.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility — Focus Styles
+   --------------------------------------------------------------------------- */
+:focus {
+  outline: 2px solid var(--cortex-cyan, #00c8ff);
+  outline-offset: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cortex-cyan, #00c8ff);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Mobile-only styles (max-width: 767px) */
+@media (max-width: 767px) {
+  .logo-img {
+    max-width: 120px;
+    height: auto;
+  }
+
+  .logo-container {
+    max-width: 100%;
+  }
+}
+
+/* Smallest viewport (320px) */
+@media (min-width: 320px) {
+  .logo-img {
+    display: block;
+    visibility: visible;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Hamburger Menu — Mobile-first (visible by default)
+   --------------------------------------------------------------------------- */
+.hamburger-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 22px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.hamburger-menu .bar {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: currentColor;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  border-radius: 2px;
+}
+
+/* Hide hamburger on desktop */
+@media (min-width: 1024px) {
+  .hamburger-menu {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Responsive Grid
+   --------------------------------------------------------------------------- */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-mobile);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-desktop);
+  }
+}
+
+@media (min-width: 1920px) {
+  .grid-responsive {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-desktop);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Touch Targets — Interactive Elements
+   --------------------------------------------------------------------------- */
+button,
+a,
+[role="button"],
+[role="link"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+select {
+  min-height: var(--touch-target-min);
+}
+
+/* ---------------------------------------------------------------------------
+   Chart Containers — Responsive Heights
+   --------------------------------------------------------------------------- */
+.chart-container {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .chart-container {
+    height: 220px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .chart-container {
+    height: 280px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Table — Horizontal Scroll on Small Screens
+   --------------------------------------------------------------------------- */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive table {
+  min-width: 600px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* ---------------------------------------------------------------------------
+   Visibility Utilities
+   --------------------------------------------------------------------------- */
+
+/* Mobile (< 768px) */
+.hidden-mobile {
+  display: none !important;
+}
+
+.visible-mobile {
+  display: block !important;
+}
+
+@media (min-width: 768px) {
+  .hidden-mobile {
+    display: block !important;
+  }
+
+  .visible-mobile {
+    display: none !important;
+  }
+}
+
+/* Tablet (768px – 1023px) */
+.hidden-tablet {
+  display: block !important;
+}
+
+.visible-tablet {
+  display: none !important;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hidden-tablet {
+    display: none !important;
+  }
+
+  .visible-tablet {
+    display: block !important;
+  }
+}
+
+/* Desktop (>= 1024px) */
+.hidden-desktop {
+  display: block !important;
+}
+
+.visible-desktop {
+  display: none !important;
+}
+
+@media (min-width: 1024px) {
+  .hidden-desktop {
+    display: none !important;
+  }
+
+  .visible-desktop {
+    display: block !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced Motion — Accessibility
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition: none !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Navigation — Mobile Overlay
+   --------------------------------------------------------------------------- */
+.nav-mobile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.nav-mobile.menu-open {
+  display: flex;
+}
+
+@media (min-width: 1024px) {
+  .nav-mobile {
+    display: flex;
+    position: static;
+    flex-direction: row;
+    background: none;
+    padding: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Responsive Typography
+   --------------------------------------------------------------------------- */
+.text-responsive-heading {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.2;
+}
+
+.text-responsive-body {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  line-height: 1.6;
+}
+
+/* ---------------------------------------------------------------------------
+   Container — Responsive Max-Width
+   --------------------------------------------------------------------------- */
+.container-responsive {
+  width: 100%;
+  max-width: var(--breakpoint-large);
+  margin-inline: auto;
+  padding-inline: var(--spacing-mobile);
+}
+
+@media (min-width: 768px) {
+  .container-responsive {
+    padding-inline: var(--spacing-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    padding-inline: var(--spacing-desktop);
+  }
+}

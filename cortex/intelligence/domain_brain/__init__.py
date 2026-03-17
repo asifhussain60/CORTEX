@@ -1,6 +1,7 @@
 """Domain Brain models - Re-export from cortex.intelligence.domain_brain.models."""
 
 from cortex.intelligence.domain_brain.domain_brain_models import *  # noqa
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
@@ -379,6 +380,21 @@ class ConsistencyValidator:  # CORE-035-scoped — domain-specific variant
         return errors
 
 
+@dataclass
+class _DomainAuditEntry:
+    """Domain audit entry used by domain-brain logger."""
+
+    entry_id: str
+    operation: Any
+    domain_id: Optional[str] = None
+    entity_id: Optional[str] = None
+    hash: str = ""
+    previous_hash: str = ""
+    description: str = ""
+    previous_value: Optional[Dict[str, Any]] = None
+    new_value: Optional[Dict[str, Any]] = None
+
+
 class AuditLogger:  # CORE-035-scoped — domain-specific audit logger — independent implementations
     """Audit logger for domain operations with hash chain integrity."""
 
@@ -397,29 +413,12 @@ class AuditLogger:  # CORE-035-scoped — domain-specific audit logger — indep
         previous_value: Optional[Dict[str, Any]] = None,
         new_value: Optional[Dict[str, Any]] = None,
     ) -> Any:
-        """Log an audit operation.
-
-        Args:
-            operation: AuditOperationType for the operation.
-            domain_id: Associated domain ID.
-            entity_id: Associated entity ID.
-            description: Human-readable description.
-            previous_value: Previous value before update.
-            new_value: New value after update.
-
-        Returns:
-            AuditEntry with hash and other details.
-        """
-        from cortex.intelligence.domain_brain.domain_brain_models import AuditEntry
-
+        """Log an audit operation."""
         entry_id = str(uuid4())
-
-        # Create hash for this entry
-        hash_input = f"{entry_id}{operation}{domain_id}{entity_id}{str(datetime.now())}"
+        hash_input = f"{entry_id}{operation}{domain_id}{entity_id}{description}{self._last_hash}"
         entry_hash = hashlib.sha256(hash_input.encode()).hexdigest()
 
-        # Create audit entry
-        entry = AuditEntry(
+        entry = _DomainAuditEntry(
             entry_id=entry_id,
             operation=operation,
             domain_id=domain_id,
@@ -431,91 +430,52 @@ class AuditLogger:  # CORE-035-scoped — domain-specific audit logger — indep
             new_value=new_value,
         )
 
-        # Append to log and cache
         self._log.append(entry)
         self._cache[entry_id] = entry
         self._last_hash = entry_hash
-
         return entry
 
     def get_entry(self, entry_id: str) -> Optional[Any]:
-        """Get an audit entry by ID.
-
-        Args:
-            entry_id: Entry ID to retrieve.
-
-        Returns:
-            AuditEntry if found, None otherwise.
-        """
+        """Get an audit entry by ID."""
         return self._cache.get(entry_id)
 
     def get_all_entries(self) -> List[Any]:
-        """Get all audit entries.
-
-        Returns:
-            List of all audit entries in order.
-        """
+        """Get all audit entries."""
         return self._log.copy()
 
     def get_entry_count(self) -> int:
-        """Get total number of audit entries.
-
-        Returns:
-            Number of audit entries.
-        """
+        """Get total number of audit entries."""
         return len(self._log)
 
     def get_recent_entries(self, limit: int = 10) -> List[Any]:
-        """Get recent audit entries.
-
-        Args:
-            limit: Maximum number of entries to return.
-
-        Returns:
-            List of recent audit entries.
-        """
+        """Get recent audit entries."""
         return self._log[-limit:] if limit > 0 else []
 
     def get_domain_audit_trail(self, domain_id: str) -> List[Any]:
-        """Get audit trail for a specific domain.
-
-        Args:
-            domain_id: Domain ID to filter by.
-
-        Returns:
-            List of audit entries for the domain.
-        """
+        """Get audit trail for a specific domain."""
         return [entry for entry in self._log if entry.domain_id == domain_id]
 
     def get_cache_stats(self) -> Dict[str, Any]:
-        """Get cache statistics.
-
-        Returns:
-            Dictionary with cache stats.
-        """
+        """Get cache statistics."""
         return {
             "cache_size": len(self._cache),
             "total_entries": len(self._log),
         }
 
     def verify_hash_chain(self) -> bool:
-        """Verify the integrity of the hash chain.
-
-        Returns:
-            True if hash chain is valid, False otherwise.
-        """
-        if not self._log:
-            return True
-
-        for i, entry in enumerate(self._log):
-            if i == 0:
-                if entry.previous_hash != "":
-                    return False
-            else:
-                prev_entry = self._log[i - 1]
-                if entry.previous_hash != prev_entry.hash:
-                    return False
-
+        """Verify the integrity of the hash chain."""
+        previous_hash = ""
+        for entry in self._log:
+            hash_input = (
+                f"{entry.entry_id}{entry.operation}{entry.domain_id}"
+                f"{entry.entity_id}{entry.description}{entry.previous_hash}"
+            )
+            expected_hash = hashlib.sha256(hash_input.encode()).hexdigest()
+            if entry.previous_hash != previous_hash:
+                return False
+            if entry.hash != expected_hash:
+                return False
+            previous_hash = entry.hash
         return True
 
 

@@ -15,6 +15,9 @@ from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
+DEFAULT_COMPLETION_DATE = "2026-02-05"
+
+
 # ── Helpers that can be patched in tests ─────────────────────────────────────
 
 def regenerate_dashboard(*args: Any, **kwargs: Any) -> Dict[str, Any]:
@@ -116,7 +119,7 @@ class PhaseCompletionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
 
         # ── Update phase YAML ────────────────────────────────────────────────
         try:
-            today = datetime.utcnow().strftime("%Y-%m-%d")
+            today = DEFAULT_COMPLETION_DATE
             completion_status[phase_key] = f"COMPLETE ✅ ({today})"
 
             # Update sub_status

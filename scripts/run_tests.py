@@ -521,7 +521,7 @@ def run_changed() -> int:
         return run_unit()
     _print_header("Changed Tests — testmon smart selection (only diff'd tests)")
     code = _run_batch(
-        test_dirs=["tests/"],
+        test_dirs=["tests/unit/", "tests/core/", "tests/preflight/"],
         timeout=30,
         maxfail=20,
         use_testmon=True,

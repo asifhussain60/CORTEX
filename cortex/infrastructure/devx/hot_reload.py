@@ -15,7 +15,12 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
 
-from cortex.models.canonical_enums import ChangeType
+
+class ChangeType(Enum):
+    """Type of file system change."""
+    CREATED = "created"
+    MODIFIED = "modified"
+    DELETED = "deleted"
 
 
 @dataclass

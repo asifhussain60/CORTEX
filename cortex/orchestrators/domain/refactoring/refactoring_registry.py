@@ -35,8 +35,12 @@ class RefactoringToolRegistry:
     """
     def __init__(self) -> None:
         """Initialize empty registry."""
-        self._adapters: Dict[RefactoringLanguage, RefactoringToolAdapter] = {}
+        self._adapters: Dict[str, RefactoringToolAdapter] = {}
         logger.info("RefactoringToolRegistry initialized")
+
+    def _normalize_language(self, language: RefactoringLanguage) -> str:
+        """Normalize language enums across compatibility imports."""
+        return getattr(language, "value", str(language))
 
     def register(self, adapter: RefactoringToolAdapter) -> Union[Ok[None], Err]:
         """Register a refactoring tool adapter.
@@ -51,22 +55,23 @@ class RefactoringToolRegistry:
             - CORE-035: Prevents duplicate language registrations
         """
         language = adapter.get_language()
+        language_key = self._normalize_language(language)
 
-        if language in self._adapters:
+        if language_key in self._adapters:
             error_msg = (
-                f"Adapter for {language.value} already registered. "
+                f"Adapter for {language_key} already registered. "
                 f"Duplicate registration prevented (CORE-035)."
             )
             logger.warning(error_msg)
             return Err(error_msg)
 
-        self._adapters[language] = adapter
+        self._adapters[language_key] = adapter
 
         availability = "available" if adapter.is_available() else "unavailable"
         operations_count = len(adapter.get_supported_operations())
 
         logger.info(
-            f"Registered adapter for {language.value}: "
+            f"Registered adapter for {language_key}: "
             f"{operations_count} operations, status={availability}"
         )
 
@@ -83,17 +88,18 @@ class RefactoringToolRegistry:
         Returns:
             Union[Ok[RefactoringToolAdapter], Err]: Adapter if found, error if not registered
         """
-        if language not in self._adapters:
-            error_msg = f"No adapter registered for {language.value}"
+        language_key = self._normalize_language(language)
+        if language_key not in self._adapters:
+            error_msg = f"No adapter registered for {language_key}"
             logger.debug(error_msg)
             return Err(error_msg)
 
-        adapter = self._adapters[language]
+        adapter = self._adapters[language_key]
 
         # Log availability status on retrieval
         if not adapter.is_available():
             logger.warning(
-                f"Adapter for {language.value} retrieved but tool is unavailable"
+                f"Adapter for {language_key} retrieved but tool is unavailable"
             )
 
         return Ok(adapter)
@@ -112,7 +118,7 @@ class RefactoringToolRegistry:
         Returns:
             List[RefactoringLanguage]: Languages with registered adapters
         """
-        return list(self._adapters.keys())
+        return [RefactoringLanguage(language) for language in self._adapters.keys()]
 
     def get_available_languages(self) -> List[RefactoringLanguage]:
         """Return list of languages with available (installed) tools.
@@ -121,7 +127,7 @@ class RefactoringToolRegistry:
             List[RefactoringLanguage]: Languages where tools are available
         """
         return [
-            language
+            RefactoringLanguage(language)
             for language, adapter in self._adapters.items()
             if adapter.is_available()
         ]

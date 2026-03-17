@@ -1,0 +1,161 @@
+# ==============================================================================
+# CORTEX GOVERNANCE SKULL RULES — Core Enforcement Contracts
+# ==============================================================================
+# This file is the governance-scoped view of CORTEX's immutable core rules.
+# SSOT for raw rules: cortex-registry/core/tier0-skull/skull-rules.yaml
+# ==============================================================================
+
+meta:
+  schema: "1.0"
+  updated: "2026-03-01"
+  author: "Asif Hussain"
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+
+enforcement_levels:
+  PRE-EXECUTION:
+    description: "Enforced before any execution begins"
+  BLOCKED:
+    description: "Operation is blocked until rule is satisfied"
+  WARNING:
+    description: "Warning issued but execution continues"
+
+core_rules:
+  - id: CORE-001
+    name: "Response Header Mandatory"
+    description: "Every first response to a user request must begin with the CORTEX response header."
+    enforcement: "PRE-EXECUTION"
+    category: "response_formatting"
+    priority: "CRITICAL"
+    rationale: "Consistent response branding and audit traceability require a canonical header."
+    examples: []
+    related_rules: ["CORE-002"]
+
+  - id: CORE-002
+    name: "VS Code Inline Rendering"
+    description: "All output must render inline in VS Code Copilot Chat without external resources."
+    enforcement: "PRE-EXECUTION"
+    category: "response_formatting"
+    priority: "HIGH"
+    rationale: "Portability and accessibility require self-contained responses."
+    examples: []
+    related_rules: ["CORE-001"]
+
+  - id: CORE-008
+    name: "TDD Mandatory"
+    description: "TDD is mandatory for all code-modifying work. Tests must be written before implementation."
+    enforcement: "PRE-EXECUTION"
+    category: "development_workflow"
+    priority: "CRITICAL"
+    rationale: "RED → GREEN → REFACTOR cycle ensures correctness by design."
+    examples: []
+    related_rules: ["CORE-048", "CORE-064", "CORE-068"]
+
+  - id: CORE-011
+    name: "Orchestrator AC Markers"
+    description: "All orchestrator traces must emit paired AC_START and AC_COMPLETE markers."
+    enforcement: "PRE-EXECUTION"
+    category: "orchestration_lifecycle"
+    priority: "HIGH"
+    rationale: "Traceability requires paired markers for every operation."
+    examples: []
+    related_rules: ["CORE-008"]
+
+  - id: CORE-019
+    name: "MCP Routing First"
+    description: "All tool invocations must route through MCP before direct execution."
+    enforcement: "PRE-EXECUTION"
+    category: "orchestration_lifecycle"
+    priority: "HIGH"
+    rationale: "Consistent routing ensures governance, tracing, and audit coverage."
+    examples: []
+    related_rules: []
+
+  - id: CORE-035
+    name: "Single Source of Truth"
+    description: "No policy duplication. Each contract has exactly one canonical file."
+    enforcement: "BLOCKED"
+    category: "governance"
+    priority: "CRITICAL"
+    rationale: "Duplicated policies cause drift and inconsistency."
+    examples: []
+    related_rules: ["CORE-064"]
+
+  - id: CORE-048
+    name: "Holistic Validation Gate"
+    description: "All orchestrators must run holistic validation before completion."
+    enforcement: "PRE-EXECUTION"
+    category: "development_workflow"
+    priority: "HIGH"
+    rationale: "Partial validation creates false confidence in delivery quality."
+    examples: []
+    related_rules: ["CORE-008", "CORE-068"]
+
+  - id: CORE-049
+    name: "Silent Autonomous Mode"
+    description: "After explicit proceed, operate silently without per-step confirmations."
+    enforcement: "PRE-EXECUTION"
+    category: "orchestration_lifecycle"
+    priority: "MEDIUM"
+    rationale: "Autonomous mode reduces friction for approved workflows."
+    examples: []
+    related_rules: []
+
+  - id: CORE-064
+    name: "Sweep Completeness"
+    description: "Any sweep must be complete — partial sweeps are prohibited."
+    enforcement: "BLOCKED"
+    category: "development_workflow"
+    priority: "HIGH"
+    rationale: "Partial sweeps create false green state that degrades over time."
+    examples: []
+    related_rules: ["CORE-035"]
+
+  - id: CORE-068
+    name: "Convergence Loop"
+    description: "Detect-fix-rescan convergence loop is required after all remediation."
+    enforcement: "PRE-EXECUTION"
+    category: "development_workflow"
+    priority: "HIGH"
+    rationale: "Single-pass remediation leaves residual failures undetected."
+    examples: []
+    related_rules: ["CORE-008", "CORE-048"]
+
+  - id: CORE-071
+    name: "Evidence-Based Certification"
+    description: "Production readiness claims require evidence from validated gates."
+    enforcement: "BLOCKED"
+    category: "governance"
+    priority: "CRITICAL"
+    rationale: "Unsupported 100% claims violate audit integrity."
+    examples: []
+    related_rules: ["CORE-048"]
+
+  - id: CORE-072
+    name: "Zero PII Leakage"
+    description: "No personally identifiable information may appear in logs, traces, or outputs."
+    enforcement: "BLOCKED"
+    category: "security"
+    priority: "CRITICAL"
+    rationale: "PII leakage violates regulatory requirements and user trust."
+    examples: []
+    related_rules: []
+
+  - id: CORE-073
+    name: "Immutable Audit Chain"
+    description: "Audit entries must be hash-chained and tamper-evident."
+    enforcement: "PRE-EXECUTION"
+    category: "governance"
+    priority: "HIGH"
+    rationale: "Tamper-evident trails are required for compliance certification."
+    examples: []
+    related_rules: ["CORE-071"]
+
+  - id: CORE-074
+    name: "Drift Lock Enforcement"
+    description: "Drift locks must be validated before any structural change to locked components."
+    enforcement: "BLOCKED"
+    category: "governance"
+    priority: "HIGH"
+    rationale: "Drift locks protect architectural invariants from uncontrolled mutation."
+    examples: []
+    related_rules: ["CORE-035"]

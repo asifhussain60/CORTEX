@@ -24,6 +24,9 @@ class CortexMasterDashboardGenerator:
     Reads cortex-registry/_cortex-master/index.yaml and generates
     dashboard/data/plan-summary.json with automatic variance detection.
     """
+
+    VERSION = "1.0.0"
+
     def __init__(self, registry_path: str = "cortex-registry/_cortex-master") -> None:
         """
         Initialize generator with registry path.

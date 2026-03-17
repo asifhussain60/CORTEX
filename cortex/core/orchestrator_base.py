@@ -49,12 +49,28 @@ class GovernanceDecision:
 class OrchestratorBase(WorkflowTemplateMixin, ABC):
     """Base class for all orchestrators with 5-step lifecycle and workflow template capability."""
 
-    def __init__(self, orchestrator_id: str = "unnamed") -> None:
-        """Initialize orchestrator."""
+    def __init__(
+        self,
+        orchestrator_id: str = "unnamed",
+        context: Optional["OrchestrationContext"] = None,
+    ) -> None:
+        """Initialize orchestrator.
+
+        Args:
+            orchestrator_id: Stable orchestrator identifier.
+            context: Optional pre-built orchestration context (legacy-compatible).
+        """
         self.orchestrator_id = orchestrator_id
         self.logger = logging.getLogger(f"cortex.orchestrators.{orchestrator_id}")
         self.execution_results: List[ExecutionResult] = []
         self._governance_decision: Optional[GovernanceDecision] = None
+        if context is None:
+            self.context = OrchestrationContext(
+                orchestrator_id=orchestrator_id,
+                orchestrator_name=self.__class__.__name__,
+            )
+        else:
+            self.context = context
 
     def execute(self) -> ExecutionResult:
         """Execute the 5-step orchestrator lifecycle."""

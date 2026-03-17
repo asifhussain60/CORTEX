@@ -151,6 +151,39 @@ You've asked CORTEX to {summary}:
 
 ---
 
+## Template Selection Matrix
+
+| Mode | Default Template | Alternative | Notes |
+|---|---|---|---|
+| IMPLEMENT/FIX/REFACTOR/AUDIT | Table | CLASSIFY (Conversational Mode) | Use table for dense structured diffs |
+| QUERY/REPHRASE/quick guidance | CLASSIFY (Conversational Mode) | Table | Prefer natural language for fast scan |
+
+### Template F: CLASSIFY (Conversational Mode)
+
+- Natural Language Reflection
+- concise conversational rendering for user-facing summaries
+- target length: ≤60 tokens for quick responses
+
+### Table vs Conversational Comparison
+
+| Dimension | Table | Conversational |
+|---|---|---|
+| Token Count | Higher | Lower |
+| Scan Time | Slower on small answers | Faster on small answers |
+| Best Use | Structured multi-field data | Natural language explanation |
+
+### Backward Compatibility
+
+- Backward compatible with existing default `'table'` rendering behavior.
+- Existing templates remain valid by default.
+- Conversational mode is additive and can be selected explicitly.
+
+Referenced AC markers:
+- AC-CIG-S2-001
+- AC-CIG-S2-002
+
+---
+
 ## VS Code Copilot Chat Rendering Rules
 
 - Use `---` for 3-zone header separation and major section dividers.

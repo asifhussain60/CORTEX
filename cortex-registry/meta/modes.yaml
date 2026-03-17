@@ -1,0 +1,113 @@
+# ============================================================================
+# CORTEX HEXA-MODE Definitions (meta canonical)
+# ============================================================================
+# Authority: cortex-architect.prompt.md § EXECUTION MODES
+# Canonical location: cortex-registry/meta/modes.yaml
+# Loaded by: cortex.core.yaml_loaders.ModesLoader
+# ============================================================================
+
+meta:
+  version: "1.0"
+  name: "CORTEX HEXA-MODE Definitions"
+  updated: "2026-02-26"
+  description: "All execution modes available in the CORTEX framework"
+
+modes:
+  PRE-FLIGHT:
+    name: "Pre-Flight"
+    trigger: "session start"
+    description: "Session initialization — Stage 0 governance audit, inflight upgrade check"
+    agent: "cortex-architect"
+    priority: 0
+    flow:
+      - "Check origin/main for upstream changes"
+      - "Run STAGE-0-GOVERNANCE-AUDIT-SPEC checks"
+      - "Validate requirements.txt (UpgradeOrchestrator)"
+      - "Route to IntentRouter"
+
+  AUDIT:
+    name: "Audit"
+    trigger: "/audit, /audit fix, scan, check"
+    description: "19-Point production readiness scan with optional auto-fix"
+    agent: "cortex-auditor"
+    priority: 1
+    flow:
+      - "Stage -1: Environment readiness"
+      - "Stage 0: Inflight upgrade + pre-flight"
+      - "Stage 1: Stage 0 governance pre-flight"
+      - "Stage 2: 19-Point production scan"
+      - "Stage 3: Wiring contract validation"
+      - "Stage 4: Orchestrator health (all 22)"
+      - "Stage 5: Vacuum cleanup"
+      - "Stage 6: Prompt/agent meta-audit"
+      - "Stages 7-8: Auto-fix convergence loop"
+      - "Stage 9: Tests + AC_COMPLETE"
+
+  IMPLEMENT:
+    name: "Implement"
+    trigger: "build, create, add, implement"
+    description: "TDD-first development — RED → GREEN → REFACTOR"
+    agent: "cortex-executor"
+    priority: 2
+    flow:
+      - "Holistic validation gate (CORE-048)"
+      - "Challenge gate (risk > 0.4)"
+      - "RED: Write failing tests first (CORE-008)"
+      - "GREEN: Implement minimum code"
+      - "REFACTOR: Clean up with tests passing"
+      - "Validate: smoke tests + compliance"
+      - "Commit: conventional commit message"
+
+  FIX:
+    name: "Fix"
+    trigger: "fix, bug, broken, error, failing"
+    description: "Bug resolution via TDD with sweep completeness"
+    agent: "cortex-executor"
+    priority: 3
+    flow:
+      - "Reproduce: identify or create failing test"
+      - "Root cause: LENS analysis"
+      - "RED: Confirm failing test"
+      - "GREEN: Fix with minimum change"
+      - "REFACTOR: Clean up"
+      - "Regression: smoke tests"
+      - "Sweep gate: CORE-064 full catalogue"
+
+  REFACTOR:
+    name: "Refactor"
+    trigger: "refactor, improve, optimize, consolidate"
+    description: "Safe code improvement with functional completeness gate"
+    agent: "cortex-executor"
+    priority: 4
+    flow:
+      - "Functional baseline: enumerate endpoints"
+      - "Baseline: smoke tests, record count"
+      - "LENS scan: complexity, duplication"
+      - "Plan: strategy with risk assessment"
+      - "Execute: incremental changes"
+      - "Security hardening gate"
+      - "Scorecard + verify"
+
+  DESIGN:
+    name: "Design"
+    trigger: "architect, design, structure, pattern"
+    description: "Challenge-first architecture decisions"
+    agent: "cortex-architect"
+    priority: 5
+    flow:
+      - "Understand: LENS analysis"
+      - "Challenge: present alternatives"
+      - "Decide: user selects approach"
+      - "Document: ADR or inline"
+
+  PLAN:
+    name: "Plan"
+    trigger: "plan, phase, roadmap"
+    description: "Phase planning and roadmap management"
+    agent: "cortex-phase-resolver"
+    priority: 6
+    flow:
+      - "Assess: current state analysis"
+      - "Decompose: break into gaps"
+      - "Sequence: dependency ordering"
+      - "Document: phase detail file"

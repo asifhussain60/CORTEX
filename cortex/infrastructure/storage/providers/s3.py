@@ -62,8 +62,7 @@ class S3StorageProvider(IKnowledgeProvider):
 
             if "/" in endpoint:
                 self.bucket_name, self.prefix = endpoint.split("/", 1)
-                if self.prefix and not self.prefix.endswith("/"):
-                    self.prefix += "/"
+                self.prefix = self.prefix.rstrip("/")
             else:
                 self.bucket_name = endpoint
                 self.prefix = ""
@@ -94,7 +93,26 @@ class S3StorageProvider(IKnowledgeProvider):
         Returns:
             Full S3 object key with prefix
         """
-        return f"{self.prefix}{path}".lstrip("/")
+        clean_path = path.lstrip("/")
+        if not self.prefix:
+            return clean_path
+        if not clean_path:
+            return self.prefix
+        return f"{self.prefix}/{clean_path}".lstrip("/")
+
+    @staticmethod
+    def _extract_error_code(error: Exception) -> str:
+        """Extract backend error code from botocore or mocked ClientError."""
+        response = getattr(error, "response", None)
+        if isinstance(response, dict):
+            return str(response.get("Error", {}).get("Code", ""))
+
+        if getattr(error, "args", None):
+            first_arg = error.args[0]
+            if isinstance(first_arg, dict):
+                return str(first_arg.get("Error", {}).get("Code", ""))
+
+        return ""
 
     def read(self, path: str) -> str:
         """
@@ -122,7 +140,7 @@ class S3StorageProvider(IKnowledgeProvider):
             return content
 
         except ClientError as e:
-            error_code = e.response.get("Error", {}).get("Code", "")
+            error_code = self._extract_error_code(e)
             if error_code == "NoSuchKey":
                 raise NotFoundError(f"Object not found: {path}") from e
             elif error_code == "AccessDenied":
@@ -158,7 +176,7 @@ class S3StorageProvider(IKnowledgeProvider):
                 Body=content.encode("utf-8")
             )
         except ClientError as e:
-            error_code = e.response.get("Error", {}).get("Code", "")
+            error_code = self._extract_error_code(e)
             if error_code == "AccessDenied":
                 raise PermissionError(f"Access denied to {path}") from e
             else:
@@ -201,7 +219,7 @@ class S3StorageProvider(IKnowledgeProvider):
                         relative = key[len(self.prefix):]
                     else:
                         relative = key
-                    entries.append(relative)
+                    entries.append(relative.lstrip("/"))
 
             return sorted(entries)
         except Exception as e:
@@ -226,8 +244,8 @@ class S3StorageProvider(IKnowledgeProvider):
             self.s3_client.head_object(Bucket=self.bucket_name, Key=key)
             return True
         except ClientError as e:
-            error_code = e.response.get("Error", {}).get("Code", "")
-            if error_code == "404":
+            error_code = self._extract_error_code(e)
+            if error_code in {"404", "NotFound", "NoSuchKey"}:
                 return False
             return False
         except Exception:
@@ -259,8 +277,8 @@ class S3StorageProvider(IKnowledgeProvider):
         except NotFoundError:
             raise
         except ClientError as e:
-            error_code = e.response.get("Error", {}).get("Code", "")
-            if error_code == "NoSuchKey":
+            error_code = self._extract_error_code(e)
+            if error_code in {"NoSuchKey", "NotFound", "404"}:
                 raise NotFoundError(f"Object not found: {path}") from e
             elif error_code == "AccessDenied":
                 raise PermissionError(f"Access denied to {path}") from e

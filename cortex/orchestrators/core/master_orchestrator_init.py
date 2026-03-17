@@ -429,6 +429,9 @@ class MasterOrchestratorInitialiser:
                 success=False,
                 details={"error": str(e)},
             )
+            # Ensure router is never None — fall back to FallbackRouter on any init error
+            if h.router is None:
+                h.router = self._make_fallback_router(h)
 
         # AC-PHASE-2-5-WIRE-003 placeholder log (router already set above)
         if h._adaptive_router is None:

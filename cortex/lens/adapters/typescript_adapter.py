@@ -16,6 +16,7 @@ Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 3
 """
 
 from pathlib import Path
+import re
 from typing import Any, Dict, List, Optional
 
 import tree_sitter_javascript as ts_javascript
@@ -53,9 +54,20 @@ class TypeScriptAdapter(LanguageAdapter):  # CORE-035-scoped — domain-specific
 
     def __init__(self) -> None:
         """Initialize TypeScriptAdapter with tree-sitter parser (uses JavaScript parser)."""
-        # New tree-sitter API (0.20+): pass language directly to Parser
-        self.parser = Parser(ts_javascript.language())
-        self.language = ts_javascript.language()
+        self.parser = None
+        self.language = None
+        try:
+            self.parser = Parser(ts_javascript.language())
+            self.language = ts_javascript.language()
+        except Exception:
+            try:
+                parser = Parser()
+                parser.set_language(ts_javascript.language())
+                self.parser = parser
+                self.language = ts_javascript.language()
+            except Exception:
+                self.parser = None
+                self.language = None
 
     def parse_file(self, file_path: Path) -> PolyglotASTResult:
         """
@@ -84,6 +96,9 @@ class TypeScriptAdapter(LanguageAdapter):  # CORE-035-scoped — domain-specific
             # Read file content
             source_code = file_path.read_bytes()
 
+            if self.parser is None:
+                return self._parse_with_regex_fallback(file_path, source_code)
+
             # Parse with tree-sitter
             tree = self.parser.parse(source_code)
             root_node = tree.root_node
@@ -108,16 +123,166 @@ class TypeScriptAdapter(LanguageAdapter):  # CORE-035-scoped — domain-specific
                 metadata={"package": package} if package else {},
             )
         except Exception as e:
-            return PolyglotASTResult(
-                file_path=file_path,
-                language=LanguageType.TYPESCRIPT,
-                classes=[],
-                functions=[],
-                imports=[],
-                raw_ast=None,
-                parse_errors=[f"Parse error: {str(e)}"],
-                metadata={},
-            )
+            try:
+                return self._parse_with_regex_fallback(file_path, source_code)
+            except Exception:
+                return PolyglotASTResult(
+                    file_path=file_path,
+                    language=LanguageType.TYPESCRIPT,
+                    classes=[],
+                    functions=[],
+                    imports=[],
+                    raw_ast=None,
+                    parse_errors=[f"Parse error: {str(e)}"],
+                    metadata={},
+                )
+
+    def _parse_with_regex_fallback(self, file_path: Path, source_code: bytes) -> PolyglotASTResult:
+        """Fallback parser for environments where tree-sitter runtime is incompatible."""
+        text = source_code.decode("utf-8", errors="ignore")
+        lines = text.splitlines()
+
+        imports: List[ImportInfo] = []
+        for idx, line in enumerate(lines, start=1):
+            match = re.search(r"import\s+(?:\{([^}]*)\}|([A-Za-z_][A-Za-z0-9_]*))\s+from\s+['\"]([^'\"]+)['\"]", line)
+            if match:
+                named = match.group(1) or ""
+                default_name = match.group(2)
+                names = [n.strip() for n in named.split(",") if n.strip()]
+                if default_name:
+                    names.append(default_name)
+                imports.append(ImportInfo(module=match.group(3), names=names, line=idx))
+
+        classes: List[ClassInfo] = []
+        class_pattern = re.compile(r"export\s+class\s+(\w+)(?:\s+implements\s+([\w,\s]+))?")
+        interface_pattern = re.compile(r"export\s+interface\s+(\w+)(?:\s+extends\s+([\w,\s]+))?")
+
+        for idx, line in enumerate(lines, start=1):
+            class_match = class_pattern.search(line)
+            if class_match:
+                class_name = class_match.group(1)
+                base_classes = [b.strip() for b in (class_match.group(2) or "").split(",") if b.strip()]
+                methods, properties, attributes = self._extract_fallback_class_members(lines, idx - 1)
+                classes.append(
+                    ClassInfo(
+                        name=class_name,
+                        line_start=idx,
+                        line_end=min(len(lines), idx + 50),
+                        methods=methods,
+                        base_classes=base_classes,
+                        properties=properties,
+                        attributes=attributes,
+                    )
+                )
+
+            interface_match = interface_pattern.search(line)
+            if interface_match:
+                interface_name = interface_match.group(1)
+                methods = self._extract_fallback_interface_methods(lines, idx - 1)
+                base_classes = [b.strip() for b in (interface_match.group(2) or "").split(",") if b.strip()]
+                classes.append(
+                    ClassInfo(
+                        name=interface_name,
+                        line_start=idx,
+                        line_end=min(len(lines), idx + 50),
+                        methods=methods,
+                        base_classes=base_classes,
+                        is_interface=True,
+                    )
+                )
+
+        return PolyglotASTResult(
+            file_path=file_path,
+            language=LanguageType.TYPESCRIPT,
+            classes=classes,
+            functions=[],
+            imports=imports,
+            raw_ast=None,
+            parse_errors=[],
+            metadata={},
+        )
+
+    def _extract_fallback_class_members(self, lines: List[str], start_idx: int) -> tuple:
+        """Extract constructor/method/property data from a class block using regex."""
+        methods: List[FunctionInfo] = []
+        properties: List[str] = []
+        attributes: List[str] = []
+
+        brace_depth = 0
+        in_block = False
+        for idx in range(start_idx, len(lines)):
+            line = lines[idx]
+            brace_depth += line.count("{") - line.count("}")
+            if "{" in line:
+                in_block = True
+            if not in_block:
+                continue
+
+            for decorator in re.findall(r"@(\w+)", line):
+                attributes.append(f"@{decorator}")
+
+            for prop in re.findall(r"\b(?:public|private|protected)\s+(\w+)\s*:", line):
+                if prop not in properties:
+                    properties.append(prop)
+
+            if re.search(r"\bconstructor\s*\(", line):
+                methods.append(
+                    FunctionInfo(
+                        name="constructor",
+                        line_start=idx + 1,
+                        line_end=idx + 1,
+                        parameters=[],
+                    )
+                )
+
+            method_match = re.search(r"\b(constructor|\w+)\s*\(([^)]*)\)", line)
+            if method_match:
+                method_name = method_match.group(1)
+                params = [p.strip().split(":")[0].replace("public ", "").replace("private ", "").replace("protected ", "") for p in method_match.group(2).split(",") if p.strip()]
+                if method_name == "constructor":
+                    for param in params:
+                        if param and param not in properties:
+                            properties.append(param)
+                methods.append(
+                    FunctionInfo(
+                        name=method_name,
+                        line_start=idx + 1,
+                        line_end=idx + 1,
+                        parameters=params,
+                        decorators=[d for d in re.findall(r"@(\w+)", line)],
+                    )
+                )
+
+            if in_block and brace_depth <= 0 and idx > start_idx:
+                break
+
+        return methods, properties, attributes
+
+    def _extract_fallback_interface_methods(self, lines: List[str], start_idx: int) -> List[FunctionInfo]:
+        """Extract method signatures from interface block."""
+        methods: List[FunctionInfo] = []
+        brace_depth = 0
+        in_block = False
+        for idx in range(start_idx, len(lines)):
+            line = lines[idx]
+            brace_depth += line.count("{") - line.count("}")
+            if "{" in line:
+                in_block = True
+            if in_block:
+                method_match = re.search(r"\b(\w+)\s*\(([^)]*)\)\s*:", line)
+                if method_match:
+                    params = [p.strip().split(":")[0] for p in method_match.group(2).split(",") if p.strip()]
+                    methods.append(
+                        FunctionInfo(
+                            name=method_match.group(1),
+                            line_start=idx + 1,
+                            line_end=idx + 1,
+                            parameters=params,
+                        )
+                    )
+            if in_block and brace_depth <= 0 and idx > start_idx:
+                break
+        return methods
 
     def get_supported_extensions(self) -> List[str]:
         """

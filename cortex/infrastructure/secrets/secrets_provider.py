@@ -27,3 +27,26 @@ class ISecretsProvider(ABC):
     @abstractmethod
     def rotate_secret(self, key: str) -> str:
         """Rotate a secret and return the new value."""
+
+    def get(self, key: str) -> str:
+        """Compatibility alias for get_secret."""
+        return self.get_secret(key)
+
+    def set(self, key: str, value: str, metadata: Any = None) -> bool:
+        """Compatibility alias for set_secret."""
+        return self.set_secret(key, value, **(metadata or {}))
+
+    def delete(self, key: str) -> bool:
+        """Compatibility alias for delete_secret."""
+        return self.delete_secret(key)
+
+    def list(self, prefix: str = "") -> List[str]:
+        """Compatibility alias for list_secrets."""
+        values = self.list_secrets()
+        if not prefix:
+            return values
+        return [value for value in values if value.startswith(prefix)]
+
+    def rotate(self, key: str) -> str:
+        """Compatibility alias for rotate_secret."""
+        return self.rotate_secret(key)

@@ -1,3 +1,4 @@
+# CORE-035: Quarantine shadow — canonical is cortex/infrastructure/security/secrets_filter.py. Not imported. Pending vacuum removal.
 """
 SecretsFilter - redacts sensitive data from logs and outputs.
 

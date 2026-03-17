@@ -28,7 +28,5 @@ class StorageConfig:
     cache_enabled: bool = True
 
     def __post_init__(self):
-        """Validate backend value."""
-        valid_backends = {"local", "s3", "azure"}
-        if self.backend not in valid_backends:
-            raise ValueError(f"Invalid backend: {self.backend}. Must be one of {valid_backends}")
+        """Normalize backend value; validation occurs in StorageProviderFactory."""
+        self.backend = str(self.backend).lower()

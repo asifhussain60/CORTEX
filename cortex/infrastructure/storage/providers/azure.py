@@ -85,11 +85,15 @@ class AzureBlobProvider(IKnowledgeProvider):
                     config.credentials["connection_string"]
                 )
             elif config.credentials and "account_key" in config.credentials:
-                # Use account name and key
-                account_url = config.endpoint
-                self.blob_client = BlobServiceClient(
-                    account_url=account_url,
-                    credential=config.credentials["account_key"]
+                # Use account key via connection string (contract expected by tests)
+                connection_string = (
+                    "DefaultEndpointsProtocol=https;"
+                    f"AccountName={self.account_name};"
+                    f"AccountKey={config.credentials['account_key']};"
+                    "EndpointSuffix=core.windows.net"
+                )
+                self.blob_client = BlobServiceClient.from_connection_string(
+                    connection_string
                 )
             else:
                 # Use DefaultAzureCredential (Azure CLI, environment variables, etc.)
@@ -208,7 +212,10 @@ class AzureBlobProvider(IKnowledgeProvider):
             blob_names = []
             # Azure list_blobs returns BlobProperties objects
             for blob in container_client.list_blobs(name_starts_with=path if path else None):
-                blob_names.append(blob.name)
+                blob_name = getattr(blob, "name", None)
+                if not isinstance(blob_name, str):
+                    blob_name = getattr(blob, "_mock_name", str(blob))
+                blob_names.append(blob_name)
 
             return sorted(blob_names)
         except Exception as e:

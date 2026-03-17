@@ -20,6 +20,9 @@ from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 
 # Phase 27: Import StandardsResolver for company domain integration
 from cortex.orchestrators.core.intent_router.challenge_generator import ChallengeGenerator
+from cortex.orchestrators.core.intent_router_impl import IntentRouter  # backward-compatible patch target
+from cortex.models.interaction_plan import requires_plan_gate  # backward-compatible patch target
+from cortex.orchestrators.core.plan_gate_service import PlanGateService  # backward-compatible patch target
 from cortex.orchestrators.core.holistic_context_builder import HolisticContextBuilder
 from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager  # noqa: F401 — patched by test harness
@@ -94,6 +97,12 @@ class MasterOrchestrator(MasterOrchestratorE2EMixin, MasterOrchestratorRegistryM
     """
 
     _instance: Optional['MasterOrchestrator'] = None
+
+# CORTEX_DEBUG TEST_FAILURE test=test_example | time=
+
+# CORTEX_DEBUG TEST_FAILURE test=test_example | time=
+
+# CORTEX_DEBUG TEST_FAILURE test=test_example | time=
 
     # Phase 95 — advisory: MasterOrchestrator receives raw user requests as operation_name
     # (freeform strings, not mode keys). The gateway requires a structured mode string

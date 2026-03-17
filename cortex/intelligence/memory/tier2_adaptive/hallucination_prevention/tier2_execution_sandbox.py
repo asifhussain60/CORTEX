@@ -39,11 +39,14 @@ class SandboxResult:
 class ExecutionSandbox:
     """Sandbox for isolated operation execution."""
 
-    def __init__(self) -> None:
+    def __init__(self, db_path: Optional[str] = None) -> None:
         """Initialize sandbox."""
+        self.db_path = db_path
         self.executed_operations: list = []
         self.side_effects_log: list = []
         self.snapshots: list = []
+        self._execution_history: list = self.executed_operations
+        self._side_effect_tracking: list = self.side_effects_log
 
     def execute(
         self,
@@ -137,6 +140,7 @@ class ExecutionSandbox:
                 "description": description,
                 "duration_ms": duration,
             })
+            self._execution_history = self.executed_operations
 
             # Add state attribute for test compatibility
             execution.state = ExecutionState.COMPLETED
@@ -158,6 +162,7 @@ class ExecutionSandbox:
                 "traceback": traceback.format_exc(),
                 "mode": mode.value if hasattr(mode, 'value') else str(mode),
             })
+            self._execution_history = self.executed_operations
 
         return execution
 
@@ -249,6 +254,7 @@ class ExecutionSandbox:
                 side_effects[f"removed_{key}", "SandboxExecution"] = before_state[key]
 
         self.side_effects_log.append(side_effects)
+        self._side_effect_tracking = self.side_effects_log
         return side_effects
 
     def get_execution_log(self) -> list:

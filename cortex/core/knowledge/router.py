@@ -72,7 +72,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.core.knowledge import KnowledgeProvider, KnowledgeQueryResult
+from cortex.core.knowledge import KnowledgeProvider, KnowledgeQueryResult, is_knowledge_provider
 
 # =============================================================================
 # ENUMS AND DATA CLASSES
@@ -405,13 +405,11 @@ class IntelligentKnowledgeRouter:  # CORE-035-scoped — domain-specific variant
 
         # Pattern 1: explicit providers
         elif tech_provider is not None and business_provider is not None:
-            # Validate providers (only if they claim to be KnowledgeProvider)
-            if hasattr(tech_provider, '__class__') and tech_provider.__class__.__name__ == 'KnowledgeProvider':
-                if not isinstance(tech_provider, KnowledgeProvider):
-                    raise ValueError("tech_provider must implement KnowledgeProvider protocol")
-            if hasattr(business_provider, '__class__') and business_provider.__class__.__name__ == 'KnowledgeProvider':
-                if not isinstance(business_provider, KnowledgeProvider):
-                    raise ValueError("business_provider must implement KnowledgeProvider protocol")
+            # Validate providers implement the KnowledgeProvider protocol
+            if not is_knowledge_provider(tech_provider):
+                raise ValueError("tech_provider must implement KnowledgeProvider protocol")
+            if not is_knowledge_provider(business_provider):
+                raise ValueError("business_provider must implement KnowledgeProvider protocol")
 
             self._tech_provider = tech_provider
             self._business_provider = business_provider

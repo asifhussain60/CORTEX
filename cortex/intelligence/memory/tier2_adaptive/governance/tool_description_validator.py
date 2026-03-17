@@ -75,7 +75,13 @@ class ToolDescription:
     error_handling: List[str] = field(default_factory=list)
 
 
-from cortex.core.result import Result
+@dataclass
+class Result:
+    """Simple result wrapper with success/value/error fields."""
+
+    success: bool
+    value: Optional[Any] = None
+    error: Optional[str] = None
 
 
 class ToolDescriptionValidator:

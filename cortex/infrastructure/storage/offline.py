@@ -44,7 +44,7 @@ class OfflineModeProvider(IKnowledgeProvider):
         self.is_offline = False
         self.offline_start_time: Optional[float] = None
 
-        self.metrics = {
+        self._metrics = {
             "offline_duration_seconds": 0,
             "retry_attempts": 0,
             "network_errors": 0,
@@ -85,8 +85,8 @@ class OfflineModeProvider(IKnowledgeProvider):
             self.is_offline = False
             if self.offline_start_time:
                 duration = time.time() - self.offline_start_time
-                self.metrics["offline_duration_seconds"] += int(duration)
-            self.metrics["successful_reconnects"] += 1
+                self._metrics["offline_duration_seconds"] += int(duration)
+            self._metrics["successful_reconnects"] += 1
 
     def _is_network_error(self, error: Exception) -> bool:
         """Check if error is network-related."""
@@ -124,11 +124,11 @@ class OfflineModeProvider(IKnowledgeProvider):
                 return result
             except NetworkError as e:
                 last_error = e
-                self.metrics["network_errors"] += 1
+                self._metrics["network_errors"] += 1
                 self._mark_offline()
 
                 if attempt < self.max_retries - 1:
-                    self.metrics["retry_attempts"] += 1
+                    self._metrics["retry_attempts"] += 1
                     backoff = self._calculate_backoff(attempt)
                     # In real implementation, would sleep here
                     # time.sleep(backoff)
@@ -139,6 +139,14 @@ class OfflineModeProvider(IKnowledgeProvider):
 
         if last_error:
             raise last_error
+
+    @property
+    def metrics(self) -> dict:
+        """Return metrics with live offline duration update."""
+        metrics = dict(self._metrics)
+        if self.is_offline and self.offline_start_time is not None:
+            metrics["offline_duration_seconds"] += int(time.time() - self.offline_start_time)
+        return metrics
 
     def read(self, path: str) -> str:
         """

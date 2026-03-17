@@ -7,7 +7,7 @@ entries:
   recorded_at: '2026-03-16T10:17:38.929610+00:00'
   context: {}
   _context_hash: d7517139
-  occurrence_count: 30
+  occurrence_count: 35
   error: '2 governance violation(s): CORE-030 VIOLATION: Pre-execution discovery not
     performed. Run cortex_discover before IMPLEMENT/DESIGN/REFACTOR operations.; CORE-008
     VIOLATION: TDD required - tests must exist before code implementation'
@@ -15,3 +15,19 @@ entries:
   avoid_in_future: 'Ensure operation satisfies: CORE-030 VIOLATION: Pre-execution
     discovery not performed. Run cortex_discover before IMPLEMENT/DESIGN/REFACTOR
     operations.; CORE-008 VIOLATION: TDD required - tests must exist before code implementation'
+- pattern_id: OPJ-ENFORCEMENT_ORCHESTR-20260316204307863307
+  orchestrator: EnforcementOrchestrator
+  operation: validate_operation
+  outcome: failure
+  confidence: 0.9
+  recorded_at: '2026-03-16T20:43:07.863334+00:00'
+  context: {}
+  _context_hash: d7517139
+  occurrence_count: 1
+  error: '1 governance violation(s): CORE-058 VIOLATION: SQLite WAL mode is DISABLED.
+    All audit databases MUST use WAL (Write-Ahead Logging) mode for concurrent-safe
+    writes. Set PRAGMA journal_mode=WAL on open.'
+  attempted_fix: see violation details
+  avoid_in_future: 'Ensure operation satisfies: CORE-058 VIOLATION: SQLite WAL mode
+    is DISABLED. All audit databases MUST use WAL (Write-Ahead Logging) mode for concurrent-safe
+    writes. Set PRAGMA journal_mode=WAL on open.'

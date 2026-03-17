@@ -1,3 +1,4 @@
+# CORE-035: Quarantine shadow — canonical is cortex/infrastructure/security/defense_orchestrator.py. Not imported. Pending vacuum removal.
 """
 DefenseOrchestrator - coordinates defense-in-depth security layers.
 

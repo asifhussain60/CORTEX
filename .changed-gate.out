@@ -1,0 +1,563 @@
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CORTEX Test Runner — Changed Tests — testmon smart selection (only diff'd tests)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+============================= test session starts ==============================
+collecting ... collected 4402 items / 2077 deselected / 1 skipped / 2325 selected
+
+tests/unit/secrets/test_environment_validation.py::TestStringValidation::test_validate_string_default PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestStringValidation::test_validate_string_min_length PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestStringValidation::test_validate_string_max_length PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestStringValidation::test_validate_string_pattern PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestIntegerValidation::test_validate_int_basic PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestIntegerValidation::test_validate_int_invalid PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestIntegerValidation::test_validate_int_min PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestIntegerValidation::test_validate_int_max PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestIntegerValidation::test_validate_int_range PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestFloatValidation::test_validate_float_basic PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestFloatValidation::test_validate_float_range PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestBooleanValidation::test_validate_bool_true_values PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestBooleanValidation::test_validate_bool_false_values PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestURLValidation::test_validate_url_valid PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestURLValidation::test_validate_url_invalid_no_scheme PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestURLValidation::test_validate_url_invalid_no_netloc PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestPortValidation::test_validate_port_valid PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestPortValidation::test_validate_port_too_low PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestPortValidation::test_validate_port_too_high PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestPortValidation::test_validate_port_not_number PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestPathValidation::test_validate_path_basic PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestPathValidation::test_validate_path_expanduser PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestPathValidation::test_validate_path_must_exist PASSED [  0%]
+tests/unit/secrets/test_environment_validation.py::TestPathValidation::test_validate_path_must_be_file PASSED [  1%]
+tests/unit/secrets/test_environment_validation.py::TestPathValidation::test_validate_path_must_be_dir PASSED [  1%]
+tests/unit/secrets/test_environment_validation.py::TestSchemaValidation::test_validate_schema_all_valid PASSED [  1%]
+tests/unit/secrets/test_environment_validation.py::TestSchemaValidation::test_validate_schema_required_missing PASSED [  1%]
+tests/unit/secrets/test_environment_validation.py::TestSchemaValidation::test_validate_schema_optional_missing PASSED [  1%]
+tests/unit/secrets/test_environment_validation.py::TestCustomValidator::test_custom_validator_pass PASSED [  1%]
+tests/unit/secrets/test_environment_validation.py::TestCustomValidator::test_custom_validator_fail PASSED [  1%]
+tests/unit/secrets/test_environment_validation.py::TestSecretsEnvironmentValidation::test_validate_secrets_env_success PASSED [  1%]
+tests/unit/secrets/test_environment_validation.py::TestSecretsEnvironmentValidation::test_validate_secrets_env_missing_key PASSED [  1%]
+tests/unit/secrets/test_environment_validation.py::TestSecretsEnvironmentValidation::test_validate_secrets_env_weak_key PASSED [  1%]
+tests/unit/secrets/test_environment_validation.py::TestRequiredVariables::test_add_required PASSED [  1%]
+tests/unit/secrets/test_environment_validation.py::TestRequiredVariables::test_required_enforced_in_schema PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_aws_key PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_bearer_token PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_jwt_token PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_password PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_github_token PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_private_key PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_credit_card PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_dict_password_key PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_dict_nested PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_dict_list_values PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_json_valid PASSED [  1%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_redact_json_invalid PASSED [  2%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_get_redaction_report PASSED [  2%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_custom_rule PASSED [  2%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_empty_string PASSED [  2%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_empty_dict PASSED [  2%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_no_secrets_in_text PASSED [  2%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_disabled_rule PASSED [  2%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_performance_large_text PASSED [  2%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_is_likely_secret PASSED [  2%]
+tests/unit/secrets/test_secret_redactor.py::TestSecretRedactor::test_preserve_data_structure PASSED [  2%]
+tests/unit/secrets/test_secrets_integration.py::TestE2ESecretsManagement::test_complete_workflow_with_audit FAILED [  2%]
+tests/unit/secrets/test_secrets_integration.py::TestE2ESecretsManagement::test_encryption_decryption_roundtrip PASSED [  2%]
+tests/unit/secrets/test_secrets_integration.py::TestE2ESecretsManagement::test_multi_secret_isolation PASSED [  2%]
+tests/unit/secrets/test_secrets_integration.py::TestE2ESecretsManagement::test_environment_validation_integration PASSED [  2%]
+tests/unit/secrets/test_secrets_integration.py::TestE2ESecretsManagement::test_integrity_agent_with_real_keys PASSED [  2%]
+tests/unit/secrets/test_secrets_integration.py::TestSecureStoragePatterns::test_storage_isolation_per_workspace PASSED [  2%]
+tests/unit/secrets/test_secrets_integration.py::TestSecureStoragePatterns::test_master_key_sensitivity PASSED [  2%]
+tests/unit/secrets/test_secrets_integration.py::TestAuditTrailIntegrity::test_audit_chain_integrity_preserved FAILED [  2%]
+tests/unit/secrets/test_secrets_integration.py::TestAuditTrailIntegrity::test_audit_trail_completeness PASSED [  2%]
+tests/unit/test_core_028_naming.py::test_core_028_naming_compliance FAILED [  2%]
+tests/unit/test_core_028_naming.py::test_compliance_documentation PASSED [  2%]
+tests/unit/test_core_028_naming.py::test_pytest_discovery PASSED         [  2%]
+tests/unit/test_core_028_naming.py::test_naming_migration_strategy PASSED [  2%]
+tests/unit/test_type_hints.py::test_core_011_type_hint_requirement PASSED [  3%]
+tests/unit/test_type_hints.py::test_type_hint_coverage_analysis PASSED   [  3%]
+tests/unit/test_type_hints.py::test_mypy_strict_validation PASSED        [  3%]
+tests/unit/test_type_hints.py::test_pre_commit_hook_strategy PASSED      [  3%]
+tests/unit/test_type_hints.py::test_ac_fix_005_01_completion_criteria PASSED [  3%]
+tests/unit/test_type_hints.py::test_type_hint_examples PASSED            [  3%]
+tests/unit/testing/test_composer_tests.py::TestComposerBasics::test_composer_initialization PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestComposerBasics::test_compose_returns_composed_test PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestSilentOperationComposer::test_silent_operation_includes_file_check PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestSilentOperationComposer::test_silent_operation_has_audit_validation PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestContextSynthesisComposer::test_context_synthesis_merges_layers PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestLoopIntelligenceComposer::test_loop_intelligence_bounds_checking PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestLoopIntelligenceComposer::test_loop_intelligence_checks_dod_status PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestGateEnforcementComposer::test_gate_enforcement_blocks_on_failure PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestGateEnforcementComposer::test_gate_enforcement_allows_on_success PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestTemplateQualityComposer::test_template_quality_checks_language PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestTemplateQualityComposer::test_template_quality_checks_no_code_snippets PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestAuditComplianceComposer::test_audit_compliance_checks_ac_markers PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestComposedTestStructure::test_composed_test_has_required_fields PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestComposedTestStructure::test_composed_test_code_is_valid_python PASSED [  3%]
+tests/unit/testing/test_composer_tests.py::TestComposedTestStructure::test_composed_test_includes_docstring PASSED [  3%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandDataModel::test_demand_creation PASSED [  3%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandDataModel::test_demand_to_dict PASSED [  3%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandDataModel::test_demand_from_dict PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestInteractionAnalyzer::test_analyzer_generates_demands PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestInteractionAnalyzer::test_silent_operation_demand PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestInteractionAnalyzer::test_context_synthesis_demand PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestInteractionAnalyzer::test_loop_intelligence_demand PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestInteractionAnalyzer::test_gate_enforcement_demand PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestInteractionAnalyzer::test_audit_compliance_demand PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestInteractionAnalyzer::test_demands_have_realistic_scenarios PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestInteractionAnalyzer::test_estimated_test_code_calculation PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandRegistry::test_registry_initialization PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandRegistry::test_register_demands_creates_yaml PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandRegistry::test_get_demands_retrieves_from_registry PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandRegistry::test_get_golden_path_demands PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandRegistry::test_registry_caching PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandValidator::test_validator_initialization PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandValidator::test_validate_no_circular_dependencies PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandValidator::test_validate_coverage_scoring PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandValidator::test_validate_realism_scoring PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandValidator::test_validate_generates_recommendations PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandIntegration::test_full_workflow_interaction_orchestrator PASSED [  4%]
+tests/unit/testing/test_demand_generator_tests.py::TestDemandIntegration::test_golden_path_expectations_met PASSED [  4%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoveryScannerInitialization::test_scanner_initializes_with_default_path PASSED [  4%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoveryScannerInitialization::test_scanner_initializes_with_custom_path PASSED [  4%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoveryScannerInitialization::test_scanner_builds_test_mapping PASSED [  4%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoveryScannerInitialization::test_discovered_components_list_initialized PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoveryScannerInitialization::test_lens_patterns_defined PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestLENSComponentDiscovery::test_scan_lens_components PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestLENSComponentDiscovery::test_lens_phases_have_patterns PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestLENSComponentDiscovery::test_language_phase_priority FAILED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestInfrastructureDiscovery::test_scan_infrastructure_components PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestInfrastructureDiscovery::test_infrastructure_patterns_defined PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestGovernanceDiscovery::test_scan_governance_components PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestGovernanceDiscovery::test_governance_registry_critical PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestMCPToolkitDiscovery::test_scan_mcp_toolkit PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestMCPToolkitDiscovery::test_mcp_patterns_defined PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestFullScan::test_scan_all_returns_unique_components PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestFullScan::test_scan_all_populates_discovered_components PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestFullScan::test_scan_all_categorizes_components PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestFullScan::test_scan_all_assigns_priorities PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoveredComponentConversion::test_component_to_inventory_entry PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoveredComponentConversion::test_inventory_entry_has_required_fields PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoverySummary::test_get_summary_returns_dict PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoverySummary::test_summary_has_required_keys PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoverySummary::test_summary_counts_match_discovered PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoverySummary::test_summary_categories_sum_to_total PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestDiscoverySummary::test_summary_components_list_complete PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestComponentFiltering::test_critical_components_identified PASSED [  5%]
+tests/unit/testing/test_discovery_scanner.py::TestComponentFiltering::test_components_by_category PASSED [  6%]
+tests/unit/testing/test_discovery_scanner.py::TestComponentFiltering::test_components_with_tests PASSED [  6%]
+tests/unit/testing/test_discovery_scanner.py::TestGenerateInventoryUpdates::test_generate_inventory_updates_returns_string PASSED [  6%]
+tests/unit/testing/test_discovery_scanner.py::TestGenerateInventoryUpdates::test_inventory_has_header PASSED [  6%]
+tests/unit/testing/test_discovery_scanner.py::TestGenerateInventoryUpdates::test_inventory_has_category_sections PASSED [  6%]
+tests/unit/testing/test_discovery_scanner.py::TestIntegrationWithWiringHarness::test_discovered_components_compatible_format PASSED [  6%]
+tests/unit/testing/test_discovery_scanner.py::TestIntegrationWithWiringHarness::test_discovery_provides_inventory_entries PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryWiringHarnessIntegration::test_discovered_components_returns_list PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryWiringHarnessIntegration::test_discovered_components_all_unwired_type PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryWiringHarnessIntegration::test_discovered_components_have_required_fields PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryWiringHarnessIntegration::test_discovery_summary_structure PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryWiringHarnessIntegration::test_discovery_summary_categories_valid PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryWiringHarnessIntegration::test_discovered_plus_static_combines PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryComponentConversionToInventory::test_discovered_components_compatible_with_inventory PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryComponentConversionToInventory::test_discovered_orchestrators_identified PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryAndWiringExecution::test_run_discovery_and_wire_returns_dict PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryAndWiringExecution::test_run_discovery_and_wire_has_status PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryAndWiringExecution::test_run_discovery_and_wire_tracks_wiring PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestCriticalComponentsDiscovery::test_critical_components_priority_zero PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestCriticalComponentsDiscovery::test_critical_components_orchestrators PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestCriticalComponentsDiscovery::test_high_priority_components_identified PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestLENSComponentsDiscovery::test_lens_components_in_discovered PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestLENSComponentsDiscovery::test_lens_phases_represented PASSED [  6%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestInfrastructureComponentsDiscovery::test_infrastructure_patterns_exist PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestInfrastructureComponentsDiscovery::test_resilience_components_discoverable PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestGovernanceComponentsDiscovery::test_governance_registry_discoverable PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestGovernanceComponentsDiscovery::test_tier_composer_discoverable PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestMCPToolkitDiscoveryIntegration::test_mcp_patterns_defined PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestMCPToolkitDiscoveryIntegration::test_tool_discovery_engine_discoverable PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryDynamicComponent::test_discovery_extensible PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryDynamicComponent::test_discovery_can_add_patterns PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestGracefulDegradationOnDiscoveryFailure::test_discovered_components_returns_empty_on_failure PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestGracefulDegradationOnDiscoveryFailure::test_discovery_summary_valid_on_failure PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestGracefulDegradationOnDiscoveryFailure::test_wiring_handles_discovery_errors PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestInventoryEnrichmentWithDiscovery::test_static_inventory_still_available PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestInventoryEnrichmentWithDiscovery::test_critical_wiring_order_still_works PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestInventoryEnrichmentWithDiscovery::test_combined_inventory_includes_all PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryScanner::test_scanner_initializes PASSED [  7%]
+tests/unit/testing/test_discovery_wiring_integration.py::TestDiscoveryScanner::test_scanner_patterns_comprehensive PASSED [  7%]
+tests/unit/testing/test_graceful_degradation.py::TestGracefulDegradationHandler::test_handler_initializes_with_full_degradation PASSED [  7%]
+tests/unit/testing/test_graceful_degradation.py::TestGracefulDegradationHandler::test_register_fallback_strategy PASSED [  7%]
+tests/unit/testing/test_graceful_degradation.py::TestGracefulDegradationHandler::test_primary_function_succeeds PASSED [  7%]
+tests/unit/testing/test_graceful_degradation.py::TestGracefulDegradationHandler::test_fallback_triggered_on_primary_failure PASSED [  7%]
+tests/unit/testing/test_graceful_degradation.py::TestGracefulDegradationHandler::test_multiple_fallback_strategies PASSED [  7%]
+tests/unit/testing/test_graceful_degradation.py::TestGracefulDegradationHandler::test_no_fallback_available PASSED [  7%]
+tests/unit/testing/test_graceful_degradation.py::TestGracefulDegradationHandler::test_degradation_level_set_to_critical PASSED [  7%]
+tests/unit/testing/test_graceful_degradation.py::TestGracefulDegradationHandler::test_reset_degradation_state PASSED [  8%]
+tests/unit/testing/test_graceful_degradation.py::TestGracefulDegradationHandler::test_failure_count_tracking PASSED [  8%]
+tests/unit/testing/test_graceful_degradation.py::TestGracefulDegradationHandler::test_failure_count_resets_on_success PASSED [  8%]
+tests/unit/testing/test_graceful_degradation.py::TestCacheFallbackStrategy::test_cache_hit PASSED [  8%]
+tests/unit/testing/test_graceful_degradation.py::TestCacheFallbackStrategy::test_cache_miss PASSED [  8%]
+tests/unit/testing/test_graceful_degradation.py::TestDefaultValueFallbackStrategy::test_default_value_returned PASSED [  8%]
+tests/unit/testing/test_graceful_degradation.py::TestDefaultValueFallbackStrategy::test_different_default_types PASSED [  8%]
+tests/unit/testing/test_graceful_degradation.py::TestFallbackResult::test_result_has_timestamp PASSED [  8%]
+tests/unit/testing/test_graceful_degradation.py::TestFallbackResult::test_result_defaults PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_valid_json_passes PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_invalid_json_fails PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_token_limit_enforced PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_token_limit_warning PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_harmful_content_detected PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_prompt_leakage_detected PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_output_sanitization PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_json_structure_validation PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_suspicious_fields_detected PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_encoding_validation PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_score_calculation PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_convenience_function PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestOutputValidation::test_multiple_violations PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestValidationSeverity::test_error_severity PASSED [  8%]
+tests/unit/testing/test_output_validation.py::TestValidationSeverity::test_warning_severity PASSED [  8%]
+tests/unit/testing/test_quality_gate.py::TestQualityGateScoring::test_high_value_content_scores_keep PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestQualityGateScoring::test_low_value_content_scores_delete PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestQualityGateScoring::test_mixed_content_scores_review PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestQualityGateScoring::test_stub_only_content_scores_delete PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestQualityGateScoring::test_score_breakdown_has_all_five_dimensions PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestQualityGateScoring::test_impact_dimension_max_is_three PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestQualityGateScoring::test_maintenance_penalty_is_negative PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestQualityGateScoring::test_score_is_bounded_zero_to_nine PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestQualityGateScoring::test_empty_file_scores_delete PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestGoldenTestDetection::test_golden_content_is_detected_as_golden PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestGoldenTestDetection::test_golden_detection_requires_two_orchestrators PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestGoldenTestDetection::test_golden_detection_requires_audit_log_assertion PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestGoldenTestDetection::test_golden_tests_are_never_categorised_delete PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestGoldenTestDetection::test_golden_tests_in_golden_dir_auto_detected PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_category_boundaries[0-DELETE] PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_category_boundaries[1-DELETE] PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_category_boundaries[3-DELETE] PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_category_boundaries[3.9-DELETE] PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_category_boundaries[4-REVIEW] PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_category_boundaries[5-REVIEW] PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_category_boundaries[6-REVIEW] PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_category_boundaries[6.9-REVIEW] PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_category_boundaries[7-KEEP] PASSED [  9%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_category_boundaries[8-KEEP] PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_category_boundaries[9-KEEP] PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_gate_passes_returns_true_for_keep PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestCategoryThresholds::test_custom_threshold_overrides_default PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestBackwardCompatAliases::test_phase71_test_value_scorer_importable PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestBackwardCompatAliases::test_phase71_scorer_types_importable PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestBackwardCompatAliases::test_phase51_quality_validator_importable PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestBackwardCompatAliases::test_wave2_test_value_scorer_importable PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestMCPToolContract::test_mcp_tool_importable PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestMCPToolContract::test_mcp_tool_has_required_properties PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestMCPToolContract::test_mcp_tool_parameters_include_target_path PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestMCPToolContract::test_mcp_tool_parameters_include_min_score PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestMCPToolContract::test_mcp_tool_result_contains_summary_table PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestMCPToolContract::test_mcp_tool_anti_tests_list_when_requested PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestPytestPluginHook::test_plugin_importable PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestPytestPluginHook::test_plugin_registers_collect_hook PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestPytestPluginHook::test_plugin_warn_mode_does_not_deselect PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestPytestPluginHook::test_plugin_strict_mode_deselects_delete_tier PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestPytestPluginHook::test_plugin_strict_mode_keeps_golden_tests PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestTDDOrchestratorGate::test_tdd_orchestrator_exposes_quality_gate PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestTDDOrchestratorGate::test_tdd_orchestrator_quality_gate_is_test_quality_gate PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestTDDOrchestratorGate::test_gate_passes_method_available PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestTDDOrchestratorGate::test_score_content_method_available PASSED [ 10%]
+tests/unit/testing/test_quality_gate.py::TestParallelSafety::test_gate_has_no_mutable_instance_state PASSED [ 11%]
+tests/unit/testing/test_quality_gate.py::TestParallelSafety::test_two_gate_instances_produce_identical_scores PASSED [ 11%]
+tests/unit/testing/test_quality_gate.py::TestParallelSafety::test_score_file_accepts_pathlib_path PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestAdapterInitialization::test_adapter_initialization PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestAdapterInitialization::test_adapter_default_initialization PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestAdapterInitialization::test_adapter_components_initialized PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestTestSuiteGeneration::test_generate_test_suite_returns_suite PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestTestSuiteGeneration::test_generate_test_suite_creates_target_count_demands PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestTestSuiteGeneration::test_generate_test_suite_composes_tests PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestTestSuiteGeneration::test_generate_test_suite_validates_quality PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestTestSuiteGeneration::test_generate_test_suite_calculates_metrics PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestDemandGeneration::test_generate_demands_creates_correct_count PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestDemandGeneration::test_generate_demands_covers_multiple_categories PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestDemandGeneration::test_generate_demands_creates_valid_demand_objects PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestDemandGeneration::test_generate_demands_stores_in_registry PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestCategorySpecificDemands::test_create_silent_operation_demand PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestCategorySpecificDemands::test_create_gate_enforcement_demand PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestCategorySpecificDemands::test_create_integration_coupling_demand PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestBatchGeneration::test_generate_batch_returns_dict PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestBatchGeneration::test_generate_batch_processes_multiple_orchestrators PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestBatchGeneration::test_generate_batch_handles_errors_gracefully PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestSuiteMetrics::test_suite_test_count_property PASSED [ 11%]
+tests/unit/testing/test_scaffolder_intelligence_adapter.py::TestSuiteMetrics::test_suite_total_lines_calculation PASSED [ 11%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_inventory_loads PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_all_components_have_required_fields PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_critical_wiring_order_respects_priority PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_entry_points_are_importable PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_challenge_integration_components_present PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_interaction_orchestrator_in_inventory PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_health_and_resilience_components_present PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_mcp_tool_components_present PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_governance_components_present PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_all_components_have_test_coverage PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_all_components_have_governance_rules PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessInventory::test_critical_components_have_wiring_hours_estimate PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessCanAutoWire::test_challenge_generator_can_be_wired PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessCanAutoWire::test_challenge_integration_orchestrator_can_be_wired PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringHarnessCanAutoWire::test_component_health_tracker_can_be_wired PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringIntegrationChecklist::test_challenge_integration_checklist PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringIntegrationChecklist::test_interaction_lens_protocol_checklist PASSED [ 12%]
+tests/unit/testing/test_wiring_harness.py::TestWiringIntegrationChecklist::test_health_resilience_checklist PASSED [ 12%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate001TrivialAutoApprove::test_trivial_score_must_be_approved PASSED [ 12%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate001TrivialAutoApprove::test_trivial_score_rejection_violates_rule PASSED [ 12%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate001TrivialAutoApprove::test_non_trivial_score_no_constraint PASSED [ 12%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate001TrivialAutoApprove::test_threshold_boundary_0_15 PASSED [ 12%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate001TrivialAutoApprove::test_violation_counter_incremented PASSED [ 12%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate002ApprovalMatrixEnforcement::test_trivial_simple_auto_approvable PASSED [ 12%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate002ApprovalMatrixEnforcement::test_moderate_requires_confirmation PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate002ApprovalMatrixEnforcement::test_complex_requires_confirmation_and_escalation PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate002ApprovalMatrixEnforcement::test_critical_requires_confirmation PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate002ApprovalMatrixEnforcement::test_matrix_boundaries PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate003AlternativeRecommendations::test_complex_operation_requires_alternatives PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate003AlternativeRecommendations::test_critical_operation_requires_alternatives PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate003AlternativeRecommendations::test_complex_with_alternatives PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate003AlternativeRecommendations::test_simple_moderate_no_alternatives_required PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate003AlternativeRecommendations::test_minimum_three_alternatives_preferred PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate004UserGoalEnhancement::test_user_goal_enhancement_enabled_by_default PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate004UserGoalEnhancement::test_goal_enhancement_for_complex_operations PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate004UserGoalEnhancement::test_goal_enhancement_with_recommendation PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate004UserGoalEnhancement::test_goal_enhancement_disabled PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate005AuditTrailEnrichment::test_audit_trail_entry_creation PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate005AuditTrailEnrichment::test_audit_trail_entry_has_hash PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate005AuditTrailEnrichment::test_audit_trail_entry_timestamp PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate005AuditTrailEnrichment::test_audit_trail_complexity_factors_enriched PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate005AuditTrailEnrichment::test_audit_trail_persists_all_decisions PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate005AuditTrailEnrichment::test_audit_trail_integrity_verification PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestConfGate005AuditTrailEnrichment::test_audit_trail_entry_unique_ids PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestGovernanceEnforcer::test_enforcer_initialization PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestGovernanceEnforcer::test_validate_all_rules PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestGovernanceEnforcer::test_compliance_tracking PASSED [ 13%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestGovernanceEnforcer::test_rule_enforcement_statistics PASSED [ 14%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestGovernanceRulesEnum::test_all_five_rules_defined PASSED [ 14%]
+tests/unit/tier1/governance/test_confirmation_gate_governance.py::TestGovernanceRulesEnum::test_rule_value_format PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_database_bloat_cleaner.py::TestCleanerProperties::test_name PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_database_bloat_cleaner.py::TestCleanerProperties::test_version PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_database_bloat_cleaner.py::TestCleanerProperties::test_domain PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_database_bloat_cleaner.py::TestExecute::test_vacuum_execution PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_database_bloat_cleaner.py::TestExecute::test_checkpoint_execution PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_database_bloat_cleaner.py::TestExecute::test_orphan_deletion PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_database_bloat_cleaner.py::TestExecute::test_dry_run_no_changes PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_database_bloat_cleaner.py::TestExecute::test_error_handling PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_database_bloat_cleaner.py::TestRetentionPurge::test_purges_old_rows PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_database_bloat_cleaner.py::TestTeardown::test_no_leaked_connections PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerInit::test_init_with_defaults PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerInit::test_init_with_relocate_mode PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerProperties::test_name PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerProperties::test_version PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerProperties::test_domain PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_protected[conftest.py-True] PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_protected[__init__.py-True] PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_protected[pytest.ini-True] PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_protected[baseline.json-True] PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_protected[test_something.py-False] PASSED [ 14%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_protected[phase_26_test.py-False] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_temp_test[phase_26_context_loading.py-True] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_temp_test[phase-53-test.py-True] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_temp_test[phase99_cleanup.py-True] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_temp_test[test_temp_something.py-True] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_temp_test[conftest_optimize.py-True] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_temp_test[test_normal.py-False] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_temp_test[conftest.py-False] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_misplaced_test[test_something.py-True] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_misplaced_test[test_extract_json.py-True] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_misplaced_test[test_custom_patterns.py-True] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_misplaced_test[conftest.py-False] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestPatternMatching::test_is_misplaced_test[some_module.py-False] PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerAnalyze::test_analyze_finds_phase_tests PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerAnalyze::test_analyze_skips_protected PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerAnalyze::test_analyze_finds_misplaced_tests PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerAnalyze::test_analyze_only_scans_root PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerExecute::test_execute_dry_run PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerExecute::test_execute_deletes_temp_test PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerExecute::test_execute_relocate_mode PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerSuggestTargetDir::test_suggest_unit_default PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerSuggestTargetDir::test_suggest_integration PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerSuggestTargetDir::test_suggest_performance PASSED [ 15%]
+tests/unit/tier1/orchestrators/cleaners/test_orphaned_test_cleaner.py::TestOrphanedTestCleanerRollback::test_rollback_not_supported PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerAnalysis::test_analyze_finds_db_files_in_root PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerAnalysis::test_analyze_ignores_subdirectory_db_files PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerAnalysis::test_analyze_with_no_db_files PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerAnalysis::test_analyze_logs_findings PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerExecution::test_execute_deletes_db_files PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerExecution::test_execute_creates_snapshot PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerExecution::test_execute_dry_run_mode PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerExecution::test_execute_handles_missing_file_gracefully PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerRollback::test_rollback_restores_deleted_files PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerRollback::test_rollback_without_snapshot_fails_gracefully PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerIntegration::test_full_cleanup_workflow PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_root_database_cleaner.py::TestRootDatabaseCleanerIntegration::test_full_workflow_with_rollback PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerInit::test_init_with_defaults PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerInit::test_init_with_custom_age PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerInit::test_init_with_dry_run PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerProperties::test_name PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerProperties::test_version PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerProperties::test_domain PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[phase-81-add-metadata.py-True] PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[phase25_wiring_audit.py-True] PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[phase_99_cleanup.py-True] PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[consolidate_phases.py-True] PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[restore_cortex_master.py-True] PASSED [ 16%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[migrate_data.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[fix_test_imports.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[validate-production.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[execute_validation_suite.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[batch_generate_tests.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[cleanup-nomenclature.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[eliminate_redirect_stubs.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[sanitize-company-refs.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[enforce-test-naming.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[add_cortex_semantic_ids.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[update_archived_paths.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[vacuum-runner.py-False] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[setup-mcp.py-False] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[run-tests.sh-False] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[build-docs-site.py-False] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_temp_script[some_normal_script.py-False] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_protected[vacuum-runner.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_protected[setup-mcp.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_protected[run-tests.sh-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_protected[build-docs-site.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_protected[enhanced_cleanup.py-True] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptPatternMatching::test_is_protected[phase-81-something.py-False] PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerAnalyze::test_analyze_finds_temp_scripts PASSED [ 17%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerAnalyze::test_analyze_skips_protected PASSED [ 18%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerAnalyze::test_analyze_respects_min_age PASSED [ 18%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerAnalyze::test_analyze_missing_scripts_dir PASSED [ 18%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerExecute::test_execute_dry_run PASSED [ 18%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerExecute::test_execute_deletes_file PASSED [ 18%]
+tests/unit/tier1/orchestrators/cleaners/test_temp_script_cleaner.py::TestTempScriptCleanerRollback::test_rollback_not_supported PASSED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_file_exists FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_file_contains_valid_json FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_contains_metadata_section FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_contains_entries_section FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_contains_ac_id_mapping_section FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_contains_domain_index_section FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestIndexEntry::test_index_entry_has_required_fields FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestIndexEntry::test_index_entry_id_format_valid FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestIndexEntry::test_index_entry_domain_valid FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestIndexEntry::test_index_entry_ac_ids_is_list FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestACIDMapping::test_ac_id_mapping_exists_for_all_entries FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestACIDMapping::test_ac_id_mapping_points_to_correct_domain FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestACIDMapping::test_ac_id_mapping_has_reference_info FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestDomainIndex::test_domain_index_has_all_domains FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestDomainIndex::test_domain_index_entries_format FAILED [ 18%]
+tests/unit/tier3/test_auto_indexing.py::TestIndexAPI::test_find_entries_by_domain_method_exists FAILED [ 18%]
+
+=================================== FAILURES ===================================
+__________ TestE2ESecretsManagement.test_complete_workflow_with_audit __________
+tests/unit/secrets/test_secrets_integration.py:41: in test_complete_workflow_with_audit
+    assert secrets["count"] == 3
+E   assert 5 == 3
+_________ TestAuditTrailIntegrity.test_audit_chain_integrity_preserved _________
+tests/unit/secrets/test_secrets_integration.py:204: in test_audit_chain_integrity_preserved
+    assert audit["events"] >= 4
+E   TypeError: '>=' not supported between instances of 'list' and 'int'
+_______________________ test_core_028_naming_compliance ________________________
+tests/unit/test_core_028_naming.py:34: in test_core_028_naming_compliance
+    assert len(security_files) > 0, "Security test files should exist"
+E   AssertionError: Security test files should exist
+E   assert 0 > 0
+E    +  where 0 = len([])
+___________ TestLENSComponentDiscovery.test_language_phase_priority ____________
+tests/unit/testing/test_discovery_scanner.py:127: in test_language_phase_priority
+    assert comp.priority == 0
+E   AssertionError: assert 1 == 0
+E    +  where 1 = DiscoveredComponent(name='phasedependencyanalyzer', module_path='cortex.core.dependency_validator', class_name='PhaseDependencyAnalyzer', full_entry_point='cortex.core.dependency_validator.PhaseDependencyAnalyzer', category=<DiscoveryCategory.LENS_COMPONENT: 'lens_component'>, priority=1, test_count=0, test_files=[], docstring='Analyzes phase dependencies and detects issues.', methods=['__init__', '_build_dependency_graph', 'get_phase_dependencies', 'get_transitive_dependencies', 'get_dependents', 'get_transitive_dependents', 'find_path', 'detect_circular_dependencies'], dependencies=[], source_file='/Users/asifhussain/PROJECTS/CORTEX/cortex/core/dependency_validator.py', line_number=76).priority
+__________________ TestIndexStructure.test_index_file_exists ___________________
+tests/unit/tier3/test_auto_indexing.py:65: in test_index_file_exists
+    assert index_file.exists(), "Knowledge index file not found"
+E   AssertionError: Knowledge index file not found
+E   assert False
+E    +  where False = exists()
+E    +    where exists = PosixPath('/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json').exists
+____________ TestIndexStructure.test_index_file_contains_valid_json ____________
+tests/unit/tier3/test_auto_indexing.py:71: in test_index_file_contains_valid_json
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+___________ TestIndexStructure.test_index_contains_metadata_section ____________
+tests/unit/tier3/test_auto_indexing.py:79: in test_index_contains_metadata_section
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+____________ TestIndexStructure.test_index_contains_entries_section ____________
+tests/unit/tier3/test_auto_indexing.py:92: in test_index_contains_entries_section
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+_________ TestIndexStructure.test_index_contains_ac_id_mapping_section _________
+tests/unit/tier3/test_auto_indexing.py:102: in test_index_contains_ac_id_mapping_section
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+_________ TestIndexStructure.test_index_contains_domain_index_section __________
+tests/unit/tier3/test_auto_indexing.py:112: in test_index_contains_domain_index_section
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+_____________ TestIndexEntry.test_index_entry_has_required_fields ______________
+tests/unit/tier3/test_auto_indexing.py:126: in test_index_entry_has_required_fields
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+_______________ TestIndexEntry.test_index_entry_id_format_valid ________________
+tests/unit/tier3/test_auto_indexing.py:140: in test_index_entry_id_format_valid
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+_________________ TestIndexEntry.test_index_entry_domain_valid _________________
+tests/unit/tier3/test_auto_indexing.py:152: in test_index_entry_domain_valid
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+________________ TestIndexEntry.test_index_entry_ac_ids_is_list ________________
+tests/unit/tier3/test_auto_indexing.py:170: in test_index_entry_ac_ids_is_list
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+__________ TestACIDMapping.test_ac_id_mapping_exists_for_all_entries ___________
+tests/unit/tier3/test_auto_indexing.py:184: in test_ac_id_mapping_exists_for_all_entries
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+_________ TestACIDMapping.test_ac_id_mapping_points_to_correct_domain __________
+tests/unit/tier3/test_auto_indexing.py:198: in test_ac_id_mapping_points_to_correct_domain
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+____________ TestACIDMapping.test_ac_id_mapping_has_reference_info _____________
+tests/unit/tier3/test_auto_indexing.py:216: in test_ac_id_mapping_has_reference_info
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+______________ TestDomainIndex.test_domain_index_has_all_domains _______________
+tests/unit/tier3/test_auto_indexing.py:233: in test_domain_index_has_all_domains
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+_______________ TestDomainIndex.test_domain_index_entries_format _______________
+tests/unit/tier3/test_auto_indexing.py:252: in test_domain_index_entries_format
+    with open(index_file, 'r') as f:
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence/tier3/knowledge/.knowledge-index.json'
+____________ TestIndexAPI.test_find_entries_by_domain_method_exists ____________
+tests/unit/tier3/test_auto_indexing.py:269: in test_find_entries_by_domain_method_exists
+    assert hasattr(indexer, 'find_entries_by_domain'), \
+E   AssertionError: KnowledgeIndexer missing find_entries_by_domain method
+E   assert False
+E    +  where False = hasattr(<cortex.intelligence.tier3.knowledge.knowledge_indexer.KnowledgeIndexer object at 0x125ac2460>, 'find_entries_by_domain')
+=========================== short test summary info ============================
+FAILED tests/unit/secrets/test_secrets_integration.py::TestE2ESecretsManagement::test_complete_workflow_with_audit
+FAILED tests/unit/secrets/test_secrets_integration.py::TestAuditTrailIntegrity::test_audit_chain_integrity_preserved
+FAILED tests/unit/test_core_028_naming.py::test_core_028_naming_compliance - ...
+FAILED tests/unit/testing/test_discovery_scanner.py::TestLENSComponentDiscovery::test_language_phase_priority
+FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_file_exists
+FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_file_contains_valid_json
+FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_contains_metadata_section
+FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_contains_entries_section
+FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_contains_ac_id_mapping_section
+FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexStructure::test_index_contains_domain_index_section
+FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexEntry::test_index_entry_has_required_fields
+FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexEntry::test_index_entry_id_format_valid
+FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexEntry::test_index_entry_domain_valid
+FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexEntry::test_index_entry_ac_ids_is_list
+FAILED tests/unit/tier3/test_auto_indexing.py::TestACIDMapping::test_ac_id_mapping_exists_for_all_entries
+FAILED tests/unit/tier3/test_auto_indexing.py::TestACIDMapping::test_ac_id_mapping_points_to_correct_domain
+FAILED tests/unit/tier3/test_auto_indexing.py::TestACIDMapping::test_ac_id_mapping_has_reference_info
+FAILED tests/unit/tier3/test_auto_indexing.py::TestDomainIndex::test_domain_index_has_all_domains
+FAILED tests/unit/tier3/test_auto_indexing.py::TestDomainIndex::test_domain_index_entries_format
+FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexAPI::test_find_entries_by_domain_method_exists
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 20 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+==== 20 failed, 420 passed, 1 skipped, 2077 deselected in 300.20s (0:05:00) ====
+
+❌ Tests failed (exit code: 1)

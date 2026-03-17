@@ -57,6 +57,13 @@ INTENTIONAL_DUPLICATES: dict[str, str] = {
         "testing/test_quality_validator.py defines test-assessment QualityReport "
         "(test_id, overall_score, coverage_score, etc.) — distinct domain schemas"
     ),
+    # Domain-isolated confidence types — different base classes + different pipelines
+    "ConfidenceLevel": (
+        "lens/schemas/ldv1_schema.py defines ConfidenceLevel(float, Enum) for Lens schema scoring; "
+        "intelligence/memory/tier2_adaptive/hallucination_prevention/detection_recovery.py defines "
+        "ConfidenceLevel(Enum) for hallucination-confidence categorisation — distinct domain schemas "
+        "with different base classes"
+    ),
 }
 
 # Classes exempt due to annotated files (CORE-035 governance comment)

@@ -63,6 +63,8 @@ workflow:
     - step_id: "lens_baseline"
       name: "LENS Baseline Analysis"
       orchestrator: "LENSOrchestrator"
+      convergence_gate:
+        max_cycles: 1
       convergence_loop:
         primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
@@ -81,6 +83,8 @@ workflow:
       depends_on: ["lens_baseline"]
       template_ref: "cortex-registry/workflows/templates/security/security-hardening.yaml"
       blocking: true
+      convergence_gate:
+        max_cycles: 10
       convergence_loop:
         primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 10
@@ -104,6 +108,8 @@ workflow:
       template_ref: "cortex-registry/workflows/templates/tdd/tdd-api-service.yaml"
       language_adapter: "{{backend_language}}_refactor_adapter"
       scaffold_mode: "{{backend_language != 'python'}}"
+      convergence_gate:
+        max_cycles: 8
       convergence_loop:
         primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
@@ -137,6 +143,8 @@ workflow:
       template_ref: "cortex-registry/workflows/templates/tdd/tdd-api-service.yaml"
       language_adapter: "{{backend_language}}_refactor_adapter"
       scaffold_mode: "{{backend_language != 'python'}}"
+      convergence_gate:
+        max_cycles: 8
       convergence_loop:
         primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
@@ -170,6 +178,8 @@ workflow:
       template_ref: "cortex-registry/workflows/templates/tdd/tdd-frontend-visual.yaml"
       language_adapter: "typescript_refactor_adapter"
       scaffold_mode: true
+      convergence_gate:
+        max_cycles: 6
       convergence_loop:
         primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 6
@@ -201,6 +211,8 @@ workflow:
       depends_on: ["layer_frontend"]
       template_ref: "cortex-registry/workflows/templates/tdd/tdd-feature-implementation.yaml"
       language_adapter: "{{backend_language}}_refactor_adapter"
+      convergence_gate:
+        max_cycles: 8
       convergence_loop:
         primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
@@ -230,6 +242,8 @@ workflow:
       orchestrator: "RefactoringOrchestrator"
       depends_on: ["layer_tests"]
       template_ref: "cortex-registry/workflows/templates/quality/refactor-holistic-sweep.yaml"
+      convergence_gate:
+        max_cycles: 5
       convergence_loop:
         primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5
@@ -252,6 +266,8 @@ workflow:
       name: "LENS Final Verification — compare against baseline"
       orchestrator: "LENSOrchestrator"
       depends_on: ["holistic_sweep"]
+      convergence_gate:
+        max_cycles: 1
       convergence_loop:
         primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1

@@ -77,6 +77,37 @@ class ClassificationRule(ABC):
         pass
 
 
+class E2ETestingRule(ClassificationRule):
+    """Rule for explicit end-to-end and golden test requests."""
+
+    def matches(self, text: str) -> bool:
+        """Return True when text explicitly requests E2E/golden tests."""
+        normalized = text.lower()
+        return any(
+            phrase in normalized
+            for phrase in (
+                "golden tests",
+                "golden test",
+                "e2e tests",
+                "e2e test",
+                "end-to-end tests",
+                "end to end tests",
+            )
+        )
+
+    def get_intent(self) -> IntentCategory:
+        """Return TEST intent for E2E phrases."""
+        return IntentCategory.TEST
+
+    def get_signal_strength(self) -> float:
+        """Return strong confidence for explicit E2E intent."""
+        return 0.95
+
+    def get_signals(self) -> List[IntentSignal]:
+        """Return signals associated with testing intent."""
+        return [IntentSignal.IMPERATIVE]
+
+
 class IntentClassifier:
     """Classify user intents from natural language text.
 
@@ -94,6 +125,7 @@ class IntentClassifier:
         """Initialize intent classifier."""
         self.keyword_mappings: Dict[IntentCategory, Set[str]] = self._build_keyword_mappings()
         self.signal_patterns: Dict[IntentSignal, re.Pattern] = self._compile_signal_patterns()
+        self.custom_rules: List[ClassificationRule] = [E2ETestingRule()]
         self.classification_cache: Dict[str, ClassificationResult] = {}
         self.metrics: Dict[str, Any] = {
             "total_classifications": 0,
@@ -217,10 +249,32 @@ class IntentClassifier:
 
         # Normalize text
         normalized = text.lower().strip()
+        words = normalized.split()
+
+        for rule in self.custom_rules:
+            if rule.matches(normalized):
+                confidence = min(max(rule.get_signal_strength(), 0.0), 1.0)
+                result = ClassificationResult(
+                    primary_intent=rule.get_intent(),
+                    confidence_score=confidence,
+                    secondary_intents=[],
+                    detected_signals=rule.get_signals(),
+                    keywords=words,
+                    reasoning=f"Matched rule {rule.__class__.__name__}, confidence={confidence:.2f}",
+                    metadata={"rule_matched": rule.__class__.__name__},
+                )
+                self.metrics["total_classifications"] += 1
+                self.metrics["confidence_sum"] += confidence
+                self.metrics["avg_confidence"] = (
+                    self.metrics["confidence_sum"] / self.metrics["total_classifications"]
+                )
+                if len(self.classification_cache) >= self._cache_max_size:
+                    self.classification_cache.pop(next(iter(self.classification_cache)))
+                self.classification_cache[cache_key] = result
+                return result
 
         # Score all intents
         intent_scores: Dict[IntentCategory, float] = {}
-        words = normalized.split()
         total_words = max(len(words), 1)
 
         for intent, keywords in self.keyword_mappings.items():
@@ -266,7 +320,7 @@ class IntentClassifier:
 
             # Signal boost
             signal_boost = len(detected_signals) * 0.05
-            confidence = min(confidence + signal_boost, 0.99)
+            confidence = min(confidence + signal_boost, 1.0)
 
         # Extract keywords (up to 5, filter short words)
         keywords_list = [w for w in words if len(w) > 2][:5]
@@ -317,6 +371,10 @@ class IntentClassifier:
     def clear_cache(self) -> None:
         """Clear classification cache."""
         self.classification_cache.clear()
+
+    def add_rule(self, rule: ClassificationRule) -> None:
+        """Register an additional custom classification rule."""
+        self.custom_rules.append(rule)
 
 
 __all__ = ["IntentCategory", "IntentSignal", "IntentClassifier", "ClassificationResult"]

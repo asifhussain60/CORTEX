@@ -43,10 +43,14 @@ class GovernanceViolationStrategy(AbstractInjectionStrategy):
 
         # Fallback: Try to extract from additional_context
         violation_line = context.additional_context.get("violation_line", 0)
-        if violation_line > 0:
+        if not violation_line:
+            violation_details = context.additional_context.get("violation_details", {})
+            if isinstance(violation_details, dict):
+                violation_line = violation_details.get("line", 0)
+        if violation_line and violation_line > 0:
             return [violation_line]
-
-        return []
+        # Last resort: inject at file start
+        return [0]
 
     def format_marker(self, context: MarkerContext, line_number: int) -> str:
         """
@@ -61,10 +65,9 @@ class GovernanceViolationStrategy(AbstractInjectionStrategy):
         """
         rule_id = context.additional_context.get("rule_id", "unknown")
         rule_name = context.additional_context.get("rule_name", "")
-        timestamp = context.additional_context.get("timestamp", "")
 
         marker = (
-            f"rule={rule_id} ({rule_name}) | time={timestamp}"
+            f"GOVERNANCE_VIOLATION | rule={rule_id}" +
+            (f" ({rule_name})" if rule_name else "")
         )
-
         return marker

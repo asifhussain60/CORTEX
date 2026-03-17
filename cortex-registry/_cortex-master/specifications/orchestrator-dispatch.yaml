@@ -9,7 +9,8 @@
 
 registration_summary:
   version: "1.0"
-  total_orchestrators: 25
+  total_orchestrators: 28
+  registration_complete: true
   wiring_complete: true
   all_traces_configured: true
   last_updated: "2026-03-12"
@@ -291,4 +292,37 @@ support_orchestrators:
       - retrieval_indexing
     sqlite_trace: "content_library_traces"
     description: "Content library management and knowledge organization"
+    phase: "SUPPORT"
+
+  RepositoryOnboardingOrchestrator:
+    entry_point: "cortex.orchestrators.support.repository_onboarding_orchestrator:RepositoryOnboardingOrchestrator"
+    capabilities:
+      - repository_bootstrap
+      - onboarding_analysis
+      - setup_validation
+      - knowledge_capture
+    sqlite_trace: "repository_onboarding_traces"
+    description: "Repository onboarding and bootstrap coordination"
+    phase: "SUPPORT"
+
+  SetupOrchestrator:
+    entry_point: "cortex.orchestrators.support.setup_orchestrator:SetupOrchestrator"
+    capabilities:
+      - setup_execution
+      - environment_validation
+      - dependency_bootstrap
+      - readiness_checks
+    sqlite_trace: "setup_traces"
+    description: "Environment setup and readiness orchestration"
+    phase: "SUPPORT"
+
+  PhaseCompletionOrchestrator:
+    entry_point: "cortex.orchestrators.support.phase_completion_orchestrator:PhaseCompletionOrchestrator"
+    capabilities:
+      - phase_completion
+      - plan_registry_sync
+      - artifact_validation
+      - completion_reporting
+    sqlite_trace: "phase_completion_traces"
+    description: "Phase completion workflow and registry synchronization"
     phase: "SUPPORT"

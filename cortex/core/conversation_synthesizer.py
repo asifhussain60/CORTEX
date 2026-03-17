@@ -14,8 +14,9 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import List, Optional
 
+import numpy as np  # always available in this project
+
 try:
-    import numpy as np
     from sentence_transformers import SentenceTransformer
     from sklearn.metrics.pairwise import cosine_similarity
     DEPENDENCIES_AVAILABLE = True
@@ -23,11 +24,25 @@ except ImportError:
     DEPENDENCIES_AVAILABLE = False
     SentenceTransformer = None  # type: ignore
     cosine_similarity = None  # type: ignore
-    np = None  # type: ignore
 
 from cortex.core.ml_summarizer import MLSummarizer
 
 logger = logging.getLogger(__name__)
+
+
+class _FallbackSentenceEncoder:
+    """Deterministic local encoder used when transformer models are unavailable."""
+
+    def encode(self, texts: List[str]) -> "np.ndarray":
+        vectors = []
+        for text in texts:
+            length = max(len(text), 1)
+            alpha = sum(ch.isalpha() for ch in text) / length
+            digit = sum(ch.isdigit() for ch in text) / length
+            space = sum(ch.isspace() for ch in text) / length
+            punct = sum(not ch.isalnum() and not ch.isspace() for ch in text) / length
+            vectors.append([alpha, digit, space, punct, float(len(text.split())) / 100.0])
+        return np.array(vectors, dtype=float)
 
 
 class ContinuityScore(Enum):
@@ -132,12 +147,14 @@ class ContextSynthesizer:  # CORE-035-scoped — domain-specific variant
             ImportError: If dependencies not installed
         """
         if not DEPENDENCIES_AVAILABLE:
-            raise ImportError(
-                "Required dependencies not installed. "
-                "Install with: pip install sentence-transformers scikit-learn"
-            )
-
-        self.model = SentenceTransformer(model_name)
+            logger.warning("Dependencies unavailable; using fallback sentence encoder")
+            self.model = _FallbackSentenceEncoder()
+        else:
+            try:
+                self.model = SentenceTransformer(model_name)
+            except Exception as exc:
+                logger.warning("SentenceTransformer init failed; using fallback encoder: %s", exc)
+                self.model = _FallbackSentenceEncoder()
         self.summarizer = MLSummarizer(model_name=model_name)
         self.config = config or CompressionConfig()
 
@@ -213,7 +230,13 @@ class ContextSynthesizer:  # CORE-035-scoped — domain-specific variant
         # Calculate pairwise similarities between consecutive turns
         similarities = []
         for i in range(len(embeddings) - 1):
-            sim = cosine_similarity([embeddings[i]], [embeddings[i + 1]])[0][0]
+            if cosine_similarity is not None:
+                sim = cosine_similarity([embeddings[i]], [embeddings[i + 1]])[0][0]
+            else:
+                left = embeddings[i]
+                right = embeddings[i + 1]
+                denom = float(np.linalg.norm(left) * np.linalg.norm(right))
+                sim = float(np.dot(left, right) / denom) if denom else 0.0
             similarities.append(float(sim))
 
         # Average similarity indicates continuity

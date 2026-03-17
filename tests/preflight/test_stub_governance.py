@@ -80,6 +80,13 @@ ALLOWED_COMPAT_SHIMS: frozenset = frozenset({
     # Canonical definitions remain in cortex/models/validation_result.py (unchanged)
     # cortex/models/shared/validation.py re-exports for import-path unification (GAP-114-01)
     "cortex/models/shared/validation.py",
+    # Phase 126 — Secrets layer compat shims (expiry: 2026-09-17)
+    # Canonical implementations live in cortex/infrastructure/secrets/
+    # These re-export for backward-compatible import paths (GAP-126-SECRETS-01)
+    "cortex/secrets/git_scanning.py",
+    "cortex/secrets/providers/azure.py",
+    "cortex/secrets/providers/aws.py",
+    "cortex/secrets/providers/vault.py",
 })
 
 CORTEX_ROOT = pathlib.Path(__file__).parents[2]

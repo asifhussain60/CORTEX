@@ -285,9 +285,11 @@ class TruthVerificationEngine:
 
         evidence = []
 
-        # Find orchestrator file
+        # Find orchestrator file — convert CamelCase to snake_case for file matching
+        import re as _re
         orchestrators_path = self.project_root / "cortex" / "orchestrators"
-        found_files = list(orchestrators_path.rglob(f"*{orchestrator_name.lower()}*.py"))
+        snake_case_name = _re.sub(r'(?<!^)(?=[A-Z])', '_', orchestrator_name).lower()
+        found_files = list(orchestrators_path.rglob(f"*{snake_case_name}*.py"))
 
         if not found_files:
             return VerificationResult(
@@ -618,9 +620,11 @@ class TruthVerificationEngine:
         """Verify test coverage exists for component."""
         component_name = context.get("component_name", self._extract_component_name(claim))
 
-        # Search for test files
+        # Search for test files — convert CamelCase to snake_case for file matching
+        import re as _re
         tests_path = self.project_root / "tests"
-        found_tests = list(tests_path.rglob(f"*test*{component_name.lower()}*.py"))
+        snake_case_name = _re.sub(r'(?<!^)(?=[A-Z])', '_', component_name).lower()
+        found_tests = list(tests_path.rglob(f"*test*{snake_case_name}*.py"))
 
         if found_tests:
             evidence = [Evidence(

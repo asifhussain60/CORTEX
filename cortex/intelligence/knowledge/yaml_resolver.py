@@ -141,6 +141,14 @@ class KnowledgeYAMLResolver:
                 "django": {"yamls": ["django.yaml", "rest-api.yaml", "python.yaml"], "requires_language": "python"},
                 "react": {"yamls": ["react.yaml", "frontend-patterns.yaml", "accessibility.yaml"]},
             },
+            "libraries": {
+                "sqlalchemy": {"yamls": ["sqlalchemy.yaml", "database-patterns.yaml"]},
+                "pydantic": {"yamls": ["pydantic.yaml", "data-validation.yaml"]},
+                "fastapi": {"yamls": ["fastapi.yaml", "rest-api.yaml"]},
+                "pytest": {"yamls": ["pytest.yaml", "testing-patterns.yaml"]},
+                "redis": {"yamls": ["redis.yaml", "cache-patterns.yaml"]},
+                "celery": {"yamls": ["celery.yaml", "task-queue.yaml"]},
+            },
             "fallback": {
                 "default_yamls": ["clean-code.yaml", "solid-principles.yaml", "testing-patterns.yaml"]
             }

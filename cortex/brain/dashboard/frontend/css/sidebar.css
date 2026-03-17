@@ -1,0 +1,288 @@
+/* =============================================================================
+   CORTEX Dashboard — Sidebar Navigation Component
+   Persistent sidebar with active state management and collapse support
+   ============================================================================= */
+
+/* ---------------------------------------------------------------------------
+   Sidebar Custom Properties
+   --------------------------------------------------------------------------- */
+:root {
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 72px;
+  --sidebar-bg: rgba(10, 14, 26, 0.95);
+  --sidebar-border: rgba(0, 200, 255, 0.15);
+  --color-primary: #0ea5e9;
+  --color-cortex-primary: #00c8ff;
+
+  /* Transition tokens (if not already defined) */
+  --transition-fast: 200ms;
+  --transition-normal: 250ms;
+  --transition-smooth: 300ms;
+}
+
+/* ---------------------------------------------------------------------------
+   Sidebar Container
+   --------------------------------------------------------------------------- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  z-index: 500;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: width var(--transition-normal) ease,
+              transform var(--transition-normal) ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ---------------------------------------------------------------------------
+   Sidebar Header
+   --------------------------------------------------------------------------- */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid var(--sidebar-border);
+  min-height: 64px;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebar-logo img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.sidebar-logo-text {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity var(--transition-normal) ease,
+              width var(--transition-normal) ease;
+}
+
+/* ---------------------------------------------------------------------------
+   Sidebar Navigation
+   --------------------------------------------------------------------------- */
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.sidebar-nav-section {
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-nav-section-title {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 0 1rem;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity var(--transition-fast) ease;
+}
+
+.sidebar-nav-item,
+.sidebar-link,
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 1rem;
+  margin: 0 0.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--transition-fast) ease,
+              color var(--transition-fast) ease,
+              padding var(--transition-normal) ease;
+  min-height: 44px;
+  border: none;
+  background: none;
+  width: calc(100% - 1rem);
+  text-align: left;
+}
+
+.sidebar-nav-item .nav-icon,
+.sidebar-link .nav-icon,
+.nav-item .nav-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.sidebar-nav-item .nav-label,
+.sidebar-link .nav-label,
+.nav-item .nav-label {
+  overflow: hidden;
+  transition: opacity var(--transition-normal) ease,
+              width var(--transition-normal) ease;
+}
+
+/* ---------------------------------------------------------------------------
+   Hover States
+   --------------------------------------------------------------------------- */
+.sidebar-nav-item:hover,
+.sidebar-link:hover,
+.nav-item:hover {
+  background: rgba(14, 165, 233, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ---------------------------------------------------------------------------
+   Active State — Brand Color (Cyan)
+   --------------------------------------------------------------------------- */
+.sidebar-nav-item.active,
+.sidebar-link.active,
+.nav-item.active,
+.active .sidebar-nav-item,
+.sidebar-nav-item[aria-current="page"],
+.sidebar-link[aria-current="page"] {
+  background: rgba(14, 165, 233, 0.15);
+  color: var(--color-primary);
+  border-left: 3px solid var(--color-primary);
+}
+
+.sidebar-nav-item.active .nav-icon,
+.sidebar-link.active .nav-icon,
+.nav-item.active .nav-icon {
+  color: var(--color-primary);
+}
+
+/* ---------------------------------------------------------------------------
+   Collapse/Expand Toggle
+   --------------------------------------------------------------------------- */
+.sidebar-collapse-btn,
+.sidebar-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.6);
+  transition: background var(--transition-fast) ease,
+              color var(--transition-fast) ease;
+  flex-shrink: 0;
+}
+
+.sidebar-collapse-btn:hover,
+.sidebar-toggle-btn:hover {
+  background: rgba(14, 165, 233, 0.12);
+  color: var(--color-primary);
+}
+
+/* ---------------------------------------------------------------------------
+   Collapsed State
+   --------------------------------------------------------------------------- */
+.sidebar.collapsed,
+.sidebar-collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+.sidebar.collapsed .sidebar-logo-text,
+.sidebar.collapsed .sidebar-nav-section-title,
+.sidebar.collapsed .nav-label {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.sidebar.collapsed .sidebar-nav-item,
+.sidebar.collapsed .sidebar-link,
+.sidebar.collapsed .nav-item {
+  padding: 0.75rem;
+  justify-content: center;
+  gap: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Footer
+   --------------------------------------------------------------------------- */
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--sidebar-border);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 72px;
+}
+
+/* ---------------------------------------------------------------------------
+   Mobile Responsiveness — Hidden on Mobile (<1024px)
+   --------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    z-index: 700;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: var(--sidebar-width);
+    transform: translateX(-100%);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+    box-shadow: 2px 0 32px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Desktop — Sidebar Visible
+   --------------------------------------------------------------------------- */
+@media (min-width: 1024px) {
+  .sidebar {
+    transform: translateX(0);
+    display: flex;
+  }
+
+  /* Push main content to account for sidebar */
+  .main-content {
+    margin-left: var(--sidebar-width);
+    transition: margin-left var(--transition-normal) ease;
+  }
+
+  .sidebar.collapsed ~ .main-content {
+    margin-left: var(--sidebar-collapsed-width);
+  }
+}

@@ -1,0 +1,15 @@
+pattern_id: orchestrator-coordination-001
+pattern_type: orchestrator-coordination
+description: Coordination protocol for cross-orchestrator execution handoffs.
+required_fields:
+  - coordinator
+  - participants
+  - correlation_id
+examples:
+  - coordination:
+      coordinator: master-orchestrator
+      participants:
+        - governance-orchestrator
+        - validation-orchestrator
+      correlation_id: corr-001
+      objective: complete phase handoff

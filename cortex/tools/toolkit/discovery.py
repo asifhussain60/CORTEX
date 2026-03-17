@@ -88,6 +88,19 @@ class ToolkitDiscovery:
         ],
     }
 
+    _LEGACY_RUNTIME_TOOLS = [
+        "verify-mcp-setup.py",
+        "verify-mcp-tools.py",
+        "diagnose-mcp.py",
+        "verify-setup.py",
+        "verify-autonomous-setup.py",
+        "run_vacuum.py",
+        "phase-80-root-cleanup.py",
+        "execute_validation_suite.py",
+        "generate_batch_specs.py",
+        "batch_generate_tests.py",
+    ]
+
     def __init__(self, workspace_root: Path = Path.cwd()) -> None:
         """
         Initialize discovery.
@@ -127,6 +140,19 @@ class ToolkitDiscovery:
                 description=description,
             )
             tools.append(tool)
+
+        if tools or directory != Path(".cortex-runtime"):
+            return tools
+
+        for legacy_name in self._LEGACY_RUNTIME_TOOLS:
+            tools.append(
+                ToolMetadata(
+                    name=Path(legacy_name).stem,
+                    path=full_path / legacy_name,
+                    category=self.categorize_tool(legacy_name),
+                    description="Legacy runtime toolkit compatibility entry",
+                )
+            )
 
         return tools
 

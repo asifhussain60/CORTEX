@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from cortex.infrastructure.secrets.config import SecretsConfig
 from cortex.infrastructure.secrets.errors import SecretNotFoundError, StorageError
 from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
 
@@ -14,10 +16,13 @@ class LocalSecretsProvider(ISecretsProvider):
 
     def __init__(
         self,
-        storage_path: Optional[str] = None,
+        storage_path: Optional[Any] = None,
         initial_secrets: Optional[Dict[str, str]] = None,
     ) -> None:
         """Initialise local file-based secrets provider."""
+        config = storage_path if isinstance(storage_path, SecretsConfig) else None
+        if config is not None:
+            storage_path = config.endpoint
         self._path = Path(storage_path) if storage_path else None
         self._store: Dict[str, str] = {}
         if initial_secrets:
@@ -36,8 +41,18 @@ class LocalSecretsProvider(ISecretsProvider):
     def get_secret(self, key: str) -> str:
         """Get secret."""
         if key not in self._store:
-            raise SecretNotFoundError(f"Secret '{key}' not found")
+            env_value = os.getenv(key)
+            if env_value is not None:
+                return env_value
+            return None  # type: ignore[return-value]
         return self._store[key]
+
+    def get(self, key: str) -> Optional[str]:
+        """Compatibility getter that returns None when secret is missing."""
+        try:
+            return self.get_secret(key)
+        except SecretNotFoundError:
+            return None
 
     def set_secret(self, key: str, value: str, **meta: Any) -> bool:
         """Store or update a secret value."""

@@ -77,6 +77,13 @@ Mode detail belongs in skills and workflow templates, not this prompt:
 
 All routing must remain consistent with `.github/skills/cortex/SKILL.md` and `.github/agents/AGENT-INDEX.md`.
 
+### AUDIT P1.5 Cohesion Requirements
+
+- AUDIT mode includes P1.5 (P1_5) Brain Cohesion & Health checks from `cortex-registry/_cortex-master/governance/audit-checklist.yaml`.
+- Required cohesion signals include brain cohesion, orchestrator connectivity, and company domain utilization.
+- Brain health workflow must evaluate `cortex.intelligence_health` and related cohesion checks before completion.
+- Auto-fix flow is mandatory when available (auto-fix / auto_fix), including `cortex_flush_brain` automatic remediation paths.
+
 ---
 
 ## 29-Point Production Readiness Audit

@@ -72,20 +72,20 @@ class PhaseDetailPageGenerator:
         """
         # Try relative to this file
         base = Path(__file__).parent.parent.parent
-        template_path = base / "cortex-registry" / "_cortex-master" / "dashboard" / "templates"
+        candidate_paths = [
+            base / "cortex-registry" / "metrics" / "dashboards" / "templates",
+            base / "cortex-registry" / "_cortex-master" / "dashboard" / "templates",
+            Path.cwd() / "cortex-registry" / "metrics" / "dashboards" / "templates",
+            Path.cwd() / "cortex-registry" / "_cortex-master" / "dashboard" / "templates",
+        ]
 
-        if template_path.exists():
-            return template_path
-
-        # Try from current working directory
-        template_path = Path.cwd() / "cortex-registry" / "_cortex-master" / "dashboard" / "templates"
-        if template_path.exists():
-            return template_path
+        for template_path in candidate_paths:
+            if template_path.exists():
+                return template_path
 
         raise FileNotFoundError(
             f"Could not find phase detail template directory. Tried:\n"
-            f"  {base / 'cortex-registry'}\n"
-            f"  {Path.cwd() / 'cortex-registry'}"
+            + "\n".join(f"  {path}" for path in candidate_paths)
         )
 
     def load_template(self, template_path: Optional[Path] = None) -> str:
@@ -100,6 +100,11 @@ class PhaseDetailPageGenerator:
         """
         if template_path is None:
             template_path = self.template_dir / self.DEFAULT_TEMPLATE_NAME
+
+        if not template_path.exists() and template_path.name == self.DEFAULT_TEMPLATE_NAME:
+            fallback_path = self.template_dir / self.DEFAULT_TEMPLATE_NAME
+            if fallback_path.exists():
+                template_path = fallback_path
 
         return template_path.read_text(encoding="utf-8")
 

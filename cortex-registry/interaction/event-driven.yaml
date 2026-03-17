@@ -1,0 +1,14 @@
+pattern_id: event-driven-001
+pattern_type: event-driven
+description: Event-driven contract for asynchronous state transitions.
+required_fields:
+  - event_type
+  - timestamp
+  - source
+examples:
+  - event:
+      event_type: phase.completed
+      timestamp: "2026-01-01T00:00:00Z"
+      source: master-orchestrator
+      payload:
+        phase_id: PHASE-01

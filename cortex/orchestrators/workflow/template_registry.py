@@ -99,6 +99,7 @@ class WorkflowTemplateRegistry:
         """
         self._templates: Dict[str, WorkflowTemplate] = {}
         self._mode: Optional[str] = None
+        self._manual_template_ids: set[str] = set()
         self._composer: Optional[TemplateComposer] = (
             TemplateComposer(
                 primitives_dir=primitives_dir,
@@ -140,7 +141,7 @@ class WorkflowTemplateRegistry:
 
                         # Register without override to avoid conflicts
                         if template_data["id"] not in self._templates:
-                            self.register_template(template_data, override=False)
+                            self.register_template(template_data, override=False, auto_discovered=True)
                 except Exception:
                     # Silently skip malformed templates
                     pass
@@ -190,7 +191,7 @@ class WorkflowTemplateRegistry:
         return self._mode
 
     def register_template(
-        self, template_data: Dict[str, Any], override: bool = False
+        self, template_data: Dict[str, Any], override: bool = False, auto_discovered: bool = False
     ) -> None:
         """
         Register workflow template with validation.
@@ -227,6 +228,8 @@ class WorkflowTemplateRegistry:
             return
 
         self._templates[template.id] = template
+        if not auto_discovered:
+            self._manual_template_ids.add(template.id)
 
     def get_template(self, template_id: str) -> Dict[str, Any]:
         """
@@ -334,6 +337,7 @@ class WorkflowTemplateRegistry:
                 "metadata": composed.get("metadata", {}),
             },
             override=False,
+            auto_discovered=False,
         )
 
         # Return the full composed dict with the requested id so all callers
@@ -352,8 +356,16 @@ class WorkflowTemplateRegistry:
         Returns:
             List of template data dictionaries.
         """
+        template_pool = self._templates.values()
+        if self._manual_template_ids:
+            template_pool = [
+                self._templates[template_id]
+                for template_id in self._manual_template_ids
+                if template_id in self._templates
+            ]
+
         templates = []
-        for template in self._templates.values():
+        for template in template_pool:
             if category is None or template.category == category:
                 templates.append(
                     {

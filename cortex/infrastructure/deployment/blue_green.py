@@ -68,8 +68,17 @@ class BlueGreenDeploymentManager:
         self.config = config
         self.active_slot = DeploymentSlot.BLUE
         self.standby_slot = DeploymentSlot.GREEN
-        self.deployments: List[Deployment] = []
-        self.current_deployment: Optional[Deployment] = None
+        # Seed an "initial" deployment in the active slot so that after the
+        # first switch_traffic() the standby slot is never empty.
+        _initial = Deployment(
+            slot=DeploymentSlot.BLUE,
+            version="initial",
+            status=DeploymentStatus.COMPLETED,
+            started_at=datetime.now(),
+            completed_at=datetime.now(),
+        )
+        self.deployments: List[Deployment] = [_initial]
+        self.current_deployment: Optional[Deployment] = _initial
 
     def start_deployment(self, version: str) -> Deployment:
         """Start a new deployment.

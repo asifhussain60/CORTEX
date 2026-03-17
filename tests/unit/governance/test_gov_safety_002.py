@@ -10,7 +10,12 @@ Validates:
 """
 
 import pytest
-from cortex.intelligence.memory.tier2_adaptive.governance.prompt_injection_sanitizer import PromptInjectionSanitizer
+from cortex.intelligence.memory.tier2_adaptive.governance.prompt_injection_sanitizer import (
+    InjectionThreatLevel,
+    PromptInjectionSanitizer,
+    SanitizationMethod,
+    SanitizationResult,
+)
 
 
 class TestSanitizationResult:

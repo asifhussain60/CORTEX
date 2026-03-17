@@ -28,6 +28,21 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
+class _FallbackSentenceEncoder:
+    """Deterministic local encoder used when transformers are unavailable."""
+
+    def encode(self, texts: List[str]) -> "np.ndarray":
+        vectors = []
+        for text in texts:
+            length = max(len(text), 1)
+            vectors.append([
+                sum(ch.isalpha() for ch in text) / length,
+                sum(ch.isdigit() for ch in text) / length,
+                float(len(text.split())) / 100.0,
+            ])
+        return np.array(vectors, dtype=float)
+
+
 class InsightType(Enum):
     """Types of learning insights."""
     FEATURE_REQUEST = "FEATURE_REQUEST"
@@ -186,12 +201,14 @@ class LearningExtractor:
             ImportError: If dependencies not installed
         """
         if not DEPENDENCIES_AVAILABLE:
-            raise ImportError(
-                "Required dependencies not installed. "
-                "Install with: pip install sentence-transformers scikit-learn"
-            )
-
-        self.model = SentenceTransformer(model_name)
+            logger.warning("Dependencies unavailable; using fallback sentence encoder")
+            self.model = _FallbackSentenceEncoder()
+        else:
+            try:
+                self.model = SentenceTransformer(model_name)
+            except Exception as exc:
+                logger.warning("SentenceTransformer init failed; using fallback encoder: %s", exc)
+                self.model = _FallbackSentenceEncoder()
         self.config = config or ExtractionConfig()
 
         logger.info(f"LearningExtractor initialized with model: {model_name}")

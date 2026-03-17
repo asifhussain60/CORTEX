@@ -46,7 +46,9 @@ class CachedKnowledgeProvider(IKnowledgeProvider):
 
         if self.l2_cache_enabled:
             self.l2_cache_dir.mkdir(parents=True, exist_ok=True)
-            self._load_l2_cache()
+            # Avoid eager preload from global shared cache to keep runtime behavior
+            # deterministic across sessions/tests; entries are loaded on demand via
+            # provider reads and repopulated into L1.
 
         # AC-PHASE50-S5-004: Initialize metrics
         self.metrics = {

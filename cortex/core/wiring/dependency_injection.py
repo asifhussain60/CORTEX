@@ -9,6 +9,7 @@ Provides type-safe dependency injection for orchestrator parameters with:
 """
 
 import logging
+import inspect
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, Optional, Type, TypeVar, get_type_hints
 
@@ -96,13 +97,16 @@ class DIContainer:
         Inject dependencies into class constructor.
         Returns: Instance of target_class with dependencies injected.
         """
-        # Get type hints for constructor
+        # Get constructor signature and type hints for constructor
+        signature = inspect.signature(target_class.__init__)
         hints = get_type_hints(target_class.__init__)
         kwargs = {}
 
-        for param_name, param_type in hints.items():
-            if param_name == 'return' or param_name == 'self':
+        for param_name, parameter in signature.parameters.items():
+            if param_name == 'self':
                 continue
+
+            param_type = hints.get(param_name)
 
             # Check for override
             if param_name in overrides:
@@ -117,6 +121,8 @@ class DIContainer:
                     kwargs[param_name] = self.get_instance(param_name)
                 elif param.default is not None:
                     kwargs[param_name] = param.default
+            elif parameter.default is inspect.Parameter.empty:
+                kwargs[param_name] = self.get_instance(param_name)
 
         return target_class(**kwargs)
 

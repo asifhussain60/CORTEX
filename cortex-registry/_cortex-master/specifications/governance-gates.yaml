@@ -8,6 +8,8 @@
 
 intent_gate_configuration:
   IMPLEMENT:
+    primary_gate: "DoRApprovalGate"
+    audit_gates: ["AuditTrailGate"]
     gate_id: "gate_tdd"
     rule: "CORE-008"
     severity: "BLOCKING"
@@ -18,6 +20,8 @@ intent_gate_configuration:
     description: "TDD gate — tests must exist before implementation"
 
   FIX:
+    primary_gate: "DoRApprovalGate"
+    audit_gates: ["AuditTrailGate"]
     gate_id: "gate_tdd"
     rule: "CORE-008"
     severity: "BLOCKING"
@@ -28,6 +32,8 @@ intent_gate_configuration:
     description: "TDD gate — regression test required before fix"
 
   REFACTOR:
+    primary_gate: "ChallengeGate"
+    audit_gates: ["AuditTrailGate"]
     gate_id: "gate_holistic"
     rule: "CORE-048"
     severity: "BLOCKING"
@@ -37,7 +43,18 @@ intent_gate_configuration:
       - no_behavior_change
     description: "Holistic validation gate — no structural changes without full scan"
 
+  ANALYZE:
+    primary_gate: null
+    audit_gates: ["AuditTrailGate"]
+    gate_id: "gate_analysis"
+    rule: "CORE-048"
+    severity: "NONE"
+    checks: []
+    description: "Read-only analysis path"
+
   AUDIT:
+    primary_gate: "PlanValidationGate"
+    audit_gates: ["AuditTrailGate"]
     gate_id: "gate_governance"
     rule: "CORE-064"
     severity: "BLOCKING"
@@ -48,6 +65,8 @@ intent_gate_configuration:
     description: "Sweep completeness gate — exhaustive audit catalogue coverage"
 
   DEBUG:
+    primary_gate: "ChallengeGate"
+    audit_gates: ["AuditTrailGate"]
     gate_id: "gate_debug"
     rule: "CORE-035"
     severity: "WARNING"
@@ -58,6 +77,8 @@ intent_gate_configuration:
     description: "Debug gate — single canonical implementation, auto-cleanup registered"
 
   PLAN:
+    primary_gate: "PlanValidationGate"
+    audit_gates: ["AuditTrailGate"]
     gate_id: "gate_governance"
     rule: "CORE-071"
     severity: "BLOCKING"
@@ -67,7 +88,19 @@ intent_gate_configuration:
       - is_ready_composite
     description: "DoR Hard Gate — DoRApprovalGate.is_ready() must return True"
 
+  ONBOARD:
+    primary_gate: null
+    audit_gates: ["AuditTrailGate"]
+    gate_id: "gate_onboard"
+    rule: "CORE-035"
+    severity: "WARNING"
+    checks:
+      - context_validation
+    description: "Onboarding gate with lightweight validation"
+
   DESIGN:
+    primary_gate: "ChallengeGate"
+    audit_gates: ["AuditTrailGate"]
     gate_id: "gate_holistic"
     rule: "CORE-048"
     severity: "WARNING"
@@ -78,6 +111,8 @@ intent_gate_configuration:
     description: "Design gate — holistic validation before structural changes"
 
   REVIEW:
+    primary_gate: "PlanValidationGate"
+    audit_gates: ["AuditTrailGate"]
     gate_id: "gate_governance"
     rule: "CORE-035"
     severity: "WARNING"
@@ -88,6 +123,8 @@ intent_gate_configuration:
     description: "Review gate — governance rule coverage validation"
 
   VACUUM:
+    primary_gate: "PlanValidationGate"
+    audit_gates: ["AuditTrailGate"]
     gate_id: "gate_vacuum"
     rule: "CORE-035"
     severity: "BLOCKING"
@@ -98,11 +135,41 @@ intent_gate_configuration:
     description: "Vacuum gate — protected roots enforced (VACUUM_PROTECTED_ROOTS)"
 
   QUERY:
+    primary_gate: null
+    audit_gates: []
     gate_id: null
     rule: null
     severity: "NONE"
     checks: []
     description: "Query gate — no pre-execution validation required"
+
+validation_gates:
+  DoRApprovalGate:
+    intent_types: [IMPLEMENT, FIX, PLAN]
+  ChallengeGate:
+    intent_types: [REFACTOR, DEBUG, DESIGN]
+  PlanValidationGate:
+    intent_types: [AUDIT, REVIEW, VACUUM]
+
+enforcement_gates:
+  TDDComplianceGate:
+    intent_types: [IMPLEMENT, FIX]
+  CoreRulesGate:
+    intent_types: [REFACTOR, AUDIT]
+  SweepCompletenessGate:
+    intent_types: [AUDIT, VACUUM]
+  SafetyEnforcementGate:
+    intent_types: [DEBUG, REVIEW]
+
+audit_gates:
+  AuditTrailGate:
+    intent_types: [IMPLEMENT, FIX, REFACTOR, AUDIT, PLAN, ONBOARD, DEBUG, REVIEW, VACUUM]
+  TraceIntegrityGate:
+    intent_types: [IMPLEMENT, FIX, REFACTOR]
+  SQLitePersistenceGate:
+    intent_types: [AUDIT, PLAN, ONBOARD]
+  ComplianceEvidenceGate:
+    intent_types: [DEBUG, REVIEW, VACUUM]
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SQLite Audit Configuration

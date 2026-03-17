@@ -70,6 +70,15 @@ class MasterOrchestratorRequestMixin:
             return ExecutionTier.TARGETED
         return ExecutionTier.FULL
 
+    def _get_intelligence_context(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """Build a minimal intelligence context dictionary for routing helpers."""
+        return {
+            "intent": request.get("intent", "QUERY"),
+            "file_path": request.get("file_path"),
+            "complexity_score": request.get("complexity_score", 0.5),
+            "context": request.get("context", {}),
+        }
+
     # _get_intelligence_context() was REMOVED (GAP-117-04, Phase 117-b).
     # It was defined but never called from production code — confirmed dead code.
     # Intelligence context is now served by per-orchestrator calls to
@@ -911,6 +920,30 @@ class MasterOrchestratorRequestMixin:
         Returns:
             Routing decision with template_id if template suggested, None otherwise.
         """
+        # Phase 100 compatibility: preserve legacy IntentRouter + template-registry path
+        # expected by workflow routing integration tests.
+        try:
+            from cortex.orchestrators.core import master_orchestrator as _master_module
+            from cortex.orchestrators.workflow.template_registry import WorkflowTemplateRegistry
+
+            intent_router = _master_module.IntentRouter()
+            classify = getattr(intent_router, "classify_intent_with_workflow_suggestion", None)
+            if callable(classify):
+                suggested_intent, suggested_template_id = classify(context)
+                if suggested_template_id:
+                    template_registry = WorkflowTemplateRegistry()
+                    template = template_registry.get_template(suggested_template_id)
+                    if template:
+                        return {
+                            "template_id": suggested_template_id,
+                            "template_name": template.get("name", suggested_template_id),
+                            "intent": str(suggested_intent).upper(),
+                            "use_autonomous_workflow": True,
+                        }
+        except Exception:
+            # Fall through to complexity router path below
+            pass
+
         try:
             # Import complexity router
             from cortex.orchestrators.core.intent_router.workflow_gate import WorkflowComplexityRouter, Intent as ComplexityIntent

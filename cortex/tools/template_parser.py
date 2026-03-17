@@ -279,10 +279,12 @@ class TemplateParser:
 
     def _build_template(self, data: Dict[str, Any], raw_content: str) -> ParsedTemplate:
         """Build ParsedTemplate from parsed YAML data."""
+        orchestrator_meta = data.get('orchestrator', {}) if isinstance(data.get('orchestrator'), dict) else {}
+
         # Extract metadata
-        name = data.get('name', data.get('template_name', 'unnamed'))
-        domain = data.get('domain', data.get('template_domain', 'general'))
-        version = str(data.get('version', data.get('template_version', '1.0.0')))
+        name = data.get('name', data.get('template_name', orchestrator_meta.get('name', 'unnamed')))
+        domain = data.get('domain', data.get('template_domain', orchestrator_meta.get('domain', 'general')))
+        version = str(data.get('version', data.get('template_version', orchestrator_meta.get('version', '1.0.0'))))
         description = data.get('description', data.get('template_description', ''))
 
         # Extract metadata section

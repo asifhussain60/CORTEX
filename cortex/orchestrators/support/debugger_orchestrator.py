@@ -191,18 +191,6 @@ class DebuggerOrchestrator(OPJMixin, IOrchestrator, OrchestratorProtocolMixin, W
                 }
             ))
 
-            # Phase 86 — GAP-86-14: Publish DEBUG_INSIGHT for cross-orchestrator awareness
-            self.event_bus.publish(Event(
-                type="DEBUG_INSIGHT",
-                payload={
-                    "session_id": session_id,
-                    "trigger": "TEST_FAILURE",
-                    "file_path": file_path,
-                    "test_name": test_name,
-                    "failure_reason": failure_reason,
-                }
-            ))
-
             _elapsed = int((time.perf_counter() - _t0) * 1000)
             logger.info("AC_COMPLETE: AC-DEBUGGER-%d ✅ (%dms)", _ts, _elapsed)
             logger.info(f"Debug session {session_id} created and markers injected")

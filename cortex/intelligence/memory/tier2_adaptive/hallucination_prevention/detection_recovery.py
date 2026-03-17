@@ -6,8 +6,71 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 from enum import Enum
+
+class ConfidenceLevel(Enum):
+    """Confidence score buckets."""
+
+    VERY_LOW = "very_low"
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    VERY_HIGH = "very_high"
+
+
+@dataclass
+class ConfidenceScore:
+    """Confidence score with rationale and evidence."""
+
+    value: float
+    reasoning: str
+    fact_checks: List[str] = field(default_factory=list)
+    evidence_sources: List[str] = field(default_factory=list)
+
+    def get_level(self) -> ConfidenceLevel:
+        """Classify confidence level from numeric value."""
+        if self.value < 0.2:
+            return ConfidenceLevel.VERY_LOW
+        if self.value < 0.5:
+            return ConfidenceLevel.LOW
+        if self.value < 0.7:
+            return ConfidenceLevel.MEDIUM
+        if self.value < 0.9:
+            return ConfidenceLevel.HIGH
+        return ConfidenceLevel.VERY_HIGH
+
+
+class HallucinationRisk(Enum):
+    """Risk severity for hallucination detection results."""
+
+    SAFE = "safe"
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
+
+
+@dataclass
+class HallucinationAssessment:
+    """Assessment payload returned by detect_hallucinations."""
+
+    is_safe: bool
+    confidence_score: ConfidenceScore
+    hallucination_risk: HallucinationRisk
+    detected_hallucinations: List[str] = field(default_factory=list)
+    reasoning_steps: List[str] = field(default_factory=list)
+    evidence_sources: List[str] = field(default_factory=list)
+    recommendations: List[str] = field(default_factory=list)
+
+
+@dataclass
+class DetectionResult:
+    """Simple result wrapper for hallucination detection compatibility."""
+
+    success: bool
+    value: Optional[HallucinationAssessment] = None
+    error: Optional[str] = None
 
 
 class HallucinationPattern(Enum):
@@ -143,12 +206,140 @@ class HallucinationDetector:
     def __init__(self) -> None:
         """Initialize detector."""
         self.events: List[HallucinationEvent] = []
+        self.confidence_threshold: float = 0.75
+        self.knowledge_base: Set[str] = set()
+        self.detection_history: List[HallucinationAssessment] = []
         self.thresholds = {
             HallucinationPattern.FACTUAL_ERROR: 70,
             HallucinationPattern.LOGICAL_CONTRADICTION: 80,
             HallucinationPattern.CONTEXT_DRIFT: 60,
             HallucinationPattern.CONFABULATION: 75,
             HallucinationPattern.INCONSISTENCY: 65,
+        }
+
+    def add_to_knowledge_base(self, facts: List[str]) -> None:
+        """Add trusted facts to the verification knowledge base."""
+        for fact in facts:
+            if fact:
+                self.knowledge_base.add(fact)
+
+    def score_confidence(
+        self,
+        output: str,
+        reasoning: str,
+        fact_checks: Optional[List[str]] = None,
+    ) -> ConfidenceScore:
+        """Compute confidence score from output, reasoning quality, and fact verification."""
+        if not output or not reasoning:
+            return ConfidenceScore(value=0.0, reasoning=reasoning, fact_checks=fact_checks or [])
+
+        fact_checks = fact_checks or []
+        base = 0.25
+        reasoning_bonus = min(len(reasoning) / 200.0, 0.35)
+
+        verified = 0
+        if fact_checks:
+            verified = sum(1 for fact in fact_checks if fact in self.knowledge_base)
+            fact_bonus = 0.4 * (verified / max(len(fact_checks), 1))
+        else:
+            fact_bonus = 0.0
+
+        value = max(0.0, min(1.0, base + reasoning_bonus + fact_bonus))
+        return ConfidenceScore(
+            value=value,
+            reasoning=reasoning,
+            fact_checks=fact_checks,
+            evidence_sources=self._extract_sources(reasoning),
+        )
+
+    def _assess_risk(self, confidence: float, hallucinations: List[str]) -> HallucinationRisk:
+        """Map confidence + hallucination count to risk class."""
+        if confidence >= 0.9 and not hallucinations:
+            return HallucinationRisk.SAFE
+        if confidence >= 0.75 and len(hallucinations) == 0:
+            return HallucinationRisk.LOW
+        if confidence >= 0.55 and len(hallucinations) <= 1:
+            return HallucinationRisk.MEDIUM
+        if confidence >= 0.35 and len(hallucinations) <= 2:
+            return HallucinationRisk.HIGH
+        return HallucinationRisk.CRITICAL
+
+    def _extract_reasoning_steps(self, reasoning: str) -> List[str]:
+        """Extract coarse reasoning steps from prose."""
+        if not reasoning:
+            return []
+        return [step.strip() for step in reasoning.split('.') if step.strip()]
+
+    def _extract_sources(self, reasoning: str) -> List[str]:
+        """Extract evidence source hints from reasoning text."""
+        if not reasoning:
+            return []
+        lower = reasoning.lower()
+        sources: List[str] = []
+        if "knowledge base" in lower:
+            sources.append("knowledge_base")
+        if "verified" in lower:
+            sources.append("verified_sources")
+        if "source" in lower and "verified_sources" not in sources:
+            sources.append("textual_source")
+        return sources
+
+    def _generate_recommendations(
+        self,
+        is_safe: bool,
+        risk_level: HallucinationRisk,
+    ) -> List[str]:
+        """Generate risk-driven remediation guidance."""
+        if is_safe:
+            return []
+        if risk_level == HallucinationRisk.CRITICAL:
+            return ["Retry generation with stricter grounding and verified sources"]
+        if risk_level == HallucinationRisk.HIGH:
+            return ["Review claims manually before accepting output"]
+        if risk_level == HallucinationRisk.MEDIUM:
+            return ["Validate key facts against trusted references"]
+        return ["Monitor output quality"]
+
+    def detect_hallucinations(
+        self,
+        output: str,
+        reasoning: str,
+        fact_checks: Optional[List[str]] = None,
+    ) -> DetectionResult:
+        """Run hallucination assessment and return wrapped Result."""
+        if not output:
+            return DetectionResult(success=False, error="Output cannot be empty")
+
+        fact_checks = fact_checks or []
+        score = self.score_confidence(output=output, reasoning=reasoning, fact_checks=fact_checks)
+        unverified = [fact for fact in fact_checks if fact not in self.knowledge_base]
+        risk = self._assess_risk(score.value, unverified)
+        is_safe = risk in (HallucinationRisk.SAFE, HallucinationRisk.LOW)
+
+        assessment = HallucinationAssessment(
+            is_safe=is_safe,
+            confidence_score=score,
+            hallucination_risk=risk,
+            detected_hallucinations=unverified,
+            reasoning_steps=self._extract_reasoning_steps(reasoning),
+            evidence_sources=self._extract_sources(reasoning),
+            recommendations=self._generate_recommendations(is_safe, risk),
+        )
+        self.detection_history.append(assessment)
+        return DetectionResult(success=True, value=assessment)
+
+    def get_detection_summary(self) -> Dict[str, Any]:
+        """Return aggregate statistics for detection history."""
+        total = len(self.detection_history)
+        if total == 0:
+            return {"total_detections": 0, "safe_outputs": 0, "average_confidence": 0.0}
+
+        safe = sum(1 for entry in self.detection_history if entry.is_safe)
+        avg_conf = sum(entry.confidence_score.value for entry in self.detection_history) / total
+        return {
+            "total_detections": total,
+            "safe_outputs": safe,
+            "average_confidence": avg_conf,
         }
 
     def detect(

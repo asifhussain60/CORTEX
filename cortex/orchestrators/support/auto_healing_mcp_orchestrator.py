@@ -119,7 +119,10 @@ class AutoHealingMCPOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementM
                 success=False,
                 diagnostics=diagnostic,
                 mcp_now_available=False,
-                action_required="MCP unavailable but no diagnostic issue found. Manual intervention required."
+                action_required=(
+                    "BLOCKED: MCP unavailable but diagnostics are inconclusive. "
+                    "Start remediation with `python3 scripts/setup-mcp.py` and Reload VS Code."
+                )
             )
 
         # Step 2: Attempt automated fix

@@ -5,7 +5,6 @@ Implements TTL-based LRU eviction with multi-layer caching.
 """
 
 import hashlib
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, Optional
@@ -39,7 +38,7 @@ class CacheKey:
         return hashlib.sha256(combined.encode()).hexdigest()
 
 
-class LENSCache(ABC):
+class LENSCache:
     """Abstract base cache manager interface.
 
     Subclasses must implement get(), set(), and invalidate().
@@ -61,8 +60,8 @@ class LENSCache(ABC):
             "set_operations": 0,
             "get_operations": 0
         }
+        self._store: Dict[str, CacheEntry] = {}
 
-    @abstractmethod
     def get(self, key: str) -> Optional[Any]:
         """Retrieve value from cache.
 
@@ -73,8 +72,18 @@ class LENSCache(ABC):
             Cached value if found and not expired, else None
         """
         self._statistics["get_operations"] += 1
+        entry = self._store.get(key)
+        if entry is None:
+            self._statistics["misses"] += 1
+            return None
+        if entry.is_expired():
+            self._statistics["misses"] += 1
+            self._store.pop(key, None)
+            return None
+        entry.hit_count += 1
+        self._statistics["hits"] += 1
+        return entry.value
 
-    @abstractmethod
     def set(self, key: str, value: Any, ttl: int = 300) -> None:
         """Store value in cache with TTL.
 
@@ -84,14 +93,25 @@ class LENSCache(ABC):
             ttl: Time-to-live in seconds (default: 5 minutes)
         """
         self._statistics["set_operations"] += 1
+        self._store[key] = CacheEntry(
+            key=key,
+            value=value,
+            created_at=datetime.now(),
+            ttl_seconds=ttl,
+        )
 
-    @abstractmethod
     def invalidate(self, pattern: str = "*") -> None:
         """Invalidate cache entries matching pattern.
 
         Args:
             pattern: Glob pattern (default: "*" = all)
         """
+        if pattern == "*":
+            self._store.clear()
+            return
+        keys_to_remove = [k for k in self._store.keys() if pattern in k]
+        for key in keys_to_remove:
+            self._store.pop(key, None)
 
     def get_statistics(self) -> Dict[str, int]:
         """Get cache hit/miss statistics."""

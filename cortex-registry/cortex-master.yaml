@@ -34,6 +34,13 @@ metadata:
   recent_completed: "phases 148-152 COMPLETE (Issue #18 backport chain: Infrastructure Foundation (DatabaseHealthVerifier 4-layer SQLite + check-51 drift lock + best_practices canonical path), Knowledge Intelligence Enhancement (ContextSynthesisGateway knowledge injection + CortexFrameworkAnalyzer.analyze_metadata() + RegistryMaterializer + 38+6 golden tests), DoR Hard Gate CORE-071 + PersonalityLayer (DoRScore 5-dim + atom-dor-prompt.yaml), Vacuum Source Protection VACUUM_PROTECTED_ROOTS + GV-028..034 + TabRenderer + PersonaLayer, Dashboard Intelligence Pipeline 7-stage). 446 preflight tests GREEN."
   planned_next: "Issue #18 COMPLETE (phases 148-152). No active planned phases remaining from Issues #17 or #18. Await new issue backport (Issue #19+) or user-directed phase creation."
 
+phase_status:
+  active: 0
+  in_progress: 0
+  planned: 0
+  completed: 147
+  archived: 4
+
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:

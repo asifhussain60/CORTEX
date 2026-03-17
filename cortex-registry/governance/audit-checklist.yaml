@@ -1,5 +1,6 @@
 id: "audit-checklist"
 metadata:
+  schema: "1.0"
   description: "CORTEX Audit Checklist - Priority-Based Governance Validation"
   authority: "cortex-architect.prompt.md | CORE-008 (tests before code)"
   last_updated: "2026-02-17"
@@ -11,9 +12,9 @@ priority_checks:
     mandatory: true
     checks:
       - id: "P0-001"
-        name: "No Hardcoded Secrets"
+        name: "Secrets Scan"
         description: "Verify no API keys, tokens, or credentials in code"
-        tool: "cortex_secrets_scan"
+        tool: "grep_search"
         evidence_required: "scan_report"
         severity: "critical"
         blocking: true
@@ -144,7 +145,7 @@ priority_checks:
       - id: "P1.5-001"
         name: "Brain Health Score"
         description: "Overall brain system health metrics"
-        tool: "cortex/intelligence_health"
+        tool: "cortex.intelligence_health"
         evidence_required: "health_metrics"
         severity: "high"
         blocking: false

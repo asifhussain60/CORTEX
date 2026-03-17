@@ -1,0 +1,28 @@
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CORTEX Test Runner — Changed Tests — testmon smart selection (only diff'd tests)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+============================= test session starts ==============================
+collecting ... collected 81 items / 65 deselected / 1 skipped / 16 selected
+
+tests/unit/registry/test_health_performance_s2_t3.py::TestPerformanceCharacteristics::test_artifact_sealing_scalable_performance PASSED [  6%]
+tests/unit/wiring/test_phase_9_orchestrator_instantiation.py::TestDependencyInjection::test_di_provider_inject PASSED [ 12%]
+tests/unit/registry/test_cortex_master_dashboard_generator.py::TestCortexMasterDashboardGenerator::test_save_dashboard_data PASSED [ 18%]
+tests/unit/registry/test_cortex_master_dashboard_generator.py::TestCortexMasterDashboardGenerator::test_generate_dashboard_data PASSED [ 25%]
+tests/unit/registry/test_cortex_master_dashboard_generator.py::TestCortexMasterDashboardGenerator::test_full_generation_workflow PASSED [ 31%]
+tests/unit/registry/test_phase_103_structure.py::TestRegistryYAMLFolderStructure::test_all_top_level_folders_exist PASSED [ 37%]
+tests/unit/registry/test_phase_103_structure.py::TestRegistryYAMLFolderStructure::test_gitkeep_files_in_empty_folders PASSED [ 43%]
+tests/unit/registry/test_phase_103_structure.py::TestPhase103RegistryStructure::test_integration_structure PASSED [ 50%]
+tests/unit/registry/test_phase_103_structure.py::TestPhase103RegistryStructure::test_metrics_structure PASSED [ 56%]
+tests/unit/registry/test_phase_103_structure.py::TestPhase103RegistryStructure::test_cortex_master_phases_structure PASSED [ 62%]
+tests/unit/registry/test_phase_103_structure.py::TestPhase103RegistryStructure::test_phase_104_in_planned PASSED [ 68%]
+tests/unit/registry/test_phase_103_structure.py::TestPhase103RegistryStructure::test_registry_core_structure PASSED [ 75%]
+tests/unit/registry/test_phase_103_structure.py::TestPhase103RegistryStructure::test_artifacts_structure PASSED [ 81%]
+tests/unit/registry/test_phase_103_structure.py::TestPhase103RegistryStructure::test_no_cortex_phases_in_user_planning PASSED [ 87%]
+tests/unit/registry/test_phase_103_structure.py::TestPhase103PythonReferences::test_cortex_master_yaml_valid PASSED [ 93%]
+tests/unit/brain/test_yaml_loaders.py::TestCoreRulesYAML::test_core_rules_has_meta PASSED [100%]
+
+================= 16 passed, 1 skipped, 65 deselected in 0.65s =================
+
+✅ All tests passed

@@ -159,6 +159,8 @@ class ASTIntelligenceEngine:
 			return ParseResult(success=False, error=f"File not found: {file_path}")
 
 		source = file_path.read_text(encoding="utf-8", errors="replace")
+		if "\x00" in source:
+			return ParseResult(success=False, error=f"Binary or non-text file: {file_path}")
 		cache_key = f"{file_path}:{hash(source)}"
 		if self.enable_cache and cache_key in self._cache:
 			return self._cache[cache_key]
@@ -187,6 +189,8 @@ class ASTIntelligenceEngine:
 				error_line=exc.lineno,
 				error_column=exc.offset,
 			)
+		except ValueError as exc:
+			return ParseResult(success=False, error=str(exc))
 
 		result = ParseResult(success=True, ast_tree=tree, module_docstring=ast.get_docstring(tree))
 
@@ -216,9 +220,14 @@ class ASTIntelligenceEngine:
 	def _extract_function(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> FunctionInfo:
 		"""Extract function metadata from AST node."""
 		parameters: List[ParameterInfo] = []
-		for arg in node.args.args:
+		defaults = list(node.args.defaults)
+		default_start_index = len(node.args.args) - len(defaults)
+		for index, arg in enumerate(node.args.args):
 			type_hint = ast.unparse(arg.annotation) if arg.annotation is not None and hasattr(ast, "unparse") else None
-			parameters.append(ParameterInfo(name=arg.arg, type_hint=type_hint))
+			default_value: Optional[str] = None
+			if index >= default_start_index and defaults and hasattr(ast, "unparse"):
+				default_value = ast.unparse(defaults[index - default_start_index])
+			parameters.append(ParameterInfo(name=arg.arg, type_hint=type_hint, default=default_value))
 
 		decorators: List[str] = []
 		for decorator in node.decorator_list:

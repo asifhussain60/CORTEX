@@ -10,7 +10,7 @@ import html
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 
 class InjectionThreatLevel(Enum):
@@ -50,7 +50,13 @@ class SanitizationResult:  # CORE-035-scoped — domain-specific variant
     methods_applied: List[SanitizationMethod] = field(default_factory=list)
 
 
-from cortex.core.result import Result
+@dataclass
+class Result:
+    """Simple result wrapper with success/value/error fields."""
+
+    success: bool
+    value: Optional[Any] = None
+    error: Optional[str] = None
 
 
 class PromptInjectionSanitizer:

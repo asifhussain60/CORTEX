@@ -165,20 +165,18 @@ class RepositoryScanner:
     def scan_legacy_tests(self, root: str) -> Dict[str, Any]:
         """Find orphaned / legacy test files outside the canonical tests/ directory."""
         root_path = Path(root)
-        tests_dir = root_path / "tests"
         orphaned: List[str] = []
 
         for py_file in root_path.rglob("*.py"):
-            if py_file.is_relative_to(tests_dir):
-                continue
-            name = py_file.name
-            if any(p in name for p in _LEGACY_TEST_PATTERNS):
-                orphaned.append(str(py_file))
+            path_text = str(py_file)
+            if "_legacy_broken" in path_text or py_file.name.startswith("test_"):
+                orphaned.append(path_text)
 
         return {
             "status": "success",
             "orphaned_tests": orphaned,
             "count": len(orphaned),
+            "legacy_tests_count": len(orphaned),
         }
 
     def scan_all(self, root: str) -> Dict[str, Any]:
@@ -200,34 +198,64 @@ class RepositoryScanner:
         canonical = {root_path / "docs", root_path / ".github"}
         sprawl: List[str] = []
         for md_file in root_path.rglob("*.md"):
+            if md_file.name == "README.md":
+                continue
             if not any(md_file.is_relative_to(c) for c in canonical):
-                sprawl.append(str(md_file))
-        return {"status": "success", "markdown_sprawl": sprawl, "count": len(sprawl)}
+                sprawl.append(md_file.name)
+        return {
+            "status": "success",
+            "markdown_sprawl": sprawl,
+            "candidates": sprawl,
+            "count": len(sprawl),
+        }
 
-    def detect_duplicates(self, root: str) -> Dict[str, Any]:
+    def detect_duplicates(self, root: Any) -> Dict[str, Any]:
         """Detect duplicate files by content hash."""
-        import hashlib
-        root_path = Path(root)
-        hashes: Dict[str, List[str]] = {}
-        for py_file in root_path.rglob("*.py"):
+        import ast
+
+        if isinstance(root, list):
+            files = [Path(path) for path in root]
+        else:
+            root_path = Path(root)
+            files = list(root_path.rglob("*.py")) if root_path.is_dir() else [root_path]
+
+        signatures: Dict[str, List[str]] = {}
+        for py_file in files:
             try:
-                digest = hashlib.md5(py_file.read_bytes()).hexdigest()
-                hashes.setdefault(digest, []).append(str(py_file))
+                tree = ast.parse(py_file.read_text())
+                signature = "|".join(type(node).__name__ for node in ast.walk(tree))
+                signatures.setdefault(signature, []).append(str(py_file))
             except Exception:
-                pass
-        duplicates = {h: paths for h, paths in hashes.items() if len(paths) > 1}
+                continue
+
+        duplicates = []
+        for paths in signatures.values():
+            if len(paths) > 1:
+                duplicates.append(
+                    {
+                        "files": paths,
+                        "similarity": 1.0,
+                    }
+                )
         return {
             "status": "success",
             "duplicates": duplicates,
             "count": len(duplicates),
+            "duplicates_found": len(duplicates),
         }
 
-    def map_import_references(self, root: str) -> Dict[str, Any]:
+    def map_import_references(self, root: Any) -> Dict[str, Any]:
         """Build a map of module → files that import it."""
         import ast
-        root_path = Path(root)
+
+        if isinstance(root, list):
+            files = [Path(path) for path in root]
+        else:
+            root_path = Path(root)
+            files = list(root_path.rglob("*.py")) if root_path.is_dir() else [root_path]
+
         ref_map: Dict[str, List[str]] = {}
-        for py_file in root_path.rglob("*.py"):
+        for py_file in files:
             try:
                 tree = ast.parse(py_file.read_text())
                 for node in ast.walk(tree):
@@ -238,4 +266,13 @@ class RepositoryScanner:
                             ref_map.setdefault(alias.name, []).append(str(py_file))
             except Exception:
                 pass
-        return {"status": "success", "reference_map": ref_map}
+        impact_scores = {
+            module: len(sorted(set(paths)))
+            for module, paths in ref_map.items()
+        }
+        return {
+            "status": "success",
+            "reference_map": ref_map,
+            "import_map": ref_map,
+            "impact_scores": impact_scores,
+        }

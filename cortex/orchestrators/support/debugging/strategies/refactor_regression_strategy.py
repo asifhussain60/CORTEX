@@ -44,8 +44,8 @@ class RefactorRegressionStrategy(AbstractInjectionStrategy):
         affected_lines = self._parse_git_diff(git_diff, context.file_path)
 
         if not affected_lines:
-            # Fallback to line_number from context
-            return [context.line_number] if context.line_number > 0 else []
+              # Fallback to line_number from context (0 = file start is valid)
+              return [context.line_number] if context.line_number >= 0 else [0]
 
         return affected_lines
 
@@ -61,12 +61,10 @@ class RefactorRegressionStrategy(AbstractInjectionStrategy):
             Formatted marker string
         """
         regression_type = context.additional_context.get("regression_type", "unknown")
-        timestamp = context.additional_context.get("timestamp", "")
-
+        refactor_type = context.additional_context.get("refactor_type", "unknown")
         marker = (
-            f"type={regression_type} | time={timestamp}"
+            f"REFACTOR_REGRESSION | refactor_type={refactor_type} | regression_type={regression_type}"
         )
-
         return marker
 
     def _parse_git_diff(self, git_diff: str, file_path: str) -> List[int]:

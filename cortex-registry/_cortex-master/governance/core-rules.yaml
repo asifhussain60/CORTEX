@@ -1,0 +1,86 @@
+# ==============================================================================
+# CORTEX CORE RULES — Governance Entry Point
+# ==============================================================================
+# Purpose: Canonical governance rules entry point for cortex-registry/governance/
+# SSOT:    cortex-registry/core/tier0-skull/skull-rules.yaml (Tier 0 — immutable)
+# Status:  ACTIVE
+# ==============================================================================
+
+id: "core-rules"
+governance_tier: 0
+category: CORTEX_CORE
+precedence: HIGHEST
+canonical_source: "cortex-registry/core/tier0-skull/skull-rules.yaml"
+
+meta:
+  version: "1.0"
+  description: >
+    Entry-point reference for CORTEX governance rules.
+    The canonical SSOT is cortex-registry/core/tier0-skull/skull-rules.yaml.
+    This file provides the governance tier 0 registration for the
+    cortex-registry/governance/ directory.
+  author: "Asif Hussain"
+  copyright: "© 2025–2026 Asif Hussain. All rights reserved."
+  phase: 109
+  fixed_in: "Phase 109 pull — broken symlink replaced with proper YAML"
+
+enforcement_levels:
+  BLOCKED:
+    description: "Execution is halted — must resolve before proceeding"
+    rules:
+      - "CORE-035"
+      - "CORE-050"
+      - "CORE-064"
+      - "CORE-068"
+      - "CORE-071"
+      - "CORE-074"
+  PRE-EXECUTION: "Must run before any code-modifying operation"
+  RUNTIME: "Enforced continuously during execution"
+  WARNING: "Surfaced as advisory — does not block"
+  PRINCIPLE: "Guiding principle — advisory only"
+
+core_rules:
+  - id: "CORE-002"
+    name: "VS Code Inline Rendering"
+    description: "All output must render inline in VS Code Copilot Chat"
+    enforcement: "RUNTIME"
+  - id: "CORE-008"
+    name: "TDD Mandatory"
+    description: "Tests must be written before implementation code"
+    enforcement: "PRE-EXECUTION"
+  - id: "CORE-035"
+    name: "Single Source of Truth"
+    description: "No duplicate authority — one SSOT per data domain"
+    enforcement: "BLOCKED"
+  - id: "CORE-048"
+    name: "Holistic Validation Gate"
+    description: "Full validation sweep before claiming completion"
+    enforcement: "PRE-EXECUTION"
+  - id: "CORE-049"
+    name: "Silent Autonomous Mode"
+    description: "After explicit proceed, execute silently without pausing"
+    enforcement: "RUNTIME"
+  - id: "CORE-064"
+    name: "Sweep Completeness"
+    description: "All affected files must be updated in a single sweep"
+    enforcement: "BLOCKED"
+  - id: "CORE-068"
+    name: "Convergence Loop"
+    description: "Detect-fix-rescan loop until zero failures"
+    enforcement: "BLOCKED"
+  - id: "CORE-071"
+    name: "No Fabricated Evidence"
+    description: "Never claim test passage without verified run output"
+    enforcement: "BLOCKED"
+  - id: "CORE-074"
+    name: "Governance Drift Lock"
+    description: "Governance contracts must not drift from registry definitions"
+    enforcement: "BLOCKED"
+  - id: "CORE-050"
+    name: "No Quality Degradation"
+    category: "governance"
+    priority: "P0"
+    description: "No degradation to production standards. Fix infrastructure, don't bypass failing gates."
+    enforcement: "BLOCKED"
+    violation_action: "Block execution until root-cause remediation is complete"
+

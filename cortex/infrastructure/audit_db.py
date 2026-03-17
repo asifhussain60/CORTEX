@@ -215,15 +215,18 @@ class CortexAuditDB:
 
         entries = []
         for row in results:
+            details = json.loads(row[7]) if row[7] else {}
             entry = AuditEntry(
                 entry_id=str(row[0]) if row[0] is not None else "",
                 timestamp=datetime.fromisoformat(row[1]) if row[1] else None,
-                operation=row[2],  # event_type → operation
+                operation=row[2],
+                event_type=row[2],
                 orchestrator_id=row[3],
                 status=row[4],
                 duration_ms=row[5],
                 error_message=row[6],
-                details=json.loads(row[7]) if row[7] else {},  # metadata → details
+                details=details,
+                metadata=details,
             )
             entries.append(entry)
 

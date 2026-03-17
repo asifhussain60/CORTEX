@@ -1,0 +1,48 @@
+registry_template: false
+metadata:
+  status: PRODUCTION_WIRED
+registered_orchestrators:
+  - name: MasterOrchestrator
+    wiring_status: wired
+  - name: TDDOrchestrator
+    wiring_status: wired
+  - name: IntentRouter
+    wiring_status: wired
+  - name: InteractionOrchestrator
+    wiring_status: wired
+  - name: SecurityOrchestrator
+    wiring_status: wired
+  - name: EnforcementOrchestrator
+    wiring_status: wired
+  - name: AuditOrchestrator
+    wiring_status: wired
+  - name: PlanningOrchestrator
+    wiring_status: wired
+  - name: EnhancedPlanningOrchestrator
+    wiring_status: wired
+  - name: CodeLevelPlanner
+    wiring_status: wired
+  - name: DashboardOrchestrator
+    wiring_status: wired
+  - name: DomainOrchestrator
+    wiring_status: wired
+  - name: DependencyResolver
+    wiring_status: wired
+  - name: DebuggerOrchestrator
+    wiring_status: wired
+  - name: RepositoryOnboardingOrchestrator
+    wiring_status: wired
+  - name: HolisticValidationOrchestrator
+    wiring_status: wired
+  - name: ChallengeEngine
+    wiring_status: wired
+  - name: SetupOrchestrator
+    wiring_status: wired
+  - name: RollbackOrchestrator
+    wiring_status: wired
+  - name: PhaseCompletionOrchestrator
+    wiring_status: wired
+wiring_status:
+  total_orchestrators: 20
+  wired: 20
+  coverage_percentage: 100

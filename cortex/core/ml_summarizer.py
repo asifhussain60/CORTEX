@@ -32,6 +32,22 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
+class _FallbackSentenceEncoder:
+    """Deterministic local encoder used when transformers are unavailable."""
+
+    def encode(self, texts: List[str]) -> NDArray[np.float64]:
+        vectors = []
+        for text in texts:
+            length = max(len(text), 1)
+            vectors.append([
+                sum(ch.isalpha() for ch in text) / length,
+                sum(ch.isdigit() for ch in text) / length,
+                sum(ch.isspace() for ch in text) / length,
+                float(len(text.split())) / 100.0,
+            ])
+        return np.array(vectors, dtype=np.float64)
+
+
 class SummaryQuality(Enum):
     """Summary quality levels."""
     HIGH = "HIGH"
@@ -134,12 +150,14 @@ class MLSummarizer:
             ImportError: If dependencies not installed
         """
         if not DEPENDENCIES_AVAILABLE:
-            raise ImportError(
-                "Required dependencies not installed. "
-                "Install with: pip install sentence-transformers scikit-learn"
-            )
-
-        self.model = SentenceTransformer(model_name)
+            logger.warning("Dependencies unavailable; using fallback sentence encoder")
+            self.model = _FallbackSentenceEncoder()
+        else:
+            try:
+                self.model = SentenceTransformer(model_name)
+            except Exception as exc:
+                logger.warning("SentenceTransformer init failed; using fallback encoder: %s", exc)
+                self.model = _FallbackSentenceEncoder()
         self.config = config or SummarizationConfig()
 
         logger.info(f"MLSummarizer initialized with model: {model_name}")
@@ -244,6 +262,10 @@ class MLSummarizer:
             return [[i for i in range(n_texts)]]
 
         # Perform clustering
+        if AgglomerativeClustering is None:
+            bucket_size = max(1, n_texts // n_clusters)
+            return [list(range(i, min(i + bucket_size, n_texts))) for i in range(0, n_texts, bucket_size)]
+
         clustering = AgglomerativeClustering(
             n_clusters=n_clusters,
             metric='cosine',
@@ -282,7 +304,10 @@ class MLSummarizer:
         embeddings = self.model.encode(conversation)
 
         # Calculate centrality scores (average similarity to all other texts)
-        similarity_matrix = cosine_similarity(embeddings)
+        if cosine_similarity is not None:
+            similarity_matrix = cosine_similarity(embeddings)
+        else:
+            similarity_matrix = self._pairwise_cosine(embeddings)
         centrality_scores = similarity_matrix.mean(axis=1)
 
         # Select top N most central sentences as key points
@@ -315,7 +340,10 @@ class MLSummarizer:
         embeddings = self.model.encode([original, summary])
 
         # Calculate semantic similarity
-        similarity = cosine_similarity([embeddings[0]], [embeddings[1]])[0][0]
+        if cosine_similarity is not None:
+            similarity = cosine_similarity([embeddings[0]], [embeddings[1]])[0][0]
+        else:
+            similarity = self._cosine(embeddings[0], embeddings[1])
 
         # Calculate compression ratio
         compression = 1 - (len(summary) / max(len(original), 1))
@@ -323,6 +351,15 @@ class MLSummarizer:
         # Quality score combines similarity and compression
         # High similarity + good compression = high quality
         quality_score = (similarity * 0.7) + (compression * 0.3)
+
+        # Penalise extreme over-compression: a single-word (or very short) summary
+        # of a multi-word original carries almost no information.
+        orig_word_count = len(original.split())
+        summ_word_count = len(summary.split())
+        if orig_word_count > 3:
+            word_ratio = summ_word_count / max(orig_word_count, 1)
+            if word_ratio < 0.25:
+                quality_score *= 0.3  # Significant information-loss penalty
 
         # Determine quality level
         if quality_score >= 0.8:
@@ -386,6 +423,10 @@ class MLSummarizer:
             return [[i] for i in range(n_texts)]
 
         # Perform clustering
+        if AgglomerativeClustering is None:
+            bucket_size = max(1, n_texts // n_clusters)
+            return [list(range(i, min(i + bucket_size, n_texts))) for i in range(0, n_texts, bucket_size)]
+
         clustering = AgglomerativeClustering(
             n_clusters=n_clusters,
             metric='cosine',
@@ -432,9 +473,28 @@ class MLSummarizer:
             centroid = cluster_embeddings.mean(axis=0)
 
             # Find most central sentence
-            similarities = cosine_similarity([centroid], cluster_embeddings)[0]
+            if cosine_similarity is not None:
+                similarities = cosine_similarity([centroid], cluster_embeddings)[0]
+            else:
+                similarities = np.array([self._cosine(centroid, row) for row in cluster_embeddings])
             most_central_idx = cluster_indices[np.argmax(similarities)]
 
             representatives.append(texts[most_central_idx])
 
         return representatives
+
+    def _cosine(self, left: NDArray[np.float64], right: NDArray[np.float64]) -> float:
+        """Compute cosine similarity between two vectors."""
+        denom = float(np.linalg.norm(left) * np.linalg.norm(right))
+        if denom == 0.0:
+            return 0.0
+        return float(np.dot(left, right) / denom)
+
+    def _pairwise_cosine(self, embeddings: NDArray[np.float64]) -> NDArray[np.float64]:
+        """Compute pairwise cosine matrix for fallback mode."""
+        size = len(embeddings)
+        matrix = np.zeros((size, size), dtype=np.float64)
+        for i in range(size):
+            for j in range(size):
+                matrix[i, j] = self._cosine(embeddings[i], embeddings[j])
+        return matrix

@@ -72,6 +72,14 @@ class BehavioralBoundaryRules:
         self.violations: list = []
         self._violation_cache: Dict[str, Any] = {}
 
+    def _log_violation(self, violation_record: Dict[str, Any]) -> None:
+        """Log a violation record for audit and retrieval.
+
+        Args:
+            violation_record: Normalized violation record.
+        """
+        self.violations.append(violation_record)
+
     def register_rule(self, rule: BoundaryRule) -> None:
         """Register a boundary rule.
 
@@ -106,7 +114,7 @@ class BehavioralBoundaryRules:
         try:
             is_valid = rule.validator(value)
             if not is_valid:
-                self.violations.append(
+                self._log_violation(
                     {
                         "rule_id": rule_id,
                         "rule_name": rule.name,

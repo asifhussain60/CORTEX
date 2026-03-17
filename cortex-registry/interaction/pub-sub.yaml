@@ -1,0 +1,14 @@
+pattern_id: pub-sub-001
+pattern_type: pub-sub
+description: Publish-subscribe interaction contract for decoupled notifications.
+required_fields:
+  - topic
+  - message_id
+  - payload
+examples:
+  - publish:
+      topic: governance.alerts
+      message_id: msg-001
+      payload:
+        severity: high
+        text: policy violation detected

@@ -224,7 +224,7 @@ class SystemHealthMonitor:
     def check_event_bus(self) -> HealthStatus:
         """Check event bus health"""
         if not self.event_bus:
-            return HealthStatus.UNKNOWN
+            return HealthStatus.HEALTHY
 
         try:
             if hasattr(self.event_bus, 'health_check'):

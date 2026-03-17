@@ -120,6 +120,7 @@ class CoreRulesLoader(BaseYAMLLoader):
         # Build meta from metadata
         metadata = raw.get("metadata", {})
         meta = {
+            "version": "1.0",
             "updated": metadata.get("last_update", ""),
             "author": metadata.get("author", ""),
         }
@@ -587,8 +588,8 @@ def get_loader(yaml_type: str, registry_path: Path) -> BaseYAMLLoader:
         # Paths are relative to cortex-registry/ root
         "core_rules": (CoreRulesLoader, "core/tier0-skull/skull-rules.yaml"),
         "audit_checklist": (AuditChecklistLoader, "governance/audit-checklist.yaml"),
-        "modes": (ModesLoader, "config/modes.yaml"),
-        "response_format": (ResponseFormatLoader, "config/response-format.yaml"),
+        "modes": (ModesLoader, "meta/modes.yaml"),
+        "response_format": (ResponseFormatLoader, "meta/response-format.yaml"),
     }
 
     if yaml_type not in loaders:

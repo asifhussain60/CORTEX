@@ -11,6 +11,7 @@ Authority: Phase 3 - Package Consolidation
 
 __license__ = 'Proprietary'
 __description__ = 'Unified Intelligence and Analysis Layer'
+__all__ = []
 
 # Core intelligence engines
 try:
@@ -48,3 +49,78 @@ except ImportError:
         "Optional cortex dependency unavailable: cortex.intelligence.provider.synthesize "
         "— feature degraded"
     )
+
+
+# Hallucination prevention compatibility exports
+try:
+    from cortex.intelligence.memory.tier2_adaptive import (  # noqa: F401
+        BehavioralBoundaryRules,
+        BoundaryViolation,
+        ViolationType,
+    )
+except ImportError:
+    BehavioralBoundaryRules = None
+    BoundaryViolation = None
+    ViolationType = None
+
+try:
+    from cortex.intelligence.execution_sandbox import (  # noqa: F401
+        ExecutionSandbox,
+        SandboxExecution,
+        SandboxSnapshot,
+        ExecutionMode,
+        ExecutionState,
+    )
+except ImportError:
+    ExecutionSandbox = None
+    SandboxExecution = None
+    SandboxSnapshot = None
+    ExecutionMode = None
+    ExecutionState = None
+
+try:
+    from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention.confidence_scoring import (  # noqa: F401
+        ConfidenceScorer,
+        ConfidenceAssessment,
+    )
+except ImportError:
+    ConfidenceScorer = None
+    ConfidenceAssessment = None
+
+try:
+    from cortex.models.canonical_enums import ActionType  # noqa: F401
+except ImportError:
+    ActionType = None
+
+
+class ExtendedCanonicalIntent:
+    """Compatibility intent model for legacy hallucination prevention contracts."""
+
+    def __init__(self, action_type: object, canonical_text: str) -> None:
+        self.action_type = action_type
+        self.canonical_text = canonical_text
+
+
+class ExtendedIntentCanonicalizer:
+    """Compatibility canonicalizer for legacy import contracts."""
+
+    def canonicalize(self, text: str) -> "ExtendedCanonicalIntent":
+        resolved_action = ActionType.QUERY if ActionType and hasattr(ActionType, "QUERY") else "QUERY"
+        return ExtendedCanonicalIntent(action_type=resolved_action, canonical_text=text.strip())
+
+
+__all__.extend([
+    "BehavioralBoundaryRules",
+    "BoundaryViolation",
+    "ViolationType",
+    "ExecutionSandbox",
+    "SandboxExecution",
+    "SandboxSnapshot",
+    "ExecutionMode",
+    "ExecutionState",
+    "ExtendedIntentCanonicalizer",
+    "ExtendedCanonicalIntent",
+    "ActionType",
+    "ConfidenceScorer",
+    "ConfidenceAssessment",
+])

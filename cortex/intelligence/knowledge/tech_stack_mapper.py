@@ -115,7 +115,7 @@ class TechStackMapper:
             ImportMapping("fastapi", ["fastapi", "python-web", "rest-api", "async"], 0.95),
             ImportMapping("flask", ["flask", "python-web", "rest-api"], 0.95),
             ImportMapping("django", ["django", "python-web", "rest-api", "orm"], 0.95),
-            ImportMapping("pydantic", ["pydantic", "validation", "serialization"], 0.90),
+            ImportMapping("pydantic", ["pydantic", "data-validation", "serialization"], 0.90),
             ImportMapping("sqlalchemy", ["sqlalchemy", "database", "orm"], 0.95),
             ImportMapping("pytest", ["pytest", "testing", "tdd"], 0.95),
             ImportMapping("unittest", ["unittest", "testing", "tdd"], 0.90),

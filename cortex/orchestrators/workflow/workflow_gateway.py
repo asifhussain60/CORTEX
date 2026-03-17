@@ -232,8 +232,16 @@ class WorkflowGateway:
         mode_upper = mode.upper()
         template_id = self.resolve_template(mode_upper, context)
 
-        # Non-exempt modes with no template are a governance violation
+        # Non-exempt modes with no template are a governance violation.
+        # Compatibility carve-out: allow internal operation-style names
+        # (typically lowercase/snake_case) to pass through without a template.
         if template_id is None and mode_upper not in _MODE_TEMPLATE_MAP:
+            if mode != mode_upper or "_" in mode or "-" in mode:
+                logger.debug(
+                    "WorkflowGateway: internal mode '%s' treated as exempt compatibility path.",
+                    mode,
+                )
+                return {"status": "exempt", "mode": mode, "template_id": None}
             raise WorkflowGatewayError(
                 f"WorkflowGateway: no template registered for mode '{mode}'. "
                 "Register a template in _MODE_TEMPLATE_MAP or mark the mode as exempt."

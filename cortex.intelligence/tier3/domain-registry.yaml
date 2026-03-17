@@ -1,0 +1,28 @@
+metadata:
+  version: "1.0"
+  tier: 3
+  purpose: "Tier-3 domain registry for business-domain extensibility and endpoint integration"
+  integration: "DOMAIN_BRAIN_ENDPOINT"
+
+cortex_domains:
+  governance: {tier: 0}
+  response_headers: {tier: 0}
+  master_orchestrator: {tier: 0}
+  planning: {tier: 1}
+  tdd: {tier: 1}
+  audit: {tier: 1}
+  health: {tier: 1}
+  vacuum: {tier: 1}
+  debug: {tier: 1}
+  design: {tier: 1}
+  query: {tier: 1}
+  digest: {tier: 1}
+  investigate: {tier: 1}
+  rephrase: {tier: 1}
+  implementation: {tier: 1}
+  refactor: {tier: 1}
+
+business_domains_ready:
+  enabled: true
+  endpoint: "${DOMAIN_BRAIN_ENDPOINT}"
+  fallback: "local_cortex_only"

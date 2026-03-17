@@ -1,0 +1,67 @@
+# ============================================================================
+# CORTEX Response Format Specification (meta canonical)
+# ============================================================================
+# Authority: .github/templates/cortex-response-templates.md (SSOT)
+# Canonical location: cortex-registry/meta/response-format.yaml
+# Loaded by: cortex.core.yaml_loaders.ResponseFormatLoader
+# ============================================================================
+
+meta:
+  version: "1.0"
+  name: "CORTEX Response Format"
+  updated: "2026-02-26"
+  description: "Response formatting standards for CORTEX output"
+
+header:
+  required: true
+  template: "# 🧠 CORTEX {mode}\n**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved."
+  fields:
+    - author
+    - mode
+    - timestamp
+
+icons:
+  status:
+    completed:
+      icon: "✅"
+      description: "Task completed successfully"
+    planned:
+      icon: "📋"
+      description: "Task planned for future"
+    critical:
+      icon: "🔴"
+      description: "Critical issue requiring immediate attention"
+    warning:
+      icon: "🟡"
+      description: "Warning — review recommended"
+    in_progress:
+      icon: "🔵"
+      description: "Currently in progress"
+    blocked:
+      icon: "⛔"
+      description: "Blocked — cannot proceed"
+  mode:
+    implement: "🔨"
+    audit: "🔍"
+    fix: "🔧"
+    design: "🏗️"
+    plan: "📋"
+
+structure:
+  sections:
+    - intent_reflection
+    - work_output
+    - validation_gate
+    - end_state
+  end_state_options:
+    - proceed_gate
+    - completion_state
+  max_depth: 3
+
+anti_patterns:
+  - pattern: "duplicate_headers"
+    description: "Never emit duplicate response headers"
+  - pattern: "missing_end_state"
+    description: "Always end with exactly one end-state block"
+  - pattern: "fabricated_quotes"
+    description: "Never fabricate quotes — use only verified sources"

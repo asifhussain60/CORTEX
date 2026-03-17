@@ -322,13 +322,16 @@ class DiscoveryScanner:
     def scan_lens_components(self) -> List[DiscoveredComponent]:
         """Scan for LENS protocol components."""
         lens_components = []
+        language_patterns = [pattern.lower() for pattern in self.LENS_PATTERNS.get("Language", [])]
 
         for phase_name, patterns in self.LENS_PATTERNS.items():
             for pattern in patterns:
                 results = self._find_classes_by_pattern(pattern)
                 for comp in results:
                     comp.category = DiscoveryCategory.LENS_COMPONENT
-                    comp.priority = 0 if phase_name == "Language" else 1
+                    class_name_lower = comp.class_name.lower()
+                    is_language_match = any(language_pattern in class_name_lower for language_pattern in language_patterns)
+                    comp.priority = 0 if phase_name == "Language" or is_language_match else 1
                     lens_components.append(comp)
 
         return lens_components

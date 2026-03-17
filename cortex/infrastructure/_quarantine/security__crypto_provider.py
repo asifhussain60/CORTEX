@@ -1,3 +1,4 @@
+# CORE-035: Quarantine shadow — canonical is cortex/infrastructure/security/crypto_provider.py. Not imported. Pending vacuum removal.
 """
 CryptoProvider - cryptographic operations.
 

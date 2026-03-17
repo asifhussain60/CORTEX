@@ -97,15 +97,19 @@ class OrchestratorScaffolder:
             try:
                 query_result = self._check_registry_for_duplicates(template.name)
                 decision = "upgrade_proposed" if query_result.found else "create_new"
-                audit_logger.log_pre_scaffolding_check(
+                ac_marker = audit_logger.log_pre_scaffolding_check(
                     orchestrator_name=template.name,
                     query_result=query_result,
                     decision=decision,
                     decision_rationale="",
                     user_override=False,
                 )
+                result.metadata["ac_marker_pre_check"] = ac_marker
+                result.metadata["duplicate_detected"] = bool(query_result.found)
             except Exception as e:
                 result.add_warning(f"Pre-scaffolding check failed: {e}")
+        else:
+            result.metadata["duplicate_detected"] = False
 
         # Validate template
         validation = self.parser.validate(template)
@@ -266,6 +270,9 @@ class OrchestratorScaffolder:
             from cortex.tools.scaffolder_audit_logger import ScaffolderAuditLogger
             return ScaffolderAuditLogger()
         except ImportError:
+            result.add_warning("Audit logger not available")
+            return None
+        except Exception:
             result.add_warning("Audit logger not available")
             return None
 

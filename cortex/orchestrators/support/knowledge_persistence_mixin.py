@@ -44,6 +44,10 @@ class OnboardingPatternRegistry:  # CORE-035-scoped lightweight replacement for 
         return []
 
 
+# Backward-compatible export expected by integration tests
+PatternRegistry = OnboardingPatternRegistry
+
+
 class KnowledgePersistenceMixin:
     """
     Mixin for adding knowledge persistence to onboarding.

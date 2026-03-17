@@ -7,7 +7,7 @@ name: Documentation Auto-Refresh
 
 on:
   push:
-    branches: [main, CORTEX]
+    branches: [main, develop, CORTEX]
     paths:
       - 'cortex-registry/knowledge/**'
       - 'cortex-registry/cortex-master.yaml'

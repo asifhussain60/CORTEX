@@ -445,3 +445,7 @@ class EnhancedAuditLogger(IAuditLogger):  # CORE-035-scoped — domain-specific 
 def get_audit_logger(component: str = "CORTEX") -> EnhancedAuditLogger:
     """Get the global audit logger instance."""
     return EnhancedAuditLogger(component=component)
+
+
+# Backward compatibility alias for modules importing AuditLogger directly.
+AuditLogger = EnhancedAuditLogger

@@ -1,0 +1,13 @@
+entries:
+- pattern_id: OPJ-DIGEST_SESSION_ORCHE-20260316204233605799
+  orchestrator: DigestSessionOrchestrator
+  operation: digest_session
+  outcome: success
+  confidence: 0.5
+  recorded_at: '2026-03-16T20:42:33.605829+00:00'
+  context:
+    file: CLAUDE.md
+    is_chat: false
+  _context_hash: 87f14aca
+  occurrence_count: 3
+  resolution: classified doc confidence=5.00 enhancements=0

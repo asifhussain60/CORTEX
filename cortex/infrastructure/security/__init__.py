@@ -29,6 +29,24 @@ from cortex.infrastructure.security.vulnerability_orchestration_gateway import (
 
 # Lazy imports for orchestrator to avoid circular dependencies
 def __getattr__(name):
+    if name == "CrossRepoEnforcer":
+        from cortex.infrastructure.security.cross_repo_enforcer import CrossRepoEnforcer
+        return CrossRepoEnforcer
+    if name == "CryptoProvider":
+        from cortex.infrastructure.security.crypto_provider import CryptoProvider
+        return CryptoProvider
+    if name == "DefenseOrchestrator":
+        from cortex.infrastructure.security.defense_orchestrator import DefenseOrchestrator
+        return DefenseOrchestrator
+    if name == "InputValidator":
+        from cortex.infrastructure.security.input_validator import InputValidator
+        return InputValidator
+    if name == "TokenBucketRateLimiter":
+        from cortex.infrastructure.security.rate_limiter import TokenBucketRateLimiter
+        return TokenBucketRateLimiter
+    if name == "SecretsFilter":
+        from cortex.infrastructure.security.secrets_filter import SecretsFilter
+        return SecretsFilter
     if name == "SecurityVulnerabilityOrchestrator":
         from cortex.orchestrators.validation.security_vulnerability_orchestrator import (
             SecurityVulnerabilityOrchestrator,
@@ -56,6 +74,12 @@ __all__ = [
     "RemediationResult",
     "VulnerabilityScanResult",
     "RemediationBatch",
+    "CrossRepoEnforcer",
+    "CryptoProvider",
+    "DefenseOrchestrator",
+    "InputValidator",
+    "TokenBucketRateLimiter",
+    "SecretsFilter",
     # Orchestrator (lazy-loaded)
     "SecurityVulnerabilityOrchestrator",
     "VulnerabilityAction",

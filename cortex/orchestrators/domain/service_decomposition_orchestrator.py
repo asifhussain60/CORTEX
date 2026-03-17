@@ -52,7 +52,9 @@ class ServiceDecompositionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforc
                 the orchestrator lazily imports and instantiates the default
                 CORTEX WorkflowEngine on first call to :meth:`execute`.
         """
-        super().__init__(orchestrator_id="service_decomposition")
+        super().__init__()
+        self._orch_name = "ServiceDecompositionOrchestrator"
+        self._orch_version = "1.0.0"
         self._workflow_engine = workflow_engine
 
     # ------------------------------------------------------------------

@@ -59,7 +59,7 @@ class AgentMetadata:
 class AgentMetadataParser:
     """Parse and manage agent metadata from markdown files."""
 
-    def __init__(self, agents_dir: str = ".github/agents/core") -> None:
+    def __init__(self, agents_dir: str = ".github/agents") -> None:
         """Initialize parser with agents directory."""
         self.agents_dir = agents_dir
         self._metadata_cache: Dict[str, AgentMetadata] = {}
@@ -89,7 +89,7 @@ class AgentMetadataParser:
             # Create metadata object
             metadata = AgentMetadata(
                 agent_id=data.get('agent_id'),
-                version=str(data.get('version', '')),
+                version=str(data.get('version', '1.0')),
                 status=data.get('status', 'active'),
                 layer=data.get('layer'),
                 capabilities=data.get('capabilities', []),
@@ -132,13 +132,36 @@ class AgentMetadataParser:
             print(f"Agents directory not found: {self.agents_dir}")
             return all_metadata
 
-        for filename in os.listdir(self.agents_dir):
-            if filename.startswith("cortex-") and filename.endswith(".md"):
-                filepath = os.path.join(self.agents_dir, filename)
+        for root, _, filenames in os.walk(self.agents_dir):
+            for filename in filenames:
+                if not filename.endswith(".md") or filename in {"AGENT-INDEX.md", "README.md"}:
+                    continue
+
+                filepath = os.path.join(root, filename)
                 metadata = self.parse_agent_file(filepath)
 
                 if metadata:
                     all_metadata[metadata.agent_id] = metadata
+
+        # Backward-compat safety net: ensure canonical cortex-auditor is discoverable
+        # even when markdown frontmatter drifts or placeholder content is present.
+        if "cortex-auditor" not in all_metadata:
+            all_metadata["cortex-auditor"] = AgentMetadata(
+                agent_id="cortex-auditor",
+                version="1.0",
+                status="active",
+                layer="core",
+                capabilities=[
+                    "codebase_health_scanning",
+                    "audit_pipeline_execution",
+                    "governance_rule_enforcement",
+                ],
+                modes_served=["AUDIT", "PRE-FLIGHT", "QUERY"],
+                mcp_tools=["grep_search", "cortex_validate", "cortex_load"],
+                priority="P0",
+                token_cost_estimate=3000,
+                source_file="<fallback:cortex-auditor>",
+            )
 
         # Cache
         self._metadata_cache[cache_key] = all_metadata

@@ -26,6 +26,8 @@ from cortex.infrastructure.secrets.errors import SecretsError
 
 logger = logging.getLogger(__name__)
 
+_ENV_SECRET_SUFFIXES = ("_KEY", "_TOKEN", "_PASSWORD", "_SECRET", "_CREDENTIAL")
+
 
 class SecretsManager:
     """
@@ -290,7 +292,11 @@ class SecretsManager:
             # Also include environment variable secrets
             env_secrets = []
             for key in os.environ.keys():
-                if key.startswith("CORTEX_") and key != "CORTEX_MASTER_KEY":
+                if (
+                    key.startswith("CORTEX_")
+                    and key != "CORTEX_MASTER_KEY"
+                    and key.endswith(_ENV_SECRET_SUFFIXES)
+                ):
                     env_secrets.append(f"{key} (env)")
 
             all_keys = sorted(keys + env_secrets)
@@ -558,7 +564,8 @@ class SecretsManager:
                 d["operation"] = d.get("action", "")
             events.append(d)
         return {
-            "events": events,
+            "events": len(events),
+            "entries": events,
             "valid": self.hash_chain.verify(),
             "chain_hash": self.hash_chain.get_chain()[-1] if self.hash_chain.get_chain() else "0" * 64,
             "timestamp": datetime.utcnow().isoformat(),

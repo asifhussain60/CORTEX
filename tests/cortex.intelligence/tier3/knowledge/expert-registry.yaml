@@ -1,0 +1,118 @@
+metadata:
+  ac_id: KN-003-02
+  version: '1.0'
+  created_at: '2026-03-17T10:34:31.346918'
+  updated_at: '2026-03-17T10:34:31.346920'
+experts:
+- expert_id: EXPERT-001
+  name: Governance Lead
+  email: governance@cortex.local
+  domains:
+  - GOVERNANCE
+  expertise_level: expert
+  active: true
+- expert_id: EXPERT-002
+  name: Routing Architect
+  email: routing@cortex.local
+  domains:
+  - INTENT-ROUTING
+  expertise_level: expert
+  active: true
+- expert_id: EXPERT-003
+  name: Safety Analyst
+  email: safety@cortex.local
+  domains:
+  - HALLUCINATION-PREVENTION
+  expertise_level: advanced
+  active: true
+- expert_id: EXPERT-004
+  name: Execution Coordinator
+  email: execution@cortex.local
+  domains:
+  - EXECUTION-ORCHESTRATION
+  expertise_level: expert
+  active: true
+- expert_id: EXPERT-005
+  name: Data Steward
+  email: data@cortex.local
+  domains:
+  - DATA-MANAGEMENT
+  expertise_level: advanced
+  active: true
+- expert_id: EXPERT-006
+  name: Observability Engineer
+  email: observability@cortex.local
+  domains:
+  - OBSERVABILITY
+  expertise_level: expert
+  active: true
+- expert_id: EXPERT-007
+  name: Security Reviewer
+  email: security@cortex.local
+  domains:
+  - SECURITY
+  expertise_level: expert
+  active: true
+- expert_id: EXPERT-008
+  name: API Designer
+  email: api@cortex.local
+  domains:
+  - API-DESIGN
+  expertise_level: advanced
+  active: true
+- expert_id: EXPERT-009
+  name: ML Reviewer
+  email: ml@cortex.local
+  domains:
+  - ML-MODELS
+  expertise_level: advanced
+  active: true
+- expert_id: EXPERT-010
+  name: Knowledge Curator
+  email: knowledge@cortex.local
+  domains:
+  - KNOWLEDGE-CURATION
+  expertise_level: expert
+  active: true
+- expert_id: EXPERT-011
+  name: Test Strategist
+  email: testing@cortex.local
+  domains:
+  - TESTING-VALIDATION
+  expertise_level: expert
+  active: true
+- expert_id: EXPERT-012
+  name: Release Engineer
+  email: deployment@cortex.local
+  domains:
+  - DEPLOYMENT
+  expertise_level: advanced
+  active: true
+- expert_id: EXPERT-013
+  name: Documentation Editor
+  email: docs@cortex.local
+  domains:
+  - DOCUMENTATION
+  expertise_level: advanced
+  active: true
+- expert_id: EXPERT-014
+  name: Performance Analyst
+  email: performance@cortex.local
+  domains:
+  - PERFORMANCE
+  expertise_level: expert
+  active: true
+- expert_id: EXPERT-015
+  name: Systems Architect
+  email: architecture@cortex.local
+  domains:
+  - ARCHITECTURE
+  expertise_level: expert
+  active: true
+- expert_id: EXPERT-016
+  name: Resilience Engineer
+  email: errors@cortex.local
+  domains:
+  - ERROR-HANDLING
+  expertise_level: advanced
+  active: true

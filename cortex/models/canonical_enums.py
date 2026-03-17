@@ -101,6 +101,8 @@ class AuditEventType(Enum):
     AUTHORIZATION = "authorization"
     AUTHENTICATION = "authentication"
     CONFIGURATION_CHANGE = "configuration_change"
+    AC_START = "ac_start"
+    AC_COMPLETE = "ac_complete"
 
 
 class AuditAction(Enum):
@@ -120,6 +122,9 @@ class AuditOperationType(Enum):  # CORE-035-scoped — domain-specific variant
     UPDATE = "update"
     DELETE = "delete"
     READ = "read"
+    AC_START = "ac_start"
+    AC_COMPLETE = "ac_complete"
+    AC_EXECUTE = "ac_execute"
     # System operations
     USER_LOGIN = "user_login"
     DATA_ACCESS = "data_access"

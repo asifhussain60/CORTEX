@@ -1,0 +1,63 @@
+# SDLC Workflow Template: Release Readiness
+# Phase: 79 (GAP-79-B-07) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Primitive references: cortex-registry/workflows/templates/primitives/
+# No version field — append-only YAML standard (CORE-002)
+
+id: sdlc-release-readiness
+title: "Release Readiness Workflow"
+description: |
+  Final gate before deployment: validates test coverage, security scan,
+  changelog completeness, and deployment checklist satisfaction.
+  Uses holistic-validation + deployment-gate primitives.
+  Outputs BLOCK-RELEASE-READINESS response template.
+
+triggers:
+  intents: ["RELEASE", "DEPLOY", "PRODUCTION_READINESS"]
+  mode_keywords: ["release", "deploy", "production ready", "ship", "go-live"]
+
+knowledge_context:
+  primary: "sdlc/release-readiness.yaml"
+  supplementary:
+    - "security/secure-coding-practices.yaml"
+    - "../knowledge-base/security/cicd-hardening.yaml"
+  company_overrides:
+    - "company/domains/deployment-policy.yaml"
+  resolution_order: "company > sdlc > domain > generic"
+
+workflow:
+  steps:
+    - id: "check-test-coverage"
+      primitive: "test-coverage-gate"
+      required: true
+      description: "Validate test suite passes with required coverage"
+
+    - id: "security-scan"
+      primitive: "security-hardening"
+      required: true
+      description: "Final security scan — no new critical/high issues"
+
+    - id: "changelog-check"
+      primitive: "documentation-gate"
+      required: true
+      description: "CHANGELOG.md updated with all changes"
+
+    - id: "deployment-checklist"
+      primitive: "deployment-gate"
+      required: true
+      description: "All deployment prerequisites satisfied"
+
+    - id: "smoke-test"
+      primitive: "smoke-test-execution"
+      required: true
+      description: "Smoke tests against staging/production environment"
+
+outputs:
+  template: "BLOCK-RELEASE-READINESS"
+  artifacts:
+    - "release-notes.md"
+    - "deployment-manifest.yaml"
+    - "rollback-plan.md"
+
+governance:
+  core_rules: ["CORE-048", "CORE-064", "CORE-068"]
+  required_evidence: ["test_report", "security_scan", "changelog_diff"]

@@ -129,7 +129,8 @@ class MarkerInjectionEngine:
         "# session_id: {{ session_id }}\n"
         "# trigger_type: {{ trigger_type }}\n"
         "# context: {{ context }}\n"
-        "# timestamp: {{ timestamp }}\n"
+        "# Injected: {{ timestamp }}\n"
+        "{% if original_code %}# original_code:\n{{ original_code }}\n{% endif %}"
         "# === END MARKER ===\n"
     )
 
@@ -210,7 +211,8 @@ class MarkerInjectionEngine:
             session_id=session_id,
             trigger_type=event_type,
             context=context_summary,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
+            original_code=original_code,
         )
 
 

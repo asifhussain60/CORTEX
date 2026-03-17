@@ -167,6 +167,10 @@ class EnhancedOnboardingOrchestrator(KnowledgePersistenceMixin):
         }
 
 
+# Backward-compatible class name used by validation tests
+OnboardingOrchestrator = EnhancedOnboardingOrchestrator
+
+
 def onboard_repository_tool(
     repository_path: str,
     capture_learning: bool = True,
@@ -252,7 +256,7 @@ def onboard_repository_tool(
                 ).to_dict()
 
         # Initialize components
-        orchestrator = EnhancedOnboardingOrchestrator()
+        orchestrator = OnboardingOrchestrator()
 
         # Perform base onboarding
         logger.info(f"Starting enhanced onboarding for {repository_path}")

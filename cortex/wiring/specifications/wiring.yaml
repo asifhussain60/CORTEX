@@ -1,0 +1,448 @@
+# =============================================================================
+# CORTEX Orchestrator Wiring Specification
+# =============================================================================
+# Authority: Phase 3 - LENS Knowledge Graph (Code Level Planner)
+# Governance: CORE-035 (Single Canonical Implementation)
+# Last Updated: 2026-02-20
+# =============================================================================
+
+
+orchestrators:
+  # 7 core orchestrators (Tier 1)
+  core:
+    - name: "MasterOrchestrator"
+      module: "cortex.orchestrators.core.master_orchestrator"
+      class: "MasterOrchestrator"
+      tier: 1
+      priority: 100
+      dependencies: []
+      capabilities: ["orchestration", "routing", "governance"]
+      health_check: "ping"
+
+    - name: "TDDOrchestrator"
+      module: "cortex.orchestrators.core.tdd_orchestrator"
+      class: "TDDOrchestrator"
+      tier: 1
+      priority: 95
+      dependencies: []
+      capabilities: ["tdd_cycle", "test_generation", "red_green_refactor"]
+      health_check: "ping"
+
+    - name: "IntentRouter"
+      module: "cortex.orchestrators.core.intent_router"
+      class: "IntentRouter"
+      tier: 1
+      priority: 90
+      dependencies: []
+      capabilities: ["intent_classification", "request_routing", "orchestrator_selection"]
+      health_check: "ping"
+
+    - name: "InteractionOrchestrator"
+      module: "cortex.orchestrators.core.interaction_orchestrator"
+      class: "InteractionOrchestrator"
+      tier: 1
+      priority: 85
+      dependencies: []
+      capabilities: ["user_interaction", "conversation_management"]
+      health_check: "ping"
+
+    - name: "SecurityOrchestrator"
+      module: "cortex.orchestrators.core.security_orchestrator"
+      class: "SecurityOrchestrator"
+      tier: 1
+      priority: 88
+      dependencies: []
+      capabilities: ["sast_scanning", "secrets_detection", "sca_scanning", "cicd_hardening", "security_gate"]
+      health_check: "ping"
+
+    - name: "EnforcementOrchestrator"
+      module: "cortex.orchestrators.core.enforcement_orchestrator"
+      class: "EnforcementOrchestrator"
+      tier: 1
+      priority: 80
+      dependencies: []
+      capabilities: ["governance_enforcement", "rule_validation"]
+      health_check: "ping"
+
+    - name: "AuditOrchestrator"
+      module: "cortex.orchestrators.core.audit_orchestrator"
+      class: "AuditOrchestrator"
+      tier: 1
+      priority: 75
+      dependencies: ["MasterOrchestrator", "EnforcementOrchestrator"]
+      capabilities: ["production_readiness_audit", "compliance_scan", "10_point_audit"]
+      health_check: "ping"
+
+  # 6 domain orchestrators (Tier 2)
+  domain:
+    - name: "PlanningOrchestrator"
+      module: "cortex.orchestrators.domain.planning_orchestrator"
+      class: "PlanningOrchestrator"
+      tier: 2
+      priority: 70
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["phase_planning", "task_decomposition"]
+      health_check: "ping"
+
+    - name: "EnhancedPlanningOrchestrator"
+      module: "cortex.orchestrators.domain.enhanced_planning_orchestrator"
+      class: "EnhancedPlanningOrchestrator"
+      tier: 2
+      priority: 68
+      dependencies: ["PlanningOrchestrator"]
+      capabilities: ["enhanced_planning", "dependency_analysis"]
+      health_check: "ping"
+
+    - name: "CodeLevelPlanner"
+      module: "cortex.orchestrators.domain.code_level_planner"
+      class: "CodeLevelPlanner"
+      tier: 2
+      priority: 65
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["code_level_planning", "lens_analysis"]
+      health_check: "ping"
+
+    - name: "DashboardOrchestrator"
+      module: "cortex.orchestrators.domain.dashboard_orchestrator"
+      class: "DashboardOrchestrator"
+      tier: 2
+      priority: 60
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["dashboard_generation", "metrics_visualization"]
+      health_check: "ping"
+
+    - name: "DomainOrchestrator"
+      module: "cortex.orchestrators.domain.domain_orchestrator"
+      class: "DomainOrchestrator"
+      tier: 2
+      priority: 58
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["domain_management", "bounded_context"]
+      health_check: "ping"
+
+    - name: "DependencyResolver"
+      module: "cortex.orchestrators.domain.dependency_resolver"
+      class: "DependencyResolver"
+      tier: 2
+      priority: 55
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["dependency_resolution", "import_analysis"]
+      health_check: "ping"
+
+  # 13 support orchestrators (Tier 3)
+  support:
+    - name: "DebuggerOrchestrator"
+      module: "cortex.orchestrators.support.debugger_orchestrator"
+      class: "DebuggerOrchestrator"
+      tier: 3
+      priority: 45
+      dependencies: []
+      capabilities: ["debugging", "error_analysis"]
+      health_check: "ping"
+
+    - name: "RepositoryOnboardingOrchestrator"
+      module: "cortex.orchestrators.support.repository_onboarding_orchestrator"
+      class: "RepositoryOnboardingOrchestrator"
+      tier: 3
+      priority: 44
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["repository_onboarding", "lens_analysis"]
+      health_check: "ping"
+
+    - name: "HolisticValidationOrchestrator"
+      module: "cortex.orchestrators.validation.holistic_validation_orchestrator"
+      class: "HolisticValidationOrchestrator"
+      tier: 3
+      priority: 43
+      dependencies: ["EnforcementOrchestrator"]
+      capabilities: ["holistic_validation", "pre_implementation_check"]
+      health_check: "ping"
+
+    - name: "ChallengeEngine"
+      module: "cortex.orchestrators.validation.challenge_engine"
+      class: "ChallengeEngine"
+      tier: 3
+      priority: 42
+      dependencies: []
+      capabilities: ["challenge_generation", "alternative_analysis"]
+      health_check: "ping"
+
+    - name: "SetupOrchestrator"
+      module: "cortex.orchestrators.support.setup_orchestrator"
+      class: "SetupOrchestrator"
+      tier: 3
+      priority: 40
+      dependencies: []
+      capabilities: ["environment_setup", "toolchain_validation"]
+      health_check: "ping"
+
+    - name: "RollbackOrchestrator"
+      module: "cortex.infrastructure.deployment.rollback_orchestrator"
+      class: "RollbackOrchestrator"
+      tier: 3
+      priority: 38
+      dependencies: []
+      capabilities: ["rollback", "state_recovery"]
+      health_check: "ping"
+
+    - name: "PhaseCompletionOrchestrator"
+      module: "cortex.orchestrators.support.phase_completion_orchestrator"
+      class: "PhaseCompletionOrchestrator"
+      tier: 3
+      priority: 33
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["phase_completion", "registry_sync"]
+      health_check: "ping"
+
+    - name: "ToolchainValidator"
+      module: "cortex.orchestrators.support.toolchain_validator"
+      class: "ToolchainValidator"
+      tier: 3
+      priority: 32
+      dependencies: []
+      capabilities: ["toolchain_validation", "dependency_check"]
+      health_check: "ping"
+
+    - name: "UpgradeOrchestrator"
+      module: "cortex.orchestrators.support.upgrade_orchestrator"
+      class: "UpgradeOrchestrator"
+      tier: 3
+      priority: 30
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["upgrade_management", "version_migration"]
+      health_check: "ping"
+
+    - name: "BulkDigestOrchestrator"
+      module: "cortex.orchestrators.support.bulk_digest_orchestrator"
+      class: "BulkDigestOrchestrator"
+      tier: 3
+      priority: 25
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["bulk_digest", "knowledge_synthesis", "batch_summarization"]
+      health_check: "ping"
+
+    - name: "DigestSessionOrchestrator"
+      module: "cortex.orchestrators.support.digest_session_orchestrator"
+      class: "DigestSessionOrchestrator"
+      tier: 3
+      priority: 24
+      dependencies: ["BulkDigestOrchestrator"]
+      capabilities: ["digest_session", "incremental_digest"]
+      health_check: "ping"
+
+    - name: "VacuumOrchestrator"
+      module: "cortex.orchestrators.support.vacuum_orchestrator"
+      class: "VacuumOrchestrator"
+      tier: 3
+      priority: 23
+      dependencies: []
+      capabilities: ["markdown_cleanup", "dead_file_removal", "repo_hygiene"]
+      health_check: "ping"
+
+    - name: "AutoHealingMCPOrchestrator"
+      module: "cortex.orchestrators.support.auto_healing_mcp_orchestrator"
+      class: "AutoHealingMCPOrchestrator"
+      tier: 3
+      priority: 22
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["auto_healing", "mcp_diagnostics", "self_repair"]
+      health_check: "ping"
+
+    - name: "SweepCatalogueOrchestrator"
+      module: "cortex.orchestrators.support.sweep_catalogue_orchestrator"
+      class: "SweepCatalogueOrchestrator"
+      tier: 3
+      priority: 21
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["sweep_catalogue", "issue_tracking", "fix_verification"]
+      health_check: "ping"
+      registration_phase: "59-g"
+
+  # ── Health tier ───────────────────────────────────────────────────────────
+  health:
+    - name: "HealthOrchestrator"
+      module: "cortex.orchestrators.health.health_orchestrator"
+      class: "HealthOrchestrator"
+      tier: 3
+      priority: 20
+      dependencies: []
+      capabilities: ["health_check", "orchestrator_ping", "system_health"]
+      health_check: "ping"
+      registration_phase: "59-g"
+
+# =============================================================================
+# TIER 4 — Extended Orchestrators (Phase 59-f: GAP-59-09 Registration)
+# Previously unregistered tiers: git, intelligence, synthesis, workflow,
+# validation (security/solid), strategies
+# =============================================================================
+  # ── Validation (extended) ─────────────────────────────────────────────────
+  validation_extended:
+    - name: "SecurityVulnerabilityOrchestrator"
+      module: "cortex.orchestrators.validation.security_vulnerability_orchestrator"
+      class: "SecurityVulnerabilityOrchestrator"
+      tier: 4
+      priority: 35
+      dependencies: ["EnforcementOrchestrator"]
+      capabilities: ["security_scan", "vulnerability_detection", "cve_remediation"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "SOLIDOrchestrator"
+      module: "cortex.orchestrators.validation.solid_orchestrator"
+      class: "SOLIDOrchestrator"
+      tier: 4
+      priority: 34
+      dependencies: []
+      capabilities: ["solid_compliance", "srp_check", "ocp_check", "dry_check"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+  # ── Strategies (re-export shim — canonical in core) ───────────────────────
+  strategies:
+    - name: "StageExecutionStrategy"
+      module: "cortex.orchestrators.strategies.stage_execution_strategy"
+      class: "StageExecutionStrategy"
+      tier: 4
+      priority: 33
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["stage_routing", "execution_strategy_selection"]
+      health_check: "ping"
+      registration_phase: "59-f"
+  # ── Git Tier ────────────────────────────────────────────────────────────
+  git:
+    - name: "GitOrchestrator"
+      module: "cortex.orchestrators.git.git_orchestrator"
+      class: "GitOrchestrator"
+      tier: 4
+      priority: 30
+      dependencies: []
+      capabilities: ["git_operations", "branch_management", "commit_creation"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "GitPublishOrchestrator"
+      module: "cortex.orchestrators.git.git_publish_orchestrator"
+      class: "GitPublishOrchestrator"
+      tier: 4
+      priority: 31
+      dependencies: ["GitOrchestrator"]
+      capabilities: ["publish", "push_to_remote", "release_tagging"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "PreCommitEnforcementOrchestrator"
+      module: "cortex.orchestrators.git.enforcement_orchestrator"
+      class: "PreCommitEnforcementOrchestrator"
+      tier: 4
+      priority: 32
+      dependencies: ["EnforcementOrchestrator"]
+      capabilities: ["pre_commit_hook", "git_governance", "commit_blocking"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+  # ── Intelligence Tier ────────────────────────────────────────────────────
+  intelligence:
+    - name: "IntelligenceOrchestrator"
+      module: "cortex.orchestrators.intelligence.intelligence_orchestrator"
+      class: "IntelligenceOrchestrator"
+      tier: 4
+      priority: 40
+      dependencies: []
+      capabilities: ["intelligence_routing", "domain_classification", "lens_dispatch"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "MetaAuditorAgent"
+      module: "cortex.orchestrators.intelligence.meta_auditor_agent"
+      class: "MetaAuditorAgent"
+      tier: 4
+      priority: 41
+      dependencies: ["IntelligenceOrchestrator"]
+      capabilities: ["meta_audit", "23_point_audit", "prompt_agent_validation"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+  # ── Synthesis Tier ───────────────────────────────────────────────────────
+  synthesis:
+    - name: "ContextAwareSynthesisGateway"
+      module: "cortex.orchestrators.synthesis.context_aware_synthesis"
+      class: "ContextAwareSynthesisGateway"
+      tier: 4
+      priority: 50
+      dependencies: []
+      capabilities: ["context_synthesis", "unified_intelligence_context", "knowledge_fusion"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+  # ── Workflow Tier ────────────────────────────────────────────────────────
+  workflow:
+    - name: "WorkflowComposer"
+      module: "cortex.orchestrators.workflow.workflow_composer"
+      class: "WorkflowComposer"
+      tier: 4
+      priority: 60
+      dependencies: []
+      capabilities: ["workflow_composition", "step_sequencing", "pipeline_assembly"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "ConvergenceLoopExecutor"
+      module: "cortex.orchestrators.workflow.convergence_loop_executor"
+      class: "ConvergenceLoopExecutor"
+      tier: 4
+      priority: 61
+      dependencies: ["WorkflowComposer"]
+      capabilities: ["convergence_loop", "detect_fix_rescan", "p0_p1_elimination"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "HolisticRefactoringSweep"
+      module: "cortex.orchestrators.workflow.holistic_refactoring_sweep"
+      class: "HolisticRefactoringSweep"
+      tier: 4
+      priority: 62
+      dependencies: ["WorkflowComposer"]
+      capabilities: ["holistic_sweep", "full_repo_refactor", "sweep_catalogue_driven"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "AutonomousWorkflowExecutor"
+      module: "cortex.orchestrators.workflow.autonomous_workflow_executor"
+      class: "AutonomousWorkflowExecutor"
+      tier: 4
+      priority: 63
+      dependencies: ["WorkflowComposer", "ConvergenceLoopExecutor"]
+      capabilities: ["autonomous_execution", "zero_human_intervention", "self_directing"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+# =============================================================================
+# ANALYZERS (Optional, from LENS)
+# =============================================================================
+analyzers:
+  - name: "DependencyAnalyzer"
+    module: "cortex.lens.analyzers.dependency_analyzer"
+    class: "DependencyAnalyzer"
+
+# =============================================================================
+# CONFIGURATION
+# =============================================================================
+config:
+  lazy_loading: true
+  health_check_on_load: false
+  max_initialization_time_seconds: 30
+  circular_dependency_detection: true
+
+# =============================================================================
+# VALIDATION RULES
+# =============================================================================
+validation:
+  required_methods:
+    - "get_name"
+    - "get_version"
+    - "initialize"
+  optional_methods:
+    - "get_mode"
+    - "execute_operation"
+    - "get_mcp_tools"
+    - "get_audit_trail"

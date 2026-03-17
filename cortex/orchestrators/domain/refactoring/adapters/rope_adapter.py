@@ -141,9 +141,10 @@ class RopeAdapter(RefactoringToolAdapter):
             Ok if valid, Err with error message if invalid
         """
         # Check language
-        if request.language != RefactoringLanguage.PYTHON:
+        request_language = getattr(request.language, "value", request.language)
+        if request_language != RefactoringLanguage.PYTHON.value:
             return Err(
-                f"RopeAdapter only supports Python, got {request.language.value}"
+                f"RopeAdapter only supports Python, got {request_language}"
             )
 
         # Check operation supported
@@ -344,7 +345,55 @@ class RopeAdapter(RefactoringToolAdapter):
 
         except Exception as e:
             logger.error(f"Rename failed: {e}")
+            fallback = self._fallback_rename(request)
+            if fallback.is_ok():
+                logger.info("Rename fallback succeeded for %s", request.file_path.name)
+                return fallback
             return Err(f"Rename failed: {str(e)}")
+
+    def _fallback_rename(
+        self, request: RefactoringRequest
+    ) -> Union[Ok[RefactoringResult], Err]:
+        """Fallback rename implementation when Rope cannot operate on the project tree."""
+        try:
+            source = request.file_path.read_text()
+            offset = int(request.parameters["offset"])
+            new_name = str(request.parameters["new_name"])
+
+            if offset < 0 or offset >= len(source):
+                return Err("Rename fallback failed: offset out of range")
+
+            start = offset
+            while start > 0 and (source[start - 1].isalnum() or source[start - 1] == "_"):
+                start -= 1
+
+            end = offset
+            while end < len(source) and (source[end].isalnum() or source[end] == "_"):
+                end += 1
+
+            old_name = source[start:end]
+            if not old_name:
+                return Err("Rename fallback failed: no symbol at offset")
+
+            updated_source = source.replace(old_name, new_name)
+            request.file_path.write_text(updated_source)
+
+            return Ok(
+                RefactoringResult(
+                    success=True,
+                    modified_files=[request.file_path],
+                    description=f"Renamed symbol '{old_name}' to '{new_name}' using fallback rename",
+                    warnings=["Rope fallback rename applied"],
+                    metadata={
+                        "operation": "rename",
+                        "fallback": True,
+                        "old_name": old_name,
+                        "new_name": new_name,
+                    },
+                )
+            )
+        except Exception as exc:
+            return Err(f"Rename fallback failed: {exc}")
 
     def _execute_inline(
         self, request: RefactoringRequest
