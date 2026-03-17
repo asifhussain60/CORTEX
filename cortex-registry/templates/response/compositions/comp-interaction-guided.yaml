@@ -1,0 +1,253 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPOSITION: Guided Interaction Response
+# ID: comp-interaction-guided
+# Tier: 3 (Composition — terminal-ready assembly)
+#
+# PURPOSE:
+#   The canonical Copilot Chat rendering template for EVERY interaction turn
+#   in the default (non-autonomous) orchestrator path.
+#
+#   Renders a structured, high-signal response that:
+#     Zone 1  — Identity header + quote
+#     Zone 2  — Current understanding (what the system has captured so far)
+#     Zone 3  — Missing information + open questions
+#     Zone 4  — Next question / recommended next step (ONE question per turn)
+#     Zone 5  — Workflow state (template name, DoR %, step progress)
+#     Zone 6  — Approval gate status (LOCKED or OPEN)
+#     Footer  — Single-line status: DoR % + gate + workflow + questions + blockers
+#
+# Rendering: VS Code GitHub Copilot Chat (300-500px panel)
+# Governance:
+#   - CORE-002: All output renders inline in VS Code Copilot Chat
+#   - CORE-049: No autonomous execution in this template path
+#   - atom-status-footer rendering rules: single line after final ---
+#
+# SSOT:
+#   - cortex-registry/workflows/templates/interaction/registry.yaml
+#   - cortex/orchestrators/core/interaction_readiness_tracker.py
+#   - cortex/orchestrators/core/interaction_workflow_composer.py
+#
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# Phase: 2026-03-17 (Guided Interaction DoR Enforcement)
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: comp-interaction-guided
+type: composition
+phase: "2026-03-17"
+trigger: "default interaction / guided readiness facilitation"
+intent: INTERACT
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  zone_count: 6
+  zone_separator: "---"
+  max_heading_levels: 3
+  single_h1: true
+  autonomous_execution: false
+  footer_required: true
+  footer_format: single_line
+  forbidden:
+    - "tree characters (U+251C U+2514 U+2502)"
+    - "raw HTML except details/summary"
+    - "raw URLs"
+    - "tables with more than 4 columns"
+    - "autonomous execution triggers"
+    - "proceed gate when DoR < 100%"
+
+# ─── Atom Assembly (ordered) ──────────────────────────────────────────────────
+atoms:
+  - id: atom-identity
+    zone: 1
+    params:
+      product_title: "🧠 CORTEX"
+      mode: "Guided"
+
+  - id: atom-quote
+    zone: 1
+    params:
+      theme: universal
+
+  - id: atom-orchestration
+    zone: 1
+    params:
+      chain: ["IntentRouter", "InteractionOrchestrator"]
+
+  - id: comp-interaction-guided-body
+    zone: 2-6
+    params:
+      # Injected at render time by InteractionOrchestrator.guide_interaction()
+      current_understanding: "{{current_understanding}}"
+      missing_info: "{{missing_info}}"
+      next_question: "{{next_question}}"
+      workflow_name: "{{workflow_name}}"
+      dor_pct: "{{dor_pct}}"
+      step_progress: "{{step_progress}}"
+      gate_status: "{{gate_status}}"
+      gate_explanation: "{{gate_explanation}}"
+      open_questions_count: "{{open_questions_count}}"
+      blockers: "{{blockers}}"
+      is_decision_checkpoint: "{{is_decision_checkpoint}}"
+
+  - id: atom-status-footer
+    zone: footer
+    params:
+      phase_id: "Guided"
+      mode: "Guided"
+      metrics: "DoR {{dor_pct}}% · Gate {{gate_status}} · Workflow: {{workflow_name}} · ✋ {{open_questions_count}} questions · ⚠ {{blockers_count}} blockers"
+
+# ─── Full Rendered Template ───────────────────────────────────────────────────
+# Variables injected by InteractionOrchestrator.guide_interaction() at render time.
+#   {{current_understanding}}  — what the system has captured so far (free text)
+#   {{missing_info}}           — list of missing dimensions (markdown list)
+#   {{next_question}}          — the single next question to ask the user (bold)
+#   {{workflow_name}}          — active workflow template display name
+#   {{dor_pct}}                — integer DoR readiness percentage (0–100)
+#   {{step_progress}}          — "N/10 dimensions resolved"
+#   {{gate_status}}            — "✅ OPEN" or "🔴 LOCKED"
+#   {{gate_explanation}}       — why the gate is locked (empty when OPEN)
+#   {{open_questions_count}}   — integer count of open questions
+#   {{blockers_count}}         — integer count of active blockers
+#   {{blockers}}               — list of blocker strings (empty when none)
+#   {{is_decision_checkpoint}} — boolean, adds Decision Required callout when true
+#
+template: |
+  # 🧠 CORTEX Guided
+
+  **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+  ---
+
+  > *"{quote}"*
+  > — {author}, **{book}**
+
+  ---
+
+  🧭 Orchestration: Classifier → Stage 1 Comprehension
+
+  ---
+
+  ## 📋 Current Understanding
+
+  {{current_understanding}}
+
+  ---
+
+  ## ❓ Missing Information
+
+  {{missing_info}}
+
+  {{#if is_decision_checkpoint}}
+  > 🔵 **Decision Required** — this step is a key decision point. Your answer
+  > will shape the direction of the workflow. Take a moment to consider carefully.
+  {{/if}}
+
+  ---
+
+  ## 💬 Next Question
+
+  **{{next_question}}**
+
+  *Answer this question so I can update the readiness score for this dimension
+  and move to the next. Your answer will be captured as evidence.*
+
+  ---
+
+  ## 🔄 Workflow State
+
+  | Metric | Value |
+  |--------|-------|
+  | Workflow | {{workflow_name}} |
+  | DoR Readiness | {{dor_pct}}% |
+  | Progress | {{step_progress}} |
+  | Approval Gate | {{gate_status}} |
+
+  {{#if gate_explanation}}
+  > ⚠️ **Gate blocked** — {{gate_explanation}}
+  {{/if}}
+
+  {{#if blockers}}
+  ### 🚫 Active Blockers
+
+  {{blockers}}
+  {{/if}}
+
+  ---
+
+  ## 🔐 Approval Gate
+
+  **Status: {{gate_status}}**
+
+  {{#if gate_open}}
+  All readiness dimensions are met. You may now proceed to execution.
+
+  ### ⚡ If you say proceed, I will:
+  1. Lock the approved readiness state
+  2. Route to the appropriate execution workflow
+  3. Emit AC_START and begin the implementation phase
+  {{else}}
+  The gate remains **locked** until DoR reaches 100%.
+
+  Remaining to unlock:
+  {{missing_dimensions_list}}
+
+  *Do not say "proceed" until all dimensions are resolved — any attempt to
+  bypass this gate will return this explanation rather than triggering execution.*
+  {{/if}}
+
+  ---
+
+  🧠 CORTEX · Guided · DoR {{dor_pct}}% · Gate {{gate_status}} · Workflow: {{workflow_name}} · ✋ {{open_questions_count}} questions · ⚠ {{blockers_count}} blockers
+
+# ─── Parameters ───────────────────────────────────────────────────────────────
+parameters:
+  required:
+    - name: current_understanding
+      type: str
+      description: "Prose summary of what has been captured so far"
+    - name: next_question
+      type: str
+      description: "The single next question to ask the user"
+    - name: workflow_name
+      type: str
+      description: "Active workflow template display name"
+    - name: dor_pct
+      type: int
+      description: "DoR readiness percentage (0–100)"
+    - name: step_progress
+      type: str
+      description: "e.g. '3/10 dimensions resolved'"
+    - name: gate_status
+      type: str
+      description: "One of: '✅ OPEN', '🔴 LOCKED'"
+    - name: open_questions_count
+      type: int
+      description: "Count of open questions"
+    - name: blockers_count
+      type: int
+      description: "Count of active blockers"
+  optional:
+    - name: missing_info
+      type: str
+      default: ""
+      description: "Markdown list of missing dimension labels"
+    - name: gate_explanation
+      type: str
+      default: ""
+      description: "Why the gate is still locked"
+    - name: blockers
+      type: str
+      default: ""
+      description: "Markdown list of blocker strings"
+    - name: is_decision_checkpoint
+      type: bool
+      default: false
+      description: "Whether current step is a key decision point"
+    - name: gate_open
+      type: bool
+      default: false
+      description: "True when gate is open (DoR = 100%)"
+    - name: missing_dimensions_list
+      type: str
+      default: ""
+      description: "Markdown list of still-incomplete dimension labels"

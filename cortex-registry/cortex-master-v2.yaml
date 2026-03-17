@@ -1,4 +1,4 @@
-updated: '2026-03-16'
+updated: '2026-03-17'
 maintainer: CORTEX Architecture Team
 
 # ============================================================
@@ -22,7 +22,7 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-16T19:40:00Z'
+  last_updated: '2026-03-17T00:00:00Z'
   autonomous_chain_updated: '2026-03-16 — stop_policy added; all continuation prompts, proceed gates, and 🚀 Next Phase blocks prohibited; CORE-RESP-001 overridden for autonomous phase chaining.'
   total_phases: 17
   active: 0
@@ -236,6 +236,58 @@ latest_findings:
       required_fix_path: "Workflow Composer governed prompt-governance workflow template; avoid ad hoc instruction edits outside template path."
   non_blocking_observations:
     - "Duplicate-class warnings remain visible in smoke output and require planned CORE-035 consolidation sweep, not emergency patching."
+
+remediation_plan:
+  plan_id: "REMEDIATION-2026-03-17-ARCHITECTURE-OPTIMIZATION"
+  status: "ACTIVE"
+  objective: "Close cross-cutting architecture drift while preserving v2 reductions and workflow-template centrality."
+  success_criteria:
+    - "All remediation tracks produce converged evidence under CORE-068 and no P0/P1 regressions."
+    - "Tutorial mode explainability is traceable to runtime decisions and knowledge YAML provenance."
+    - "YAML-reader no-bypass migration trend is monotonic with no net-new bypasses."
+    - "Onboarding contract names are canonicalized across runtime, workflows, and MCP surfaces."
+    - "Traceability golden coverage reaches stable AC_START/AC_COMPLETE closure on wired orchestrators."
+  governance_contract:
+    mandatory_workflow_execution: true
+    prohibited_execution_mode: "No ad hoc remediation scripts outside workflow-template-governed execution."
+    required_primitives:
+      - "primitives/execution/ac-marker-emit.yaml"
+      - "primitives/governance/holistic-validation-gate.yaml"
+      - "primitives/validation/detect-fix-rescan-loop.yaml"
+    required_gates:
+      - "CORTEX_WORKERS=8 python3 scripts/run_tests.py preflight"
+      - "CORTEX_WORKERS=8 python3 scripts/run_tests.py smoke"
+      - "python3 scripts/validate_governance_alignment.py"
+      - "python3 scripts/validate_dual_surface_parity.py"
+  references:
+    phase_detail_file: "cortex-registry/planning/phases/v2/phase-m17-remediation-01.yaml"
+    execution_templates:
+      - "cortex-registry/workflows/templates/governance/yaml-governance-workflow.yaml"
+      - "cortex-registry/workflows/templates/governance/prompt-governance-workflow.yaml"
+      - "cortex-registry/workflows/templates/sdlc/implement-workflow.yaml"
+      - "cortex-registry/workflows/templates/lifecycle/onboarding-workflow.yaml"
+      - "cortex-registry/workflows/templates/governance/audit-fix-pipeline.yaml"
+      - "cortex-registry/workflows/templates/lifecycle/phase-management-workflow.yaml"
+      - "cortex-registry/workflows/templates/sdlc/refactor-workflow.yaml"
+  indexed_workstreams:
+    p0:
+      - "WS-01-yaml-canonicalization"
+      - "WS-02-response-governance"
+      - "WS-03-tutorial-explainability"
+      - "WS-04-onboarding-canonicalization"
+      - "WS-05-traceability-closure"
+    p1:
+      - "WS-06-master-index-thinning"
+      - "WS-07-test-signal-hardening"
+  milestone_windows:
+    window_0_30_days:
+      - "Stabilize P0 governance and onboarding drift."
+    window_31_60_days:
+      - "Converge tutorial provenance + traceability parity."
+    window_61_90_days:
+      - "Complete first-wave canonicalization + index thinning with certification delta."
+  next_execution_phase: "phase-m17-remediation-01"
+  phase_detail_file: "cortex-registry/planning/phases/v2/phase-m17-remediation-01.yaml"
 
 workflow_composer_fixes:
   mandate: "All active blocker fixes and architecture hardening tasks route through Workflow Composer templates with convergence evidence."

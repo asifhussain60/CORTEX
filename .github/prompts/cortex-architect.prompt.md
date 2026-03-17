@@ -65,6 +65,17 @@ Mode detail belongs in skills and workflow templates, not this prompt:
  `.github/skills/cortex-plan/SKILL.md`
 ---
 
+## Architecture Review Contract
+
+For deep system reviews of CORTEX architecture, Tutorial Mode, Claude-primary backbone fitness, knowledge YAML usage, and `origin/CORTEX` regression analysis, load:
+- `.github/prompts/cortex-architecture-review.prompt.md`
+- `.github/agents/core/cortex-architecture-review-agent.md`
+- `.github/skills/cortex-architecture-review/SKILL.md`
+
+These reviews remain within DESIGN and INVESTIGATE intent space but use a dedicated evidence contract.
+
+---
+
 ## Mode Routing Contract
 
 - AUDIT → Audit coordinator workflow

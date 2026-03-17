@@ -83,6 +83,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **cortex-review-agent.md** | PR-scoped code review: 6-stage pipeline, OWASP security, APPROVE/REQUEST_CHANGES/BLOCK verdict | `/review {pr}`, "code review", "pull request review" |
 | **cortex-feedback-agent.md** | Cross-repo capability extraction with 8 sanitization gates (G1–G8) | `/feedback`, "backport", "capability extraction" |
 | **cortex-claude-readiness-agent.md** | Claude-primary production-readiness verification + remediation with dual-surface continuity gate | `/claude-ready audit`, `/claude-ready fix`, `/claude-ready certify` |
+| **cortex-architecture-review-agent.md** | Deep architecture, Tutorial Mode, Claude backbone, knowledge YAML, and historical regression review | `/architecture-review`, "architecture review", "tutorial mode review", "capacity review" |
 ### Documentation Agents
 
 **Directory:** `.github/agents/docs/`
@@ -189,6 +190,16 @@ are resolved or explicitly approved as WONT-FIX.
 | **WORKFLOW_COMPOSE** | cortex-architect.prompt.md (§ WORKFLOW COMPOSE MODE) | ~3,000 |
 
 > **Default context:** `cortex-architect.prompt.md` only. Load specialist agents on-demand per intent above.
+
+### Focused System Review Loadout
+
+For system-level architecture reviews, load:
+- `cortex-architect.prompt.md`
+- `cortex-architecture-review.prompt.md`
+- `cortex-architecture-review-agent.md`
+- `cortex-claude-readiness-agent.md` when dual-surface or Claude-primary fitness is in scope
+
+Use this loadout for Tutorial Mode review, explainability review, knowledge-YAML review, cross-cutting registry review, and `origin/CORTEX` regression comparison.
 
 ### `/audit fix` Pipeline (Canonical Production-Readiness Command)
 

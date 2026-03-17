@@ -1,0 +1,124 @@
+updated: '2026-03-17'
+maintainer: CORTEX Architecture Team
+
+metadata:
+  id: phase-m17-remediation-01
+  title: "Post-M17 Architecture Remediation Wave 01"
+  status: PLANNED
+  priority: P0
+  depends_on:
+    - phase-m17
+  objective: "Execute remediation workstreams for architecture drift closure with zero-regression enforcement."
+
+scope:
+  workstreams:
+    - WS-01-yaml-canonicalization
+    - WS-02-response-governance
+    - WS-03-tutorial-explainability
+    - WS-04-onboarding-canonicalization
+    - WS-05-traceability-closure
+    - WS-06-master-index-thinning
+    - WS-07-test-signal-hardening
+
+execution_contract:
+  workflow_governed_only: true
+  mandatory_templates:
+    - cortex-registry/workflows/templates/governance/yaml-governance-workflow.yaml
+    - cortex-registry/workflows/templates/governance/prompt-governance-workflow.yaml
+    - cortex-registry/workflows/templates/sdlc/implement-workflow.yaml
+    - cortex-registry/workflows/templates/lifecycle/onboarding-workflow.yaml
+    - cortex-registry/workflows/templates/governance/audit-fix-pipeline.yaml
+    - cortex-registry/workflows/templates/lifecycle/phase-management-workflow.yaml
+    - cortex-registry/workflows/templates/sdlc/refactor-workflow.yaml
+  required_primitives:
+    - primitives/execution/ac-marker-emit.yaml
+    - primitives/governance/holistic-validation-gate.yaml
+    - primitives/validation/detect-fix-rescan-loop.yaml
+
+completion_gate:
+  required_checks:
+    - "CORTEX_WORKERS=8 python3 scripts/run_tests.py preflight"
+    - "CORTEX_WORKERS=8 python3 scripts/run_tests.py smoke"
+    - "python3 scripts/validate_governance_alignment.py"
+    - "python3 scripts/validate_dual_surface_parity.py"
+  success_conditions:
+    - "No P0/P1 regressions introduced."
+    - "All workstreams emit convergence evidence and closure notes."
+    - "Master index remains thin and reference-oriented."
+
+finding_to_workstream_map:
+  - finding: "FINDING-M7-AC-001"
+    workstream: "WS-02-response-governance"
+  - finding: "ARCH-YAML-BYPASS-DRIFT"
+    workstream: "WS-01-yaml-canonicalization"
+  - finding: "ARCH-TUTORIAL-E2E-WIRING"
+    workstream: "WS-03-tutorial-explainability"
+  - finding: "ARCH-ONBOARDING-CONTRACT-DRIFT"
+    workstream: "WS-04-onboarding-canonicalization"
+  - finding: "ARCH-SQLITE-TRACE-CLOSURE"
+    workstream: "WS-05-traceability-closure"
+  - finding: "ARCH-THIN-INDEX-PRESSURE"
+    workstream: "WS-06-master-index-thinning"
+  - finding: "ARCH-TEST-WARNING-DEBT"
+    workstream: "WS-07-test-signal-hardening"
+
+workstreams:
+  - id: "WS-01-yaml-canonicalization"
+    priority: P0
+    scope: "Route critical runtime YAML reads through canonical readers; block net-new direct-load bypasses."
+    owner_surface: "core + governance"
+    execution_template: "cortex-registry/workflows/templates/governance/yaml-governance-workflow.yaml"
+    completion_evidence: "Preflight no-bypass checks trend downward without introducing new violations."
+  - id: "WS-02-response-governance"
+    priority: P0
+    scope: "Reconcile active response-header/governance contracts and retire deprecated active references."
+    owner_surface: "prompts + templates + instructions"
+    execution_template: "cortex-registry/workflows/templates/governance/prompt-governance-workflow.yaml"
+    completion_evidence: "Golden response rendering + prompt determinism checks pass with single active contract path."
+  - id: "WS-03-tutorial-explainability"
+    priority: P0
+    scope: "Bind tutorial layer to execution artifacts (decision, reason, knowledge source) without mutating execution behavior."
+    owner_surface: "orchestrators + tutorial renderer + response templates"
+    execution_template: "cortex-registry/workflows/templates/sdlc/implement-workflow.yaml"
+    completion_evidence: "Tutorial mode golden outputs show decision→reasoning→knowledge provenance consistency."
+  - id: "WS-04-onboarding-canonicalization"
+    priority: P0
+    scope: "Canonicalize onboarding orchestrator naming and workflow references across runtime and registry."
+    owner_surface: "support orchestrators + onboarding workflows + MCP onboarding entrypoints"
+    execution_template: "cortex-registry/workflows/templates/lifecycle/onboarding-workflow.yaml"
+    completion_evidence: "No naming drift between workflow YAMLs, runtime modules, and registry contracts."
+  - id: "WS-05-traceability-closure"
+    priority: P0
+    scope: "Close AC marker and audit trail parity gaps on wired orchestrators."
+    owner_surface: "observability + orchestration base + golden sqlite trace tests"
+    execution_template: "cortex-registry/workflows/templates/governance/audit-fix-pipeline.yaml"
+    completion_evidence: "AC completeness and sqlite trace golden checks converge without xfail dependence."
+  - id: "WS-06-master-index-thinning"
+    priority: P1
+    scope: "Reduce master index pressure by moving detail to phase/workstream leaf YAMLs while preserving index discoverability."
+    owner_surface: "planning + registry"
+    execution_template: "cortex-registry/workflows/templates/lifecycle/phase-management-workflow.yaml"
+    completion_evidence: "Master indexes remain thin and reference-oriented with no loss of phase traceability."
+  - id: "WS-07-test-signal-hardening"
+    priority: P1
+    scope: "Burn down warning/skip/xfail debt with explicit ownership and retirement targets."
+    owner_surface: "tests + quality gates + release readiness checks"
+    execution_template: "cortex-registry/workflows/templates/sdlc/refactor-workflow.yaml"
+    completion_evidence: "Warning volume and non-green categories trend down per cycle with no regression in pass counts."
+
+milestone_windows:
+  window_0_30_days:
+    outcomes:
+      - "WS-01 guardrail activated (no net-new YAML bypasses)."
+      - "WS-02 AC marker prompt-governance blocker closed."
+      - "WS-04 onboarding naming contract normalized."
+  window_31_60_days:
+    outcomes:
+      - "WS-03 tutorial explainability provenance wired and golden-tested."
+      - "WS-05 traceability parity improved to remove high-risk xfail dependencies."
+      - "WS-07 warning/skip/xfail retirement baseline established and enforced."
+  window_61_90_days:
+    outcomes:
+      - "WS-01 first-wave canonicalization complete across core/governance surfaces."
+      - "WS-06 thin-index posture stabilized with all deep detail moved to leaf files."
+      - "Certification delta confirms no P0/P1 regressions and sustained readiness gate health."

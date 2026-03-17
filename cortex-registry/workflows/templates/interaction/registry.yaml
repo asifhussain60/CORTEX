@@ -1,0 +1,126 @@
+# ============================================================================
+# INTERACTION WORKFLOW TEMPLATES — Registry
+# ============================================================================
+# Purpose:
+#   Defines all guided interaction workflow templates used by the default
+#   (non-autonomous) interaction layer.  These templates drive the user
+#   toward DoR = 100% before any approval gate opens.
+#
+# Architecture:
+#   These templates are purely GUIDANCE artifacts — they define questioning
+#   sequences, readiness dimensions, and completion criteria. They do NOT
+#   trigger code execution.  Execution workflows live under sdlc/, fix/, etc.
+#
+# Governance:
+#   - CORE-049: No autonomous execution in guided mode
+#   - WC-001: Workflow templates declare HOW — not inline procedural logic
+#   - WC-003: All loops and conditions are declarative
+#
+# Python companion: cortex/orchestrators/core/interaction_workflow_composer.py
+# Response template: cortex-registry/templates/response/compositions/comp-interaction-guided.yaml
+# ============================================================================
+
+id: 'interaction-workflow-registry'
+title: 'Guided Interaction Workflow Templates'
+version: '1.0.0'
+created: '2026-03-17'
+status: 'active'
+
+# ── Shared DoR Dimensions (SSOT for all interaction workflows) ────────────────
+dor_dimensions:
+  - id: objective_clarity
+    label: 'Objective Clarity'
+    weight: 0.20
+  - id: scope_clarity
+    label: 'Scope Clarity'
+    weight: 0.15
+  - id: constraints
+    label: 'Constraints'
+    weight: 0.10
+  - id: dependencies
+    label: 'Dependencies'
+    weight: 0.10
+  - id: inputs
+    label: 'Inputs / Context Provided'
+    weight: 0.10
+  - id: risks
+    label: 'Risk Assessment'
+    weight: 0.10
+  - id: acceptance_criteria
+    label: 'Acceptance Criteria'
+    weight: 0.10
+  - id: testing_expectations
+    label: 'Testing Expectations'
+    weight: 0.05
+  - id: rollout_considerations
+    label: 'Rollout Considerations'
+    weight: 0.05
+  - id: ownership
+    label: 'Ownership / Approver'
+    weight: 0.05
+
+# ── Approval Gate ─────────────────────────────────────────────────────────────
+approval_gate:
+  strategy: 'threshold'
+  threshold: 100
+  description: |
+    The gate opens ONLY when the composite DoR score reaches 100%.
+    All ten dimensions must individually reach 100%.
+    Any active blocker forces the gate to remain closed regardless of scores.
+  enforcement: 'P0 — gate cannot be bypassed in default interaction mode'
+
+# ── Templates ─────────────────────────────────────────────────────────────────
+templates:
+  - id: feature-planning
+    display_name: 'Feature Planning'
+    trigger_keywords: ['feature', 'implement', 'new', 'add', 'build', 'create']
+    intent_fallback: ['IMPLEMENT']
+    companion_module: 'cortex.orchestrators.core.interaction_workflow_composer'
+
+  - id: bug-investigation
+    display_name: 'Bug Investigation'
+    trigger_keywords: ['bug', 'fix', 'broken', 'error', 'fail', 'crash', 'issue', 'defect']
+    intent_fallback: ['FIX', 'DEBUG']
+    companion_module: 'cortex.orchestrators.core.interaction_workflow_composer'
+
+  - id: refactor-planning
+    display_name: 'Refactor Planning'
+    trigger_keywords: ['refactor', 'clean', 'restructure', 'reorganise', 'reorganize', 'rename']
+    intent_fallback: ['REFACTOR']
+    companion_module: 'cortex.orchestrators.core.interaction_workflow_composer'
+
+  - id: architecture-review
+    display_name: 'Architecture Review'
+    trigger_keywords: ['architect', 'architecture', 'design', 'adr', 'decision', 'structure']
+    intent_fallback: ['AUDIT']
+    companion_module: 'cortex.orchestrators.core.interaction_workflow_composer'
+
+  - id: test-strategy
+    display_name: 'Test Strategy'
+    trigger_keywords: ['test', 'testing', 'coverage', 'tdd', 'spec', 'e2e', 'integration']
+    intent_fallback: ['TDD']
+    companion_module: 'cortex.orchestrators.core.interaction_workflow_composer'
+
+  - id: onboarding
+    display_name: 'Repository Onboarding'
+    trigger_keywords: ['onboard', 'explore', 'understand', 'analyse', 'analyze', 'overview', 'repo']
+    intent_fallback: ['QUERY']
+    companion_module: 'cortex.orchestrators.core.interaction_workflow_composer'
+
+  - id: documentation-request
+    display_name: 'Documentation Request'
+    trigger_keywords: ['doc', 'document', 'readme', 'write up', 'guide', 'explain']
+    intent_fallback: []
+    companion_module: 'cortex.orchestrators.core.interaction_workflow_composer'
+
+  - id: workflow-design
+    display_name: 'Workflow Design'
+    trigger_keywords: ['workflow', 'compose', 'pipeline', 'orchestrate', 'chain']
+    intent_fallback: ['WORKFLOW_COMPOSE']
+    companion_module: 'cortex.orchestrators.core.interaction_workflow_composer'
+
+  - id: general-inquiry
+    display_name: 'General Inquiry'
+    trigger_keywords: []
+    intent_fallback: ['UNKNOWN', 'INTERACT']
+    companion_module: 'cortex.orchestrators.core.interaction_workflow_composer'

@@ -1307,4 +1307,355 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         return (result.assembled_content, metrics)
 
 
+    # =========================================================================
+    # Guided Interaction — DoR-Gated Default Path
+    # =========================================================================
+
+    def guide_interaction(
+        self,
+        user_request: str,
+        workflow_state: Optional[Any] = None,
+        user_answer: Optional[str] = None,
+        answered_dimension: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Drive one guided interaction turn toward DoR = 100%.
+
+        This is the DEFAULT orchestrator method for the non-autonomous
+        interaction path.  It NEVER triggers execution autonomously.
+        Its sole responsibility is to:
+          1. Select or advance the correct guided workflow template.
+          2. Update the DoR tracker with any new user-provided evidence.
+          3. Render the structured Copilot Chat response payload.
+          4. Keep the approval gate locked until DoR reaches 100%.
+
+        Args:
+            user_request: The user's latest message or request text.
+            workflow_state: Optional existing InteractionWorkflowState from
+                a prior turn.  When None, a new workflow is selected.
+            user_answer: Optional answer text the user provided to the
+                last question.
+            answered_dimension: Dimension key the user just answered.
+                When provided alongside user_answer, the tracker is updated.
+
+        Returns:
+            Structured response payload dict with keys:
+              - ``rendered_response``: Full Markdown string for Copilot Chat.
+              - ``workflow_state``: Updated InteractionWorkflowState.
+              - ``readiness_state``: ReadinessState snapshot.
+              - ``gate_open``: bool — True only when DoR = 100%.
+              - ``footer``: Single-line footer string.
+              - ``next_question``: Next question string or None.
+              - ``template_id``: Active workflow template ID.
+
+        Note:
+            Calling this method when ``gate_open`` is True indicates the user
+            may proceed to the execution layer.  The caller (MasterOrchestrator)
+            is responsible for routing to the appropriate execution workflow ONLY
+            after ``gate_open`` is confirmed.
+
+        AC_START: AC-INTERACTION-GUIDED-TURN-001
+        """
+        # --- Lazy imports to avoid circular dependencies ---
+        from cortex.orchestrators.core.interaction_workflow_composer import (
+            InteractionWorkflowComposer,
+            InteractionWorkflowState,
+        )
+        from cortex.orchestrators.core.interaction_readiness_tracker import (
+            InteractionReadinessTracker,
+        )
+
+        composer = InteractionWorkflowComposer()
+
+        # Step 1: Select or reuse workflow
+        if workflow_state is None:
+            # Detect intent for better template selection
+            detected_intent = self._classify_intent(user_request) if hasattr(self, "_classify_intent") else "UNKNOWN"
+            workflow_state = composer.select_workflow(user_request, intent=detected_intent)
+
+        # Step 2: Update tracker if user answered a question
+        tracker = workflow_state.readiness_tracker
+        if tracker is None:
+            tracker = InteractionReadinessTracker()
+            workflow_state.readiness_tracker = tracker
+
+        if answered_dimension and user_answer:
+            # Mark as 100% for this dimension — full credit on explicit answer
+            composer.advance_step(
+                state=workflow_state,
+                answered_dimension=answered_dimension,
+                score=100,
+                evidence=user_answer,
+            )
+
+        # Step 3: Build readiness snapshot
+        state = tracker.get_state()
+        composite = state.composite_pct
+        gate_open = state.gate_open
+
+        # Step 4: Build the next question (only when gate is still locked)
+        next_question = composer.get_next_question(workflow_state) if not gate_open else None
+
+        # Step 5: Gather rendering variables
+        missing_dims = state.missing_dimensions
+        open_q_count = len(state.open_questions)
+        blockers_count = len(state.blockers)
+        resolved = len(workflow_state.completed_steps)
+        total_dims = 10  # canonical dimension count (SSOT: DIMENSION_WEIGHTS)
+
+        step_progress = f"{resolved}/{total_dims} dimensions resolved"
+        gate_status = "✅ OPEN" if gate_open else "🔴 LOCKED"
+
+        # Build current understanding from captured evidence
+        current_understanding = self._build_current_understanding(
+            workflow_state, state, user_request
+        )
+
+        # Build missing info list
+        missing_info = (
+            "\n".join(f"- {label}" for label in missing_dims)
+            if missing_dims
+            else "_All dimensions captured._"
+        )
+
+        # Gate explanation (shown only when locked)
+        gate_explanation = ""
+        if not gate_open:
+            remaining = len(missing_dims)
+            gate_explanation = (
+                f"{remaining} dimension{'s' if remaining != 1 else ''} "
+                f"still require{'s' if remaining == 1 else ''} information before approval can be granted."
+            )
+
+        # Blockers list (markdown)
+        blockers_md = (
+            "\n".join(f"- {b}" for b in state.blockers)
+            if state.blockers
+            else ""
+        )
+
+        # Missing dimensions list for gate display
+        missing_dims_list = (
+            "\n".join(f"- {label}" for label in missing_dims)
+            if missing_dims
+            else ""
+        )
+
+        # Decision checkpoint callout
+        is_checkpoint = composer.is_at_decision_checkpoint(workflow_state)
+
+        # Step 6: Render full Copilot Chat Markdown payload
+        rendered = self._render_guided_response(
+            workflow_name=workflow_state.display_name,
+            current_understanding=current_understanding,
+            missing_info=missing_info,
+            next_question=next_question or "All dimensions complete — gate is open.",
+            dor_pct=composite,
+            step_progress=step_progress,
+            gate_status=gate_status,
+            gate_open=gate_open,
+            gate_explanation=gate_explanation,
+            open_questions_count=open_q_count,
+            blockers_count=blockers_count,
+            blockers=blockers_md,
+            is_decision_checkpoint=is_checkpoint,
+            missing_dimensions_list=missing_dims_list,
+        )
+
+        # Step 7: Build footer
+        footer = tracker.get_footer_line(
+            workflow_name=workflow_state.display_name,
+            mode="Guided",
+        )
+
+        self._audit_trail.append({
+            "ac_id": "AC-INTERACTION-GUIDED-TURN-001",
+            "operation": "guide_interaction",
+            "dor_pct": composite,
+            "gate_open": gate_open,
+            "turn_number": self.turn_number,
+            "timestamp": datetime.now().isoformat(),
+        })
+
+        # AC_COMPLETE: AC-INTERACTION-GUIDED-TURN-001
+        return {
+            "rendered_response": rendered,
+            "workflow_state": workflow_state,
+            "readiness_state": state,
+            "gate_open": gate_open,
+            "footer": footer,
+            "next_question": next_question,
+            "template_id": workflow_state.template_id,
+            "dor_pct": composite,
+        }
+
+    def _build_current_understanding(
+        self,
+        workflow_state: Any,
+        readiness_state: Any,
+        user_request: str,
+    ) -> str:
+        """Build a prose summary of what has been captured so far.
+
+        Args:
+            workflow_state: Current InteractionWorkflowState.
+            readiness_state: Current ReadinessState snapshot.
+            user_request: The user's latest message.
+
+        Returns:
+            Markdown prose summary string.
+        """
+        completed = list(getattr(workflow_state, "completed_steps", []))
+        if not completed:
+            return (
+                f"You've described: _\"{user_request[:200]}{'...' if len(user_request) > 200 else ''}\"_\n\n"
+                "I'm now working through the readiness dimensions to ensure everything "
+                "is clear before any work begins."
+            )
+
+        dims = getattr(readiness_state, "dimensions", {})
+        lines = [
+            f"Based on our conversation so far, here is what I've captured for the "
+            f"**{getattr(workflow_state, 'display_name', 'Guided')}** workflow:\n"
+        ]
+        for dim_key in completed:
+            dim = dims.get(dim_key)
+            if dim and getattr(dim, "evidence", ""):
+                lines.append(f"- **{dim.label}**: {dim.evidence[:120]}")
+
+        return "\n".join(lines)
+
+    def _render_guided_response(
+        self,
+        workflow_name: str,
+        current_understanding: str,
+        missing_info: str,
+        next_question: str,
+        dor_pct: int,
+        step_progress: str,
+        gate_status: str,
+        gate_open: bool,
+        gate_explanation: str,
+        open_questions_count: int,
+        blockers_count: int,
+        blockers: str,
+        is_decision_checkpoint: bool,
+        missing_dimensions_list: str,
+    ) -> str:
+        """Render the full Copilot Chat Markdown response for one guided turn.
+
+        This method is the Python-level rendering engine for
+        ``comp-interaction-guided.yaml``.  It produces deterministic Markdown
+        that renders correctly inside VS Code Copilot Chat.
+
+        Args:
+            workflow_name: Display name of the active workflow template.
+            current_understanding: Prose summary of captured context.
+            missing_info: Markdown list of missing dimension labels.
+            next_question: The single next question to ask the user.
+            dor_pct: DoR readiness percentage (0–100).
+            step_progress: Human-readable step progress string.
+            gate_status: Gate display string (``"✅ OPEN"`` or ``"🔴 LOCKED"``).
+            gate_open: True when gate is open.
+            gate_explanation: Why the gate is still locked (empty when open).
+            open_questions_count: Count of open questions.
+            blockers_count: Count of active blockers.
+            blockers: Markdown list of blocker strings (empty when none).
+            is_decision_checkpoint: True when current step is a key decision point.
+            missing_dimensions_list: Markdown list of incomplete dimensions for gate.
+
+        Returns:
+            Full Markdown string suitable for VS Code Copilot Chat rendering.
+        """
+        checkpoint_callout = ""
+        if is_decision_checkpoint:
+            checkpoint_callout = (
+                "\n> 🔵 **Decision Required** — this step is a key decision point. "
+                "Your answer will shape the direction of the workflow.\n"
+            )
+
+        blockers_section = ""
+        if blockers:
+            blockers_section = f"\n### 🚫 Active Blockers\n\n{blockers}\n"
+
+        gate_explanation_callout = ""
+        if gate_explanation:
+            gate_explanation_callout = f"\n> ⚠️ **Gate blocked** — {gate_explanation}\n"
+
+        if gate_open:
+            gate_body = (
+                "**Status: ✅ OPEN**\n\n"
+                "All readiness dimensions are met. You may now proceed to execution.\n\n"
+                "### ⚡ If you say proceed, I will:\n"
+                "1. Lock the approved readiness state\n"
+                "2. Route to the appropriate execution workflow\n"
+                "3. Emit AC_START and begin the implementation phase\n"
+            )
+        else:
+            gate_body = (
+                f"**Status: 🔴 LOCKED**\n\n"
+                "The gate remains **locked** until DoR reaches 100%.\n\n"
+                "Remaining to unlock:\n"
+                f"{missing_dimensions_list}\n\n"
+                "*Do not say \"proceed\" until all dimensions are resolved — "
+                "any attempt to bypass this gate will return this explanation "
+                "rather than triggering execution.*\n"
+            )
+
+        footer = (
+            f"🧠 CORTEX · Guided · DoR {dor_pct}% · Gate {gate_status} · "
+            f"Workflow: {workflow_name} · ✋ {open_questions_count} questions "
+            f"· ⚠ {blockers_count} blockers"
+        )
+
+        return f"""# 🧠 CORTEX Guided
+
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+---
+
+🧭 Orchestration: Classifier → Stage 1 Comprehension
+
+---
+
+## 📋 Current Understanding
+
+{current_understanding}
+
+---
+
+## ❓ Missing Information
+
+{missing_info}
+{checkpoint_callout}
+---
+
+## 💬 Next Question
+
+**{next_question}**
+
+*Answer this question so I can update the readiness score for this dimension
+and move to the next.*
+
+---
+
+## 🔄 Workflow State
+
+| Metric | Value |
+|--------|-------|
+| Workflow | {workflow_name} |
+| DoR Readiness | {dor_pct}% |
+| Progress | {step_progress} |
+| Approval Gate | {gate_status} |
+{gate_explanation_callout}{blockers_section}
+---
+
+## 🔐 Approval Gate
+
+{gate_body}
+
+---
+
+{footer}"""
+
+
 # AC_COMPLETE: AC-P0-INTERACTION-ORCH-GREEN-001

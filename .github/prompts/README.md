@@ -11,6 +11,7 @@
 | File | Status | Size | Purpose |
 |------|--------|------|---------|
 | `cortex-architect.prompt.md` | ✅ ACTIVE | ~700 lines | Senior AI architect for IMPLEMENT/FIX/REFACTOR/AUDIT |
+| `cortex-architecture-review.prompt.md` | ✅ ACTIVE | ~230 lines | Repeatable deep architecture review for tutorial wiring, Claude backbone, registry cross-cuts, and regression analysis |
 | `CORTEX.prompt.md` | ✅ ACTIVE | ~200 lines | Master orchestrator for all request routing |
 | `cortex-doc.prompt.md` | ✅ ACTIVE | ~1,370 lines | Documentation orchestration (discovery → generation → build) |
 | `cortex-sync.prompt.md` | ✅ ACTIVE | ~280 lines | One-way deterministic sync with 3-way merge |

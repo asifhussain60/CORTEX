@@ -25,6 +25,7 @@ This is the **gateway skill** — it classifies intent and routes to the appropr
 | Analyse root causes of recurring failures | `cortex-debug` | `/rca` |
 | Plan phases, certify, onboard, or ingest content | `cortex-plan` | `/plan` `/totalrecall` `/digest` `/onboard` |
 | Understand governance rules or CORE enforcement | `cortex-audit` | `/audit` `/audit fix` |
+| Review CORTEX architecture, Tutorial Mode, Claude backbone, or cross-cutting YAML wiring | `cortex-architecture-review` | `/architecture-review` |
 
 ### Overlap Disambiguation
 
@@ -59,6 +60,7 @@ This is the **gateway skill** — it classifies intent and routes to the appropr
 | `/distill {file}` | Chat transcript → executable prompt |
 | `/onboard {repo}` | LENS analysis + SQLite dashboard |
 | `/review {pr}` | PR code review: security + quality + verdict |
+| `/architecture-review` | Deep architecture and explainability review with branch regression comparison |
 | `/feedback` | Cross-repo capability extraction |
 | `/sync target={path}` | One-way privacy-safe sync |
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs |

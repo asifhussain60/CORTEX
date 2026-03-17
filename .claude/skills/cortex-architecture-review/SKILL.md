@@ -1,0 +1,1 @@
+@../../../.github/skills/cortex-architecture-review/SKILL.md
