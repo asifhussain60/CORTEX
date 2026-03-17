@@ -107,7 +107,7 @@ ARCHITECT-*-SUMMARY.md
 .coverage
 htmlcov/
 .tox/
-.testmondata          # pytest-testmon change-aware DB (Layer 2 — machine-local)
+.testmondata*         # pytest-testmon change-aware DB (Layer 2 — machine-local)
 .nox/
 
 # .NET Build Artifacts
@@ -182,6 +182,7 @@ cortex-registry/company/dashboards/spa/cortex/
 /onboard_output.txt
 /*_output.txt
 /*.bak
+.changed-gate*.out
 /*_v[0-9]*.py
 /*_v[0-9]*.md
 /*-v[0-9]*.py
