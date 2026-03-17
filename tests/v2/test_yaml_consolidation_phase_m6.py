@@ -70,7 +70,8 @@ def test_m6_unified_code_modify_workflow_contract_preserved() -> None:
 def test_m6_required_injection_and_response_templates_still_present() -> None:
     """Required parity files for GAP-M6-08 remain present."""
     required_paths = [
-        "cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml",
+        ".github/templates/cortex-response-templates.md",
+        "cortex-registry/templates/response/_registry.yaml",
         "cortex-registry/workflows/templates/lifecycle/content-library-routing.yaml",
         "cortex-registry/workflows/templates/primitives/intelligence/intelligence-injection.yaml",
     ]

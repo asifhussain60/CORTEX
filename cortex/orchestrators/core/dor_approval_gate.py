@@ -33,10 +33,34 @@ class DoRApprovalGate:
         Returns:
             ApprovalDecision indicating whether execution may proceed.
         """
+        context = reflection.context or {}
+        gate_open = bool(context.get("gate_open", False))
+        missing_dimensions = context.get("missing_dimensions", []) or []
+        dor_pct = context.get("dor_pct")
+
+        # Primary path: explicit readiness context from guided interaction.
+        if gate_open:
+            return ApprovalDecision(approved=True, reason="DoR criteria met")
+
+        if missing_dimensions:
+            return ApprovalDecision(
+                approved=False,
+                reason=(
+                    f"{len(missing_dimensions)} readiness dimension"
+                    f"{'s' if len(missing_dimensions) != 1 else ''} incomplete"
+                ),
+            )
+
+        if isinstance(dor_pct, int) and dor_pct < 100:
+            return ApprovalDecision(
+                approved=False,
+                reason=f"DoR below threshold: {dor_pct}% < 100%",
+            )
+
+        # Compatibility fallback for callers that only provide intent confidence.
         if reflection.confidence < 0.6:
             return ApprovalDecision(
                 approved=False,
                 reason="Confidence below 0.6 threshold",
-                violations=["LOW_CONFIDENCE"],
             )
         return ApprovalDecision(approved=True, reason="DoR criteria met")

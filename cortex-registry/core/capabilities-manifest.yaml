@@ -439,8 +439,8 @@ workflow_templates:
       description: TypeScript Strict Mode Refactoring Workflow
     governance:
     - id: copilot_chat_response_template
-      path: cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml
-      description: Copilot Chat Response Template
+      path: cortex-registry/templates/response/_registry.yaml
+      description: Response Template Registry
     - id: holistic_file_review_gate
       path: cortex-registry/workflows/templates/governance/holistic-file-review-gate.yaml
       description: Holistic File Review Gate

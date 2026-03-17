@@ -17,7 +17,7 @@ workflow:
 
   required_contracts:
     workflow_composer_spec: "cortex-registry/workflows/workflow-composer-spec.yaml"
-    response_template: "cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml"
+    response_template: ".github/templates/cortex-response-templates.md"
     intelligence_injection: "cortex-registry/workflows/templates/primitives/intelligence/intelligence-injection.yaml"
 
   steps:

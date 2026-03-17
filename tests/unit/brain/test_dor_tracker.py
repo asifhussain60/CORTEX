@@ -16,6 +16,8 @@ from cortex.core.dor_tracker import (
     DoRTurn,
     UserResponse,
     Challenge,
+    DoRScore,
+    DoRApprovalGate,
 )
 
 
@@ -237,6 +239,42 @@ class TestDoRTracker:
         tracker.complete_turn(turn, 0.95, final_factors, True, "Success", 100.0)
         
         assert turn.final_dor_factors == final_factors
+
+
+class TestDoRApprovalGate:
+    """Test strict DoR approval gate behavior for readiness enforcement."""
+
+    def test_default_min_score_is_100(self) -> None:
+        gate = DoRApprovalGate()
+        assert gate.min_score == 100
+
+    def test_gate_blocks_when_composite_below_100(self) -> None:
+        gate = DoRApprovalGate()
+        score = DoRScore(
+            requirement_completeness=1.0,
+            architecture_clarity=1.0,
+            dependency_resolution=1.0,
+            test_readiness=0.9,
+            risk_assessment=0.9,
+        )
+        result = gate.evaluate(score)
+        assert result["composite"] < 100
+        assert result["approved"] is False
+        assert result["gap"] > 0
+
+    def test_gate_opens_only_at_100(self) -> None:
+        gate = DoRApprovalGate()
+        score = DoRScore(
+            requirement_completeness=1.0,
+            architecture_clarity=1.0,
+            dependency_resolution=1.0,
+            test_readiness=1.0,
+            risk_assessment=1.0,
+        )
+        result = gate.evaluate(score)
+        assert result["composite"] == 100
+        assert result["approved"] is True
+        assert result["gap"] == 0
     
     def test_challenge_with_empty_alternatives(self, tracker: DoRTracker):
         """Test adding challenge without alternatives."""

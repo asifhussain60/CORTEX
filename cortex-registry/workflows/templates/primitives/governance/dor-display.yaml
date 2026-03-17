@@ -94,7 +94,7 @@ steps:
 # =============================================================================
 # Five-state lifecycle enforced before any code-modifying operation.
 # A request MUST reach GATE_OPEN before execution proceeds.
-# DoRScore.composite ≥ 70 is required to transition from
+# DoRScore.composite = 100 is required to transition from
 # READINESS_VALIDATION → GATE_OPEN.
 # =============================================================================
 
@@ -107,7 +107,7 @@ state_machine:
   initial_state: DRAFT
   gate_state: GATE_OPEN
   gate_class: cortex.core.dor_tracker.DoRApprovalGate
-  gate_min_score: 70
+  gate_min_score: 100
 
   states:
     - id: DRAFT

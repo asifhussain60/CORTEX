@@ -3,8 +3,8 @@ ResponseTemplateValidator — CORE-066 enforcement.
 
 Validates that all user-visible output from CORTEX workflows is rendered
 through the canonical Response Template format defined in:
-  cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml
-  .github/templates/cortex-response-templates.md (SSOT)
+    cortex-registry/templates/response/_registry.yaml
+    .github/templates/cortex-response-templates.md (SSOT)
 
 Any raw dict output, missing Author header, or non-canonical formatting is
 flagged as a CORE-066 violation (P0 if it blocks AC_COMPLETE, P1 otherwise).
@@ -26,8 +26,10 @@ logger = logging.getLogger(__name__)
 
 # Required canonical header tokens (SSOT: cortex-response-templates.md)
 _CANONICAL_AUTHOR = "Asif Hussain"
-_ORCHESTRATOR_MARKER = "**Orchestrator:**"
 _AUTHOR_MARKER = "**Author:**"
+_ORCHESTRATION_MARKER = "🧭 Orchestration:"
+_LEGACY_ORCHESTRATOR_MARKER = "**Orchestrator:**"
+_IDENTITY_MARKERS = ("# 🧠 CORTEX", "# 🛠️ CORTEX Architect")
 
 
 class ResponseTemplateValidator:
@@ -46,8 +48,10 @@ class ResponseTemplateValidator:
         'P1'
 
         >>> result = validator.validate_output(
-        ...     "## ⚡ CORTEX Architect IMPLEMENT\\n"
-        ...     "**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅\\n"
+        ...     "# 🛠️ CORTEX Architect IMPLEMENT\n"
+        ...     "**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.\n\n"
+        ...     "---\n\n"
+        ...     "🧭 Orchestration: Classifier → TDD Builder\n"
         ... )
         >>> result["valid"]
         True
@@ -116,10 +120,19 @@ class ResponseTemplateValidator:
                 f"Canonical author '{_CANONICAL_AUTHOR}' not found in output."
             )
 
-        # ── Check 5: Orchestrator marker must be present ───────────────────
-        if _ORCHESTRATOR_MARKER not in output:
+        # ── Check 5: Current or legacy response identity marker must exist ─
+        has_identity_marker = any(marker in output for marker in _IDENTITY_MARKERS)
+        has_orchestration_marker = _ORCHESTRATION_MARKER in output
+        has_legacy_orchestrator_marker = _LEGACY_ORCHESTRATOR_MARKER in output
+        if not (
+            has_identity_marker
+            or has_orchestration_marker
+            or has_legacy_orchestrator_marker
+        ):
             violations.append(
-                f"Missing '{_ORCHESTRATOR_MARKER}' orchestrator identifier (CORE-066)."
+                "Missing canonical response identity marker. Expected one of: "
+                f"{_ORCHESTRATION_MARKER!r}, {_LEGACY_ORCHESTRATOR_MARKER!r}, "
+                f"or an H1 starting with one of {_IDENTITY_MARKERS!r}."
             )
 
         if violations:

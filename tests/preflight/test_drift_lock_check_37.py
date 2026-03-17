@@ -51,14 +51,15 @@ class TestDriftLockCheck37:
             "cortex-registry/templates/response/compositions/ was deleted — restore it."
         )
 
-    def test_all_eight_compositions_still_exist(self) -> None:
-        """Regression: all 8 Phase 120 compositions must remain present."""
+    def test_all_required_compositions_still_exist(self) -> None:
+        """Regression: all required response compositions must remain present."""
         required = {
             "comp-implement-fix", "comp-refactor", "comp-audit-fix",
             "comp-health", "comp-vacuum", "comp-debug", "comp-query", "comp-introduce",
+            "comp-interaction-guided",
         }
         present = {p.stem for p in COMPOSITIONS_DIR.glob("comp-*.yaml")}
         missing = required - present
         assert not missing, (
-            f"Phase 120 compositions deleted: {', '.join(sorted(missing))}"
+            f"Required response compositions deleted: {', '.join(sorted(missing))}"
         )

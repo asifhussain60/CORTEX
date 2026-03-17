@@ -354,6 +354,21 @@ class TestFooterMetricConsistency:
         footer = result["footer"]
         assert f"DoR {dor_pct}%" in footer
 
+    def test_rendered_response_footer_matches_footer_field(self) -> None:
+        """Rendered markdown footer must match the structured footer payload exactly."""
+        orch = _make_orchestrator()
+        result = orch.guide_interaction(PARTIALLY_READY_REQUEST)
+        rendered = result["rendered_response"]
+        assert result["footer"] in rendered
+
+    def test_response_includes_quote_block(self) -> None:
+        """Guided response must include a quote block to satisfy canonical 3-zone header."""
+        orch = _make_orchestrator()
+        result = orch.guide_interaction(PARTIALLY_READY_REQUEST)
+        rendered = result["rendered_response"]
+        assert "\n> *\"" in rendered
+        assert "\n> — " in rendered
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # 6. Workflow Template Switching
@@ -383,6 +398,28 @@ class TestWorkflowTemplateSwitching:
         bug_result = orch.guide_interaction("fix the broken auth")
         # The next questions from different templates should differ
         assert feature_result["next_question"] != bug_result["next_question"]
+
+
+class TestModelAgnosticRenderingContract:
+    """Response structure must remain deterministic regardless of active model context."""
+
+    @pytest.mark.parametrize("model_name", ["gpt-5.3-codex", "claude-sonnet", "gpt-4.1"])
+    def test_structure_is_model_agnostic(self, model_name: str) -> None:
+        orch = _make_orchestrator()
+        setattr(orch, "_active_model", model_name)
+        rendered = orch.guide_interaction(PARTIALLY_READY_REQUEST)["rendered_response"]
+
+        expected_sections = [
+            "# 🧠 CORTEX Guided",
+            "## 📋 Current Understanding",
+            "## ❓ Missing Information",
+            "## 💬 Next Question",
+            "## 🔄 Workflow State",
+            "## 🔐 Approval Gate",
+        ]
+        positions = [rendered.find(section) for section in expected_sections]
+        assert all(pos >= 0 for pos in positions)
+        assert positions == sorted(positions), "Sections must keep canonical order"
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

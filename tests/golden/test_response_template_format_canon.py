@@ -1,8 +1,8 @@
 """Golden snapshot: Response Template Canonicalization Enforcement (phase-126-h, Check #37).
 
-Validates the 8 terminal composition YAML files for structural correctness:
+Validates the terminal composition YAML files for structural correctness:
   1. Each composition file is parseable YAML (non-empty)
-  2. All 8 compositions exist in cortex-registry/templates/response/compositions/
+    2. All required compositions exist in cortex-registry/templates/response/compositions/
   3. No composition contains a 'proceed' block inside a 'next_steps' section
   4. Proceed gate markers appear only at the terminal position if present
   5. Composition IDs match their filename stems (no orphaned IDs)
@@ -31,7 +31,7 @@ COMPOSITIONS_DIR = (
 )
 REGISTRY_FILE = CORTEX_ROOT / "cortex-registry" / "templates" / "response" / "_registry.yaml"
 
-# Canonical 8 terminal compositions (Phase 120 delivery)
+# Canonical terminal compositions (includes guided interaction composition)
 _REQUIRED_COMPOSITIONS = {
     "comp-implement-fix",
     "comp-refactor",
@@ -41,6 +41,7 @@ _REQUIRED_COMPOSITIONS = {
     "comp-debug",
     "comp-query",
     "comp-introduce",
+    "comp-interaction-guided",
 }
 
 
@@ -54,7 +55,7 @@ def _load_composition(name: str) -> Dict[str, Any]:
 
 
 class TestResponseTemplateCanon:
-    """All 8 terminal composition files must exist and be structurally valid."""
+    """All required terminal composition files must exist and be structurally valid."""
 
     def test_all_eight_compositions_exist(self) -> None:
         """All 8 required terminal compositions must exist in the compositions dir."""

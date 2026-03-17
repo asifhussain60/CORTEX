@@ -176,7 +176,6 @@ tiers:
         - holistic-file-review-gate.yaml          # composed_by: implement/fix/refactor-workflow (CORE-048 gate)
         - request-execution-plan-gate.yaml        # composed_by: all code-modifying workflows (plan gate)
         - master-plan-phase-lifecycle.yaml        # composed_by: lifecycle/master-plan-execution
-        - copilot-chat-response-template.yaml     # composed_by: all workflows (response rendering, Phase 64)
       debugging:
         - multi-stack-debug-pipeline.yaml  # DEBUG mode — intent_routing: DEBUG
       rca:

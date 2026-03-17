@@ -2032,7 +2032,7 @@ rules:
         Session ends mid-work, the next session resumes from step_last_completed.
         Resume trigger: 'resume sweep {sweep_id}'
         Resume protocol: SweepCatalogueOrchestrator.list_open_sweeps() checked at session start.
-      session_pause_banner: "Rendered via copilot-chat-response-template.yaml § session_pause_banner"
+      session_pause_banner: "Rendered via response template registry and markdown SSOT (.github/templates/cortex-response-templates.md)"
 
     tests:
       golden_test_file: "tests/golden/workflow/test_holistic_file_review_golden.py"
@@ -2074,7 +2074,7 @@ rules:
     summary: >
       Every user-visible output produced by a CORTEX workflow step in a VS Code
       GitHub Copilot Chat Session MUST be rendered through the canonical
-      copilot-chat-response-template workflow template. Raw dict output, ad-hoc
+      response template SSOT and registry-backed compositions. Raw dict output, ad-hoc
       text, or unstructured markdown from workflow steps is a P1 governance
       violation. SSOT for format: .github/templates/cortex-response-templates.md.
 
@@ -2111,7 +2111,7 @@ rules:
       auto_fix: "Restore from SSOT when author field is missing or incorrect"
 
     implementation:
-      workflow_template: "cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml"
+      workflow_template: "cortex-registry/templates/response/_registry.yaml"
       ssot: ".github/templates/cortex-response-templates.md"
       validator: "ResponseTemplateValidator (post-step hook in workflow engine)"
       auto_fix: "Wrap raw output in nearest matching section template"
@@ -2141,7 +2141,7 @@ rules:
     governance_dependency:
       requires: "CORE-002 (All output inline), CORE-049 (Silent autonomous)"
       enables: "Consistent user experience across all 14 execution modes and all 26 MCP tools"
-      blocks_until: "copilot-chat-response-template.yaml wired into WorkflowEngine post-step hook"
+      blocks_until: "response template registry and validator wired into WorkflowEngine post-step hook"
       remediation_status: "🔵 PLANNED — Phase 64 implementation"
       AC_COMPLETE: "AC-P64-CORE066-001 (pending)"
 

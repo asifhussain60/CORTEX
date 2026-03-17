@@ -348,13 +348,14 @@ class DoRApprovalGate:
     """
     Hard gate that blocks execution when ``DoRScore.composite`` is below threshold.
 
-    Default threshold is 70 / 100.  Instantiate with a custom ``min_score`` to
-    adjust per-workflow requirements.
+    Default threshold is 100 / 100 to enforce strict readiness before
+    execution. Instantiate with a custom ``min_score`` only for explicitly
+    approved non-default workflows.
 
     Phase: 150-a (GAP-150-01)
     """
 
-    DEFAULT_MIN_SCORE: int = 70
+    DEFAULT_MIN_SCORE: int = 100
 
     def __init__(self, min_score: int = DEFAULT_MIN_SCORE) -> None:
         if not 0 <= min_score <= 100:

@@ -153,6 +153,12 @@ compositions:
     orchestration_chain: "Classifier → Mission Control"
     status: PLANNED
 
+  - id: comp-interaction-guided
+    file: compositions/comp-interaction-guided.yaml
+    description: "Guided interaction response — non-autonomous DoR facilitation"
+    orchestration_chain: "Classifier → Stage 1 Comprehension"
+    status: PLANNED
+
 # ─── Prompts ──────────────────────────────────────────────────────────────────
 prompts:
   - id: prompt-cortex-main

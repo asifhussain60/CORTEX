@@ -1443,7 +1443,13 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         # Decision checkpoint callout
         is_checkpoint = composer.is_at_decision_checkpoint(workflow_state)
 
-        # Step 6: Render full Copilot Chat Markdown payload
+        # Step 6: Build footer (single source of truth)
+        footer = tracker.get_footer_line(
+            workflow_name=workflow_state.display_name,
+            mode="Guided",
+        )
+
+        # Step 7: Render full Copilot Chat Markdown payload
         rendered = self._render_guided_response(
             workflow_name=workflow_state.display_name,
             current_understanding=current_understanding,
@@ -1459,12 +1465,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
             blockers=blockers_md,
             is_decision_checkpoint=is_checkpoint,
             missing_dimensions_list=missing_dims_list,
-        )
-
-        # Step 7: Build footer
-        footer = tracker.get_footer_line(
-            workflow_name=workflow_state.display_name,
-            mode="Guided",
+            footer_line=footer,
         )
 
         self._audit_trail.append({
@@ -1540,6 +1541,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         blockers: str,
         is_decision_checkpoint: bool,
         missing_dimensions_list: str,
+        footer_line: str,
     ) -> str:
         """Render the full Copilot Chat Markdown response for one guided turn.
 
@@ -1562,6 +1564,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
             blockers: Markdown list of blocker strings (empty when none).
             is_decision_checkpoint: True when current step is a key decision point.
             missing_dimensions_list: Markdown list of incomplete dimensions for gate.
+            footer_line: Canonical footer line for response and payload parity.
 
         Returns:
             Full Markdown string suitable for VS Code Copilot Chat rendering.
@@ -1601,15 +1604,16 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                 "rather than triggering execution.*\n"
             )
 
-        footer = (
-            f"🧠 CORTEX · Guided · DoR {dor_pct}% · Gate {gate_status} · "
-            f"Workflow: {workflow_name} · ✋ {open_questions_count} questions "
-            f"· ⚠ {blockers_count} blockers"
-        )
+        quote_text, quote_author, quote_book = self._get_guided_quote()
 
         return f"""# 🧠 CORTEX Guided
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+---
+
+> *"{quote_text}"*
+> — {quote_author}, **{quote_book}**
 
 ---
 
@@ -1655,7 +1659,19 @@ and move to the next.*
 
 ---
 
-{footer}"""
+{footer_line}"""
+
+    def _get_guided_quote(self) -> tuple[str, str, str]:
+        """Return deterministic quote metadata for guided interaction header.
+
+        Returns:
+            Tuple of ``(text, author, book)`` for the quote block.
+        """
+        return (
+            "Quality is not an act, it is a habit.",
+            "Aristotle",
+            "Nicomachean Ethics",
+        )
 
 
 # AC_COMPLETE: AC-P0-INTERACTION-ORCH-GREEN-001
