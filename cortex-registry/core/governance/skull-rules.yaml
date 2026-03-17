@@ -159,3 +159,13 @@ core_rules:
     rationale: "Drift locks protect architectural invariants from uncontrolled mutation."
     examples: []
     related_rules: ["CORE-035"]
+
+  - id: CORE-075
+    name: "Zero Test Bypass Tolerance"
+    description: "Skipped tests must be fixed, deprecated, or deleted — never accumulated as permanent debt."
+    enforcement: "BLOCKED"
+    category: "quality_gates"
+    priority: "CRITICAL"
+    rationale: "Silent skip-creep creates false green CI and erodes regression safety."
+    examples: []
+    related_rules: ["CORE-008", "CORE-050", "CORE-068"]

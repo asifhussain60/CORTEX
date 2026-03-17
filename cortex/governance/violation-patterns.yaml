@@ -105,6 +105,26 @@ patterns:
         severity: "MEDIUM"
 
   # ─────────────────────────────────────────────────────────────────────────
+  CORE-075:
+    name: "Zero Test Bypass Tolerance"
+    description: "Detect unconditional test skips that accumulate as permanent debt."
+    patterns:
+      - type: "module_level_skip"
+        regex: "^pytestmark\\s*=\\s*pytest\\.mark\\.skip\\((?!.*skipif)"
+        message: "CORE-075 violation: module-level unconditional skip — fix, deprecate, or delete the test"
+        severity: "CRITICAL"
+
+      - type: "permanent_skip_decorator"
+        regex: "@pytest\\.mark\\.skip\\(reason=\".*(?:pending|deferred|TODO|FIXME|not yet).*\"\\)"
+        message: "CORE-075 violation: permanent skip with deferred language — schedule remediation"
+        severity: "HIGH"
+
+      - type: "skip_previous_error"
+        regex: "(?i)pytest\\.mark\\.skip.*(?:previous|known|existing|old)\\s*(?:error|failure|bug|issue)"
+        message: "CORE-075 violation: test skipped due to previous error — must be fixed or deleted"
+        severity: "CRITICAL"
+
+  # ─────────────────────────────────────────────────────────────────────────
   CORE-028:
     name: "File Naming Standards"
     description: "Files must use snake_case, lowercase. SCREAMING_CASE and camelCase are forbidden."

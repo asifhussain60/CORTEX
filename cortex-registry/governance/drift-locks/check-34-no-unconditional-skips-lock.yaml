@@ -1,0 +1,23 @@
+# Drift Lock: Check #34 — No Unconditional Test Skips (CORE-075)
+# Authority: CORE-075 (Zero Test Bypass Tolerance)
+# Created: 2026-03-17
+
+id: "check-34-no-unconditional-skips-lock"
+check_number: 34
+rule: "CORE-075"
+status: "ACTIVE"
+enforcement_tier: "BLOCKED"
+description: |
+  Enforces a hard ceiling on module-level unconditional pytest.mark.skip
+  markers. The ceiling can only decrease (ratchet-down protocol).
+
+locked_artifacts:
+  - path: "tests/preflight/test_no_unconditional_skips.py"
+    contract: "UNCONDITIONAL_SKIP_CEILING must only decrease"
+  - path: "cortex-registry/governance/skip-debt-registry.yaml"
+    contract: "All unconditional skips must be registered with remediation_action"
+
+ceiling_history:
+  - date: "2026-03-17"
+    ceiling: 22
+    event: "Initial baseline — CORE-075 introduced"

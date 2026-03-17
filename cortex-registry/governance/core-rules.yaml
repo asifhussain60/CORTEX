@@ -21,8 +21,8 @@ meta:
     cortex-registry/governance/ directory.
   author: "Asif Hussain"
   copyright: "© 2025–2026 Asif Hussain. All rights reserved."
-  phase: 109
-  fixed_in: "Phase 109 pull — broken symlink replaced with proper YAML"
+  phase: 151
+  fixed_in: "Phase 151 — CORE-075 Zero Test Bypass Tolerance added"
 
 enforcement_levels:
   BLOCKED:
@@ -34,6 +34,7 @@ enforcement_levels:
       - "CORE-068"
       - "CORE-071"
       - "CORE-074"
+      - "CORE-075"
   PRE-EXECUTION: "Must run before any code-modifying operation"
   RUNTIME: "Enforced continuously during execution"
   WARNING: "Surfaced as advisory — does not block"
@@ -83,4 +84,11 @@ core_rules:
     description: "No degradation to production standards. Fix infrastructure, don't bypass failing gates."
     enforcement: "BLOCKED"
     violation_action: "Block execution until root-cause remediation is complete"
+  - id: "CORE-075"
+    name: "Zero Test Bypass Tolerance"
+    category: "quality_gates"
+    priority: "P0"
+    description: "Skipped tests must be fixed, deprecated, or deleted — never accumulated as permanent debt."
+    enforcement: "BLOCKED"
+    violation_action: "Block execution when unconditional skip ceiling is exceeded."
 

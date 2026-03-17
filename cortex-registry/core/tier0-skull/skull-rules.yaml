@@ -14,12 +14,12 @@ precedence: HIGHEST
 
 metadata:
   schema: "1.0"
-  rule_count: 38
+  rule_count: 39
   ac_rule_count: 2
-  total_rule_count: 40
+  total_rule_count: 41
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-02-26 - Total Recall Phase 4: metadata aligned to actual rule count (38 CORE + 2 AC = 40 total)"
+  last_update: "2026-03-17 - Phase 151: CORE-075 Zero Test Bypass Tolerance added (39 CORE + 2 AC = 41 total)"
   consolidation_date: "2026-02-21"
   consolidation_status: "Phase 16 - CORE-064 Sweep Completeness Contract registered (partial sweep prevention)"
   naming_system: "Dual naming - CORE-* (canonical ID) + Business Principle (human-readable alias)"
@@ -2487,6 +2487,53 @@ rules:
       enables: "Definition of Ready enforcement — no premature IMPLEMENT invocations"
       remediation_status: "✅ COMPLETE — Phase 150 implementation"
       AC_COMPLETE: "AC-P150-CORE071-001 ✅"
+
+  # CORE-075: Zero Test Bypass Tolerance (Phase 151 — 2026-03-17)
+  - rule_id: CORE-075
+    title: "Zero Test Bypass Tolerance — skipped tests must be fixed, deprecated, or deleted"
+    tier: P0
+    severity: blocked
+    phase_introduced: "phase-151"
+    category: quality_gates
+    description: |
+      CORTEX must NEVER accumulate skipped tests as permanent technical debt.
+      Every unconditional ``pytest.mark.skip`` at module level is tracked in
+      a ratchet-down ceiling that can only decrease over time.
+
+      When CORTEX encounters a failing test, it MUST choose one of three actions:
+        1. FIX — Remediate the root cause so the test passes.
+        2. DEPRECATE — If the feature is removed, delete the test entirely.
+        3. DELETE — If the test is low-value, remove it.
+
+      Permanently skipping a test to hide a previous failure is PROHIBITED.
+      The preflight gate (Check #34) enforces a hard ceiling on unconditional
+      module-level skips. The ceiling ratchets DOWN as skips are resolved.
+
+      Prevents:
+      - Silent accumulation of hidden test debt
+      - False green CI by excluding failing tests
+      - Loss of regression safety through skip-creep
+      - Test suites that appear healthy while masking hundreds of bypasses
+    enforcement:
+      pre_commit: true
+      ci_gate: true
+      drift_lock: "check-34-no-unconditional-skips-lock.yaml"
+      preflight_check: "tests/preflight/test_no_unconditional_skips.py"
+    acceptance_criteria:
+      - id: "AC-075-A"
+        test_name: "test_unconditional_skip_ceiling_not_exceeded"
+        assertion: "Module-level unconditional skips do not exceed the ratchet ceiling"
+      - id: "AC-075-B"
+        test_name: "test_no_new_unconditional_skips_without_registry"
+        assertion: "All unconditional skips have documented reason= arguments"
+      - id: "AC-075-C"
+        test_name: "test_skip_ceiling_matches_actual_count"
+        assertion: "Ceiling is ratcheted down when skips are fixed/deleted"
+    governance_dependency:
+      requires: "CORE-008 (TDD), CORE-050 (No Quality Degradation), CORE-068 (Convergence Loop)"
+      enables: "Zero skip-debt accumulation — all test bypasses tracked and remediated"
+      remediation_status: "✅ COMPLETE — Phase 151 implementation"
+      AC_COMPLETE: "AC-P151-CORE075-001 ✅"
 
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION

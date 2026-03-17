@@ -1,0 +1,141 @@
+# =============================================================================
+# CORTEX Skip Debt Registry — CORE-075 Enforcement
+# =============================================================================
+#
+# Authority:  CORE-075 (Zero Test Bypass Tolerance)
+# Preflight:  tests/preflight/test_no_unconditional_skips.py (Check #34)
+# Status:     ACTIVE
+# Created:    2026-03-17
+# Author:     Asif Hussain
+#
+# PURPOSE
+# -------
+# Tracks all known module-level unconditional test skips. Each entry must
+# have a remediation_action (FIX | DEPRECATE | DELETE) and a target date.
+# The ratchet ceiling in the preflight test enforces that skip count can
+# only decrease over time.
+#
+# AC-ID: AC-CORE075-REGISTRY-001
+# =============================================================================
+
+id: "skip-debt-registry"
+authority: "CORE-075"
+ceiling: 22
+ceiling_date: "2026-03-17"
+enforcement: "BLOCKED"
+
+entries:
+  # --- Phase 38.0 Remediation Pending (9 modules) ---
+  - file: "tests/unit/core/hallucination_prevention/test_execution_sandbox.py"
+    reason: "Phase 38.0 remediation pending"
+    remediation_action: "FIX"
+    category: "hallucination_prevention"
+
+  - file: "tests/unit/core/hallucination_prevention/test_hallucination_detection.py"
+    reason: "Phase 38.0 remediation pending"
+    remediation_action: "FIX"
+    category: "hallucination_prevention"
+
+  - file: "tests/unit/core/hallucination_prevention/test_confidence_scoring.py"
+    reason: "Phase 38.0 remediation pending"
+    remediation_action: "FIX"
+    category: "hallucination_prevention"
+
+  - file: "tests/unit/core/hallucination_prevention/test_behavioral_boundaries.py"
+    reason: "Phase 38.0 remediation pending"
+    remediation_action: "FIX"
+    category: "hallucination_prevention"
+
+  - file: "tests/unit/core/hallucination_prevention/test_vision_mutations.py"
+    reason: "Phase 38.0 remediation pending"
+    remediation_action: "FIX"
+    category: "hallucination_prevention"
+
+  - file: "tests/unit/core/hallucination_prevention/test_output_validator.py"
+    reason: "Phase 38.0 remediation pending"
+    remediation_action: "FIX"
+    category: "hallucination_prevention"
+
+  - file: "tests/unit/core/orchestrator/test_intent_router_core.py"
+    reason: "Phase 38.0 remediation pending"
+    remediation_action: "FIX"
+    category: "orchestration"
+
+  - file: "tests/unit/brain/discovery/test_config_discovery.py"
+    reason: "Phase 38.0 remediation pending - discovery modules incomplete"
+    remediation_action: "FIX"
+    category: "brain_discovery"
+
+  - file: "tests/unit/brain/discovery/test_database_discovery.py"
+    reason: "Phase 38.0 remediation pending - discovery modules incomplete"
+    remediation_action: "FIX"
+    category: "brain_discovery"
+
+  # --- API Alignment Issues (2 modules) ---
+  - file: "tests/unit/core/intent/test_ast_audit_tracing.py"
+    reason: "Tests need API alignment - ParseResult vs Result, query_audit_trail method"
+    remediation_action: "FIX"
+    category: "intent_routing"
+
+  - file: "tests/unit/core/orchestrator/test_4stage_integration.py"
+    reason: "4-stage integration tests require updated Stage1ComprehensionContext"
+    remediation_action: "FIX"
+    category: "orchestration"
+
+  # --- Migrated/Deprecated (3 modules) ---
+  - file: "tests/unit/dashboards/test_data_collectors.py"
+    reason: "company.dashboards.core migrated to spa/ structure"
+    remediation_action: "DELETE"
+    category: "dashboards"
+
+  - file: "tests/unit/dashboards/test_static_dashboard_generator.py"
+    reason: "company.dashboards.core migrated to spa/ structure"
+    remediation_action: "DELETE"
+    category: "dashboards"
+
+  - file: "tests/unit/dashboards/test_visualization_manager.py"
+    reason: "Phase 38.0 remediation pending - visualization_manager module incomplete"
+    remediation_action: "DELETE"
+    category: "dashboards"
+
+  # --- Phase 82+ Pending (4 modules) ---
+  - file: "tests/integration/test_mcp_tool_detection_validation.py"
+    reason: "MCP tool detection and server infrastructure under development - Phase 82+"
+    remediation_action: "FIX"
+    category: "mcp"
+
+  - file: "tests/integration/phase9/test_orchestrator_wiring_integration.py"
+    reason: "Orchestrator wiring data integrity issues and health checks pending Phase 82+"
+    remediation_action: "FIX"
+    category: "orchestration"
+
+  - file: "tests/mcp/conftest.py"
+    reason: "MCP tools and infrastructure implementation pending Phase 82+"
+    remediation_action: "FIX"
+    category: "mcp"
+
+  - file: "tests/orchestrators/core/test_architecture_guard_integration.py"
+    reason: "Phase 38.0 remediation pending - architecture guard module not found"
+    remediation_action: "FIX"
+    category: "orchestration"
+
+  # --- Feature-Specific (4 modules) ---
+  - file: "tests/unit/cortex/brain/core/knowledge/test_change_detection.py"
+    reason: "Phase 38.0 remediation"
+    remediation_action: "FIX"
+    category: "knowledge"
+
+  - file: "tests/unit/remediation/test_rem_003_01_copilot_verbosity.py"
+    reason: "Verbosity guidelines not yet implemented in copilot-instructions.md"
+    remediation_action: "FIX"
+    category: "remediation"
+
+  - file: "tests/integration/lens/test_dashboard_artifacts_red.py"
+    reason: "RED-phase TDD contracts — no implementation yet"
+    remediation_action: "FIX"
+    category: "lens"
+
+  - file: "tests/tools/test_csharp_adapter_standalone.py"
+    reason: "tree-sitter-languages not available for Python 3.14"
+    remediation_action: "FIX"
+    category: "tools"
