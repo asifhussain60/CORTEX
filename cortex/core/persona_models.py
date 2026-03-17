@@ -12,7 +12,7 @@ AC_START: AC-PHASE37.1-003
 
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class PersonaCommandParameter(BaseModel):
@@ -58,8 +58,9 @@ class Persona(BaseModel):
     onboarding_focus: Optional[List[str]] = None
     trigger_discovery: bool = False
 
-    @validator('depth')
-    def validate_depth(cls: type, v: object) -> object:
+    @field_validator('depth')
+    @classmethod
+    def validate_depth(cls, v: object) -> object:
         """Validate depth is one of allowed values."""
         if v is not None:
             allowed = ["executive", "standard", "detailed", "full"]
@@ -69,8 +70,9 @@ class Persona(BaseModel):
                 )
         return v
 
-    @validator('show_code')
-    def validate_show_code(cls: type, v: object) -> object:
+    @field_validator('show_code')
+    @classmethod
+    def validate_show_code(cls, v: object) -> object:
         """Validate show_code is bool or allowed string."""
         if v is not None and not isinstance(v, bool):
             allowed = ["diagrams", "snippets", "relevant", "complete"]
@@ -90,8 +92,9 @@ class DepthLevel(BaseModel):  # CORE-035-scoped — domain-specific variant
     show_code: Union[bool, str]
     metrics: str
 
-    @validator('show_code')
-    def validate_show_code(cls: type, v: object) -> object:
+    @field_validator('show_code')
+    @classmethod
+    def validate_show_code(cls, v: object) -> object:
         """Validate show_code is bool or allowed string."""
         if not isinstance(v, bool):
             allowed = ["snippets", "relevant", "complete"]
@@ -101,8 +104,9 @@ class DepthLevel(BaseModel):  # CORE-035-scoped — domain-specific variant
                 )
         return v
 
-    @validator('metrics')
-    def validate_metrics(cls: type, v: object) -> object:
+    @field_validator('metrics')
+    @classmethod
+    def validate_metrics(cls, v: object) -> object:
         """Validate metrics level."""
         allowed = ["high_level", "relevant", "full", "all"]
         if v not in allowed:

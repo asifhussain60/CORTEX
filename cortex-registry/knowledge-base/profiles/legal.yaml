@@ -1,8 +1,0 @@
-id: "profile-legal"
-title: "Legal Domain Profile"
-owner: "CORTEX Domain Profiles"
-source_of_truth: "Domain Profile Registry"
-focus:
-  - "policy and contract constraints"
-  - "records retention obligations"
-  - "review and approval checkpoints"

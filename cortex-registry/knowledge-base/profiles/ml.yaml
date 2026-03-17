@@ -1,8 +1,0 @@
-id: "profile-ml"
-title: "ML Domain Profile"
-owner: "CORTEX Domain Profiles"
-source_of_truth: "Domain Profile Registry"
-focus:
-  - "model lifecycle and evaluation"
-  - "data quality and drift management"
-  - "inference reliability and monitoring"

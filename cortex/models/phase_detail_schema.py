@@ -9,7 +9,7 @@ Authority: PHASE-STORY-SYSTEM-COMPREHENSIVE.yaml (ENH-032)
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class PhaseStatus(str, Enum):  # CORE-035-scoped — domain-specific variant
@@ -28,18 +28,17 @@ class ImpactLevel(str, Enum):
 
 class MermaidDiagram(BaseModel):
     """Mermaid diagram specification"""
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "type": "architecture",
+            "title": "Event Bus Architecture",
+            "mermaid_code": "graph TD\nA[Publisher] --> B[EventBus]\nB --> C[Subscriber]"
+        }
+    })
+
     type: str = Field(..., description="Diagram type: architecture, workflow, data_flow, dependency")
     title: str = Field(..., description="Diagram title for display")
     mermaid_code: str = Field(..., description="Mermaid.js diagram code")
-
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        json_schema_extra = {
-            "example": {
-                "type": "architecture",
-                "title": "Event Bus Architecture",
-                "mermaid_code": "graph TD\nA[Publisher] --> B[EventBus]\nB --> C[Subscriber]"
-            }
-        }
 
 
 class Feature(BaseModel):
@@ -62,19 +61,18 @@ class CodeFile(BaseModel):
 
 class ArchitectureSection(BaseModel):  # CORE-035-scoped — domain-specific variant
     """Architecture section with diagrams"""
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "overview": "Event-driven architecture foundation",
+            "diagrams": [],
+            "components": ["OrchestratorEventBus", "OrchestratorEvent"]
+        }
+    })
+
     overview: str = Field(..., description="LLM-generated architecture overview")
     diagrams: List[MermaidDiagram] = Field(default_factory=list, description="Architecture diagrams")
     components: List[str] = Field(default_factory=list, description="Key components")
     design_patterns: Optional[List[str]] = Field(None, description="Design patterns applied")
-
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        json_schema_extra = {
-            "example": {
-                "overview": "Event-driven architecture foundation",
-                "diagrams": [],
-                "components": ["OrchestratorEventBus", "OrchestratorEvent"]
-            }
-        }
 
 
 class ImplementationSection(BaseModel):
@@ -140,6 +138,20 @@ class Lesson(BaseModel):
 class PhaseDetail(BaseModel):
     """Complete phase detail model for comprehensive detail pages"""
 
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "phase_id": "PHASE-01",
+            "title": "Orchestrator Event Bus Infrastructure",
+            "status": "COMPLETED",
+            "completion_date": "2026-02-04",
+            "overview": "Event-driven communication backbone enabling decoupled orchestrator communication",
+            "objectives": [
+                "Enable event-driven orchestrator communication",
+                "Remove direct orchestrator dependencies"
+            ]
+        }
+    })
+
     # Core metadata
     phase_id: str = Field(..., description="Phase identifier (e.g., PHASE-01)")
     title: str = Field(..., description="Phase title")
@@ -179,21 +191,6 @@ class PhaseDetail(BaseModel):
     git_tag: Optional[str] = Field(None, description="Git tag for phase completion")
     author: Optional[str] = Field(None, description="Phase author")
     created_date: Optional[str] = Field(None, description="Phase creation date")
-
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        json_schema_extra = {
-            "example": {
-                "phase_id": "PHASE-01",
-                "title": "Orchestrator Event Bus Infrastructure",
-                "status": "COMPLETED",
-                "completion_date": "2026-02-04",
-                "overview": "Event-driven communication backbone enabling decoupled orchestrator communication",
-                "objectives": [
-                    "Enable event-driven orchestrator communication",
-                    "Remove direct orchestrator dependencies"
-                ]
-            }
-        }
 
     def to_html_context(self) -> Dict[str, Any]:
         """Convert to HTML template context"""

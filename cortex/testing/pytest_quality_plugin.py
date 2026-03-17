@@ -4,8 +4,9 @@ CORTEX Pytest Quality Plugin (Phase 07b)
 Registers a pytest_collect_file hook that scores each test file at collection
 time using TestQualityGate. Operates in two modes:
 
-  warn   (default) — scores files, emits warnings for REVIEW/DELETE tier.
-                     No tests are deselected.
+  warn   (default) — scores files, collects REVIEW/DELETE findings and emits
+                     a single compact summary via pytest_terminal_summary.
+                     No tests are deselected. No per-file UserWarnings emitted.
   strict            — BLOCK (deselect) DELETE-tier files at collection.
                      Activated via CORTEX_QUALITY_GATE=strict env var or
                      --quality-gate=strict CLI flag.
@@ -15,7 +16,7 @@ of mode.
 
 Integration:
   Registered alongside CortexXdistPlugin in conftest.py.
-  Parallel-safe — stateless, no shared state between workers.
+  Parallel-safe — findings list is populated sequentially during collection.
 
 Authority: test-quality.txt | CORE-008 | CORE-011 | CORE-012
 AC-ID: AC-PHASE-07B-TEST-QUALITY-GATE-001
@@ -25,29 +26,39 @@ Date: 2026-02-20
 from __future__ import annotations
 
 import os
-import warnings
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional, Tuple
 
-from cortex.testing.quality_gate import DELETE, TestQualityGate
+from cortex.testing.quality_gate import DELETE, REVIEW, ScoreResult, TestQualityGate
+
+
+# Findings: (category, filename, score, breakdown_str, blocked)
+_Finding = Tuple[str, str, float, str, bool]
 
 
 class CortexQualityPlugin:
     """Pytest plugin that gates test collection on quality score.
 
+    Findings (REVIEW/DELETE) are collected during pytest_collect_file and
+    emitted as a single compact table via pytest_terminal_summary.  This
+    eliminates the per-file UserWarning flood (previously 900+ warnings).
+
     Attributes:
         mode: "warn" (default) or "strict" (deselects DELETE-tier files).
         gate: TestQualityGate instance for scoring.
+        _findings: Accumulated REVIEW/DELETE findings for the summary report.
     """
 
     def __init__(self, mode: str = "warn") -> None:
         """Initialise plugin.
 
         Args:
-            mode: "warn" emits warnings only. "strict" deselects DELETE-tier files.
+            mode: "warn" collects findings for summary. "strict" also deselects
+                  DELETE-tier files at collection time.
         """
         self.mode = mode
         self.gate = TestQualityGate()
+        self._findings: List[_Finding] = []
 
     def should_deselect(self, filepath: Path) -> bool:
         """Determine if a test file should be deselected at collection.
@@ -64,7 +75,6 @@ class CortexQualityPlugin:
         """
         result = self.gate.score_file(filepath)
 
-        # Golden tests are always kept
         if result.is_golden:
             return False
 
@@ -76,8 +86,9 @@ class CortexQualityPlugin:
     def pytest_collect_file(self, parent: object, file_path: Path) -> None:
         """Hook: called for each candidate test file during collection.
 
-        Scores the file and emits a warning for REVIEW/DELETE tier files.
-        In strict mode, raises pytest.skip equivalent via deselection.
+        Scores the file and records REVIEW/DELETE findings for the terminal
+        summary.  Does NOT call warnings.warn() — previously caused 900+
+        UserWarning lines that cluttered pytest output.
 
         Args:
             parent: pytest collector parent node.
@@ -90,27 +101,65 @@ class CortexQualityPlugin:
 
         result = self.gate.score_file(file_path)
 
-        if result.category == DELETE and not result.is_golden:
-            msg = (
-                f"[CORTEX Quality Gate] DELETE-tier file "
-                f"(score={result.score}/9): {file_path.name} — "
-                f"Impact:{result.breakdown.get('impact', 0)} "
-                f"Likelihood:{result.breakdown.get('likelihood', 0)} "
-                f"Detection:{result.breakdown.get('detection', 0)} "
-                f"Efficiency:{result.breakdown.get('efficiency', 0)} "
-                f"Penalty:{result.breakdown.get('maintenance_penalty', 0)}"
-            )
-            if self.mode == "strict":
-                warnings.warn(msg + " [BLOCKED]", stacklevel=2)
-            else:
-                warnings.warn(msg + " [consider archiving]", stacklevel=2)
+        if result.is_golden or result.category not in (DELETE, REVIEW):
+            return
 
-        elif result.category == "REVIEW":
-            warnings.warn(
-                f"[CORTEX Quality Gate] REVIEW-tier file "
-                f"(score={result.score}/9): {file_path.name}",
-                stacklevel=2,
+        blocked = self.mode == "strict" and result.category == DELETE
+        breakdown_str = ""
+        if result.category == DELETE:
+            bd = result.breakdown
+            breakdown_str = (
+                f"Impact:{bd.get('impact', 0)} "
+                f"Likelihood:{bd.get('likelihood', 0)} "
+                f"Detection:{bd.get('detection', 0)} "
+                f"Efficiency:{bd.get('efficiency', 0)} "
+                f"Penalty:{bd.get('maintenance_penalty', 0)}"
             )
+
+        self._findings.append(
+            (result.category, file_path.name, result.score, breakdown_str, blocked)
+        )
+
+    def pytest_terminal_summary(self, terminalreporter: object, exitstatus: int) -> None:
+        """Emit a compact quality gate summary after all tests complete.
+
+        Replaces the previous per-file warnings.warn() approach.
+        Only printed when there are REVIEW or DELETE findings.
+
+        Args:
+            terminalreporter: pytest's terminal reporter.
+            exitstatus: Exit status of the test run.
+        """
+        if not self._findings:
+            return
+
+        tr = terminalreporter
+        delete_findings = [f for f in self._findings if f[0] == DELETE]
+        review_findings = [f for f in self._findings if f[0] == REVIEW]
+
+        tr.write_sep("-", "CORTEX Quality Gate Summary", yellow=True)
+        tr.write_line(
+            f"  {len(delete_findings)} DELETE-tier  |  "
+            f"{len(review_findings)} REVIEW-tier  |  "
+            f"{len(self._findings)} total files below KEEP threshold (score < 7/9)",
+            yellow=True,
+        )
+
+        if delete_findings:
+            tr.write_line("  DELETE-tier files [consider archiving]:", red=True)
+            for _cat, fname, score, bd, blocked in sorted(delete_findings, key=lambda x: x[2]):
+                suffix = " [BLOCKED]" if blocked else ""
+                tr.write_line(f"    score={score}/9  {fname}{suffix}  {bd}", red=True)
+
+        if review_findings:
+            tr.write_line("  REVIEW-tier files [human review required]:", yellow=True)
+            for _cat, fname, score, _bd, _blocked in sorted(review_findings, key=lambda x: x[2]):
+                tr.write_line(f"    score={score}/9  {fname}", yellow=True)
+
+        tr.write_line(
+            "  Run with CORTEX_QUALITY_GATE=strict to block DELETE-tier files.",
+            bold=True,
+        )
 
 
 def make_plugin(mode: Optional[str] = None) -> CortexQualityPlugin:

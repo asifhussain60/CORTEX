@@ -1,8 +1,0 @@
-id: "repo-cortex"
-title: "CORTEX Repository Profile"
-owner: "CORTEX Repository Profiles"
-source_of_truth: "Repository Knowledge Registry"
-characteristics:
-  - "workflow-composer-centric orchestration"
-  - "governance-first validation model"
-  - "dual-surface Claude and Copilot compatibility"

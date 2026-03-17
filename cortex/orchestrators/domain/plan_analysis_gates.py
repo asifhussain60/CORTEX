@@ -265,3 +265,7 @@ class PlanAnalysisGateRunner:
             True when all blocking gates passed.
         """
         return all(not v.blocking for v in verdicts.values())
+
+
+# Backwards-compatibility alias — tests and downstream code may import GateVerdict
+GateVerdict = PlanGateVerdict

@@ -1,8 +1,0 @@
-id: "profile-healthcare"
-title: "Healthcare Domain Profile"
-owner: "CORTEX Domain Profiles"
-source_of_truth: "Domain Profile Registry"
-focus:
-  - "regulated data workflows"
-  - "auditability and traceability"
-  - "privacy-by-design controls"

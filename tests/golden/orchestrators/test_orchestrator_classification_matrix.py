@@ -4,7 +4,7 @@ Orchestrator Classification Matrix + Wiring Contract Tests
 Phase 124 — Wiring Verification Suite (Gap: no orchestrator-wide audit)
 
 WHAT THIS TESTS:
-  1. Orchestrator Inventory: all 8 composition files are present and classified
+    1. Orchestrator Inventory: all 9 composition files are present and classified
      (analysis / design / operations / meta)
   2. Classification contract: each composition intent maps to exactly ONE category
      in the trigger policy — no unclassified or multi-classified intents
@@ -41,16 +41,17 @@ WORKFLOWS_TEMPLATES_ROOT = REPO_ROOT / "cortex-registry" / "workflows" / "templa
 
 # ── Orchestrator Classification Matrix (ground truth) ─────────────────────────
 #
-# Category    | Composition         | Intent(s)        | atom-principle | workflow_template
-# ------------|---------------------|------------------|----------------|------------------
-# analysis    | comp-query.yaml     | QUERY            | ✅ required    | ❌ exempt (query)
-# design      | comp-introduce.yaml | INTRODUCE        | ✅ required    | ❌ exempt (intro)
-# operations  | comp-implement-fix  | IMPLEMENT, FIX   | ❌ blocked     | ✅ required
-# operations  | comp-refactor       | REFACTOR         | ❌ blocked     | ✅ required
-# operations  | comp-debug          | DEBUG            | ❌ blocked     | ✅ required
-# operations  | comp-audit-fix      | AUDIT            | ❌ blocked     | ✅ required
-# operations  | comp-health         | HEALTH           | ❌ blocked     | ✅ required (maintenance)
-# operations  | comp-vacuum         | VACUUM           | ❌ blocked     | ✅ required (maintenance)
+# Category    | Composition                | Intent(s)        | atom-principle | workflow_template
+# ------------|----------------------------|------------------|----------------|------------------
+# analysis    | comp-query.yaml            | QUERY            | ✅ required    | ❌ exempt (query)
+# design      | comp-introduce.yaml        | INTRODUCE        | ✅ required    | ❌ exempt (intro)
+# operations  | comp-interaction-guided    | INTERACT         | ❌ blocked     | ✅ required
+# operations  | comp-implement-fix         | IMPLEMENT, FIX   | ❌ blocked     | ✅ required
+# operations  | comp-refactor              | REFACTOR         | ❌ blocked     | ✅ required
+# operations  | comp-debug                 | DEBUG            | ❌ blocked     | ✅ required
+# operations  | comp-audit-fix             | AUDIT            | ❌ blocked     | ✅ required
+# operations  | comp-health                | HEALTH           | ❌ blocked     | ✅ required (maintenance)
+# operations  | comp-vacuum                | VACUUM           | ❌ blocked     | ✅ required (maintenance)
 
 COMPOSITION_MATRIX = {
     "comp-query.yaml": {
@@ -65,6 +66,13 @@ COMPOSITION_MATRIX = {
         "intents": ["INTRODUCE"],
         "principle_injection": True,
         "workflow_template_required": False,
+        "single_hop": False,
+    },
+    "comp-interaction-guided.yaml": {
+        "category": "operations",
+        "intents": ["INTERACT"],
+        "principle_injection": False,
+        "workflow_template_required": True,
         "single_hop": False,
     },
     "comp-implement-fix.yaml": {

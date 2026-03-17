@@ -84,6 +84,17 @@ _ACKNOWLEDGED_GAPS: frozenset[str] = frozenset({
     "CORE-095",   # cited in cortex-docs or scripts
     "CORE-097",   # cited in cortex-docs or scripts
     "CORE-070",   # cited in cortex-docs or scripts
+    # Phase 144 — rules cited in production but not yet in core-rules.yaml YAML
+    "CORE-003",   # cited in production orchestrators / prompts
+    "CORE-010",   # cited in production orchestrators / prompts
+    "CORE-021",   # cited in production orchestrators / prompts
+    "CORE-022",   # cited in production orchestrators / prompts
+    "CORE-023",   # cited in production orchestrators / prompts
+    "CORE-037",   # cited in production orchestrators / prompts
+    "CORE-043",   # cited in production orchestrators / prompts
+    "CORE-044",   # cited in production orchestrators / prompts
+    "CORE-045",   # cited in production orchestrators / prompts
+    "CORE-072",   # cited in production orchestrators / prompts
 })
 
 

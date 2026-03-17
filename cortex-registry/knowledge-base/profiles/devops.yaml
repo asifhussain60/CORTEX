@@ -1,8 +1,0 @@
-id: "profile-devops"
-title: "DevOps Domain Profile"
-owner: "CORTEX Domain Profiles"
-source_of_truth: "Domain Profile Registry"
-focus:
-  - "CI/CD reliability"
-  - "infrastructure automation"
-  - "release safety and observability"

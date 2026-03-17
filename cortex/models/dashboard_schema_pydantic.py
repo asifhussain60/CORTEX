@@ -13,7 +13,7 @@ Replaces: Old dataclass-based dashboard_schema.py (migration planned for Phase-1
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 # ============================================================================
 # METRICS MODELS
@@ -21,52 +21,44 @@ from pydantic import BaseModel, Field, validator
 
 class CodeMetrics(BaseModel):
     """Code quality and complexity metrics"""
+    model_config = ConfigDict(title="Code Metrics", description="Code quality, complexity, and coverage metrics")
+
     lines_of_code: Optional[int] = Field(None, ge=0)
     cyclomatic_complexity: Optional[float] = Field(None, ge=0)
     maintainability_index: Optional[float] = Field(None, ge=0, le=100)
     test_coverage_percent: Optional[float] = Field(None, ge=0, le=100)
     duplication_percent: Optional[float] = Field(None, ge=0, le=100)
 
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        title = "Code Metrics"
-        description = "Code quality, complexity, and coverage metrics"
-
 
 class DependencyMetrics(BaseModel):
     """Dependency health and version status"""
+    model_config = ConfigDict(title="Dependency Metrics", description="Dependency version and vulnerability tracking")
+
     total_dependencies: Optional[int] = Field(None, ge=0)
     up_to_date: Optional[int] = Field(None, ge=0)
     outdated: Optional[int] = Field(None, ge=0)
     vulnerable: Optional[int] = Field(None, ge=0)
 
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        title = "Dependency Metrics"
-        description = "Dependency version and vulnerability tracking"
-
 
 class SecurityMetrics(BaseModel):
     """Security vulnerability and scanning metrics"""
+    model_config = ConfigDict(title="Security Metrics", description="Vulnerability counts and security scoring")
+
     critical_vulnerabilities: Optional[int] = Field(None, ge=0)
     high_vulnerabilities: Optional[int] = Field(None, ge=0)
     medium_vulnerabilities: Optional[int] = Field(None, ge=0)
     low_vulnerabilities: Optional[int] = Field(None, ge=0)
     security_score: Optional[float] = Field(None, ge=0, le=100)
 
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        title = "Security Metrics"
-        description = "Vulnerability counts and security scoring"
-
 
 class PerformanceMetrics(BaseModel):  # CORE-035-scoped — domain-specific variant
     """Performance and benchmarking metrics"""
+    model_config = ConfigDict(title="Performance Metrics", description="Build, test, and deployment performance indicators")
+
     build_time_seconds: Optional[float] = Field(None, ge=0)
     test_execution_time_seconds: Optional[float] = Field(None, ge=0)
     deployment_frequency_days: Optional[float] = Field(None, ge=0)
     mean_time_to_recovery_hours: Optional[float] = Field(None, ge=0)
-
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        title = "Performance Metrics"
-        description = "Build, test, and deployment performance indicators"
 
 
 # ============================================================================
@@ -85,18 +77,17 @@ class Repository(BaseModel):
     health_score: Optional[float] = Field(None, ge=0, le=100, description="0-100 health score")
     last_analyzed_at: Optional[datetime] = Field(None, description="Last analysis timestamp")
 
-    @validator('slug')
-    def slug_must_be_kebab_case(cls: object, v: object) -> None:
+    model_config = ConfigDict(title="Repository", description="Repository metadata and core information")
+
+    @field_validator('slug')
+    @classmethod
+    def slug_must_be_kebab_case(cls, v: str) -> str:
         """Enforce kebab-case for slug"""
         if not all(c.isalnum() or c == '-' for c in v):
             raise ValueError("slug must be alphanumeric with hyphens only")
         if v.startswith('-') or v.endswith('-'):
             raise ValueError("slug cannot start or end with hyphen")
         return v.lower()
-
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        title = "Repository"
-        description = "Repository metadata and core information"
 
 
 # ============================================================================
@@ -105,6 +96,8 @@ class Repository(BaseModel):
 
 class UseCase(BaseModel):  # CORE-035-scoped — domain-specific use case model
     """Business use case extracted from repository analysis"""
+    model_config = ConfigDict(title="Use Case", description="Business use case with actors, flows, and value proposition")
+
     id: str = Field(..., description="Unique use case identifier (e.g., uc-001)")
     title: str = Field(..., description="Business-friendly use case title")
     category: str = Field(..., description="Category: API, Database, Integration, etc.")
@@ -115,13 +108,11 @@ class UseCase(BaseModel):  # CORE-035-scoped — domain-specific use case model
     business_value: str = Field("", description="Why this use case matters")
     confidence_score: float = Field(0.5, ge=0.0, le=1.0, description="Detection confidence 0-1")
 
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        title = "Use Case"
-        description = "Business use case with actors, flows, and value proposition"
-
 
 class Overview(BaseModel):  # CORE-035-scoped — domain-specific variant
     """High-level repository overview"""
+    model_config = ConfigDict(title="Overview", description="Repository summary and key information")
+
     summary: str = Field(..., description="Technical summary of the repository")
     business_summary: Optional[str] = Field(None, description="Business-friendly narrative")
     key_features: Optional[List[str]] = Field(None, description="Top 3-5 features")
@@ -131,10 +122,6 @@ class Overview(BaseModel):  # CORE-035-scoped — domain-specific variant
     upcoming_maintenance: Optional[List[str]] = Field(None, description="Scheduled maintenance")
     use_cases: Optional[List[UseCase]] = Field(None, description="Business use cases")
 
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        title = "Overview"
-        description = "Repository summary and key information"
-
 
 # ============================================================================
 # LENS & ANALYSIS MODELS
@@ -142,14 +129,12 @@ class Overview(BaseModel):  # CORE-035-scoped — domain-specific variant
 
 class LensAnalysis(BaseModel):
     """LENS-powered code intelligence insights"""
+    model_config = ConfigDict(title="LENS Analysis", description="Code intelligence and pattern analysis")
+
     duplication_score: Optional[float] = Field(None, ge=0, le=100)
     pattern_violations: Optional[List[str]] = Field(None)
     anti_patterns_detected: Optional[List[Dict[str, Any]]] = Field(None)
     recommendations: Optional[List[str]] = Field(None)
-
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        title = "LENS Analysis"
-        description = "Code intelligence and pattern analysis"
 
 
 # ============================================================================
@@ -177,31 +162,35 @@ class Dashboard(BaseModel):
     # Metadata
     metadata: Optional[Dict[str, Any]] = Field(None, description="Generation metadata")
 
-    @validator('schema_version')
-    def schema_version_must_be_v3(cls: object, v: object) -> None:
+    model_config = ConfigDict(
+        title="Dashboard",
+        description="Complete repository intelligence dashboard (schema v3.0)",
+        json_schema_extra={
+            "example": {
+                "schema_version": "3.0",
+                "repo": {
+                    "slug": "cortex",
+                    "display_name": "CORTEX",
+                    "description": "Enterprise Code Intelligence Platform",
+                    "primary_language": "Python",
+                    "health_score": 85
+                },
+                "overview": {
+                    "summary": "High-performance code intelligence system",
+                    "business_summary": "AI-powered repository analysis for enterprises",
+                    "key_features": ["Code Analysis", "Metrics", "Security Scanning"]
+                }
+            }
+        }
+    )
+
+    @field_validator('schema_version')
+    @classmethod
+    def schema_version_must_be_v3(cls, v: str) -> str:
         """Enforce schema version 3.0"""
         if v != "3.0":
             raise ValueError("schema_version must be '3.0'")
         return v
-
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        title = "Dashboard"
-        description = "Complete repository intelligence dashboard (schema v3.0)"
-        example = {
-            "schema_version": "3.0",
-            "repo": {
-                "slug": "cortex",
-                "display_name": "CORTEX",
-                "description": "Enterprise Code Intelligence Platform",
-                "primary_language": "Python",
-                "health_score": 85
-            },
-            "overview": {
-                "summary": "High-performance code intelligence system",
-                "business_summary": "AI-powered repository analysis for enterprises",
-                "key_features": ["Code Analysis", "Metrics", "Security Scanning"]
-            }
-        }
 
 
 # ============================================================================
@@ -220,13 +209,11 @@ class RepositoryTile(BaseModel):
 
 class Registry(BaseModel):
     """Repository registry (index of all dashboards)"""
+    model_config = ConfigDict(title="Repository Registry", description="Index of all repository dashboards")
+
     schema_version: str = Field("3.0")
     repositories: List[RepositoryTile] = Field(default_factory=list)
     last_updated: datetime = Field(default_factory=datetime.now)
-
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        title = "Repository Registry"
-        description = "Index of all repository dashboards"
 
 
 # ============================================================================
@@ -235,15 +222,13 @@ class Registry(BaseModel):
 
 class GenerationMetadata(BaseModel):
     """Dashboard generation metadata"""
+    model_config = ConfigDict(title="Generation Metadata", description="Dashboard generation tracking and metadata")
+
     generated_at: datetime = Field(default_factory=datetime.now)
     generator_version: str = Field(..., description="CORTEX version")
     generator_name: str = Field(default="cortex-v3.0")
     analysis_duration_seconds: Optional[float] = Field(None, ge=0)
     adapter_type: str = Field(default="json", description="Data adapter used")
-
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        title = "Generation Metadata"
-        description = "Dashboard generation tracking and metadata"
 
 
 # ============================================================================

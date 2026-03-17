@@ -18,7 +18,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 # ============================================================================
 # ENUMERATIONS
@@ -116,24 +116,22 @@ class LensArtifactMetadata(BaseModel):
 
 class LensArtifact(BaseModel):
     """Root artifact containing analyzed intelligence."""
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "metadata": {
+                "schema_version": "1.0",
+                "timestamp": "2026-02-10T15:30:00Z",
+                "repository": "cortex",
+                "branch": "main"
+            },
+            "nodes": [],
+            "edges": []
+        }
+    })
+
     metadata: Dict[str, Any]
     nodes: List[Dict[str, Any]] = []
     edges: List[Dict[str, Any]] = []
-
-    class Config:  # noqa: CORE-035 — pydantic inner class
-        """Pydantic model configuration."""
-        json_schema_extra = {
-            "example": {
-                "metadata": {
-                    "schema_version": "1.0",
-                    "timestamp": "2026-02-10T15:30:00Z",
-                    "repository": "cortex",
-                    "branch": "main"
-                },
-                "nodes": [],
-                "edges": []
-            }
-        }
 
 
 # ============================================================================

@@ -1,8 +1,0 @@
-id: "profile-finops"
-title: "FinOps Domain Profile"
-owner: "CORTEX Domain Profiles"
-source_of_truth: "Domain Profile Registry"
-focus:
-  - "cost visibility and allocation"
-  - "efficiency optimization"
-  - "capacity and usage governance"

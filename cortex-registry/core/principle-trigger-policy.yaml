@@ -53,6 +53,7 @@ intent_categories:
     principle_injection: false
     override_allowed: false
     intents:
+      - INTERACT
       - IMPLEMENT
       - FIX
       - REFACTOR
@@ -133,7 +134,7 @@ render_position:
 # ─── Audit Contract ───────────────────────────────────────────────────────────
 audit_contract:
   check_id: "P2-004"
-  description: "No operational composition (comp-implement-fix, comp-refactor, comp-debug, comp-audit-fix, comp-health, comp-vacuum) may include atom-principle in its atoms list"
+  description: "No operational composition (comp-interaction-guided, comp-implement-fix, comp-refactor, comp-debug, comp-audit-fix, comp-health, comp-vacuum) may include atom-principle in its atoms list"
   detection_method: "Parse all cortex-registry/templates/response/compositions/*.yaml; assert atom-principle absent from operational intent compositions"
   drift_lock_test: "tests/intelligence/test_principle_drift_locks.py::TestDriftLockCompQuery"
   severity: "P2"

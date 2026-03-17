@@ -139,7 +139,8 @@ template: |
 
   {{#if is_decision_checkpoint}}
   > 🔵 **Decision Required** — this step is a key decision point. Your answer
-  > will shape the direction of the workflow. Take a moment to consider carefully.
+  > will shape the direction of the workflow.
+  > Take a moment to consider carefully.
   {{/if}}
 
   ---
@@ -148,8 +149,9 @@ template: |
 
   **{{next_question}}**
 
-  *Answer this question so I can update the readiness score for this dimension
-  and move to the next. Your answer will be captured as evidence.*
+  *Answer this question so I can update the readiness score for this dimension.*
+
+  *Your answer will be captured as evidence and move the workflow forward.*
 
   ---
 
@@ -182,6 +184,7 @@ template: |
   All readiness dimensions are met. You may now proceed to execution.
 
   ### ⚡ If you say proceed, I will:
+
   1. Lock the approved readiness state
   2. Route to the appropriate execution workflow
   3. Emit AC_START and begin the implementation phase
@@ -191,13 +194,17 @@ template: |
   Remaining to unlock:
   {{missing_dimensions_list}}
 
-  *Do not say "proceed" until all dimensions are resolved — any attempt to
-  bypass this gate will return this explanation rather than triggering execution.*
+  *Do not say "proceed" until all dimensions are resolved.*
+
+  *Any attempt to bypass this gate will return this explanation rather than triggering execution.*
   {{/if}}
 
   ---
 
   🧠 CORTEX · Guided · DoR {{dor_pct}}% · Gate {{gate_status}} · Workflow: {{workflow_name}} · ✋ {{open_questions_count}} questions · ⚠ {{blockers_count}} blockers
+
+workflow_template: "cortex-registry/workflows/templates/interaction/registry.yaml"
+orchestration_chain: "Classifier → Stage 1 Comprehension"
 
 # ─── Parameters ───────────────────────────────────────────────────────────────
 parameters:
