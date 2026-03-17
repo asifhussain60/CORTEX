@@ -69,7 +69,7 @@ enforcement:
 # Setup instructions (referenced when MCP unavailable)
 setup:
   script_path: ".cortex-runtime/setup-mcp.py"
-  guide_path: ".github/prompts/MCP-SETUP-GUIDE.md"
+  guide_path: ".github/prompts/MCP-ORCHESTRATOR-MAPPING.md"
   
   steps:
     - "Run: python .cortex-runtime/setup-mcp.py"

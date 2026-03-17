@@ -56,12 +56,10 @@ _IMPERATIVE_PATTERN = re.compile(
 # Files fully exempt from hedging scan
 _HEDGE_EXEMPT_FILES = frozenset({
     "cortex-sync.prompt.md",           # admin sync tool — conditional language intentional
-    "MCP-SETUP-GUIDE.md",              # setup guide — instructional conditional prose
 })
 
 # Files exempt from imperative-verb requirement (non-governance files)
 _IMPERATIVE_EXEMPT_FILES = frozenset({
-    "MCP-SETUP-GUIDE.md",
     "AGENT-INDEX.md",
     "README.md",  # index files — not governance agents
 })

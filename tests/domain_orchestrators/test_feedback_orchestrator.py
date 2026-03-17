@@ -198,9 +198,11 @@ class TestFeedbackAgentAndPromptFiles:
         path = _REPO_ROOT / ".github" / "agents" / "support" / "cortex-feedback-agent.md"
         assert path.exists(), f"Missing: {path}"
 
-    def test_feedback_prompt_md_exists(self) -> None:
-        path = _REPO_ROOT / ".github" / "prompts" / "cortex-feedback.prompt.md"
+    def test_feedback_prompt_content_exists_in_trainer(self) -> None:
+        path = _REPO_ROOT / ".github" / "prompts" / "cortex-trainer.prompt.md"
         assert path.exists(), f"Missing: {path}"
+        content = path.read_text()
+        assert "Cross-Repo Feedback Extraction" in content, "Feedback section missing from trainer prompt"
 
     def test_feedback_agent_md_has_content(self) -> None:
         path = _REPO_ROOT / ".github" / "agents" / "support" / "cortex-feedback-agent.md"

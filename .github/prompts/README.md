@@ -13,9 +13,18 @@
 | `cortex-architect.prompt.md` | ✅ ACTIVE | ~700 lines | Senior AI architect for IMPLEMENT/FIX/REFACTOR/AUDIT |
 | `CORTEX.prompt.md` | ✅ ACTIVE | ~200 lines | Master orchestrator for all request routing |
 | `cortex-doc.prompt.md` | ✅ ACTIVE | ~1,370 lines | Documentation orchestration (discovery → generation → build) |
-| `MCP-ORCHESTRATOR-MAPPING.md` | ✅ ACTIVE | ~300 lines | Orchestrator → MCP tool mapping for SaaS/external repos |
-| `MCP-SETUP-GUIDE.md` | ✅ ACTIVE | ~120 lines | Pylance-style MCP setup (stdio, auto-starts) |
+| `cortex-sync.prompt.md` | ✅ ACTIVE | ~280 lines | One-way deterministic sync with 3-way merge |
+| `cortex-total-recall.prompt.md` | ✅ ACTIVE | ~420 lines | 10-phase production certification pipeline |
+| `cortex-trainer.prompt.md` | ✅ ACTIVE | ~200 lines | Gap-driven training + cross-repo feedback extraction |
+| `MCP-ORCHESTRATOR-MAPPING.md` | ✅ ACTIVE | ~420 lines | Orchestrator → MCP tool mapping + setup guide |
 | `README.md` | — | — | This file |
+
+### Merged Files (M7-a consolidation)
+
+| Merged From | Merged Into | Reason |
+|-------------|-------------|--------|
+| `cortex-feedback.prompt.md` | `cortex-trainer.prompt.md` | Same education domain |
+| `MCP-SETUP-GUIDE.md` | `MCP-ORCHESTRATOR-MAPPING.md` | Same MCP reference domain |
 
 ### `reference/` — Supporting Documentation
 

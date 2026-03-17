@@ -15,13 +15,13 @@ class TestMCPSetupValidation:
     """Test suite for MCP setup validation."""
 
     def test_mcp_setup_guide_exists(self):
-        """Test MCP setup guide exists and is readable."""
-        guide_path = Path(__file__).parent.parent.parent / ".github" / "prompts" / "MCP-SETUP-GUIDE.md"
-        assert guide_path.exists(), "MCP-SETUP-GUIDE.md must exist"
-        assert guide_path.is_file(), "MCP-SETUP-GUIDE.md must be a file"
+        """Test MCP setup guide content exists in orchestrator mapping."""
+        guide_path = Path(__file__).parent.parent.parent / ".github" / "prompts" / "MCP-ORCHESTRATOR-MAPPING.md"
+        assert guide_path.exists(), "MCP-ORCHESTRATOR-MAPPING.md must exist"
+        assert guide_path.is_file(), "MCP-ORCHESTRATOR-MAPPING.md must be a file"
         
         content = guide_path.read_text()
-        assert len(content) > 1000, "MCP setup guide must have substantial content"
+        assert len(content) > 1000, "MCP mapping must have substantial content"
         assert "Pylance" in content, "Must document Pylance-style architecture"
 
     def test_setup_script_exists(self):
@@ -68,7 +68,7 @@ class TestMCPSetupValidation:
     def test_vscode_settings_template(self):
         """Test .vscode/settings.json configuration template."""
         root = Path(__file__).parent.parent.parent
-        guide_path = root / ".github" / "prompts" / "MCP-SETUP-GUIDE.md"
+        guide_path = root / ".github" / "prompts" / "MCP-ORCHESTRATOR-MAPPING.md"
         
         content = guide_path.read_text()
         
@@ -85,7 +85,7 @@ class TestMCPSetupValidation:
     def test_pylance_architecture_documentation(self):
         """Test Pylance-style architecture is documented."""
         root = Path(__file__).parent.parent.parent
-        guide_path = root / ".github" / "prompts" / "MCP-SETUP-GUIDE.md"
+        guide_path = root / ".github" / "prompts" / "MCP-ORCHESTRATOR-MAPPING.md"
         
         content = guide_path.read_text()
         

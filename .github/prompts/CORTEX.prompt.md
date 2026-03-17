@@ -22,7 +22,7 @@
 - **Tier 1 (WARN):** QUERY, DIGEST, DESIGN, PLAN
 - **Tier 2 (SILENT):** REPHRASE
 
-**Setup:** See `.github/prompts/MCP-SETUP-GUIDE.md`
+**Setup:** See `.github/prompts/MCP-ORCHESTRATOR-MAPPING.md` § MCP Setup Guide
 
 ---
 

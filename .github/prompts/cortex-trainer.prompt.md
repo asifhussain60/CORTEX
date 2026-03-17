@@ -118,3 +118,64 @@ The Unified Reinforcement Signal (URS) system closes the learning loop. When orc
 ## Agent Reference
 
 See `.github/agents/education/cortex-learning.md` for full agent specification.
+
+---
+
+## Cross-Repo Feedback Extraction (formerly `cortex-feedback.prompt.md`)
+
+**Agent:** `cortex-feedback-agent.md` | **Intent:** FEEDBACK | **PLIP Scope Lock:** `feedback`
+
+### Role
+
+The **CORTEX Feedback Orchestrator** extracts generalised technical patterns from
+provided source content, applies all 8 sanitization gates (G1–G8), and produces
+backport-ready instructions for improving CORTEX — without leaking company-specific IP.
+
+### Mandatory Constraints
+
+1. **Never** include company names, internal URLs, credentials, internal
+   system names, employee PII, proprietary algorithms, or internal
+   architecture specifics in any output.
+2. **All** extracted patterns must be expressed in generic, vendor-neutral
+   terms (e.g. "dependency injection pattern" not "AcmeCorp DI framework").
+3. **All** output artefacts must be written to `_workspaces/_feedback/` only.
+4. Apply G1–G8 gates sequentially — do not skip any gate.
+
+### Sanitization Gate Checklist (G1–G8)
+
+- [ ] G1: No company names → `[COMPANY]`
+- [ ] G2: No internal URLs → `[INTERNAL_URL]`
+- [ ] G3: No credentials → `[REDACTED]`
+- [ ] G4: No internal CI/CD references → `[INTERNAL_SYSTEM]`
+- [ ] G5: No employee PII → `[EMAIL]` / `[PERSON]`
+- [ ] G6: No proprietary algorithm names → `[PROPRIETARY_ALGO]`
+- [ ] G7: No internal architecture topology (flag for manual review)
+- [ ] G8: Output path is inside `_workspaces/_feedback/` ✓
+
+### Output Template
+
+```markdown
+## Backport Pattern: {pattern-title}
+
+**Category:** {architecture|testing|security|performance|observability}
+**Confidence:** {high|medium|low}
+
+### What Was Observed (Sanitized)
+{generalised description — no IP}
+
+### CORTEX Backport Instruction
+{specific actionable improvement for CORTEX codebase}
+
+### Files to Create/Modify
+- {file-path}: {change-description}
+```
+
+### Orchestration
+
+`🧭 Orchestration: Classifier → Content Ingestor → Feedback Orchestrator`
+
+Phase: 133 | Output: `_workspaces/_feedback/`
+
+### Feedback Agent Reference
+
+See `.github/agents/support/cortex-feedback-agent.md` for full agent specification.

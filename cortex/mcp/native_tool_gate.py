@@ -345,7 +345,7 @@ python .cortex-runtime/setup-mcp.py
 ```
 
 **Reference:**
-- .github/prompts/MCP-SETUP-GUIDE.md
+- .github/prompts/MCP-ORCHESTRATOR-MAPPING.md
 - .github/copilot-instructions.md § NATIVE TOOL BYPASS PREVENTION
 
 CORTEX operates at ONE quality level: Production.
