@@ -1,0 +1,442 @@
+# CI/CD Security Hardening Rules
+# Knowledge Base for SecurityOrchestrator
+# Source: OWASP CI/CD Security, Arnica best practices
+#
+# Author: CORTEX Implementation
+# Phase: impl-security-orchestrator
+# AC-ID: AC-SECURITY-KB-003
+
+domain: "security"
+metadata:
+  name: "CI/CD Security Hardening"
+  source: "OWASP CI/CD Security Guidelines, GitHub Security Best Practices"
+  updated: "2026-02-18"
+  description: |
+    Security rules for hardening GitHub Actions workflows and CI/CD pipelines.
+    Covers action pinning, expression injection, artifact security, and more.
+
+rules:
+  # ========================================================================
+  # GitHub Actions Pinning
+  # ========================================================================
+  - id: "CICD-001"
+    name: "Pin Actions to Full SHA"
+    severity: "HIGH"
+    category: "supply_chain"
+    description: |
+      GitHub Actions should be pinned to full commit SHAs to prevent
+      supply chain attacks where malicious code is injected into tags.
+    pattern: 'uses:\s*([^@]+)@(v\d+|v\d+\.\d+|v\d+\.\d+\.\d+|main|master|latest)'
+    remediation: |
+      Replace tag references with full SHA:
+      
+      # Bad
+      uses: actions/checkout@v4
+      
+      # Good
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      
+      Find SHA: 
+      - Go to action repository releases
+      - Click on the tag
+      - Copy the full commit SHA
+    cwe_id: "CWE-829"
+    owasp_cicd: "CICD-SEC-3"
+    
+  - id: "CICD-002"
+    name: "Avoid @main/@master References"
+    severity: "CRITICAL"
+    category: "supply_chain"
+    description: |
+      Using @main or @master for actions is extremely dangerous as any
+      change to the default branch is immediately executed in your pipeline.
+    pattern: 'uses:\s*[^@]+@(main|master|trunk|develop)'
+    remediation: |
+      Never use branch references. Always use pinned SHAs:
+      
+      # Dangerous
+      uses: owner/action@main
+      
+      # Safe
+      uses: owner/action@<full-40-char-sha>
+    cwe_id: "CWE-829"
+    owasp_cicd: "CICD-SEC-3"
+
+  # ========================================================================
+  # Expression Injection
+  # ========================================================================
+  - id: "CICD-003"
+    name: "Expression Injection via Issue/PR Body"
+    severity: "CRITICAL"
+    category: "injection"
+    description: |
+      Using github.event.issue.body or github.event.pull_request.body
+      directly in run steps allows attackers to inject shell commands.
+    pattern: '\$\{\{\s*github\.event\.(issue|pull_request|comment)\.body'
+    remediation: |
+      Always sanitize external input via environment variables:
+      
+      # Vulnerable
+      - run: echo "${{ github.event.issue.body }}"
+      
+      # Safe
+      - env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: echo "$ISSUE_BODY"
+    cwe_id: "CWE-94"
+    owasp_cicd: "CICD-SEC-4"
+    
+  - id: "CICD-004"
+    name: "Expression Injection via Title"
+    severity: "CRITICAL"
+    category: "injection"
+    description: |
+      PR and issue titles are user-controlled and can contain shell metacharacters.
+    pattern: '\$\{\{\s*github\.event\.(issue|pull_request)\.title'
+    remediation: |
+      Use environment variable indirection:
+      
+      # Vulnerable
+      - run: echo "PR: ${{ github.event.pull_request.title }}"
+      
+      # Safe
+      - env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: echo "PR: $PR_TITLE"
+    cwe_id: "CWE-94"
+    owasp_cicd: "CICD-SEC-4"
+    
+  - id: "CICD-005"
+    name: "Expression Injection via head_ref"
+    severity: "HIGH"
+    category: "injection"
+    description: |
+      github.head_ref is the branch name from PRs and can be attacker-controlled
+      (malicious branch names like `; rm -rf /`).
+    pattern: '\$\{\{\s*github\.head_ref\s*\}\}'
+    remediation: |
+      Sanitize via environment variable:
+      
+      # Vulnerable
+      - run: git checkout ${{ github.head_ref }}
+      
+      # Safer (but validate branch name pattern)
+      - env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          if [[ "$BRANCH" =~ ^[a-zA-Z0-9/_-]+$ ]]; then
+            git checkout "$BRANCH"
+          fi
+    cwe_id: "CWE-94"
+    owasp_cicd: "CICD-SEC-4"
+
+  # ========================================================================
+  # Secrets Management
+  # ========================================================================
+  - id: "CICD-006"
+    name: "Secrets in Workflow Logs"
+    severity: "HIGH"
+    category: "secrets"
+    description: |
+      Secrets may be exposed if echoed or used in commands that print output.
+    pattern: 'echo\s+.*\$\{\{\s*secrets\.'
+    remediation: |
+      Never echo secrets. Use secret masking:
+      
+      # Dangerous
+      - run: echo ${{ secrets.API_KEY }}
+      
+      # If debugging needed, mask manually:
+      - run: |
+          echo "::add-mask::${{ secrets.API_KEY }}"
+    cwe_id: "CWE-532"
+    owasp_cicd: "CICD-SEC-2"
+    
+  - id: "CICD-007"
+    name: "GITHUB_TOKEN Overprivilege"
+    severity: "MEDIUM"
+    category: "permissions"
+    description: |
+      Workflows should use minimal GITHUB_TOKEN permissions via
+      explicit permissions block.
+    anti_pattern: true
+    check: "missing_permissions_block"
+    remediation: |
+      Add explicit permissions block:
+      
+      permissions:
+        contents: read
+        pull-requests: write
+        # Only what you need
+    cwe_id: "CWE-250"
+    owasp_cicd: "CICD-SEC-2"
+
+  # ========================================================================
+  # Artifact Security
+  # ========================================================================
+  - id: "CICD-008"
+    name: "Artifact Tampering (Artipacked)"
+    severity: "HIGH"
+    category: "artifacts"
+    description: |
+      Unpinned upload-artifact/download-artifact can lead to artifact
+      injection attacks where malicious artifacts replace legitimate ones.
+    pattern: 'uses:\s*actions/(upload|download)-artifact@v\d+'
+    remediation: |
+      Pin artifact actions to SHA:
+      
+      # Vulnerable
+      uses: actions/upload-artifact@v4
+      
+      # Secure
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+    cwe_id: "CWE-829"
+    owasp_cicd: "CICD-SEC-5"
+    
+  - id: "CICD-009"
+    name: "Cache Poisoning"
+    severity: "MEDIUM"
+    category: "artifacts"
+    description: |
+      Workflow caches can be poisoned by PRs from forks in public repos.
+    pattern: 'uses:\s*actions/cache@'
+    remediation: |
+      Be cautious with caches in public repos:
+      
+      1. Pin cache action to SHA
+      2. Use key prefixes that include workflow name
+      3. Consider cache isolation strategies
+      
+      uses: actions/cache@<sha>
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    cwe_id: "CWE-345"
+    owasp_cicd: "CICD-SEC-5"
+
+  # ========================================================================
+  # Pull Request Security
+  # ========================================================================
+  - id: "CICD-010"
+    name: "Dangerous pull_request_target"
+    severity: "CRITICAL"
+    category: "permissions"
+    description: |
+      pull_request_target runs with repository secrets but checks out
+      PR code by default. This is a common source of CI/CD compromise.
+    pattern: 'on:\s*\n\s*pull_request_target:'
+    remediation: |
+      Avoid pull_request_target unless necessary. If used:
+      
+      1. Never checkout PR code with actions/checkout
+      2. Or explicitly checkout base branch:
+      
+      - uses: actions/checkout@sha
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+      
+      3. Never run untrusted code with secrets access
+    cwe_id: "CWE-863"
+    owasp_cicd: "CICD-SEC-1"
+    
+  - id: "CICD-011"
+    name: "PR Checkout in pull_request_target"
+    severity: "CRITICAL"
+    category: "permissions"
+    description: |
+      Checking out PR HEAD in pull_request_target workflow gives
+      untrusted code access to repository secrets.
+    pattern: 'ref:\s*\$\{\{\s*github\.event\.pull_request\.head\.(sha|ref)\s*\}\}'
+    context_required: "pull_request_target"
+    remediation: |
+      In pull_request_target workflows, only checkout base branch:
+      
+      # Dangerous
+      - uses: actions/checkout@sha
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      
+      # Safe
+      - uses: actions/checkout@sha
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+    cwe_id: "CWE-863"
+    owasp_cicd: "CICD-SEC-1"
+
+  # ========================================================================
+  # Runner Security
+  # ========================================================================
+  - id: "CICD-012"
+    name: "Self-hosted Runner Risk"
+    severity: "MEDIUM"
+    category: "runner"
+    description: |
+      Self-hosted runners persist between jobs and may have
+      leftover state from previous executions.
+    pattern: 'runs-on:\s*self-hosted'
+    remediation: |
+      For self-hosted runners:
+      
+      1. Use ephemeral runners (--ephemeral flag)
+      2. Clean workspace at job end
+      3. Never use for public repo PRs
+      4. Implement network isolation
+      
+      Or use GitHub-hosted runners when possible:
+      runs-on: ubuntu-latest
+    cwe_id: "CWE-668"
+    owasp_cicd: "CICD-SEC-7"
+
+  # ========================================================================
+  # Third-party Actions
+  # ========================================================================
+  - id: "CICD-013"
+    name: "Unverified Third-party Action"
+    severity: "MEDIUM"
+    category: "supply_chain"
+    description: |
+      Third-party actions should be audited and preferably from
+      verified creators or organizations.
+    check: "third_party_action_audit"
+    remediation: |
+      Before using third-party actions:
+      
+      1. Review the action's source code
+      2. Check creator reputation
+      3. Look for "Verified creator" badge
+      4. Pin to specific SHA
+      5. Consider forking to your org
+      
+      Trusted orgs: actions, github, aws-actions, azure, google-github-actions
+    cwe_id: "CWE-829"
+    owasp_cicd: "CICD-SEC-3"
+
+  # ========================================================================
+  # Job Isolation
+  # ========================================================================
+  - id: "CICD-014"
+    name: "Cross-job Secret Leakage"
+    severity: "MEDIUM"
+    category: "secrets"
+    description: |
+      Secrets passed between jobs via outputs can be exposed in logs.
+    pattern: '\$\{\{\s*needs\.[^}]+\.outputs\.[^}]*secret'
+    remediation: |
+      Never pass secrets via job outputs. Use:
+      
+      1. Direct secret references in each job
+      2. OIDC for cloud authentication
+      3. HashiCorp Vault or similar secrets manager
+    cwe_id: "CWE-200"
+    owasp_cicd: "CICD-SEC-2"
+
+best_practices:
+  - name: "Use Minimal Permissions"
+    description: |
+      Always declare explicit permissions for GITHUB_TOKEN:
+      
+      permissions:
+        contents: read
+        packages: write
+        
+  - name: "Enable Branch Protection"
+    description: |
+      Require CI to pass before merge:
+      - Status checks required
+      - Require branches to be up to date
+      - Include administrators
+      
+  - name: "Review Actions Before Use"
+    description: |
+      Before adding any action:
+      1. Read the source code
+      2. Check recent commits
+      3. Verify maintainer identity
+      4. Pin to SHA
+      
+  - name: "Separate Workflows by Trust Level"
+    description: |
+      Split workflows:
+      - CI (untrusted): pull_request, no secrets
+      - CD (trusted): push to main, with secrets
+      
+  - name: "Implement OIDC for Cloud Auth"
+    description: |
+      Use OIDC instead of long-lived credentials:
+      
+      permissions:
+        id-token: write
+        
+      - uses: aws-actions/configure-aws-credentials@sha
+        with:
+          role-to-assume: arn:aws:iam::123456789:role/GitHubActions
+          
+  - name: "Audit Workflow History"
+    description: |
+      Regularly review:
+      - Workflow run logs
+      - Recent workflow changes
+      - New actions added
+      - Permissions changes
+
+workflow_templates:
+  secure_ci:
+    name: "Secure CI Template"
+    description: "Minimal-privilege CI workflow with security best practices"
+    template: |
+      name: Secure CI
+      
+      on:
+        pull_request:
+          branches: [main]
+        push:
+          branches: [main]
+      
+      permissions:
+        contents: read
+      
+      jobs:
+        lint-and-test:
+          runs-on: ubuntu-latest
+          steps:
+            - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+            
+            - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
+              with:
+                python-version: '3.11'
+                cache: 'pip'
+            
+            - name: Install dependencies
+              run: pip install -r requirements.txt
+            
+            - name: Run tests
+              run: pytest
+              
+  secure_cd:
+    name: "Secure CD Template"
+    description: "Deployment workflow with OIDC and minimal secrets"
+    template: |
+      name: Deploy
+      
+      on:
+        push:
+          branches: [main]
+      
+      permissions:
+        contents: read
+        id-token: write
+      
+      jobs:
+        deploy:
+          runs-on: ubuntu-latest
+          environment: production
+          steps:
+            - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+            
+            - uses: aws-actions/configure-aws-credentials@sha
+              with:
+                role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+                aws-region: us-east-1
+            
+            - name: Deploy
+              run: ./deploy.sh

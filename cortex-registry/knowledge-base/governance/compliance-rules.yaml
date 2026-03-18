@@ -1,0 +1,21 @@
+domain: "compliance"
+tier: "tier1"
+category: "compliance"
+
+rules:
+  - id: "COMP-001"
+    name: "Audit Trail"
+    description: "All operations must be logged for audit"
+    severity: "critical"
+    
+  - id: "COMP-002"
+    name: "Data Retention"
+    description: "Comply with data retention policies"
+    severity: "high"
+    
+  - id: "COMP-003"
+    name: "Access Control"
+    description: "Implement role-based access control"
+    severity: "high"
+
+status: "DEFINED"

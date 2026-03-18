@@ -31,7 +31,7 @@ class TestVacuumOsArtifactCleanup:
 
         # Create fake .DS_Store files in a nested structure
         (tmp_path / ".DS_Store").write_bytes(b"\x00" * 8)
-        subdir = tmp_path / "cortex-docs" / "assets"
+        subdir = tmp_path / "assets"
         subdir.mkdir(parents=True)
         (subdir / ".DS_Store").write_bytes(b"\x00" * 8)
 
@@ -47,6 +47,20 @@ class TestVacuumOsArtifactCleanup:
         # Files NOT deleted
         assert (tmp_path / ".DS_Store").exists()
         assert (subdir / ".DS_Store").exists()
+
+    def test_skips_cortex_docs_dir(self, tmp_path: Path) -> None:
+        """OS junk cleanup must not touch cortex-docs once it is protected."""
+        from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
+
+        docs_ds = tmp_path / "cortex-docs" / "assets" / ".DS_Store"
+        docs_ds.parent.mkdir(parents=True)
+        docs_ds.write_bytes(b"\x00" * 8)
+
+        vacuum = VacuumOrchestrator(workspace_root=tmp_path)
+        results = vacuum.run_os_artifact_cleanup(dry_run=False)
+
+        assert results == []
+        assert docs_ds.exists(), "cortex-docs/.DS_Store must not be deleted"
 
     def test_live_run_deletes_ds_store(self, tmp_path: Path) -> None:
         """Live run must delete all .DS_Store files in the workspace."""

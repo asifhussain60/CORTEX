@@ -77,7 +77,7 @@ class TestVacuumBuildArtifactCleanup:
         assert not obj_dir.exists(), "obj/ should be deleted"
 
     def test_vacuum_build_artifact_skips_protected_dirs(self, tmp_path: Path) -> None:
-        """Build artifact cleanup must not touch .venv, .git, _workspaces."""
+        """Build artifact cleanup must not touch .venv, .git, _workspaces, cortex-docs."""
         from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
 
         # Create build-like dirs inside protected areas
@@ -89,6 +89,10 @@ class TestVacuumBuildArtifactCleanup:
         git_obj.mkdir(parents=True)
         (git_obj / "pack").write_text("fake")
 
+        docs_cache = tmp_path / "cortex-docs" / "tests" / "__pycache__"
+        docs_cache.mkdir(parents=True)
+        (docs_cache / "view.cpython-313.pyc").write_bytes(b"fake")
+
         # Also create an actual build artifact to ensure we still clean
         real_bin = tmp_path / "cortex" / "project" / "bin"
         real_bin.mkdir(parents=True)
@@ -99,6 +103,7 @@ class TestVacuumBuildArtifactCleanup:
 
         assert venv_bin.exists(), ".venv/bin must be protected"
         assert git_obj.exists(), ".git/objects must be protected"
+        assert docs_cache.exists(), "cortex-docs/__pycache__ must be protected"
         assert not real_bin.exists(), "cortex/project/bin should be cleaned"
 
 

@@ -1,0 +1,19 @@
+domain: "repositories"
+analysis:
+  architecture_type: unknown
+  patterns_detected: []
+  repository_path: cortex-sts/CortexLabs/BadMonolith
+  status: success
+metadata:
+  brain_enhancement: {}
+  learning_metrics:
+    by_orchestrator:
+      OnboardingOrchestrator: 1
+    cache_keys:
+    - OnboardingOrchestrator:onboarding:cortex-sts/CortexLabs/BadMonolith
+    cached_learnings: 1
+    total_learnings: 1
+repository:
+  name: BadMonolith
+  onboarded_at: '2026-02-22T19:25:51.567845'
+  path: cortex-sts/CortexLabs/BadMonolith

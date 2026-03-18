@@ -1,0 +1,21 @@
+domain: "security"
+tier: "tier1"
+category: "security"
+
+rules:
+  - id: "SEC-001"
+    name: "Encryption in Transit"
+    description: "All external communication must use TLS 1.2+"
+    severity: "critical"
+    
+  - id: "SEC-002"
+    name: "Authentication Required"
+    description: "All API endpoints require authentication"
+    severity: "critical"
+    
+  - id: "SEC-003"
+    name: "API Rate Limiting"
+    description: "Implement rate limiting on all endpoints"
+    severity: "high"
+
+status: "DEFINED"

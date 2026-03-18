@@ -528,7 +528,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         # lives in _plan_naming_fixes / _plan_root_cleanup (PROTECTED_DIRS).
         _PROTECTED_ROOTS: frozenset = frozenset({
             ".git", ".github", ".venv", "venv", "env",
-            "_workspaces", ".cortex-runtime", "docs",
+            "_workspaces", ".cortex-runtime", "docs", "cortex-docs",
             "cortex-registry", "node_modules",
         })
 
@@ -640,7 +640,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         # and should be cleaned. Phase-141 source protection applies to
         # rename/relocate operations, not OS artifact deletion.
         _PROTECTED_ROOTS: frozenset = frozenset({
-            ".git", ".venv", "venv", "env",
+            ".git", ".venv", "venv", "env", "cortex-docs",
         })
 
         results: List[OperationResult] = []

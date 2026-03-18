@@ -100,6 +100,7 @@ PROTECTED_DIRS: FrozenSet[str] = frozenset({
     "cortex-registry",
     # Documentation and deployment
     "docs",
+    "cortex-docs",
     "deployment",
     # Workspace and workspace-adjacent
     "_workspaces",
@@ -127,6 +128,7 @@ Includes:
 - ``.github``        — agents, prompts, copilot instructions, CI
 - ``.vscode``        — VS Code workspace settings
 - ``docs``           — user-facing HTML documentation
+- ``cortex-docs``    — protected documentation workspace and tests
 - ``cortex-registry``— YAML governance rules and registry
 - ``_workspaces``    — intentional workspace area; ALL subfolders are protected:
                          • ``approved-orchestrator-view/`` — approved orchestrator dashboard
@@ -157,6 +159,8 @@ VACUUM_PROTECTED_ROOTS: FrozenSet[str] = frozenset({
     "scripts",
     # User-facing HTML documentation
     "docs",
+    # Protected documentation workspace
+    "cortex-docs",
 })
 """Canonical root-level protection guard (GV-028, GV-033) — Phase 151.
 

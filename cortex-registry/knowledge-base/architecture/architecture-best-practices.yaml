@@ -1,0 +1,185 @@
+# Architecture Best Practices
+# Authority: Phase 19 Sub-Phase A — Registry Expansion
+# Consumer: KnowledgeSynthesisEngine._load_architecture_patterns() for IMPLEMENT/DESIGN intents
+# Updated: 2026-02-21
+
+domain: "architecture"
+metadata:
+  created_at: "2026-02-21T00:00:00Z"
+  updated_at: "2026-02-21T00:00:00Z"
+  description: >
+    Canonical architecture best-practice patterns for use by KnowledgeSynthesisEngine
+    when synthesising IMPLEMENT and DESIGN intelligence context.
+  applicable_intents:
+    - IMPLEMENT
+    - DESIGN
+    - REFACTOR
+    - ANALYZE
+
+patterns:
+  - id: ARC-001
+    name: Domain-Driven Design (DDD)
+    category: structural
+    severity: high
+    description: >
+      Organise code around business domains with bounded contexts, aggregates,
+      and domain events. Each bounded context has its own ubiquitous language
+      and is independently deployable.
+    when_to_use:
+      - Complex business logic with rich domain behaviour
+      - Multiple teams working on the same codebase
+      - Need to isolate domain changes from infrastructure
+    key_concepts:
+      - bounded_context: "Explicit boundary within which a model applies"
+      - aggregate: "Cluster of domain objects treated as a unit"
+      - domain_event: "Something meaningful that happened in the domain"
+      - repository: "Abstraction over data access within a bounded context"
+    anti_patterns:
+      - "Anemic domain model (behaviour-less data bags)"
+      - "Shared database across bounded contexts"
+      - "Calling another context's repository directly"
+    cortex_usage:
+      - "CORTEX orchestrators are bounded contexts (core/domain/support tiers)"
+      - "Each orchestrator owns its data — no cross-orchestrator DB calls"
+
+  - id: ARC-002
+    name: Microservices Architecture
+    category: deployment
+    severity: high
+    description: >
+      Decompose the system into small, independently deployable services aligned
+      to business capabilities. Services communicate via well-defined APIs.
+    when_to_use:
+      - Independent scaling requirements per capability
+      - Polyglot technology needs across services
+      - Multiple teams deploying at different cadences
+    key_concepts:
+      - service_boundary: "Owns a single business capability"
+      - api_contract: "Stable interface between services (OpenAPI/gRPC)"
+      - circuit_breaker: "Fault-tolerance pattern for inter-service calls"
+      - service_mesh: "Infrastructure layer for service-to-service communication"
+    anti_patterns:
+      - "Distributed monolith (tight coupling disguised as services)"
+      - "Synchronous chains longer than 3 services"
+      - "Shared library containing domain logic"
+    cortex_usage:
+      - "MCP server is a microservice boundary for external tool consumers"
+      - "Orchestrators expose capabilities via IOrchestrator protocol"
+
+  - id: ARC-003
+    name: Event-Driven Architecture (EDA)
+    category: integration
+    severity: medium
+    description: >
+      Services communicate asynchronously via events. Producers emit events
+      without knowing consumers. Enables loose coupling and temporal decoupling.
+    when_to_use:
+      - Need for decoupled async workflows between components
+      - Audit trail and event sourcing requirements
+      - Fan-out patterns (one event, many consumers)
+    key_concepts:
+      - event_broker: "Message bus (Kafka, RabbitMQ, Azure Service Bus)"
+      - event_schema: "Versioned contract for event payload"
+      - consumer_group: "Set of consumers sharing load for an event type"
+      - dead_letter_queue: "Events that failed processing after max retries"
+    anti_patterns:
+      - "Event-carried state transfer without schema registry"
+      - "Direct DB reads in event handlers (coupling)"
+      - "Unbounded event retention without compaction policy"
+
+  - id: ARC-004
+    name: CQRS (Command Query Responsibility Segregation)
+    category: data
+    severity: medium
+    description: >
+      Separate read (query) and write (command) models. Write model enforces
+      business invariants; read model is optimised for query performance.
+    when_to_use:
+      - Significantly different read vs write load profiles
+      - Complex query requirements that would pollute the write model
+      - Combined with Event Sourcing for full audit trail
+    key_concepts:
+      - command_handler: "Validates + executes business operation, emits events"
+      - query_handler: "Reads from denormalised read model, no side effects"
+      - read_model: "Projection built from events, optimised for UI/API queries"
+      - event_store: "Append-only log of all domain events"
+    anti_patterns:
+      - "Implementing CQRS without Event Sourcing for simple CRUD"
+      - "Sharing the write model's ORM entities in the read path"
+
+  - id: ARC-005
+    name: Hexagonal Architecture (Ports and Adapters)
+    category: structural
+    severity: high
+    description: >
+      Core domain logic is isolated from external concerns (DB, HTTP, MQ) via
+      ports (interfaces) and adapters (implementations). Enables testing without
+      infrastructure and swapping adapters without touching domain code.
+    when_to_use:
+      - Need to test domain logic in isolation from infrastructure
+      - Multiple delivery mechanisms (HTTP API + CLI + MQ consumer)
+      - Anticipate swapping infrastructure (e.g., DB migration)
+    key_concepts:
+      - port: "Interface defined by the domain (IRepository, IEventPublisher)"
+      - driving_adapter: "Calls into the domain (HTTP controller, CLI command)"
+      - driven_adapter: "Called by the domain (SQLAlchemy repo, Redis cache)"
+      - application_core: "Pure domain + use cases, no infrastructure imports"
+    anti_patterns:
+      - "Importing ORM models into domain layer"
+      - "Framework decorators on domain entities"
+    cortex_usage:
+      - "IOrchestrator is a port; concrete orchestrators are driving adapters"
+      - "ADOWorkItemProvider implements IWorkItemProvider port"
+
+  - id: ARC-006
+    name: Saga Pattern (Distributed Transactions)
+    category: integration
+    severity: medium
+    description: >
+      Manage long-running business transactions spanning multiple services without
+      distributed locking. Each service performs a local transaction and emits an
+      event/command; compensating transactions undo completed steps on failure.
+    when_to_use:
+      - Multi-step workflows that must maintain consistency across services
+      - Cannot use a 2-phase commit (e.g., across databases)
+      - Long-running business processes with human approval steps
+    key_concepts:
+      - choreography: "Each service reacts to events — no central coordinator"
+      - orchestration: "Central saga orchestrator issues commands to services"
+      - compensation: "Undo action executed when a step fails"
+      - saga_state: "Durable state tracking which steps have completed"
+    anti_patterns:
+      - "Saga without compensation logic (partial failure = data inconsistency)"
+      - "Synchronous saga steps (negates decoupling benefit)"
+
+  - id: ARC-007
+    name: Strangler Fig Pattern (Legacy Migration)
+    category: migration
+    severity: low
+    description: >
+      Incrementally replace legacy system by routing traffic to new implementation
+      one capability at a time. Legacy and new coexist until full migration.
+    when_to_use:
+      - Big-bang replacement is too risky
+      - Need to deliver value while migrating
+      - Legacy system must remain operational during migration
+    key_concepts:
+      - facade: "Routes requests to legacy or new implementation"
+      - intercept: "Capture and redirect specific legacy calls"
+      - incremental_cutover: "Feature-by-feature migration with rollback"
+    anti_patterns:
+      - "Tight coupling between facade and both legacy and new implementations"
+      - "Not measuring traffic split — unable to validate cutover"
+
+guidance:
+  implement_intents:
+    - "Apply ARC-005 (Hexagonal) by default — domain logic must not import infrastructure"
+    - "Use ARC-001 (DDD) bounded contexts to contain new features"
+    - "Prefer ARC-003 (EDA) for cross-service integration over synchronous calls"
+  design_intents:
+    - "Start with ARC-001 (DDD) context mapping before choosing deployment model"
+    - "Evaluate ARC-004 (CQRS) if read/write ratio > 10:1"
+    - "ARC-006 (Saga) for any workflow spanning more than 1 service boundary"
+  refactor_intents:
+    - "Migrate toward ARC-005 (Hexagonal) by extracting infrastructure to adapters"
+    - "Apply ARC-007 (Strangler Fig) for large-scale rewrites"

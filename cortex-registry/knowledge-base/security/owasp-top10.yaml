@@ -1,0 +1,420 @@
+# OWASP Top 10 2021 Security Patterns
+# Knowledge Base for SecurityOrchestrator
+# Source: https://owasp.org/Top10/
+# 
+# Author: CORTEX Implementation
+# Phase: impl-security-orchestrator
+# AC-ID: AC-SECURITY-KB-001
+
+domain: "security"
+metadata:
+  name: "OWASP Top 10 2021"
+  edition: "2021"
+  source: "https://owasp.org/Top10/"
+  updated: "2026-02-18"
+  description: |
+    OWASP Top 10 security risks for web applications.
+    Patterns and detection rules for CORTEX SecurityOrchestrator.
+
+categories:
+  - id: "A01:2021"
+    name: "Broken Access Control"
+    description: |
+      Access control enforces policy such that users cannot act outside of their
+      intended permissions. Failures typically lead to unauthorized information
+      disclosure, modification, or destruction of all data.
+    cwe_ids:
+      - "CWE-22"   # Path Traversal
+      - "CWE-23"   # Relative Path Traversal
+      - "CWE-35"   # Path Traversal
+      - "CWE-59"   # Link Following
+      - "CWE-200"  # Exposure of Sensitive Information
+      - "CWE-201"  # Information Exposure Through Sent Data
+      - "CWE-219"  # Storage of File with Sensitive Data Under Web Root
+      - "CWE-264"  # Permissions, Privileges, and Access Controls
+      - "CWE-275"  # Permission Issues
+      - "CWE-276"  # Incorrect Default Permissions
+      - "CWE-284"  # Improper Access Control
+      - "CWE-285"  # Improper Authorization
+      - "CWE-352"  # Cross-Site Request Forgery (CSRF)
+      - "CWE-359"  # Exposure of Private Personal Information
+      - "CWE-377"  # Insecure Temporary File
+      - "CWE-402"  # Transmission of Private Resources into a New Sphere
+      - "CWE-425"  # Direct Request ('Forced Browsing')
+      - "CWE-441"  # Unintended Proxy or Intermediary
+      - "CWE-497"  # Exposure of System Data to an Unauthorized Control Sphere
+      - "CWE-538"  # File and Directory Information Exposure
+      - "CWE-540"  # Inclusion of Sensitive Information in Source Code
+      - "CWE-548"  # Exposure of Information Through Directory Listing
+      - "CWE-552"  # Files or Directories Accessible to External Parties
+      - "CWE-566"  # Authorization Bypass Through User-Controlled SQL Primary Key
+      - "CWE-601"  # URL Redirection to Untrusted Site ('Open Redirect')
+      - "CWE-639"  # Authorization Bypass Through User-Controlled Key
+      - "CWE-651"  # Exposure of WSDL File Containing Sensitive Information
+      - "CWE-668"  # Exposure of Resource to Wrong Sphere
+      - "CWE-706"  # Use of Incorrectly-Resolved Name or Reference
+      - "CWE-862"  # Missing Authorization
+      - "CWE-863"  # Incorrect Authorization
+      - "CWE-913"  # Improper Control of Dynamically-Managed Code Resources
+      - "CWE-922"  # Insecure Storage of Sensitive Information
+      - "CWE-1275" # Sensitive Cookie with Improper SameSite Attribute
+    patterns:
+      - pattern: 'user_id\s*=\s*request\.(get|post|params)'
+        severity: "HIGH"
+        description: "Direct use of user-controlled ID without authorization check"
+      - pattern: '\.objects\.get\(id=request\.'
+        severity: "HIGH"
+        description: "IDOR vulnerability - accessing objects by user-controlled ID"
+
+  - id: "A02:2021"
+    name: "Cryptographic Failures"
+    description: |
+      Failures related to cryptography (or lack thereof), which often lead to
+      exposure of sensitive data. Previously known as "Sensitive Data Exposure."
+    cwe_ids:
+      - "CWE-261"  # Weak Encoding for Password
+      - "CWE-296"  # Improper Following of a Certificate's Chain of Trust
+      - "CWE-310"  # Cryptographic Issues
+      - "CWE-319"  # Cleartext Transmission of Sensitive Information
+      - "CWE-321"  # Use of Hard-coded Cryptographic Key
+      - "CWE-322"  # Key Exchange without Entity Authentication
+      - "CWE-323"  # Reusing a Nonce, Key Pair in Encryption
+      - "CWE-324"  # Use of a Key Past its Expiration Date
+      - "CWE-325"  # Missing Required Cryptographic Step
+      - "CWE-326"  # Inadequate Encryption Strength
+      - "CWE-327"  # Use of a Broken or Risky Cryptographic Algorithm
+      - "CWE-328"  # Use of Weak Hash
+      - "CWE-329"  # Generation of Predictable IV with CBC Mode
+      - "CWE-330"  # Use of Insufficiently Random Values
+      - "CWE-331"  # Insufficient Entropy
+      - "CWE-335"  # Incorrect Usage of Seeds in Pseudo-Random Number Generator
+      - "CWE-336"  # Same Seed in Pseudo-Random Number Generator
+      - "CWE-337"  # Predictable Seed in Pseudo-Random Number Generator
+      - "CWE-338"  # Use of Cryptographically Weak Pseudo-Random Number Generator
+      - "CWE-340"  # Generation of Predictable Numbers or Identifiers
+      - "CWE-347"  # Improper Verification of Cryptographic Signature
+      - "CWE-523"  # Unprotected Transport of Credentials
+      - "CWE-720"  # OWASP Top Ten 2007 Category A9 - Insecure Communications
+      - "CWE-757"  # Selection of Less-Secure Algorithm During Negotiation
+      - "CWE-759"  # Use of a One-Way Hash without a Salt
+      - "CWE-760"  # Use of a One-Way Hash with a Predictable Salt
+      - "CWE-780"  # Use of RSA Algorithm without OAEP
+      - "CWE-818"  # Insufficient Transport Layer Protection
+      - "CWE-916"  # Use of Password Hash With Insufficient Computational Effort
+    patterns:
+      - pattern: 'md5\s*\('
+        severity: "HIGH"
+        description: "Use of weak MD5 hash algorithm"
+      - pattern: 'sha1\s*\('
+        severity: "MEDIUM"
+        description: "Use of weak SHA1 hash algorithm for security purposes"
+      - pattern: 'DES|3DES|RC4|RC2|Blowfish'
+        severity: "HIGH"
+        description: "Use of deprecated/weak encryption algorithm"
+      - pattern: 'random\s*\(\s*\)'
+        severity: "MEDIUM"
+        description: "Use of non-cryptographic random for security purposes"
+
+  - id: "A03:2021"
+    name: "Injection"
+    description: |
+      Injection flaws, such as SQL, NoSQL, OS, and LDAP injection, occur when
+      untrusted data is sent to an interpreter as part of a command or query.
+    cwe_ids:
+      - "CWE-20"   # Improper Input Validation
+      - "CWE-74"   # Improper Neutralization of Special Elements in Output
+      - "CWE-75"   # Failure to Sanitize Special Elements into a Different Plane
+      - "CWE-77"   # Improper Neutralization of Special Elements used in a Command
+      - "CWE-78"   # Improper Neutralization of Special Elements used in an OS Command
+      - "CWE-79"   # Improper Neutralization of Input During Web Page Generation (XSS)
+      - "CWE-80"   # Improper Neutralization of Script-Related HTML Tags
+      - "CWE-83"   # Improper Neutralization of Script in Attributes in a Web Page
+      - "CWE-87"   # Improper Neutralization of Alternate XSS Syntax
+      - "CWE-88"   # Improper Neutralization of Argument Delimiters in a Command
+      - "CWE-89"   # Improper Neutralization of Special Elements used in an SQL Command
+      - "CWE-90"   # Improper Neutralization of Special Elements used in an LDAP Query
+      - "CWE-91"   # XML Injection
+      - "CWE-93"   # Improper Neutralization of CRLF Sequences
+      - "CWE-94"   # Improper Control of Generation of Code
+      - "CWE-95"   # Improper Neutralization of Directives in Dynamically Evaluated Code
+      - "CWE-96"   # Improper Neutralization of Directives in Statically Saved Code
+      - "CWE-97"   # Improper Neutralization of Server-Side Includes
+      - "CWE-98"   # Improper Control of Filename for Include/Require Statement
+      - "CWE-99"   # Improper Control of Resource Identifiers
+      - "CWE-100"  # Deprecated: Technology-Specific Input Validation Problems
+      - "CWE-113"  # Improper Neutralization of CRLF Sequences in HTTP Headers
+      - "CWE-116"  # Improper Encoding or Escaping of Output
+      - "CWE-138"  # Improper Neutralization of Special Elements
+      - "CWE-184"  # Incomplete List of Disallowed Inputs
+      - "CWE-470"  # Use of Externally-Controlled Input to Select Classes or Code
+      - "CWE-471"  # Modification of Assumed-Immutable Data
+      - "CWE-564"  # SQL Injection: Hibernate
+      - "CWE-610"  # Externally Controlled Reference to a Resource in Another Sphere
+      - "CWE-643"  # Improper Neutralization of Data within XPath Expressions
+      - "CWE-644"  # Improper Neutralization of HTTP Headers for Scripting Syntax
+      - "CWE-652"  # Improper Neutralization of Data within XQuery Expressions
+      - "CWE-917"  # Improper Neutralization of Special Elements used in an Expression Language Statement
+    patterns:
+      - pattern: 'f".*SELECT.*{.*}.*FROM'
+        severity: "CRITICAL"
+        description: "SQL injection via f-string"
+      - pattern: 'f".*INSERT.*{.*}.*INTO'
+        severity: "CRITICAL"
+        description: "SQL injection via f-string"
+      - pattern: 'execute\s*\(\s*f"'
+        severity: "CRITICAL"
+        description: "SQL injection via execute with f-string"
+      - pattern: 'os\.system\s*\(\s*f"'
+        severity: "CRITICAL"
+        description: "OS command injection via f-string"
+      - pattern: 'subprocess\..*\(\s*f"'
+        severity: "CRITICAL"
+        description: "OS command injection via subprocess"
+      - pattern: 'eval\s*\('
+        severity: "CRITICAL"
+        description: "Code injection via eval()"
+      - pattern: 'exec\s*\('
+        severity: "CRITICAL"
+        description: "Code injection via exec()"
+
+  - id: "A04:2021"
+    name: "Insecure Design"
+    description: |
+      A new category focusing on risks related to design and architectural flaws,
+      with a call for more use of threat modeling, secure design patterns, and
+      reference architectures.
+    cwe_ids:
+      - "CWE-73"   # External Control of File Name or Path
+      - "CWE-183"  # Permissive List of Allowed Inputs
+      - "CWE-209"  # Generation of Error Message Containing Sensitive Information
+      - "CWE-213"  # Exposure of Sensitive Information Due to Incompatible Policies
+      - "CWE-235"  # Improper Handling of Extra Parameters
+      - "CWE-256"  # Plaintext Storage of a Password
+      - "CWE-257"  # Storing Passwords in a Recoverable Format
+      - "CWE-266"  # Incorrect Privilege Assignment
+      - "CWE-269"  # Improper Privilege Management
+      - "CWE-280"  # Improper Handling of Insufficient Permissions or Privileges
+      - "CWE-311"  # Missing Encryption of Sensitive Data
+      - "CWE-312"  # Cleartext Storage of Sensitive Information
+      - "CWE-313"  # Cleartext Storage in a File or on Disk
+      - "CWE-316"  # Cleartext Storage of Sensitive Information in Memory
+      - "CWE-419"  # Unprotected Primary Channel
+      - "CWE-430"  # Deployment of Wrong Handler
+      - "CWE-434"  # Unrestricted Upload of File with Dangerous Type
+      - "CWE-444"  # Inconsistent Interpretation of HTTP Requests
+      - "CWE-451"  # User Interface (UI) Misrepresentation of Critical Information
+      - "CWE-472"  # External Control of Assumed-Immutable Web Parameter
+      - "CWE-501"  # Trust Boundary Violation
+      - "CWE-522"  # Insufficiently Protected Credentials
+      - "CWE-525"  # Use of Web Browser Cache Containing Sensitive Information
+      - "CWE-539"  # Use of Persistent Cookies Containing Sensitive Information
+      - "CWE-579"  # J2EE Bad Practices: Non-serializable Object Stored in Session
+      - "CWE-598"  # Use of GET Request Method With Sensitive Query Strings
+      - "CWE-602"  # Client-Side Enforcement of Server-Side Security
+      - "CWE-642"  # External Control of Critical State Data
+      - "CWE-646"  # Reliance on File Name or Extension of Externally-Supplied File
+      - "CWE-650"  # Trusting HTTP Permission Methods on the Server Side
+      - "CWE-653"  # Improper Isolation or Compartmentalization
+      - "CWE-656"  # Reliance on Security Through Obscurity
+      - "CWE-657"  # Violation of Secure Design Principles
+      - "CWE-799"  # Improper Control of Interaction Frequency
+      - "CWE-807"  # Reliance on Untrusted Inputs in a Security Decision
+      - "CWE-840"  # Business Logic Errors
+      - "CWE-841"  # Improper Enforcement of Behavioral Workflow
+      - "CWE-927"  # Use of Implicit Intent for Sensitive Communication
+      - "CWE-1021" # Improper Restriction of Rendered UI Layers or Frames
+      - "CWE-1173" # Improper Use of Validation Framework
+    patterns:
+      - pattern: 'pickle\.load'
+        severity: "HIGH"
+        description: "Insecure deserialization via pickle"
+      - pattern: 'yaml\.load\s*\([^)]*\)'
+        severity: "HIGH"
+        description: "Insecure YAML deserialization (use safe_load)"
+
+  - id: "A05:2021"
+    name: "Security Misconfiguration"
+    description: |
+      Security misconfiguration is the most commonly seen issue. This is commonly
+      a result of insecure default configurations, incomplete or ad hoc configurations,
+      open cloud storage, misconfigured HTTP headers, and verbose error messages.
+    cwe_ids:
+      - "CWE-2"    # Environmental Security Flaws
+      - "CWE-11"   # ASP.NET Misconfiguration: Creating Debug Binary
+      - "CWE-13"   # ASP.NET Misconfiguration: Password in Configuration File
+      - "CWE-15"   # External Control of System or Configuration Setting
+      - "CWE-16"   # Configuration
+      - "CWE-260"  # Password in Configuration File
+      - "CWE-315"  # Cleartext Storage of Sensitive Information in a Cookie
+      - "CWE-520"  # .NET Misconfiguration: Use of Impersonation
+      - "CWE-526"  # Exposure of Sensitive Information Through Environmental Variables
+      - "CWE-537"  # Java Runtime Error Message Containing Sensitive Information
+      - "CWE-541"  # Inclusion of Sensitive Information in an Include File
+      - "CWE-547"  # Use of Hard-coded, Security-relevant Constants
+      - "CWE-611"  # Improper Restriction of XML External Entity Reference
+      - "CWE-614"  # Sensitive Cookie in HTTPS Session Without 'Secure' Attribute
+      - "CWE-756"  # Missing Custom Error Page
+      - "CWE-776"  # Improper Restriction of Recursive Entity References in DTDs
+      - "CWE-942"  # Permissive Cross-domain Policy with Untrusted Domains
+      - "CWE-1004" # Sensitive Cookie Without 'HttpOnly' Flag
+      - "CWE-1032" # OWASP Top Ten 2017 Category A6 - Security Misconfiguration
+      - "CWE-1174" # ASP.NET Misconfiguration: Improper Model Validation
+    patterns:
+      - pattern: 'DEBUG\s*=\s*True'
+        severity: "CRITICAL"
+        description: "Debug mode enabled in production"
+      - pattern: 'ALLOWED_HOSTS\s*=\s*\[\s*"\*"\s*\]'
+        severity: "HIGH"
+        description: "Wildcard allowed hosts"
+      - pattern: 'CORS_ORIGIN_ALLOW_ALL\s*=\s*True'
+        severity: "HIGH"
+        description: "CORS allows all origins"
+
+  - id: "A06:2021"
+    name: "Vulnerable and Outdated Components"
+    description: |
+      Components, such as libraries, frameworks, and other software modules, run
+      with the same privileges as the application. If a vulnerable component is
+      exploited, such an attack can facilitate serious data loss or server takeover.
+    cwe_ids:
+      - "CWE-937"  # OWASP Top Ten 2013 Category A9 - Using Components with Known Vulnerabilities
+      - "CWE-1035" # OWASP Top Ten 2017 Category A9 - Using Components with Known Vulnerabilities
+      - "CWE-1104" # Use of Unmaintained Third Party Components
+    patterns:
+      - pattern: 'django[<>=]=*[0-2]\.'
+        severity: "HIGH"
+        description: "Outdated Django version (< 3.x)"
+      - pattern: 'flask[<>=]=*0\.'
+        severity: "MEDIUM"
+        description: "Outdated Flask version (< 1.x)"
+
+  - id: "A07:2021"
+    name: "Identification and Authentication Failures"
+    description: |
+      Confirmation of the user's identity, authentication, and session management
+      is critical to protect against authentication-related attacks.
+    cwe_ids:
+      - "CWE-255"  # Credentials Management Errors
+      - "CWE-259"  # Use of Hard-coded Password
+      - "CWE-287"  # Improper Authentication
+      - "CWE-288"  # Authentication Bypass Using an Alternate Path or Channel
+      - "CWE-290"  # Authentication Bypass by Spoofing
+      - "CWE-294"  # Authentication Bypass by Capture-replay
+      - "CWE-295"  # Improper Certificate Validation
+      - "CWE-297"  # Improper Validation of Certificate with Host Mismatch
+      - "CWE-300"  # Channel Accessible by Non-Endpoint
+      - "CWE-302"  # Authentication Bypass by Assumed-Immutable Data
+      - "CWE-304"  # Missing Critical Step in Authentication
+      - "CWE-306"  # Missing Authentication for Critical Function
+      - "CWE-307"  # Improper Restriction of Excessive Authentication Attempts
+      - "CWE-346"  # Origin Validation Error
+      - "CWE-384"  # Session Fixation
+      - "CWE-521"  # Weak Password Requirements
+      - "CWE-613"  # Insufficient Session Expiration
+      - "CWE-620"  # Unverified Password Change
+      - "CWE-640"  # Weak Password Recovery Mechanism for Forgotten Password
+      - "CWE-798"  # Use of Hard-coded Credentials
+      - "CWE-940"  # Improper Verification of Source of a Communication Channel
+      - "CWE-1216" # Lockout Mechanism Errors
+    patterns:
+      - pattern: "password\\s*=\\s*[\"'][^\"']{4,}[\"']"
+        severity: "CRITICAL"
+        description: "Hardcoded password"
+      - pattern: "api_key\\s*=\\s*[\"'][^\"']+[\"']"
+        severity: "CRITICAL"
+        description: "Hardcoded API key"
+
+  - id: "A08:2021"
+    name: "Software and Data Integrity Failures"
+    description: |
+      Software and data integrity failures relate to code and infrastructure that
+      does not protect against integrity violations. An example of this is where
+      an application relies upon plugins, libraries, or modules from untrusted
+      sources, repositories, and CDNs.
+    cwe_ids:
+      - "CWE-345"  # Insufficient Verification of Data Authenticity
+      - "CWE-353"  # Missing Support for Integrity Check
+      - "CWE-426"  # Untrusted Search Path
+      - "CWE-494"  # Download of Code Without Integrity Check
+      - "CWE-502"  # Deserialization of Untrusted Data
+      - "CWE-565"  # Reliance on Cookies without Validation and Integrity Checking
+      - "CWE-784"  # Reliance on Cookies without Validation and Integrity Checking in a Security Decision
+      - "CWE-829"  # Inclusion of Functionality from Untrusted Control Sphere
+      - "CWE-830"  # Inclusion of Web Functionality from an Untrusted Source
+      - "CWE-915"  # Improperly Controlled Modification of Dynamically-Determined Object Attributes
+    patterns:
+      - pattern: 'uses:\s*[^@]+@(v\d+|main|master)'
+        severity: "HIGH"
+        description: "Unpinned GitHub Action"
+
+  - id: "A09:2021"
+    name: "Security Logging and Monitoring Failures"
+    description: |
+      This category is to help detect, escalate, and respond to active breaches.
+      Without logging and monitoring, breaches cannot be detected.
+    cwe_ids:
+      - "CWE-117"  # Improper Output Neutralization for Logs
+      - "CWE-223"  # Omission of Security-relevant Information
+      - "CWE-532"  # Insertion of Sensitive Information into Log File
+      - "CWE-778"  # Insufficient Logging
+    patterns:
+      - pattern: 'logging\.disable'
+        severity: "MEDIUM"
+        description: "Logging disabled"
+      - pattern: 'except.*pass'
+        severity: "LOW"
+        description: "Silent exception handling"
+
+  - id: "A10:2021"
+    name: "Server-Side Request Forgery (SSRF)"
+    description: |
+      SSRF flaws occur whenever a web application is fetching a remote resource
+      without validating the user-supplied URL.
+    cwe_ids:
+      - "CWE-918"  # Server-Side Request Forgery (SSRF)
+    patterns:
+      - pattern: 'requests\.(get|post|put|delete)\s*\(\s*f"'
+        severity: "HIGH"
+        description: "Potential SSRF via user-controlled URL"
+      - pattern: 'urllib\.request\.urlopen\s*\('
+        severity: "MEDIUM"
+        description: "Potential SSRF via urlopen"
+
+remediation_guides:
+  sql_injection: |
+    Use parameterized queries or an ORM:
+    
+    # Bad
+    cursor.execute(f"SELECT * FROM users WHERE id = {user_id}")
+    
+    # Good
+    cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+    
+  command_injection: |
+    Use subprocess with list arguments:
+    
+    # Bad
+    os.system(f"echo {user_input}")
+    
+    # Good
+    subprocess.run(["echo", user_input], check=True)
+    
+  xss: |
+    Use templating engine auto-escape or html.escape():
+    
+    # Bad
+    return f"<h1>Hello {name}</h1>"
+    
+    # Good
+    import html
+    return f"<h1>Hello {html.escape(name)}</h1>"
+    
+  hardcoded_secrets: |
+    Use environment variables or secrets manager:
+    
+    # Bad
+    API_KEY = "sk-1234567890"
+    
+    # Good
+    import os
+    API_KEY = os.environ.get("API_KEY")

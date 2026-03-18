@@ -32,6 +32,10 @@ def _make_workspace(tmp_path: Path) -> Path:
     (tmp_path / "docs").mkdir()
     (tmp_path / "docs" / "index.html").write_text("<html/>")
 
+    # cortex-docs (protected documentation workspace)
+    (tmp_path / "cortex-docs").mkdir()
+    (tmp_path / "cortex-docs" / "index.html").write_text("<html/>")
+
     # Unprotected clutter that may be touched
     (tmp_path / "junk_orphan").mkdir()
     (tmp_path / "TEMP_NOTES.txt").write_text("temp\n")
@@ -56,9 +60,14 @@ def test_vacuum_protected_roots_contains_tests() -> None:
     assert "tests" in VACUUM_PROTECTED_ROOTS
 
 
+def test_vacuum_protected_roots_contains_cortex_docs() -> None:
+    """GV-028: 'cortex-docs' must be in VACUUM_PROTECTED_ROOTS."""
+    assert "cortex-docs" in VACUUM_PROTECTED_ROOTS
+
+
 def test_vacuum_protected_roots_contains_required_entries() -> None:
     """GV-033: All mandatory roots must be present."""
-    required = {"cortex", "cortex-registry", "tests", ".github", "scripts", "docs"}
+    required = {"cortex", "cortex-registry", "tests", ".github", "scripts", "docs", "cortex-docs"}
     assert required.issubset(VACUUM_PROTECTED_ROOTS)
 
 
@@ -69,6 +78,13 @@ def test_is_protected_returns_true_for_cortex_subpath(tmp_path: Path) -> None:
     _make_workspace(tmp_path)
     vac = VacuumOrchestrator(workspace_root=tmp_path)
     assert vac._is_protected(tmp_path / "cortex" / "foo.py") is True
+
+
+def test_is_protected_returns_true_for_cortex_docs_subpath(tmp_path: Path) -> None:
+    """GV-029: _is_protected(cortex-docs/foo) returns True."""
+    _make_workspace(tmp_path)
+    vac = VacuumOrchestrator(workspace_root=tmp_path)
+    assert vac._is_protected(tmp_path / "cortex-docs" / "index.html") is True
 
 
 def test_is_protected_returns_false_for_temp(tmp_path: Path) -> None:
@@ -112,3 +128,11 @@ def test_vacuum_skips_github_directory(tmp_path: Path) -> None:
     vac = VacuumOrchestrator(workspace_root=tmp_path)
     vac.run(dry_run=True)
     assert (tmp_path / ".github" / "keep_me.py").exists()
+
+
+def test_vacuum_skips_cortex_docs_directory(tmp_path: Path) -> None:
+    """GV-029: run() dry_run leaves cortex-docs/ tree untouched."""
+    _make_workspace(tmp_path)
+    vac = VacuumOrchestrator(workspace_root=tmp_path)
+    vac.run(dry_run=True)
+    assert (tmp_path / "cortex-docs" / "index.html").exists()

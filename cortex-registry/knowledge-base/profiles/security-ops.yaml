@@ -1,0 +1,184 @@
+# Security Operations Domain Profile
+# Profile ID: security-ops-v1.0
+# Category: Security Operations, SOC, Incident Response
+# Target: Security operations centres, SIEM consumers, threat detection pipelines
+# Created: 2026-02-21 (Phase 19 Sub-Phase C — Registry Expansion)
+
+domain: "profiles"
+profile:
+  id: security-ops-v1.0
+  name: Security Operations
+  category: security
+  description: >
+    Governance profile for security-operations workloads including SOC pipelines,
+    SIEM integrations, incident-response automation, threat detection, and
+    vulnerability management. Applies on top of OWASP and CICD-hardening baselines.
+  tags:
+    - security-operations
+    - soc
+    - incident-response
+    - siem
+    - threat-detection
+    - vulnerability-management
+    - security-monitoring
+
+compatibility:
+  cortex_compatibility: "1.0"
+  python_versions: ["3.10", "3.11", "3.12", "3.13"]
+
+rules:
+  # ── Incident Response ──────────────────────────────────────────────────────
+  - id: SOC-001
+    name: incident-classification
+    severity: critical
+    description: >
+      Every security incident must be classified with a severity level
+      (P0/P1/P2/P3) within 15 minutes of detection. Classification must be
+      persisted to an immutable audit log.
+    pattern: "incident severity classification within SLA"
+    enforcement: mandatory
+    auto_fix: false
+    references:
+      - NIST SP 800-61r2 Section 3.2
+      - CORTEX CORE-027 (Audit Trail)
+
+  - id: SOC-002
+    name: incident-response-runbook
+    severity: high
+    description: >
+      P0 and P1 incidents must invoke an automated runbook within 5 minutes of
+      classification. Runbook execution must be idempotent and logged.
+    pattern: "automated runbook invocation for high-severity incidents"
+    enforcement: mandatory
+    auto_fix: false
+
+  - id: SOC-003
+    name: containment-before-eradication
+    severity: critical
+    description: >
+      Containment actions (network isolation, credential rotation, service
+      suspension) must be executed before eradication and recovery steps.
+      Skipping containment is a compliance violation.
+    pattern: "contain → eradicate → recover ordering enforced"
+    enforcement: mandatory
+    auto_fix: false
+
+  # ── SIEM / Log Integrity ───────────────────────────────────────────────────
+  - id: SOC-004
+    name: log-tamper-detection
+    severity: critical
+    description: >
+      Security-event logs must be shipped to an immutable SIEM store within
+      60 seconds of event occurrence. Local-only logging of security events
+      is forbidden.
+    pattern: "SIEM ingest within 60s SLA"
+    enforcement: mandatory
+    auto_fix: false
+    references:
+      - OWASP Logging Cheat Sheet
+
+  - id: SOC-005
+    name: log-retention-minimum
+    severity: high
+    description: >
+      Security logs must be retained for a minimum of 12 months online and
+      7 years in cold storage (configurable via SECURITY_LOG_RETENTION_MONTHS env).
+    pattern: "log retention 12 months minimum"
+    enforcement: mandatory
+    auto_fix: false
+    references:
+      - PCI-DSS Requirement 10.7
+
+  # ── Threat Detection ───────────────────────────────────────────────────────
+  - id: SOC-006
+    name: anomaly-alerting
+    severity: high
+    description: >
+      Anomaly detection models must emit an alert when a metric deviates more
+      than 3 standard deviations from a 30-day rolling baseline. Alerts must
+      include context: asset, user, time, metric, deviation score.
+    pattern: "3-sigma anomaly threshold with contextual alert payload"
+    enforcement: recommended
+    auto_fix: false
+
+  - id: SOC-007
+    name: threat-intel-enrichment
+    severity: medium
+    description: >
+      Inbound security events must be enriched with threat-intelligence IOCs
+      (IP reputation, domain classification, file hash lookups) before
+      triage assignment.
+    pattern: "IOC enrichment before triage"
+    enforcement: recommended
+    auto_fix: false
+
+  # ── Vulnerability Management ───────────────────────────────────────────────
+  - id: SOC-008
+    name: critical-vuln-sla
+    severity: critical
+    description: >
+      Critical (CVSS ≥ 9.0) vulnerabilities must be remediated or formally
+      risk-accepted within 24 hours of detection. High (CVSS 7.0-8.9) within
+      7 days. Medium within 30 days.
+    pattern: "CVSS-based remediation SLA enforced"
+    enforcement: mandatory
+    auto_fix: false
+    references:
+      - NIST NVD CVSS v3.1
+
+  - id: SOC-009
+    name: dependency-scan-in-cicd
+    severity: high
+    description: >
+      Every CI pipeline must run a dependency vulnerability scan (e.g., Trivy,
+      Snyk, OWASP Dependency-Check). Pipelines that skip the scan step must
+      be blocked from merging to main.
+    pattern: "dependency scan mandatory in CI"
+    enforcement: mandatory
+    auto_fix: false
+    references:
+      - CORTEX CICD-hardening.yaml
+
+  # ── Access & Credential Controls ──────────────────────────────────────────
+  - id: SOC-010
+    name: privileged-access-mfa
+    severity: critical
+    description: >
+      All privileged access (admin consoles, production databases, secrets
+      managers) must require MFA and be logged with a justification ticket ID.
+    pattern: "MFA + ticket required for privileged access"
+    enforcement: mandatory
+    auto_fix: false
+    references:
+      - NIST SP 800-63B AAL3
+
+compliance_mappings:
+  PCI-DSS:
+    - Requirement 10: Monitoring and log management (SOC-004, SOC-005)
+    - Requirement 11: Security testing (SOC-008, SOC-009)
+    - Requirement 12: Information security policy (SOC-001, SOC-002)
+  SOC2:
+    - CC7.1: Detection and monitoring of security events (SOC-004, SOC-006)
+    - CC7.2: Evaluation and response to security threats (SOC-001, SOC-003)
+  NIST_CSF:
+    - DE.CM: Security continuous monitoring (SOC-004, SOC-006, SOC-007)
+    - RS.RP: Response planning (SOC-001, SOC-002, SOC-003)
+    - RC.RP: Recovery planning (SOC-003)
+
+tooling:
+  recommended:
+    - name: Trivy
+      purpose: Container and dependency vulnerability scanning
+      rules: [SOC-009]
+    - name: OWASP Dependency-Check
+      purpose: Dependency vulnerability scanning for JVM/Python/JS
+      rules: [SOC-009]
+    - name: Elastic SIEM / Splunk / Sentinel
+      purpose: SIEM log aggregation and correlation
+      rules: [SOC-004, SOC-005, SOC-006]
+    - name: PagerDuty / OpsGenie
+      purpose: Incident alerting and runbook automation
+      rules: [SOC-001, SOC-002]
+    - name: VirusTotal / MISP
+      purpose: Threat-intelligence IOC enrichment
+      rules: [SOC-007]

@@ -1,0 +1,21 @@
+domain: "data"
+tier: "tier1"
+category: "data"
+
+rules:
+  - id: "DATA-001"
+    name: "Data Encryption"
+    description: "Sensitive data must be encrypted at rest"
+    severity: "critical"
+    
+  - id: "DATA-002"
+    name: "Data Privacy"
+    description: "PII must not be logged"
+    severity: "critical"
+    
+  - id: "DATA-003"
+    name: "Data Validation"
+    description: "All inputs must be validated"
+    severity: "high"
+
+status: "DEFINED"
