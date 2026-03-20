@@ -1,0 +1,17 @@
+id: "phase-m20"
+title: "Feedback Issue 20 — Redacted Intake and Decomposition"
+created: "2026-03-20"
+status: BLOCKED
+priority: P0
+source_issue: "https://github.com/asifhussain60/CORTEX/issues/20"
+sweep_catalogue_id: "SWEEP-M20-ISSUE20-REDACTED"
+
+sweep_catalogue:
+  - id: "GAP-M20-01"
+    title: "Obtain unredacted Issue 20 requirements from source owner"
+    status: OPEN
+  - id: "GAP-M20-02"
+    title: "Decompose disclosed requirements into thin-indexed executable workstreams"
+    status: OPEN
+
+blocking_note: "GitHub payload and public page expose only 'REDACTED'; execution cannot start until requirements are visible."

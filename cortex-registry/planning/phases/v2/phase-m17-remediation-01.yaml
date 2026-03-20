@@ -4,11 +4,13 @@ maintainer: CORTEX Architecture Team
 metadata:
   id: phase-m17-remediation-01
   title: "Post-M17 Architecture Remediation Wave 01"
-  status: PLANNED
+  status: COMPLETE
   priority: P0
   depends_on:
     - phase-m17
   objective: "Execute remediation workstreams for architecture drift closure with zero-regression enforcement."
+  completed_on: '2026-03-17'
+  closure_note: "Closed as converged with no remaining P0/P1 blockers in the post-M17 remediation wave."
 
 scope:
   workstreams:

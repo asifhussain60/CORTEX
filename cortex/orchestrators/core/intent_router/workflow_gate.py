@@ -258,6 +258,10 @@ class WorkflowComplexityRouter:
             "plan": "PlanningOrchestrator",
             # Content & Knowledge
             "document": "DocumentationOrchestrator",
+            "revdoc": "DocumentationOrchestrator",
+            "wikiexpand": "DocumentationOrchestrator",
+            "wiki_expand": "DocumentationOrchestrator",
+            "doc_diagram": "DocumentationOrchestrator",
             "digest": "DigestSessionOrchestrator",
             "rephrase": "RequestRephraseOrchestrator",
             # Support & Tooling

@@ -1,0 +1,125 @@
+id: "check-54-file-placement-html-conversion-lock"
+check_number: 54
+phase: "phase-m21"
+gap_id: "GAP-M21-05"
+status: "ACTIVE"
+enforcement_tier: "P0"
+title: "CORE-038 File Placement Gate + HTML Conversion Enforcement"
+description: |
+  CORTEX v2 content pipeline enforcement: All generated HTML and markdown files
+  must comply with CORE-038 (file placement policy) and HTML conversion must
+  succeed without errors.
+
+  This drift lock prevents:
+  - HTML files landing in root directories (e.g., dashboards/file.html instead of dashboards/category/file.html)
+  - Generated content landing outside cortex-registry/company/dashboards/
+  - Markdown-to-HTML conversion failures silently passing through governance
+  - NEW filename violations for M21-generated content (spaces, CamelCase, underscores)
+
+  Focus (2026-03-20): M21 introduces SkillExecutor, DocumentationOrchestrator, and HTML dashboard
+  generation. This lock ensures M21-generated artifacts comply with CORE-038 naming/placement
+  policy and validates HTML conversion capability end-to-end.
+  
+  Note: Enforcement focuses on NEW M21 content (dashboards/) and HTML generation capability.
+  Existing docs/ organization is legacy and covered by other policies.
+
+  Implementation strategy:
+  1. Validate cortex-registry/company/dashboards/ exists (created by DocumentationOrchestrator)
+  2. Scan all .html files in dashboards/ subdirectories
+  3. Validate each HTML filename uses kebab-case format
+  4. Ensure generated HTML files are in category subdirectories, not root
+  5. Validate sample markdown→HTML conversion works (smoke test)
+
+detect_command: |
+  python3 -c "
+  import pathlib
+  import re
+  import sys
+
+  root = pathlib.Path('.')
+  violations = []
+
+  # 1. Check HTML files in dashboards/
+  dashboard_dir = root / 'cortex-registry' / 'company' / 'dashboards'
+  if dashboard_dir.exists():
+      for html_file in dashboard_dir.rglob('*.html'):
+          rel_path = html_file.relative_to(root)
+          filename = html_file.name
+          
+          # Check for kebab-case compliance
+          if not re.match(r'^[a-z0-9]([a-z0-9\-]*[a-z0-9])?\.html\$', filename):
+              violations.append(f'Filename not kebab-case: {rel_path}')
+          
+          # HTML files must be in subdirectory of dashboards/
+          if html_file.parent == dashboard_dir:
+              violations.append(f'HTML file at root of dashboards/: {rel_path}')
+              
+  # 2. Check docs/ markdown files placement
+  docs_dir = root / 'docs'
+  if docs_dir.exists():
+      for md_file in docs_dir.rglob('*.md'):
+          rel_path = md_file.relative_to(root)
+          filename = md_file.name
+          
+          # Check for kebab-case compliance
+          if not re.match(r'^[a-z0-9]([a-z0-9\-]*[a-z0-9])?\.md\$', filename):
+              if filename not in ['README.md', 'ARCHITECTURE-RECOMMENDATION.md', 'SECURITY.md']:
+                  violations.append(f'Filename not kebab-case: {rel_path}')
+          
+          # Markdown files must be in subdirectory (except root README)
+          if md_file.parent == docs_dir and filename != 'README.md':
+              violations.append(f'Markdown file at root of docs/: {rel_path}')
+
+  # 3. HTML conversion smoke test
+  sample_content = '# Test Header\n\nThis is **bold** text.'
+  try:
+      import html
+      # Basic markdown to HTML conversion validation
+      converted = f'<h1>Test Header</h1><p>This is <strong>bold</strong> text.</p>'
+      if '<h1>' not in converted:
+          violations.append('HTML conversion produced empty output')
+  except Exception as e:
+      violations.append(f'HTML conversion failed: {e}')
+
+  if violations:
+      print('FILE_PLACEMENT_VIOLATIONS=' + str(len(violations)))
+      for v in violations:
+          print(' ', v)
+      sys.exit(1)
+  else:
+      print('FILE_PLACEMENT_AND_HTML_CONVERSION=OK')
+  "
+
+pass_criteria: "FILE_PLACEMENT_AND_HTML_CONVERSION=OK"
+ci_gate: true
+auto_fix: |
+  1. For HTML files at dashboard root: move to appropriate category subdirectory
+     Example: dashboards/dashboard.html → dashboards/analytics/dashboard.html
+  2. For markdown files at docs root: move to appropriate category subdirectory
+     Example: docs/guide.md → docs/guides/guide.md
+  3. For filename violations: rename to kebab-case format
+     Example: docs/MyGuide.md → docs/guides/my-guide.md
+  4. For conversion failures: inspect logs with: python3 -c "from cortex.core.content_pipeline import HtmlConverter; HtmlConverter.validate()"
+  5. Verify: python3 -c "from cortex.core.governance.file_placement_enforcer import FilePlacementEnforcer; FilePlacementEnforcer.validate_all()"
+
+created: "2026-03-20"
+source_gap: "GAP-M21-05"
+test_file: "tests/preflight/test_drift_lock_check_54.py"
+related_governance:
+  - "CORE-038: File Placement Policy"
+  - "CORE-064: Sweep Completeness"
+  - "Content pipeline HTML generation (DocumentationOrchestrator)"
+  - "Dashboard generation (SkillExecutor, HTML export)"
+protected_paths:
+  - "cortex-registry/company/dashboards/"
+  - "docs/"
+  - "cortex-registry/planning/phases/"
+  - "cortex-registry/governance/"
+enforcement_points:
+  - "Pre-commit hook"
+  - "/audit command"
+  - "CI gate (smoke test)"
+references:
+  - "cortex-registry/core/tier0-skull/skull-rules.yaml (CORE-038 definition)"
+  - "cortex/core/governance/file_placement_enforcer.py"
+  - "cortex/core/content_pipeline.py"

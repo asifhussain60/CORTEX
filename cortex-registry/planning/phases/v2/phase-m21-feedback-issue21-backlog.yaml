@@ -1,0 +1,43 @@
+id: "phase-m21"
+title: "Feedback Issue 21 — Skill, Docs, and Governance Intake Bundle"
+created: "2026-03-20"
+status: COMPLETE
+priority: P0
+source_issue: "https://github.com/asifhussain60/CORTEX/issues/21"
+sweep_catalogue_id: "SWEEP-M21-ISSUE21-BACKPORT"
+
+sweep_catalogue:
+  - id: "GAP-M21-01"
+    title: "OrchestratorRegistry + SkillExecutor + SkillBridge + ACMarkerBridge"
+    status: CLOSED
+  - id: "GAP-M21-02"
+    title: "DocumentationOrchestrator (REVDOC/WIKIEXPAND) + diagram-generation extension"
+    status: CLOSED
+  - id: "GAP-M21-03"
+    title: "AuditCoordinatorEnhanced + SessionBridge + RCA skill integration"
+    status: CLOSED
+  - id: "GAP-M21-04"
+    title: "Stage0 preflight workflow + cortex_governance stage0_audit operation"
+    status: CLOSED
+  - id: "GAP-M21-05"
+    title: "File placement gate (CORE-038) + HTML conversion enforcement + drift lock 54"
+    status: CLOSED
+  - id: "GAP-M21-06"
+    title: "Planning boundary split: PlanningCoordinator, RepoPlanOrchestrator, RegistryIndexManager, request rephrase boundary classifier"
+    status: CLOSED
+
+evidence:
+  completed_gaps:
+    - "GAP-M21-01: implemented SkillExecutor, SkillBridge, ACMarkerBridge with passing unit tests."
+    - "GAP-M21-02: added REVDOC/WIKIEXPAND alias routing to documentation path and locked with intent/router tests."
+    - "GAP-M21-03: implemented AuditCoordinatorEnhanced + SessionBridge and RCA wrapper behavior with passing tests."
+    - "GAP-M21-04: implemented preflight workflow + cortex_governance stage0_audit operation with passing smoke tests."
+    - "GAP-M21-05: implemented check-54 drift lock (CORE-038 file placement + HTML conversion) with 10/10 tests passing."
+    - "GAP-M21-06: implemented RegistryIndexManager + RepoPlanOrchestrator + PlanningCoordinator boundary classifier with passing tests."
+  validations:
+    - "preflight: 469 passed, 10 skipped"
+    - "smoke: 3022 passed, 29 skipped, 18 xfailed, 1 xpassed"
+    - "governance alignment: passed"
+    - "dual-surface parity: passed"
+  remaining:
+    - "All M21 gaps now CLOSED. Phase ready for consolidation."

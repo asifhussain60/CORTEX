@@ -22,11 +22,11 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-17T00:00:00Z'
+  last_updated: '2026-03-20T16:20:00Z'
   autonomous_chain_updated: '2026-03-16 — stop_policy added; all continuation prompts, proceed gates, and 🚀 Next Phase blocks prohibited; CORE-RESP-001 overridden for autonomous phase chaining.'
-  total_phases: 17
+  total_phases: 20
   active: 0
-  completed: 17
+  completed: 19
   in_progress: 0
   planned: 0
   architectural_decision: "HYBRID — preserve v2 reductions while recentering execution on Workflow Composer + dedicated workflow templates"
@@ -228,18 +228,14 @@ latest_findings:
     - "Smoke performance remains within budget envelope (~31s with CORTEX_WORKERS=8)."
     - "OPJ test-time write guard is active via CORTEX_OPJ_DISABLED=1 in pytest config."
     - "OPJ growth controls remain active (shard cap 100, registry cap 200)."
-  active_blockers:
-    - id: "FINDING-M7-AC-001"
-      severity: P1
-      area: "Prompt governance contract"
-      summary: "Smoke fails on AC marker format documentation expectation in .github/copilot-instructions.md."
-      required_fix_path: "Workflow Composer governed prompt-governance workflow template; avoid ad hoc instruction edits outside template path."
+    - "AC marker format contract regression (FINDING-M7-AC-001) closed under workflow-governed prompt governance path."
+  active_blockers: []
   non_blocking_observations:
     - "Duplicate-class warnings remain visible in smoke output and require planned CORE-035 consolidation sweep, not emergency patching."
 
 remediation_plan:
   plan_id: "REMEDIATION-2026-03-17-ARCHITECTURE-OPTIMIZATION"
-  status: "ACTIVE"
+  status: "CLOSED"
   objective: "Close cross-cutting architecture drift while preserving v2 reductions and workflow-template centrality."
   success_criteria:
     - "All remediation tracks produce converged evidence under CORE-068 and no P0/P1 regressions."
@@ -286,7 +282,7 @@ remediation_plan:
       - "Converge tutorial provenance + traceability parity."
     window_61_90_days:
       - "Complete first-wave canonicalization + index thinning with certification delta."
-  next_execution_phase: "phase-m17-remediation-01"
+  next_execution_phase: "none"
   phase_detail_file: "cortex-registry/planning/phases/v2/phase-m17-remediation-01.yaml"
 
 workflow_composer_fixes:
@@ -400,9 +396,9 @@ session_resume_protocol:
     maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
 
 runtime_state:
-  last_completed_phase: "phase-m17"
+  last_completed_phase: "phase-m21"
   next_executable_phase: "none"
-  last_session_action: "phase-m17 completed: deep cleanup and enforcement hardening converged with canonical one-path validation, policy-gate activation, and green smoke/preflight gates."
+  last_session_action: "phase-m21 completed with all 6 gaps closed and validation gates green; phase-m20 remains blocked pending unredacted intake."
   last_session_prompt: "AUTO_RESUME_FROM_ACTIVE_PLAN"
 
 phase_detail_files:
@@ -593,6 +589,38 @@ phase_detail_files:
     depends_on: ["phase-m16"]
     file: "cortex-registry/planning/phases/v2/phase-m17-deep-cleanup-and-enforcement-hardening.yaml"
     note: "COMPLETE — canonical capability mapping, governance/policy split hardening, protected-surface controls (CODEOWNERS + policy gate), and converged golden/validator/smoke/preflight gates with zero-regression evidence."
+
+  - id: phase-m18
+    title: "Feedback Issue 18 — Backport Capability Bundle"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-M18-ISSUE18-BACKPORT
+    gaps: 9
+    sub_phases: 3
+    depends_on: ["phase-m17"]
+    file: "cortex-registry/planning/phases/v2/phase-m18-feedback-issue18-backlog.yaml"
+    note: "COMPLETE — issue #18 backport capability bundle verified present in current branch and reconciled as closed."
+
+  - id: phase-m20
+    title: "Feedback Issue 20 — Redacted Intake and Decomposition"
+    priority: P0
+    status: BLOCKED
+    sweep_id: SWEEP-M20-ISSUE20-REDACTED
+    gaps: 2
+    sub_phases: 1
+    file: "cortex-registry/planning/phases/v2/phase-m20-feedback-issue20-redacted-intake.yaml"
+    note: "BLOCKED — source issue body is redacted; unredacted requirements required before decomposition/execution."
+
+  - id: phase-m21
+    title: "Feedback Issue 21 — Skill, Docs, and Governance Intake Bundle"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-M21-ISSUE21-BACKPORT
+    gaps: 6
+    sub_phases: 3
+    depends_on: ["phase-m18"]
+    file: "cortex-registry/planning/phases/v2/phase-m21-feedback-issue21-backlog.yaml"
+    note: "COMPLETE — all 6 gaps CLOSED. M21 skill/docs/governance bundle ready for integration."
 # ============================================================
 # CORTEX v2 is designed to ADAPT to evolving LLM capabilities.
 # The LLM Capability Manifest (cortex-registry/core/llm-capabilities.yaml)
@@ -636,15 +664,15 @@ production_readiness:
     latest_preflight: "465 passed, 10 skipped in 5.79s"
     production_validator: "99.2% readiness; 0 critical; 0 high; deployment ready"
 
-  total_phases: 17
+  total_phases: 20
   active: 0
-  completed: 17
+  completed: 19
   in_progress: 0
   planned: 0
   archived: 0
-  completion_percentage: 100
-  consolidation_summary: "2026-03-16 — M17 closed: deep cleanup and enforcement hardening complete with policy-gate activation and zero-regression certification evidence."
-  active_phases: "none — all migration phases complete"
+  completion_percentage: 95
+  consolidation_summary: "2026-03-20 — M21 completed with all 6 gaps closed and validation gates green; M20 remains blocked pending unredacted intake."
+  active_phases: "phase-m20 blocked"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -851,3 +879,38 @@ phases:
     sub_phases: 5
     file: "cortex-registry/planning/phases/v2/phase-m17-deep-cleanup-and-enforcement-hardening.yaml"
     note: "P0 — COMPLETE. Deep cleanup and enforcement hardening delivered with canonical one-path mapping, governance/policy hard-split, anti-tamper protected surfaces, and zero-regression evidence."
+
+  # Phase M18 — ISSUE 18 BACKPORT BUNDLE (depends: M17)
+  - id: phase-m18
+    title: "Feedback Issue 18 — Backport Capability Bundle"
+    priority: P0
+    status: COMPLETE
+    depends_on: ["phase-m17"]
+    sweep_id: SWEEP-M18-ISSUE18-BACKPORT
+    gaps: 9
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/v2/phase-m18-feedback-issue18-backlog.yaml"
+    note: "P0 — COMPLETE. Dashboard/knowledge/DoR/governance backport bundle from issue #18 is already implemented and validated in current branch." 
+
+  # Phase M20 — ISSUE 20 REDACTED INTAKE (blocked)
+  - id: phase-m20
+    title: "Feedback Issue 20 — Redacted Intake and Decomposition"
+    priority: P0
+    status: BLOCKED
+    sweep_id: SWEEP-M20-ISSUE20-REDACTED
+    gaps: 2
+    sub_phases: 1
+    file: "cortex-registry/planning/phases/v2/phase-m20-feedback-issue20-redacted-intake.yaml"
+    note: "P0 — BLOCKED. Source owner must disclose unredacted requirements before execution can begin."
+
+  # Phase M21 — ISSUE 21 SKILL/DOCS/GOVERNANCE INTAKE (depends: M18)
+  - id: phase-m21
+    title: "Feedback Issue 21 — Skill, Docs, and Governance Intake Bundle"
+    priority: P0
+    status: COMPLETE
+    depends_on: ["phase-m18"]
+    sweep_id: SWEEP-M21-ISSUE21-BACKPORT
+    gaps: 6
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/v2/phase-m21-feedback-issue21-backlog.yaml"
+    note: "P0 — COMPLETE. All 6 gaps are closed with validation evidence including drift-lock-54/html conversion enforcement."

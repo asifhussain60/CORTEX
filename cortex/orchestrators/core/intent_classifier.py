@@ -110,7 +110,7 @@ _REGEX_PATTERNS: List[Tuple[re.Pattern[str], IntentType, float]] = [
     (re.compile(r"\b(implement|create|build|add|develop|construct|rebuild|rework|scaffold|assemble|generate|fabricate)\b", re.I), IntentType.IMPLEMENT, 0.75),
     # IMPLEMENT — multi-word phrasal verbs (must use lookahead-friendly pattern)
     (re.compile(r"\b(spin\s+up|stand\s+up|wire\s+up)\b", re.I), IntentType.IMPLEMENT, 0.78),
-    (re.compile(r"\b(document|docs|documentation)\b", re.I), IntentType.DOCUMENT, 0.80),
+    (re.compile(r"\b(document|docs|documentation|revdoc|wikiexpand|wiki\s+expand|doc\s+diagram|diagram\s+generation)\b", re.I), IntentType.DOCUMENT, 0.80),
     (re.compile(r"\b(onboard|onboarding|bootstrap|initialize|register)\b", re.I), IntentType.ONBOARD, 0.85),
     (re.compile(r"\b(rephrase|reword|token optim|compact this)\b", re.I), IntentType.REPHRASE, 0.88),
     # VACUUM — extended with housekeeping/declutter/sweep aliases
@@ -148,6 +148,7 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
     ],
     IntentType.DOCUMENT: [
         "document", "docs", "documentation", "write", "report", "generate", "export",
+        "revdoc", "wikiexpand", "wiki expand", "doc diagram", "diagram generation",
     ],
     IntentType.ANALYZE: [
         "analyze", "analyse", "investigate", "inspect", "examine", "scan",
@@ -484,6 +485,9 @@ class IntentClassifier:
             "test": IntentType.IMPLEMENT,
             "migrate": IntentType.IMPLEMENT,
             "security": IntentType.AUDIT,
+            "revdoc": IntentType.DOCUMENT,
+            "wikiexpand": IntentType.DOCUMENT,
+            "wiki_expand": IntentType.DOCUMENT,
             "document": IntentType.DOCUMENT,
             "onboard": IntentType.ONBOARD,
             "rephrase": IntentType.REPHRASE,

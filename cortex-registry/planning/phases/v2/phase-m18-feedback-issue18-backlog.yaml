@@ -1,0 +1,38 @@
+id: "phase-m18"
+title: "Feedback Issue 18 — Backport Capability Bundle"
+created: "2026-03-20"
+status: COMPLETE
+priority: P0
+source_issue: "https://github.com/asifhussain60/CORTEX/issues/18"
+sweep_catalogue_id: "SWEEP-M18-ISSUE18-BACKPORT"
+completed_on: "2026-03-20"
+closure_note: "Closed — capabilities already present in current branch from completed issue-18 backport chain (infra/database health, knowledge index wiring, DoR + personality, vacuum protection GV-028..034, dashboard intelligence pipeline)."
+
+sweep_catalogue:
+  - id: "GAP-M18-01"
+    title: "Dashboard intelligence pipeline (7-stage)"
+    status: CLOSED
+  - id: "GAP-M18-02"
+    title: "Knowledge injection exit gate + INDEX loader wiring"
+    status: CLOSED
+  - id: "GAP-M18-03"
+    title: "Database health verifier + CORE-069/070 enforcement"
+    status: CLOSED
+  - id: "GAP-M18-04"
+    title: "DoR hard gate primitive and workflow step-0 coverage (CORE-071)"
+    status: CLOSED
+  - id: "GAP-M18-05"
+    title: "Response personality atoms + intent reflection integration"
+    status: CLOSED
+  - id: "GAP-M18-06"
+    title: "Vacuum source protection hardening (GV-028..034)"
+    status: CLOSED
+  - id: "GAP-M18-07"
+    title: "Persona-layered dashboard tab renderers"
+    status: CLOSED
+  - id: "GAP-M18-08"
+    title: "CORTEX framework self-aware analyzer + materialization"
+    status: CLOSED
+  - id: "GAP-M18-09"
+    title: "CORE-035 canonical best-practices import-path consolidation"
+    status: CLOSED

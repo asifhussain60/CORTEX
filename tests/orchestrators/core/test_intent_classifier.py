@@ -46,6 +46,8 @@ class TestExactOperationMatch:
             ("digest", IntentType.DIGEST),
             ("implement", IntentType.IMPLEMENT),
             ("onboard", IntentType.ONBOARD),
+            ("revdoc", IntentType.DOCUMENT),
+            ("wikiexpand", IntentType.DOCUMENT),
         ],
     )
     def test_exact_match_returns_correct_intent(
@@ -84,6 +86,8 @@ class TestTier1Regex:
             ("audit the codebase for stale imports", IntentType.AUDIT),
             ("refactor the master orchestrator for clarity", IntentType.REFACTOR),
             ("plan the next phase of development", IntentType.PLAN),
+            ("revdoc the architecture changes", IntentType.DOCUMENT),
+            ("wikiexpand this module documentation", IntentType.DOCUMENT),
         ],
     )
     def test_regex_fires_for_canonical_phrases(

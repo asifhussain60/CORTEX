@@ -37,6 +37,8 @@ User Request → MasterOrchestrator.coordinate_operation()
   → Result + Audit Trail (inline only)
 ```
 
+**Unified VS Code front-door:** `.github/agents/core/cortex-unified-vscode-agent.md` acts as intake facade and delegates to specialist agents from `.github/agents/AGENT-INDEX.md` without altering mode contracts.
+
 **No bypass:** All requests through MasterOrchestrator. No direct MCP calls without orchestrator context.
 
 ---

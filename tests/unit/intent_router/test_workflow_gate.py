@@ -328,6 +328,21 @@ class TestOrchestratorSelection:
         decision = router.route(intent)
         
         assert decision.orchestrator == "TDDOrchestrator"
+
+    def test_select_documentation_orchestrator_for_revdoc(self):
+        """REVDOC alias operations should select DocumentationOrchestrator."""
+        router = WorkflowComplexityRouter()
+        intent = Intent(
+            operation_type="revdoc",
+            target_files=["docs/architecture.md"],
+            dependencies=[],
+            risk_level="LOW",
+            metadata={}
+        )
+
+        decision = router.route(intent)
+
+        assert decision.orchestrator == "DocumentationOrchestrator"
     
     def test_select_interaction_orchestrator_for_unknown(self):
         """Unknown operations default to InteractionOrchestrator (LENS comprehension).

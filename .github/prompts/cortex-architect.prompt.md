@@ -78,6 +78,11 @@ These reviews remain within DESIGN and INVESTIGATE intent space but use a dedica
 
 ## Mode Routing Contract
 
+Unified intake front-door:
+- Use `.github/agents/core/cortex-unified-vscode-agent.md` as the VS Code entry facade.
+- Delegate from unified intake to specialist agents listed in `.github/agents/AGENT-INDEX.md`.
+- Preserve existing 13 execution-mode semantics; unified intake does not introduce a new mode.
+
 - AUDIT → Audit coordinator workflow
 - IMPLEMENT/FIX/REFACTOR → TDD workflow templates
 - DESIGN/PLAN/QUERY/INVESTIGATE → architecture or analysis workflows

@@ -65,6 +65,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 |-------|---------|-----------|
 | **cortex-architect.md** | Mode router + challenge enforcer + production readiness | Architecture, audits, design |
 | **cortex-audit-coordinator.md** | Codebase health, production-readiness scanning, git delta audit coordination | `/audit`, quality analysis |
+| **cortex-unified-vscode-agent.md** | Unified VS Code front-door agent with challenge-first intake and specialist delegation | Holistic architecture review, mixed-intent sessions, guided execution |
 | **cortex-executor.md** | Code execution + TDD implementation | Running tests, implementation |
 | **cortex-interactive.md** | Conversational mode | Questions, exploratory |
 | **cortex-meta-auditor.md** | Meta-level governance auditing | Governance coherence checks |
@@ -188,6 +189,7 @@ are resolved or explicitly approved as WONT-FIX.
 | **RCA** | cortex-debugger.md + `cortex_learning` op=`rca` | ~3,500 |
 | **GOLDEN_TEST** | cortex-executor.md + cortex-architect.md | ~5,000 |
 | **WORKFLOW_COMPOSE** | cortex-architect.prompt.md (§ WORKFLOW COMPOSE MODE) | ~3,000 |
+| **UNIFIED** | cortex-unified-vscode-agent.md + intent-specific specialist delegates | ~2,400 + delegate cost |
 
 > **Default context:** `cortex-architect.prompt.md` only. Load specialist agents on-demand per intent above.
 
