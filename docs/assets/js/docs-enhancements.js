@@ -191,6 +191,15 @@
   }
 
   function run() {
+    var path = window.location.pathname || '';
+    if (
+      path === '/' ||
+      path.endsWith('/index.html') ||
+      path.endsWith('/CORTEX/')
+    ) {
+      return;
+    }
+
     ensureStylesheet();
     var metrics = summarizeContext();
     injectContentPanel(metrics);

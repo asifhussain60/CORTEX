@@ -5648,58 +5648,6 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SECTION: PO Intelligence Dashboard (Tab 11) — Phase 129
-         Product Owner metrics: velocity trend, capacity, risk register
-         ═══════════════════════════════════════════════════════ -->
-    <section class="container section" id="po-dashboard-tab" aria-labelledby="po-dashboard-heading">
-        <div class="text-center mb-16">
-            <!-- Tab 11 nav item -->
-            <span id="po-dashboard-nav" class="po-tab-nav-item" data-tab-index="11" aria-label="PO Dashboard">
-                <i class="fas fa-chart-line" aria-hidden="true"></i>
-                <span>PO Dashboard</span>
-            </span>
-            <h2 class="text-4xl text-gradient font-bold" id="po-dashboard-heading">Product Owner Intelligence Dashboard</h2>
-            <p class="text-muted text-xl max-w-2xl mx-auto">
-                Real-time velocity trends, sprint capacity, and risk signals — powered by CORTEX PO Intelligence Suite.
-            </p>
-        </div>
-
-        <!-- D3 Velocity Chart -->
-        <div
-            id="po-velocity-chart"
-            class="po-chart-container"
-            data-schema="docs/data/po-metrics-schema.json"
-            aria-label="Sprint velocity trend chart (D3.js)"
-            role="img"
-            style="min-height:200px;background:rgba(0,0,0,0.15);border-radius:12px;padding:2rem;border:1px solid rgba(255,255,255,0.06);"
-        >
-            <p style="color:var(--text-tertiary);text-align:center;padding-top:1rem;">
-                <i class="fas fa-chart-bar" aria-hidden="true"></i>
-                Velocity trend chart renders here via D3.js when sprint data is loaded.
-            </p>
-        </div>
-
-        <!-- Metrics grid -->
-        <div class="po-metrics-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-top:2rem;">
-            <div class="po-metric-card" style="background:rgba(0,0,0,0.2);border-radius:12px;padding:1.5rem;border:1px solid rgba(255,255,255,0.06);">
-                <div style="color:var(--accent-cyan);font-size:1.5rem;margin-bottom:0.5rem;"><i class="fas fa-tachometer-alt" aria-hidden="true"></i></div>
-                <div style="font-size:1.1rem;font-weight:700;color:var(--text-primary);">Sprint Capacity</div>
-                <div style="color:var(--text-tertiary);font-size:0.875rem;margin-top:0.25rem;">WSJF-ranked committed points with confidence intervals</div>
-            </div>
-            <div class="po-metric-card" style="background:rgba(0,0,0,0.2);border-radius:12px;padding:1.5rem;border:1px solid rgba(255,255,255,0.06);">
-                <div style="color:#f59e0b;font-size:1.5rem;margin-bottom:0.5rem;"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i></div>
-                <div style="font-size:1.1rem;font-weight:700;color:var(--text-primary);">Risk Register</div>
-                <div style="color:var(--text-tertiary);font-size:0.875rem;margin-top:0.25rem;">Likelihood × impact signals from live work items</div>
-            </div>
-            <div class="po-metric-card" style="background:rgba(0,0,0,0.2);border-radius:12px;padding:1.5rem;border:1px solid rgba(255,255,255,0.06);">
-                <div style="color:#a78bfa;font-size:1.5rem;margin-bottom:0.5rem;"><i class="fas fa-project-diagram" aria-hidden="true"></i></div>
-                <div style="font-size:1.1rem;font-weight:700;color:var(--text-primary);">Dependency Graph</div>
-                <div style="color:var(--text-tertiary);font-size:0.875rem;margin-top:0.25rem;">D3-rendered feature dependency graph with critical path</div>
-            </div>
-        </div>
-    </section>
-
 </main>
 
 <!-- ─── Compact single-row footer ─── -->
