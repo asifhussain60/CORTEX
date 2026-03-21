@@ -1,5 +1,6 @@
 ---
 scope: non-production-admin
+purpose: "Production certification detail for cortex-plan skill; reserved for skill loading"
 ---
 # CORTEX Total Recall — Production Certification Authority
 

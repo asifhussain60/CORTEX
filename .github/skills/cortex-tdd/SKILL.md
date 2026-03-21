@@ -2,6 +2,7 @@
 name: cortex-tdd
 description: 'CORTEX TDD workflow skill. Use when: implementing features, fixing bugs, refactoring code, or any code-modifying operation. Covers CORE-008 TDD cycle (RED-GREEN-REFACTOR), holistic validation gate (CORE-048), sweep completeness (CORE-064), convergence gate (CORE-068), and workflow template routing for IMPLEMENT, FIX, and REFACTOR intents.'
 argument-hint: 'implement <feature> | fix <bug> | refactor <scope>'
+detail-prompt-file: '../../prompts/cortex-architect.prompt.md'
 ---
 
 # CORTEX TDD Workflow

@@ -2,6 +2,7 @@
 name: cortex-debug
 description: 'CORTEX debug pipeline skill. Use when: running /debug, /debug-inject, /debug-cleanup, inserting debug markers, analyzing test failures, tracing API calls, capturing frontend console output, or investigating root causes with marker injection. Covers 8 injection strategies (3 Python + 5 multi-stack), Vision API, and auto-cleanup.'
 argument-hint: 'debug <file> | debug-inject <path> | debug-cleanup'
+detail-prompt-file: '../../prompts/cortex-architect.prompt.md'
 ---
 
 # CORTEX Multi-Stack Debug Pipeline

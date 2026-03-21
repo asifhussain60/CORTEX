@@ -2,6 +2,7 @@
 name: cortex-plan
 description: 'CORTEX planning and lifecycle skill. Use when: running /plan, /totalrecall, /digest, /distill, /onboard, /decompose, editing cortex-master.yaml, creating or completing phases, or managing the master plan. Covers THIN INDEX CONTRACT, phase lifecycle, phase templates, production certification, content digestion, and service decomposition.'
 argument-hint: 'plan <feature> | totalrecall | digest <path> | onboard <repo>'
+detail-prompt-file: '../../prompts/cortex-total-recall.prompt.md'
 ---
 
 # CORTEX Planning & Lifecycle

@@ -2,6 +2,7 @@
 name: cortex-architecture-review
 description: 'CORTEX architecture review skill. Use when: running architecture review, tutorial mode review, Claude backbone review, cross-cutting YAML review, explainability review, regression comparison against origin/CORTEX, or capacity and consolidation analysis. Covers runtime architecture, prompts, agents, skills, governance, knowledge YAMLs, LENS, onboarding, SQLite tracing, and tooling-footprint reduction.'
 argument-hint: 'architecture review | tutorial mode | claude backbone | origin/CORTEX | consolidation'
+detail-prompt-file: '../../prompts/cortex-architecture-review.prompt.md'
 ---
 
 # CORTEX Architecture Review Skill

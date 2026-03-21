@@ -2,6 +2,7 @@
 name: cortex-audit
 description: 'CORTEX audit and quality skill. Use when: running /audit, /audit fix, /health, /healthcheck, checking production readiness, scanning for issues, running governance checks, or validating wiring contracts. Covers the 9-stage audit pipeline, 29-point + 12 hardening checks, health endpoints, and drift lock protocol.'
 argument-hint: 'fix | health | stage <1-9> | check <1-41>'
+detail-prompt-file: '../../prompts/cortex-architect.prompt.md'
 ---
 
 # CORTEX Audit & Quality

@@ -3,6 +3,8 @@
 **Updated:** 2026-03-15 | **Mode:** Token-optimized SSOT
 **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
+**NOTE:** This prompt provides architect mode detail referenced by CORTEX.prompt.md and skills. It maintains production-critical routing contracts.
+
 ---
 
 ## Purpose

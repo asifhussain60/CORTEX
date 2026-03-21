@@ -1,5 +1,6 @@
 ---
 scope: non-production-admin
+purpose: "Documentation orchestration detail for cortex-doc skill; reserved for skill loading"
 ---
 # CORTEX Documentation Orchestrator
 **Updated:** 2026-03-09 (Phase 109.3 — `visual-qa-agent.md` added; screenshot-triggered visual audit pipeline wired; "fix this" / "redesign this" + screenshot auto-routes to Vision API audit; Phase 109.2 — Tetris Layout Engine added; `tetris-layout-agent.md` wired; `tetris-layout-spec.yaml` in cortex-registry; trigger phrase routing added · `serve` argument added — kills port 8000, closes ALL existing Terminal windows, opens single Mac Terminal, launches Chrome) | **Status:** ✅ PRODUCTION READY

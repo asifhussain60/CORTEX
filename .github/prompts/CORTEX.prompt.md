@@ -47,9 +47,16 @@ User Request → MasterOrchestrator.coordinate_operation()
 
 ### Intent Routing
 
-Requests are classified by `IntentRouter` and routed to domain orchestrators. The full intent-to-orchestrator mapping, keyword lists, and mode-specific arguments are defined exclusively in `cortex-architect.prompt.md` and its agents (CORE-035: single canonical source).
+Requests are classified by `IntentRouter` and routed to domain orchestrators. The full intent-to-orchestrator mapping, keyword lists, and mode-specific arguments are defined exclusively in **skills**, accessed via `cortex_skill` MCP tool (CORE-035: single canonical source):
 
-**This prompt provides the routing pipeline only — not mode details.**
+- **Architect mode routing:** `.github/skills/cortex-architecture-review/SKILL.md`
+- **TDD & testing:** `.github/skills/cortex-tdd/SKILL.md`  
+- **Audit & governance:** `.github/skills/cortex-audit/SKILL.md`
+- **Debug & RCA:** `.github/skills/cortex-debug/SKILL.md`
+- **Planning & certification:** `.github/skills/cortex-plan/SKILL.md`
+- **Core CORTEX operations:** `.github/skills/cortex/SKILL.md`
+
+**This prompt provides the routing pipeline only. Specialized behavior is loaded from skills, not from subsidiary prompts.**
 
 ### Default Handler: InteractionOrchestrator (Stage 1)
 
@@ -123,7 +130,7 @@ Exempt: QUERY, REPHRASE, INTRODUCE, DIGEST, DESIGN, PLAN, RCA
 
 **Trigger:** `/audit`, `/audit fix`, "scan for issues", "check repo health"
 
-The full 9-stage pipeline, 19-point production readiness audit table, and auto-fix details are defined in `cortex-architect.prompt.md` § AUDIT MODE (CORE-035: single canonical source). This prompt provides the routing entry point only.
+The full 9-stage pipeline, 19-point production readiness audit table, and auto-fix details are defined in `.github/skills/cortex-audit/SKILL.md` (CORE-035: single canonical source). This prompt provides the routing entry point only.
 
 **Key facts:**
 - `/audit fix` runs a 9-stage pipeline with convergence guarantee (loops until 0 P0/P1)
@@ -136,7 +143,7 @@ The full 9-stage pipeline, 19-point production readiness audit table, and auto-f
 
 **Trigger:** "fix", "bug", "broken", "error", "failing"
 
-The full TDD sequence (RED → GREEN → REFACTOR), sweep completeness contract (CORE-064), and convergence gate (CORE-068) details are defined in `cortex-architect.prompt.md` § FIX MODE (CORE-035: single canonical source). This prompt provides the routing entry point only.
+The full TDD sequence (RED → GREEN → REFACTOR), sweep completeness contract (CORE-064), and convergence gate (CORE-068) details are defined in `.github/skills/cortex-tdd/SKILL.md` (CORE-035: single canonical source). This prompt provides the routing entry point only.
 
 **Key facts:**
 - TDD mandatory — write/confirm failing test before fixing (CORE-008)
@@ -247,10 +254,14 @@ Every operation:
 
 | Doc | Purpose |
 |-----|---------|
-| `.github/prompts/cortex-architect.prompt.md` | Architect mode (expanded execution modes) |
+| `.github/skills/cortex/SKILL.md` | CORTEX operations and mode routing |
+| `.github/skills/cortex-tdd/SKILL.md` | TDD workflow (code-modifying) |
+| `.github/skills/cortex-audit/SKILL.md` | Audit and governance |
+| `.github/skills/cortex-debug/SKILL.md` | Debug and RCA |
+| `.github/skills/cortex-plan/SKILL.md` | Planning and certification |
+| `.github/skills/cortex-architecture-review/SKILL.md` | Architecture review |
 | `.github/templates/cortex-response-templates.md` | Response formatting SSOT |
 | `cortex-registry/core/` | CORE governance rules |
-| `cortex-registry/planning/cortex-refactor-master.yaml` | Refactor plan |
 
 ---
 

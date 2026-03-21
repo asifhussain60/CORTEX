@@ -6,7 +6,9 @@ system-prompt-file: ../prompts/CORTEX.prompt.md
 scope: non-production-admin
 ---
 
-# CORTEX Agent
+# CORTEX Agent — Unified Entry Point
+
+**CRITICAL:** This is the ONLY user-facing agent in the VS Code picker. The `scope: non-production-admin` marker indicates governance classification, not visibility. All other agents under `.github/agents/` are reserved for internal delegation only.
 
 CORTEX is the single VS Code agent entry point for this repository.
 
@@ -22,6 +24,7 @@ CORTEX is the single VS Code agent entry point for this repository.
 - AUDIT and HEALTH workflows with governance enforcement.
 - DEBUG and RCA execution with structured root-cause analysis.
 - PLAN, DIGEST, REVIEW, and architecture-oriented orchestration.
+- All specialized modes accessible via keywords (e.g., `/audit`, `/implement`, `/sync`)
 
 ## Governance
 

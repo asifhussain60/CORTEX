@@ -1,5 +1,6 @@
 ---
 scope: non-production-admin
+purpose: "Training and feedback orchestration detail for cortex-tdd skill; reserved for skill loading"
 ---
 # CORTEX Trainer Prompt
 

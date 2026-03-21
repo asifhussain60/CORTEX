@@ -1,5 +1,6 @@
 ---
 scope: non-production-admin
+purpose: "Architecture review detail for cortex-architecture-review skill; reserved for skill loading"
 ---
 
 # CORTEX Architecture Review Prompt

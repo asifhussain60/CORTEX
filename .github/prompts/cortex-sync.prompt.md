@@ -1,5 +1,6 @@
 ---
 scope: non-production-admin
+purpose: "Sync operations detail for cortex-sync-agent.md; reserved for agent loading"
 prompt_id: cortex-sync
 status: active
 mode: SYNC
