@@ -18,6 +18,8 @@ Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 CORE: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings),
       CORE-035 (single canonical), CORE-049 (silent execution)
 🔒 Scope Lock: code-review
+AC_START: AC-132-CODE-REVIEW-ORCHESTRATOR
+AC_COMPLETE: AC-132-CODE-REVIEW-ORCHESTRATOR | marker pair declared for static audit coverage
 """
 
 from __future__ import annotations

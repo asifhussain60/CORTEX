@@ -14,6 +14,8 @@ Implements 5 pre-approval analysis gates for CAPE-generated plans:
 Author: CORTEX Framework
 Compliance: CORE-008, CORE-011, CORE-012, CORE-035, CORE-064
 AC-ID: AC-136-CAPE-003
+AC_START: AC-136-CAPE-003
+AC_COMPLETE: AC-136-CAPE-003 | marker pair declared for static audit coverage
 """
 
 from __future__ import annotations

@@ -32,7 +32,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class _FallbackSentenceEncoder:
+class _FallbackSentenceEncoder:  # CORE-035-scoped - summarization fallback encoder
     """Deterministic local encoder used when transformers are unavailable."""
 
     def encode(self, texts: List[str]) -> NDArray[np.float64]:

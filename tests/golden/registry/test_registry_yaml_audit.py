@@ -23,6 +23,8 @@ QUALITY_GATE_YAML = ROOT / "cortex-registry" / "core" / "test-quality-gate.yaml"
 QUALITY_GATE_PY = ROOT / "cortex" / "testing" / "quality_gate.py"
 
 REQUIRED_WORKFLOW_FIELDS = {"id", "name"}
+KNOWN_BROKEN_WORKFLOW_TEMPLATES: set[str] = set()
+KNOWN_EMPTY_WORKFLOW_TEMPLATES: set[str] = set()
 DELETED_PATH_PATTERNS = [
     "cortex_intelligence",   # dissolved package — but cortex_intelligence_matrix is VALID (MCP tool)
     "cortex_lens",           # dissolved package — cortex.lens (dot) is the canonical MCP tool name
@@ -61,20 +63,41 @@ def _load_yaml(path: Path) -> dict:
 class TestWorkflowTemplateSchema:
     """All workflow templates must satisfy required schema fields."""
 
+    def test_workflow_template_exemption_lists_remain_justified(self) -> None:
+        """Known broken/empty workflow exemptions must correspond to real unresolved files."""
+        stale_broken = []
+        for name in KNOWN_BROKEN_WORKFLOW_TEMPLATES:
+            matches = list(TEMPLATES_ROOT.rglob(name))
+            if not matches:
+                stale_broken.append(name)
+
+        stale_empty = []
+        for name in KNOWN_EMPTY_WORKFLOW_TEMPLATES:
+            matches = list(TEMPLATES_ROOT.rglob(name))
+            if not matches:
+                stale_empty.append(name)
+                continue
+            for path in matches:
+                with path.open() as fh:
+                    content = yaml.safe_load(fh)
+                if content not in (None, {}):
+                    stale_empty.append(path.relative_to(ROOT).as_posix())
+
+        assert not stale_broken and not stale_empty, (
+            "Workflow template xfail exemptions are stale. "
+            f"broken={stale_broken}, empty={stale_empty}"
+        )
+
     def test_all_workflow_templates_parse_as_yaml(self) -> None:
         """Every .yaml file in templates/ must be parseable.
         
         Pre-existing YAML syntax errors in Phase 49+ governance templates are tracked
         as a separate cleanup sweep.
         """
-        # Known pre-existing broken files (Phase 49+ era, pre-Phase 63)
-        KNOWN_BROKEN: set[str] = {
-            "golden-test-promotion.yaml",  # Line 472 block mapping syntax error (Phase 49)
-        }
         failed = []
         pre_existing = []
         for yaml_file in TEMPLATES_ROOT.rglob("*.yaml"):
-            if yaml_file.name in KNOWN_BROKEN:
+            if yaml_file.name in KNOWN_BROKEN_WORKFLOW_TEMPLATES:
                 pre_existing.append(str(yaml_file.relative_to(ROOT)))
                 continue
             try:
@@ -96,13 +119,10 @@ class TestWorkflowTemplateSchema:
         
         Known empty placeholder files are xfailed for separate cleanup.
         """
-        KNOWN_EMPTY: set[str] = {
-            "css-extraction-workflow.yaml",  # Empty placeholder (pre-Phase 63)
-        }
         empty = []
         pre_existing_empty = []
         for yaml_file in TEMPLATES_ROOT.rglob("*.yaml"):
-            if yaml_file.name in KNOWN_EMPTY:
+            if yaml_file.name in KNOWN_EMPTY_WORKFLOW_TEMPLATES:
                 pre_existing_empty.append(str(yaml_file.relative_to(ROOT)))
                 continue
             try:

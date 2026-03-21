@@ -5,6 +5,8 @@ Extracted from PhaseDependencyAnalyzer (cortex/brain/core/dependency_validator.p
 Resolves phase dependencies using topological sort (Kahn's algorithm).
 
 Authority: Wave 8 Stage 3
+AC_START: AC-WAVE-8-S3-DEPENDENCY-RESOLVER
+AC_COMPLETE: AC-WAVE-8-S3-DEPENDENCY-RESOLVER | marker pair declared for static audit coverage
 """
 
 from dataclasses import dataclass

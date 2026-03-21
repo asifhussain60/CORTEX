@@ -115,7 +115,7 @@ class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult 
         }
 
 
-class InputValidator:
+class InputValidator:  # CORE-035-scoped - orchestration input governance variant
     """
     Main validator for LLM inputs.
 

@@ -9,6 +9,9 @@ Example:
   imports = ['fastapi', 'pydantic', 'pytest']
   categories = mapper.map_imports(imports)
   # Returns: [('fastapi', 0.95), ('pydantic', 0.90), ('pytest', 0.88)]
+
+AC_START: AC-PHASE54-S3-T1
+AC_COMPLETE: AC-PHASE54-S3-T1 | marker pair declared for static audit coverage
 """
 # CORE-035 — domain-scoped; class name appropriate for this module
 

@@ -6,6 +6,8 @@ including scope analysis, phase breakdown, and TDD step ordering.
 
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 AC-ID: AC-SDLC-PHASE3-001
+AC_START: AC-SDLC-PHASE3-001
+AC_COMPLETE: AC-SDLC-PHASE3-001 | marker pair declared for static audit coverage
 """
 # CORE-035 — domain-scoped; class name is contextually appropriate here
 

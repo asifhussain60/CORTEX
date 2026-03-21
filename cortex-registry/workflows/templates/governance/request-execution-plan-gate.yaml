@@ -30,6 +30,9 @@ workflow:
     phase: "102"
     golden_tests: "tests/golden/orchestrators/plan_gate/test_plan_gate_golden.py"
     core_rules: ["CORE-008", "CORE-011", "CORE-012", "CORE-028", "CORE-035"]
+    supplemental_primitives:
+      - uses_primitive: 'primitives/governance/plan-analysis-gate.yaml'
+      - uses_primitive: 'primitives/governance/dependency-guard-migration.yaml'
 
   # ---------------------------------------------------------------------------
   # Convergence gate: Loop until all criteria met

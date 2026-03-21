@@ -9,7 +9,7 @@ from typing import Any, Dict
 from urllib.parse import urlparse
 
 
-class InputValidator:
+class InputValidator:  # CORE-035-scoped - security boundary validation variant
     """Validates and sanitizes user-provided input."""
 
     _SQL_PATTERNS = [

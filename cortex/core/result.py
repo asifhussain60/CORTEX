@@ -56,6 +56,11 @@ class Ok(Generic[T], metaclass=_ResultMeta):  # CORE-035-scoped — domain-speci
         """
         return False
 
+    @property
+    def success(self) -> bool:
+        """Compatibility flag for lifecycle-style result checks."""
+        return True
+
     def unwrap(self) -> T:
         """Get Ok value.
 
@@ -140,6 +145,11 @@ class Err(Generic[E], metaclass=_ResultMeta):  # CORE-035-scoped — domain-spec
             True (always for Err).
         """
         return True
+
+    @property
+    def success(self) -> bool:
+        """Compatibility flag for lifecycle-style result checks."""
+        return False
 
     def unwrap(self) -> T:
         """Get Ok value or raise exception.

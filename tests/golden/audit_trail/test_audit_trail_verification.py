@@ -123,11 +123,6 @@ class TestAuditRecordCreation:
     audit DB via the monkeypatched singleton. Tracked for Phase 64 AC wiring sweep.
     """
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.execute() does not write to audit DB "
-               "via singleton — Phase 64 AC wiring sweep will close this gap",
-        strict=False,
-    )
     def test_audit_trail_record_created_on_invocation(self, patched_audit_db):
         """A successful execute() must write at least one audit event."""
         orch = _StubOrchestrator("test-create-record")
@@ -136,11 +131,6 @@ class TestAuditRecordCreation:
         events = patched_audit_db.query_events(orchestrator_id="test-create-record")
         assert len(events) >= 1, "At least one audit event expected after execute()"
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.execute() does not write ORCHESTRATOR_START "
-               "— Phase 64 AC wiring sweep will close this gap",
-        strict=False,
-    )
     def test_audit_trail_start_event_on_invocation(self, patched_audit_db):
         """execute() must produce an ORCHESTRATOR_START event."""
         orch = _StubOrchestrator("test-start-event")
@@ -152,11 +142,6 @@ class TestAuditRecordCreation:
         )
         assert len(starts) >= 1, "ORCHESTRATOR_START event missing"
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.execute() does not write ORCHESTRATOR_END "
-               "— Phase 64 AC wiring sweep will close this gap",
-        strict=False,
-    )
     def test_audit_trail_end_event_on_invocation(self, patched_audit_db):
         """teardown() must produce an ORCHESTRATOR_END event."""
         orch = _StubOrchestrator("test-end-event")
@@ -177,11 +162,6 @@ class TestAuditRecordCreation:
 class TestAuditRequiredFields:
     """Every audit entry must have timestamp, orchestrator_id, event_type, status."""
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.execute() does not write audit events "
-               "— Phase 64 AC wiring sweep will close this gap",
-        strict=False,
-    )
     def test_audit_trail_required_fields(self, patched_audit_db, verifier):
         """All events produced by an invocation must have required fields."""
         orch = _StubOrchestrator("test-required-fields")
@@ -219,11 +199,6 @@ class TestAuditRequiredFields:
 class TestAuditImmutability:
     """Audit records must be append-only; no UPDATE/DELETE on past events."""
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.execute() does not write audit events "
-               "— Phase 64 AC wiring sweep will close this gap",
-        strict=False,
-    )
     def test_audit_trail_immutability(self, patched_audit_db):
         """Events written are retrievable with original data intact."""
         orch = _StubOrchestrator("test-immutable")
@@ -251,10 +226,6 @@ class TestAuditImmutability:
 class TestAuditStartEndPairs:
     """Orchestrator invocations must produce matched START/END pairs."""
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.execute() does not write audit events — Phase 64",
-        strict=False,
-    )
     def test_audit_db_has_orchestrator_start_end_events(self, patched_audit_db, verifier):
         """assert_start_end_pair succeeds after a normal execution."""
         orch = _StubOrchestrator("test-pair")
@@ -264,10 +235,6 @@ class TestAuditStartEndPairs:
         assert start_evt.event_type == EventType.ORCHESTRATOR_START.value
         assert end_evt.event_type == EventType.ORCHESTRATOR_END.value
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.execute() does not write audit events — Phase 64",
-        strict=False,
-    )
     def test_failed_execution_still_has_end_event(self, patched_audit_db, verifier):
         """Even a failing orchestrator must produce an END event (via teardown)."""
         orch = _FailingOrchestrator("test-fail-pair")
@@ -286,10 +253,6 @@ class TestAuditStartEndPairs:
 class TestAuditTimestampMonotonicity:
     """Audit event timestamps must be monotonically non-decreasing."""
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.execute() does not write audit events — Phase 64",
-        strict=False,
-    )
     def test_audit_db_timestamps_monotonic(self, patched_audit_db, verifier):
         """Three successive invocations must have non-decreasing timestamps."""
         for i in range(3):
@@ -308,10 +271,6 @@ class TestAuditTimestampMonotonicity:
 class TestAuditFullChain:
     """Full E2E chain from user request through orchestrators."""
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.execute() does not write audit events — Phase 64",
-        strict=False,
-    )
     def test_audit_chain_two_orchestrators(self, patched_audit_db, verifier):
         """Chain of two orchestrators must pass verify_full_chain."""
         orch_a = _StubOrchestrator("chain-orch-a")
@@ -324,10 +283,6 @@ class TestAuditFullChain:
         assert summary["timestamps_monotonic"] is True
         assert summary["total_events"] >= 4
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.execute() does not write audit events — Phase 64",
-        strict=False,
-    )
     def test_audit_chain_user_to_enforcement(self, patched_audit_db, verifier):
         """Simulated 3-stage chain: router -> tdd -> enforcement."""
         for orch_id in ("router", "tdd", "enforcement"):
@@ -442,10 +397,6 @@ class TestAuditVerifierErrors:
 class TestAuditViaRunMethod:
     """The run() method must also produce audit events like execute()."""
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.run() does not write audit events — Phase 64",
-        strict=False,
-    )
     def test_run_produces_start_event(self, patched_audit_db):
         """run() should produce an ORCHESTRATOR_START event."""
         orch = _StubOrchestrator("test-run-start")
@@ -457,10 +408,6 @@ class TestAuditViaRunMethod:
         )
         assert len(starts) >= 1
 
-    @pytest.mark.xfail(
-        reason="Pre-existing: OrchestratorBase.run() does not write audit events — Phase 64",
-        strict=False,
-    )
     def test_run_produces_end_event(self, patched_audit_db):
         """run() should produce an ORCHESTRATOR_END event via teardown."""
         orch = _StubOrchestrator("test-run-end")

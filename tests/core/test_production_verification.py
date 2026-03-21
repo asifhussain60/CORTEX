@@ -262,6 +262,31 @@ def find_all_planned_markers() -> List[Dict]:
 # DUPLICATE DETECTION (CORE-035)
 # =============================================================================
 
+def _class_has_scoped_duplicate_annotation(
+    source_lines: List[str],
+    node: ast.ClassDef,
+) -> bool:
+    """Return True when a class is explicitly marked as a scoped variant."""
+    line_index = node.lineno - 1
+    candidate_lines = []
+
+    if 0 <= line_index < len(source_lines):
+        candidate_lines.append(source_lines[line_index])
+
+    lookback = line_index - 1
+    while lookback >= 0 and len(candidate_lines) < 4:
+        stripped = source_lines[lookback].strip()
+        if not stripped:
+            lookback -= 1
+            continue
+        if stripped.startswith("#"):
+            candidate_lines.append(source_lines[lookback])
+            lookback -= 1
+            continue
+        break
+
+    return any("CORE-035-scoped" in line for line in candidate_lines)
+
 def find_duplicate_implementations() -> List[Dict]:
     """
     Find potential duplicate implementations (CORE-035 violations).
@@ -277,13 +302,18 @@ def find_duplicate_implementations() -> List[Dict]:
         for py_file in base_path.rglob("*.py"):
             if "test" in py_file.name.lower():
                 continue
+            if "_quarantine" in str(py_file):
+                continue
             
             try:
                 source = py_file.read_text(encoding="utf-8")
                 tree = ast.parse(source, filename=str(py_file))
+                source_lines = source.splitlines()
                 
                 for node in ast.walk(tree):
                     if isinstance(node, ast.ClassDef):
+                        if _class_has_scoped_duplicate_annotation(source_lines, node):
+                            continue
                         class_name = node.name
                         if class_name not in class_locations:
                             class_locations[class_name] = []
@@ -312,6 +342,53 @@ def find_duplicate_implementations() -> List[Dict]:
 # =============================================================================
 # TESTS
 # =============================================================================
+
+def test_find_duplicate_implementations_ignores_quarantine_directory(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Duplicate detection must ignore quarantined production shadows."""
+    production_root = tmp_path / "cortex"
+    active_dir = production_root / "infrastructure" / "security"
+    quarantine_dir = production_root / "infrastructure" / "_quarantine"
+    active_dir.mkdir(parents=True)
+    quarantine_dir.mkdir(parents=True)
+
+    (active_dir / "validator.py").write_text(
+        "class InputValidator:\n    pass\n",
+        encoding="utf-8",
+    )
+    (quarantine_dir / "validator.py").write_text(
+        "class InputValidator:\n    pass\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setitem(globals(), "PRODUCTION_PATHS", [production_root])
+
+    assert find_duplicate_implementations() == []
+
+
+def test_find_duplicate_implementations_ignores_core_035_scoped_variants(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Duplicate detection must ignore explicitly scoped domain variants."""
+    production_root = tmp_path / "cortex"
+    orchestrator_dir = production_root / "orchestrators"
+    core_dir = production_root / "core"
+    orchestrator_dir.mkdir(parents=True)
+    core_dir.mkdir(parents=True)
+
+    scoped_class = (
+        "class DashboardData:  # CORE-035-scoped - domain-specific variant\n"
+        "    pass\n"
+    )
+    (orchestrator_dir / "dashboard_a.py").write_text(scoped_class, encoding="utf-8")
+    (core_dir / "dashboard_b.py").write_text(scoped_class, encoding="utf-8")
+
+    monkeypatch.setitem(globals(), "PRODUCTION_PATHS", [production_root])
+
+    assert find_duplicate_implementations() == []
 
 class TestProductionStubDetection:
     """Test that production code has no stub implementations."""

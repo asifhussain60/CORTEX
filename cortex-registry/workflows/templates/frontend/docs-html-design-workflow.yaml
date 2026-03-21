@@ -28,6 +28,11 @@ metadata:
   technologies: [html, css, javascript, tailwindcss, d3js, lucide-icons, font-awesome]
   rollback_on_failure: true
   vision_api_integration: true
+  supplemental_primitives:
+    - uses_primitive: 'primitives/analysis/lens-vision-scan.yaml'
+    - uses_primitive: 'primitives/execution/file-extraction.yaml'
+    - uses_primitive: 'primitives/execution/semantic-edit.yaml'
+    - uses_primitive: 'primitives/validation/dom-validation.yaml'
 
 # ══════════════════════════════════════════════════════════════════════════════
 # DESIGN SYSTEM — IMMUTABLE TOKENS

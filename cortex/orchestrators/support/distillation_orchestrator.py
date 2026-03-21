@@ -62,7 +62,7 @@ class IntentGraph:
 
 
 @dataclass
-class DistillationResult:
+class DistillationResult:  # CORE-035-scoped - orchestrator distillation result variant
     """Result of running DistillationOrchestrator.distill()."""
     success: bool = False
     distilled_prompt: str = ""

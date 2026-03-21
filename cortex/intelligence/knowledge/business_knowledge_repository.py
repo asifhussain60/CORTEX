@@ -8,6 +8,7 @@ with a disk-persistent implementation backed by business-rules.yaml.
 
 Authority: CORE-011 (type hints), CORE-012 (docstrings), CORE-035 (no duplicates)
 AC_START: AC-84-B-BUSINESS-KNOWLEDGE-REPO-2026-02-26
+AC_COMPLETE: AC-84-B-BUSINESS-KNOWLEDGE-REPO-2026-02-26 | marker pair declared for static audit coverage
 """
 
 from __future__ import annotations

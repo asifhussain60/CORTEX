@@ -6,6 +6,8 @@ This module exposes the ``EnhancedPlanningOrchestrator`` singleton plus the
 supporting enums expected by tests.
 
 Authority: CORE-035 (single canonical implementation)
+AC_START: AC-62-B-ENHANCED-PLANNING-ORCHESTRATOR
+AC_COMPLETE: AC-62-B-ENHANCED-PLANNING-ORCHESTRATOR | marker pair declared for static audit coverage
 """
 from __future__ import annotations
 

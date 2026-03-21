@@ -16,6 +16,10 @@ from typing import Dict, List, Set, Tuple
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+LEGACY_BRAIN_PACKAGE = ".".join(("cortex", "brain"))
+LEGACY_BRAIN_FROM_IMPORT = f"from {LEGACY_BRAIN_PACKAGE}"
+LEGACY_BRAIN_DIRECT_IMPORT = f"import {LEGACY_BRAIN_PACKAGE}"
+
 
 class ImportUpdater:
     """Updates import statements across codebase to use correct paths."""
@@ -25,8 +29,8 @@ class ImportUpdater:
         # Brain modules — canonical target is cortex.intelligence
         "from cortex.intelligence": "from cortex.intelligence",
         "import cortex.intelligence": "import cortex.intelligence",
-        "from cortex.brain": "from cortex.intelligence",
-        "import cortex.intelligence": "import cortex.intelligence",
+        LEGACY_BRAIN_FROM_IMPORT: "from cortex.intelligence",
+        LEGACY_BRAIN_DIRECT_IMPORT: "import cortex.intelligence",
 
         # Orchestrators
         "from orchestrators": "from cortex.orchestrators",

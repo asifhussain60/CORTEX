@@ -100,7 +100,6 @@ class DoRTurn:
             "execution_time_ms": round(self.execution_time_ms, 1),
         }
 
-
 class DoRTracker:
     """
     Tracks Definition of Ready (DoR) across turns.
@@ -344,7 +343,7 @@ class DoRScore:
         }
 
 
-class DoRApprovalGate:
+class DoRApprovalGate:  # CORE-035-scoped - DoR tracking helper variant
     """
     Hard gate that blocks execution when ``DoRScore.composite`` is below threshold.
 

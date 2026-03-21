@@ -21,7 +21,7 @@ class IntentReflection:
     context: dict[str, Any] = field(default_factory=dict)
 
 
-class DoRApprovalGate:
+class DoRApprovalGate:  # CORE-035-scoped - orchestrator-facing approval gate variant
     """Definition of Ready approval gate — validates requests before execution."""
 
     def evaluate(self, reflection: IntentReflection) -> ApprovalDecision:

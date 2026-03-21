@@ -4,7 +4,7 @@ AC_START: AC-MASTER-ORCH-001
 AC-AR-006-01: Coordinates domain orchestrators (receive → delegate → aggregate → audit).
 AC-FIX-HALLUCINATION-001: Validates operations against behavioral boundaries before delegation.
 AC-UX-VISIBILITY-001: Auto-injects OrchestratorContext; displays visual indicators in responses.
-AC_COMPLETE: AC-MASTER-ORCH-001 ✅
+AC_COMPLETE: AC-MASTER-ORCH-001 ✅ 0ms
 """
 
 from __future__ import annotations

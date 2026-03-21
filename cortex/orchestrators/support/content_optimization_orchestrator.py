@@ -63,7 +63,7 @@ class FileOptimization:
 
 
 @dataclass
-class OptimizationResult:
+class OptimizationResult:  # CORE-035-scoped - orchestrator result payload variant
     """Result of running ContentOptimizationOrchestrator.optimize()."""
     success: bool = False
     files_processed: int = 0

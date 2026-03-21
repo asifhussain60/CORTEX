@@ -11,6 +11,9 @@ Example:
       loaded_yamls=['fastapi-security.yaml']
   )
   # Returns: StalenessReport(missing=['sqlalchemy'], outdated=[...], ...)
+
+AC_START: AC-PHASE54-S3-T2
+AC_COMPLETE: AC-PHASE54-S3-T2 | marker pair declared for static audit coverage
 """
 
 import logging

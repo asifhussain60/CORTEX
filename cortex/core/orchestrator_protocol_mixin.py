@@ -36,6 +36,7 @@ CORE-011 (type hints), CORE-012 (docstrings)
 import functools
 import logging
 import threading
+from datetime import datetime
 from typing import Any, Callable, Dict, Optional, TypeVar
 
 from cortex.core.result import Ok, Result
@@ -130,6 +131,30 @@ class OrchestratorProtocolMixin:
     _orch_name: str = ""
     _orch_version: str = "1.0.0"
 
+    @classmethod
+    def __init_subclass__(cls, **kwargs: Any) -> None:
+        """Wrap subclass run/execute entrypoints with audit emission.
+
+        This keeps audit trail behavior consistent for orchestrators that
+        implement their own ``run()`` / ``execute()`` methods while still
+        inheriting ``OrchestratorProtocolMixin``.
+        """
+        super().__init_subclass__(**kwargs)
+
+        for method_name in ("run", "execute"):
+            method = cls.__dict__.get(method_name)
+            if method is None or not callable(method):
+                continue
+            if getattr(method, "_cortex_audit_wrapped", False):
+                continue
+
+            @functools.wraps(method)
+            def _wrapped(self: Any, *args: Any, __method: Callable[..., Any] = method, __name: str = method_name, **kwargs: Any) -> Any:
+                return self._audit_wrapped_call(__method, __name, *args, **kwargs)
+
+            setattr(_wrapped, "_cortex_audit_wrapped", True)
+            setattr(cls, method_name, _wrapped)
+
     # ------------------------------------------------------------------
     # Execution tracking (lazy-init — safe when __init__ is not called)
     # ------------------------------------------------------------------
@@ -187,14 +212,21 @@ class OrchestratorProtocolMixin:
         Returns:
             Ok wrapping the operation result dict, or Ok with not_implemented.
         """
+        self._ensure_counters()
+        start = datetime.utcnow()
+        should_emit = self._get_audit_wrapper_depth() == 0
+
+        if should_emit:
+            self._emit_audit_start(operation_name=operation_name)
+
         # Phase 58 — cross-cutting hooks on every operation
         self._activate_cross_cutting_hooks(
             operation=operation_name,
             orchestrator_context=parameters.get("orchestrator_context"),
             unified_context=parameters.get("unified_context"),
         )
-        self._ensure_counters()
         self._uptime_requests += 1
+        result: Result
         try:
             if hasattr(self, "run"):
                 result = self.run(parameters)  # type: ignore[arg-type]
@@ -203,11 +235,118 @@ class OrchestratorProtocolMixin:
             else:
                 result = {"status": "not_implemented", "operation": operation_name}
             self._success_count += 1
-            return Ok(result)
+            result = Ok(result)
+            if should_emit:
+                self._emit_audit_end(
+                    operation_name=operation_name,
+                    started_at=start,
+                    status="success",
+                    error_message=None,
+                )
+            return result
         except Exception as exc:
             self._failure_count += 1
             from cortex.core.result import Err  # noqa: PLC0415
+            if should_emit:
+                self._emit_audit_end(
+                    operation_name=operation_name,
+                    started_at=start,
+                    status="failed",
+                    error_message=str(exc),
+                )
             return Err(str(exc))
+
+    def _get_orchestrator_id(self) -> str:
+        """Return canonical orchestrator id for audit events."""
+        orchestrator_id = getattr(self, "orchestrator_id", "")
+        if isinstance(orchestrator_id, str) and orchestrator_id.strip():
+            return orchestrator_id
+        return self.get_name()
+
+    def _get_audit_wrapper_depth(self) -> int:
+        """Get current audit wrapper nesting depth."""
+        depth = getattr(self, "_audit_wrapper_depth", 0)
+        return depth if isinstance(depth, int) else 0
+
+    def _emit_audit_start(self, operation_name: str) -> None:
+        """Emit ORCHESTRATOR_START event (best-effort, never blocks)."""
+        try:
+            from cortex.infrastructure.audit_db import AuditEntry, EventType, get_audit_db  # noqa: PLC0415
+
+            get_audit_db().log_event(
+                AuditEntry(
+                    event_type=EventType.ORCHESTRATOR_START.value,
+                    orchestrator_id=self._get_orchestrator_id(),
+                    operation=operation_name,
+                    status="started",
+                    metadata={"class": type(self).__name__, "via": "mixin"},
+                )
+            )
+        except Exception:
+            pass
+
+    def _emit_audit_end(
+        self,
+        *,
+        operation_name: str,
+        started_at: datetime,
+        status: str,
+        error_message: Optional[str],
+    ) -> None:
+        """Emit ORCHESTRATOR_END event (best-effort, never blocks)."""
+        try:
+            from cortex.infrastructure.audit_db import AuditEntry, EventType, get_audit_db  # noqa: PLC0415
+
+            duration_ms = int((datetime.utcnow() - started_at).total_seconds() * 1000)
+            get_audit_db().log_event(
+                AuditEntry(
+                    event_type=EventType.ORCHESTRATOR_END.value,
+                    orchestrator_id=self._get_orchestrator_id(),
+                    operation=operation_name,
+                    status=status,
+                    duration_ms=duration_ms,
+                    error_message=error_message,
+                    metadata={"class": type(self).__name__, "via": "mixin"},
+                )
+            )
+        except Exception:
+            pass
+
+    def _audit_wrapped_call(
+        self,
+        method: Callable[..., Any],
+        method_name: str,
+        *args: Any,
+        **kwargs: Any,
+    ) -> Any:
+        """Run an entrypoint under paired START/END audit emission."""
+        depth = self._get_audit_wrapper_depth()
+        if depth > 0:
+            return method(self, *args, **kwargs)
+
+        self._audit_wrapper_depth = depth + 1
+        started_at = datetime.utcnow()
+        self._emit_audit_start(operation_name=method_name)
+        try:
+            result = method(self, *args, **kwargs)
+            self._emit_audit_end(
+                operation_name=method_name,
+                started_at=started_at,
+                status="success",
+                error_message=None,
+            )
+            return result
+        except Exception as exc:
+            self._emit_audit_end(
+                operation_name=method_name,
+                started_at=started_at,
+                status="failed",
+                error_message=str(exc),
+            )
+            from cortex.core.result import Err  # noqa: PLC0415
+            return Err(str(exc))
+        finally:
+            self._audit_wrapper_depth = depth
 
     # ------------------------------------------------------------------
     # Cross-cutting activation hook (Phase 58 — all dimensions)

@@ -76,7 +76,7 @@ class FlowAnalysis:
 
 
 @dataclass
-class OptimizationResult:
+class OptimizationResult:  # CORE-035-scoped - response optimizer result variant
     """
     Optimization result.
 

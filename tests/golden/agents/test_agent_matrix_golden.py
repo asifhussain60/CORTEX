@@ -274,14 +274,7 @@ class TestOrchestratorProtocolMixinRollout:
 class TestCortexMasterYamlContract:
     """AC-REVIEW-05-A — cortex-master.yaml must be ≤ 850 lines (Thin Index Contract)."""
 
-    @pytest.mark.xfail(
-        reason=(
-            "REVIEW-GAP-05 RED SCAFFOLD: cortex-master.yaml — THIN INDEX CONTRACT. "
-            "This test goes GREEN when file is within 850L limit."
-        ),
-        strict=False,
-    )
-    def test_cortex_master_yaml_under_500_lines(self) -> None:
+    def test_cortex_master_yaml_within_thin_index_contract(self) -> None:
         """cortex-master.yaml must satisfy THIN INDEX CONTRACT (≤850 lines)."""
         master_yaml = REPO_ROOT / "cortex-registry" / "cortex-master.yaml"
         assert master_yaml.exists(), "cortex-registry/cortex-master.yaml must exist"

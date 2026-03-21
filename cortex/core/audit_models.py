@@ -124,6 +124,14 @@ class AuditEntry:
 
     # ── Backward-compat shims ──────────────────────────────────────────────
 
+    @property
+    def id(self) -> str:
+        """Backward-compatible alias for entry_id.
+
+        Several legacy verification paths still access ``entry.id``.
+        """
+        return self.entry_id
+
     def to_dict(self) -> dict[str, Any]:
         """Serialize to a plain dictionary.
 

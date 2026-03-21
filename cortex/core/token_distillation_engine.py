@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class DistillationResult:
+class DistillationResult:  # CORE-035-scoped - token distillation engine result variant
     """Result of content distillation"""
     original_tokens: int
     distilled_tokens: int

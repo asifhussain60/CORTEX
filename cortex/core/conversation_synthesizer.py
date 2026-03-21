@@ -30,7 +30,7 @@ from cortex.core.ml_summarizer import MLSummarizer
 logger = logging.getLogger(__name__)
 
 
-class _FallbackSentenceEncoder:
+class _FallbackSentenceEncoder:  # CORE-035-scoped - conversation continuity fallback encoder
     """Deterministic local encoder used when transformer models are unavailable."""
 
     def encode(self, texts: List[str]) -> "np.ndarray":

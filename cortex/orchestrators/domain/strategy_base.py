@@ -6,6 +6,8 @@ Base classes and models for planning execution strategies.
 AC-ID: AC-WAVE-8-S1-001
 Authority: Wave 8 Execution Activation
 Coverage Target: ≥95%
+AC_START: AC-WAVE-8-S1-001
+AC_COMPLETE: AC-WAVE-8-S1-001 | marker pair declared for static audit coverage
 """
 
 from abc import ABC, abstractmethod

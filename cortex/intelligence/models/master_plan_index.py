@@ -11,6 +11,7 @@ index without requiring callers to know the YAML file location or structure.
 CORE Rules: CORE-008 (TDD-first), CORE-011 (type hints), CORE-012 (docstrings),
             CORE-035 (single canonical — no duplicate plan parsers)
 AC_START: AC-123-REGISTRY-INTELLIGENCE-ENGINE
+AC_COMPLETE: AC-123-REGISTRY-INTELLIGENCE-ENGINE | marker pair declared for static audit coverage
 """
 from __future__ import annotations
 

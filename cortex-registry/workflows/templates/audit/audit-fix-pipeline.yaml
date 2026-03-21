@@ -49,6 +49,8 @@ workflow:
       - cortex_metrics (op: capture)
       - cortex_intelligence_matrix (op: gaps)  # Phase 65 — ENH-MATRIX-001
       - cortex.lens (op: analyze)              # Phase 65 — LENS wiring
+    supplemental_primitives:
+      - uses_primitive: 'primitives/governance/drift-lock-emit.yaml'
 
   # Phase 65 intelligence integration
   intelligence_wiring:
