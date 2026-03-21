@@ -18,5 +18,5 @@
 ## Backbone Artifacts (Required)
 - `.claude/settings.json`
 - `.claude/rules/*.md`
-- `.claude/agents/*.md`
+- `.claude/agents/.cortex-agents-readme`
 - `.claude/skills/*/SKILL.md`

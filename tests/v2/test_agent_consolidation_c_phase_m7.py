@@ -8,16 +8,25 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
-def test_m7c_vacuum_agent_merged() -> None:
-    """Vacuum capabilities consolidate into a single support agent."""
-    merged_path = REPO_ROOT / ".claude/agents/cortex-vacuum.md"
-    assert merged_path.exists(), "Merged vacuum agent missing"
+def test_m7c_single_vscode_entrypoint() -> None:
+    """VS Code discovery must expose a single CORTEX agent entry point."""
+    primary_agent_path = REPO_ROOT / ".github/agents/CORTEX.agent.md"
+    assert primary_agent_path.exists(), "Primary CORTEX agent entry point missing"
 
-    content = merged_path.read_text(encoding="utf-8")
-    assert "8-stage pipeline" in content
-    assert "CORE-064" in content
-    assert "OS artifacts" in content
-    assert "backup artifacts" in content
+    primary_content = primary_agent_path.read_text(encoding="utf-8")
+    assert "name: CORTEX" in primary_content
+    assert "system-prompt-file: ../prompts/CORTEX.prompt.md" in primary_content
+
+    claude_agents_dir = REPO_ROOT / ".claude/agents"
+    assert claude_agents_dir.exists(), ".claude/agents directory must exist"
+    assert list(claude_agents_dir.glob("*.md")) == [], (
+        ".claude/agents must not contain specialist .md agent files"
+    )
+
+    sentinel_readme = claude_agents_dir / ".cortex-agents-readme"
+    assert sentinel_readme.exists(), "Missing .claude/agents/.cortex-agents-readme"
+    sentinel_content = sentinel_readme.read_text(encoding="utf-8")
+    assert "intentionally empty" in sentinel_content.lower()
 
     removed_path = REPO_ROOT / ".github/agents/certification/cortex-vacuum-agent.md"
     assert not removed_path.exists(), "Certification vacuum worker should be merged away"

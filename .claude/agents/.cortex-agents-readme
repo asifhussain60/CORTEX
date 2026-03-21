@@ -1,0 +1,12 @@
+# .claude/agents/
+
+This directory is intentionally empty of specialist `.md` agent files.
+
+VS Code Copilot custom agent discovery uses a single picker-facing entry point:
+- `.github/agents/CORTEX.agent.md`
+
+Specialist capabilities remain available through delegated specifications in:
+- `.github/agents/core/`
+- `.github/agents/support/`
+
+This prevents duplicate agent picker entries from dual-directory discovery.

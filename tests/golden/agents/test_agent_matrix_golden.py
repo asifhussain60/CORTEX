@@ -27,6 +27,7 @@ class TestAllAgentFilesExist:
 
     # Canonical agent file paths from AGENT-INDEX.md (as of Phase 64)
     EXPECTED_AGENT_FILES: List[str] = [
+        ".github/agents/CORTEX.agent.md",
         ".github/agents/core/cortex-architect.md",
         ".github/agents/core/cortex-audit-coordinator.md",
         ".github/agents/core/cortex-executor.md",
@@ -38,7 +39,6 @@ class TestAllAgentFilesExist:
         ".github/agents/core/cortex-environment-setup.md",
         ".github/agents/core/request-rephrase-orchestrator.md",
         ".github/agents/support/cortex-debugger.md",
-        ".claude/agents/cortex-vacuum.md",
         ".github/agents/AGENT-INDEX.md",
     ]
 

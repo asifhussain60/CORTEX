@@ -10,6 +10,11 @@
 
 **CRITICAL:** This file replaces bulk agent loading. Load specific agents ONLY when needed per intent.
 
+**CRITICAL:** VS Code agent picker discovery MUST expose only `.github/agents/CORTEX.agent.md` as the user-facing agent.
+All other files in `.github/agents/core/` and `.github/agents/support/` are delegated capability specifications, not separate picker-facing entry points.
+
+**CRITICAL:** `.claude/agents/` MUST remain intentionally empty of specialist `*.md` agent files to prevent duplicate picker entries from dual-directory discovery.
+
 ```yaml
 Default Context: THIS FILE ONLY (~200 tokens)
 Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
@@ -58,6 +63,10 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 ---
 
 ## Agent Registry
+
+**Primary picker entry point:** `CORTEX.agent.md`
+
+**Delegation model:** CORTEX delegates internally to core and support agent specs listed below.
 
 ### Core Agents
 
