@@ -1,5 +1,10 @@
 # 07 Steer Sre
 
+## Synthesis Metadata
+- content_source: docs/.content/
+- diagram_source: docs/assets/diagrams/
+- synthesis_mode: documentation-orchestrator
+
 ## Steering Prompt
 Generate a V2 video in a confident, practical tone.
 

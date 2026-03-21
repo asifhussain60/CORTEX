@@ -11,11 +11,11 @@ state:
   # Last pipeline execution timestamp (ISO 8601)
   # Used by git-discovery-agent to determine "since" window.
   # Falls back to 7 days if null.
-  last_execution_timestamp: "2026-03-14T00:00:00Z"
+  last_execution_timestamp: "2026-03-21T00:00:00Z"
 
   # Last Git commit SHA processed by the pipeline.
   # Used for precise diff range (commit_range: last_commit..HEAD).
-  last_commit_sha: "5a2c950dfa0d1e732b0e061e03faaa1c8fce0d94"
+  last_commit_sha: "4b4fab0dc1d7b9a44713e4f785bcc8b6161aa880"
 
   # GitHub Issue Tracking — used by github-issue-harvester-agent
   github_issues:
@@ -39,6 +39,16 @@ state:
 
   # Pipeline execution history (last 5 runs for audit trail)
   execution_history:
+    - timestamp: "2026-03-21T00:00:00Z"
+      commit_range: "5a2c950df..4b4fab0dc"
+      phases_executed: [discovery, drift, sync, certification]
+      issues_harvested: []
+      certification_result: CERTIFIED
+      p0_count: 0
+      p1_count: 0
+      p2_count: 0
+      files_modified: 7
+      note: "Steering prompt synthesis metadata gate remediated for 7/7 files under docs/assets/video-prompts/steering-prompts."
     - timestamp: "2026-03-14T00:00:00Z"
       commit_range: "8bef9078e..5a2c950df"
       phases_executed: [discovery, drift, sync, certification]
