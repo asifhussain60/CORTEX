@@ -11,6 +11,12 @@ from dataclasses import dataclass
 from typing import Any, Dict
 
 
+class LLMResponseError(Exception):
+    """Raised when an LLM provider returns malformed or incomplete response data."""
+
+    pass
+
+
 @dataclass
 class LLMUsage:
     """Token usage information for LLM call."""

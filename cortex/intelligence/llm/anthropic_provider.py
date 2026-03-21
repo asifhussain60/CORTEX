@@ -17,7 +17,12 @@ try:
 except ImportError:
     ANTHROPIC_AVAILABLE = False
 
-from cortex.intelligence.llm.i_llm_provider import ILLMProvider, LLMResponse, LLMUsage
+from cortex.intelligence.llm.i_llm_provider import (
+    ILLMProvider,
+    LLMResponse,
+    LLMResponseError,
+    LLMUsage,
+)
 
 # PHASE 3: Import observability metrics (REQUIRED - no fallback stubs allowed)
 from cortex.observability.llm_metrics import record_llm_call, record_llm_error
@@ -105,7 +110,17 @@ class AnthropicProvider(ILLMProvider):
                 **kwargs
             )
 
-            content = response.content[0].text
+            if not response.content:
+                raise LLMResponseError("Empty response content from Anthropic API")
+
+            first_content = response.content[0]
+            content = getattr(first_content, "text", "")
+            if not content:
+                raise LLMResponseError("Missing response text in Anthropic API response")
+
+            if response.usage is None:
+                raise LLMResponseError("Missing usage data in Anthropic API response")
+
             usage = LLMUsage(
                 prompt_tokens=response.usage.input_tokens,
                 completion_tokens=response.usage.output_tokens,

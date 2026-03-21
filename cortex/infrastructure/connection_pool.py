@@ -17,6 +17,7 @@ CORE-CRIT-STATE-001: Thread-safe operations with RLock protecting shared state
 import logging
 import threading
 import time
+from collections import deque
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
@@ -118,7 +119,7 @@ class ConnectionPool:
         self.timeout = timeout
         self.health_check_interval = health_check_interval
 
-        self._available_connections: list[Connection] = []
+        self._available_connections: deque[Connection] = deque()
         self._all_connections: set[Connection] = set()
         self._lock = threading.RLock()
         self._not_empty = threading.Condition(self._lock)
@@ -166,13 +167,11 @@ class ConnectionPool:
 
             while True:
                 # Try to get a valid connection
-                valid_conns = [c for c in self._available_connections if c.is_valid]
-
-                if valid_conns:
-                    conn = valid_conns[0]
-                    self._available_connections.remove(conn)
-                    conn.last_used = time.time()
-                    return conn
+                while self._available_connections:
+                    conn = self._available_connections.popleft()
+                    if conn.is_valid:
+                        conn.last_used = time.time()
+                        return conn
 
                 # No valid connections, calculate wait time
                 wait_time = deadline - time.time()
@@ -223,22 +222,20 @@ class ConnectionPool:
         already in the pool. For active recovery, see BRT-011.
         """
         with self._lock:
-            # Check available connections for staleness
-            stale_conns = []
-
-            for conn in self._available_connections:
+            stale_count = 0
+            for conn in self._all_connections:
                 # Mark very old connections as stale (> 1 hour)
                 age = time.time() - conn.created_at
-                if age > 3600:
+                if age > 3600 and conn.is_valid:
                     conn.is_valid = False
-                    stale_conns.append(conn)
-
-            # Remove stale connections from available pool
-            for conn in stale_conns:
-                if conn in self._available_connections:
-                    self._available_connections.remove(conn)
-                    self._failed_checks += 1
+                    stale_count += 1
                     logger.debug(f"Removed stale connection {conn.connection_id}")
+
+            if stale_count:
+                self._available_connections = deque(
+                    c for c in self._available_connections if c.is_valid
+                )
+                self._failed_checks += stale_count
 
             self._last_health_check = time.time()
 
@@ -257,8 +254,8 @@ class ConnectionPool:
         with self._lock:
             return {
                 "capacity": self.capacity,
-                "available_connections": len(
-                    [c for c in self._available_connections if c.is_valid]
+                "available_connections": sum(
+                    1 for c in self._available_connections if c.is_valid
                 ),
                 "total_connections": len(self._all_connections),
                 "failed_checks": self._failed_checks,

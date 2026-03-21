@@ -807,6 +807,20 @@ class TestScaffolderTemplates:
         assert output_included == 'Included content'
         assert output_excluded == ''
 
+    def test_template_block_rejects_malicious_condition(self):
+        """Template condition evaluator should reject code-injection expressions."""
+        from cortex.tools.scaffolder_templates import TemplateBlock
+
+        block = TemplateBlock(
+            name='malicious_block',
+            content='Included content',
+            condition="__import__('os').system('whoami')",
+        )
+
+        output = block.render({})
+
+        assert output == ''
+
 
 # =============================================================================
 # AC-TT-003-01: Template Validator Tests

@@ -24,13 +24,19 @@ class CachedKnowledgeProvider(IKnowledgeProvider):
     AC-PHASE50-S5-005: Supports cache bypass via bypass_cache flag
     """
 
-    def __init__(self, provider: IKnowledgeProvider, config: StorageConfig) -> None:
+    def __init__(
+        self,
+        provider: IKnowledgeProvider,
+        config: StorageConfig,
+        max_l2_entries: int = 1000,
+    ) -> None:
         """
         Initialize CachedKnowledgeProvider.
 
         Args:
             provider: Underlying IKnowledgeProvider to wrap
             config: StorageConfig with cache_enabled, cache_ttl_seconds
+            max_l2_entries: Maximum number of persisted L2 cache entries
         """
         self.provider = provider
         self.config = config
@@ -43,12 +49,11 @@ class CachedKnowledgeProvider(IKnowledgeProvider):
         # AC-PHASE50-S5-003: Initialize L2 cache (filesystem)
         self.l2_cache_enabled = config.cache_enabled if config.cache_enabled is not None else True
         self.l2_cache_dir = Path.home() / ".cortex-runtime" / "cache" / "storage"
+        self.max_l2_entries = max_l2_entries
 
         if self.l2_cache_enabled:
             self.l2_cache_dir.mkdir(parents=True, exist_ok=True)
-            # Avoid eager preload from global shared cache to keep runtime behavior
-            # deterministic across sessions/tests; entries are loaded on demand via
-            # provider reads and repopulated into L1.
+            self._enforce_l2_cache_limit()
 
         # AC-PHASE50-S5-004: Initialize metrics
         self.metrics = {
@@ -113,28 +118,50 @@ class CachedKnowledgeProvider(IKnowledgeProvider):
             )
             del self.l1_cache[lru_key]
 
-    def _load_l2_cache(self) -> None:
-        """
-        Load L2 cache from filesystem.
-
-        AC-PHASE50-S5-003: Load persisted cache on startup
-        """
-        if not self.l2_cache_dir.exists():
+    def _load_l2_entry(self, key: str) -> None:
+        """Load a single L2 cache entry into L1 on demand."""
+        if not self.l2_cache_enabled:
             return
 
-        for cache_file in self.l2_cache_dir.glob("*"):
+        cache_file = self.l2_cache_dir / f"{key}.cache"
+        if not cache_file.exists():
+            return
+
+        try:
+            with open(cache_file, "r") as f:
+                data = json.load(f)
+            timestamp = data.get("timestamp", 0)
+            if self._is_cache_valid(timestamp):
+                self._evict_lru_entry()
+                self.l1_cache[key] = (data.get("value", ""), timestamp)
+                try:
+                    cache_file.touch()
+                except Exception:
+                    pass
+            else:
+                cache_file.unlink(missing_ok=True)
+        except Exception:
+            pass
+
+    def _enforce_l2_cache_limit(self) -> None:
+        """Limit number of L2 cache files using oldest-access eviction."""
+        if not self.l2_cache_enabled or not self.l2_cache_dir.exists():
+            return
+
+        cache_files = [
+            cache_file
+            for cache_file in self.l2_cache_dir.glob("*.cache")
+            if cache_file.is_file()
+        ]
+        overflow = len(cache_files) - self.max_l2_entries
+        if overflow <= 0:
+            return
+
+        cache_files.sort(key=lambda path: path.stat().st_mtime)
+        for cache_file in cache_files[:overflow]:
             try:
-                if cache_file.is_file() and cache_file.suffix == ".cache":
-                    with open(cache_file, "r") as f:
-                        data = json.load(f)
-                        # Only load if not expired
-                        if self._is_cache_valid(data.get("timestamp", 0)):
-                            key = cache_file.stem
-                            value = data.get("value", "")
-                            timestamp = data.get("timestamp", time.time())
-                            self.l1_cache[key] = (value, timestamp)
+                cache_file.unlink()
             except Exception:
-                # Silently skip corrupted cache files
                 pass
 
     def _save_to_l2_cache(self, key: str, value: str) -> None:
@@ -158,6 +185,7 @@ class CachedKnowledgeProvider(IKnowledgeProvider):
             }
             with open(cache_file, "w") as f:
                 json.dump(data, f)
+            self._enforce_l2_cache_limit()
         except Exception:
             # Silently fail if L2 cache write fails
             pass
@@ -187,6 +215,14 @@ class CachedKnowledgeProvider(IKnowledgeProvider):
                     return value
                 else:
                     del self.l1_cache[cache_key]
+
+            self._load_l2_entry(cache_key)
+            if cache_key in self.l1_cache:
+                value, timestamp = self.l1_cache[cache_key]
+                if self._is_cache_valid(timestamp):
+                    self.metrics["hits"] += 1
+                    return value
+                del self.l1_cache[cache_key]
 
             self.metrics["misses"] += 1
 
@@ -252,6 +288,13 @@ class CachedKnowledgeProvider(IKnowledgeProvider):
                     # Deserialize list
                     return json.loads(value)
 
+            self._load_l2_entry(cache_key)
+            if cache_key in self.l1_cache:
+                value, timestamp = self.l1_cache[cache_key]
+                if self._is_cache_valid(timestamp):
+                    self.metrics["hits"] += 1
+                    return json.loads(value)
+
             self.metrics["misses"] += 1
 
         # Fetch from provider
@@ -281,6 +324,13 @@ class CachedKnowledgeProvider(IKnowledgeProvider):
         if self.config.cache_enabled:
             cache_key = self._get_cache_key(path, "exists")
 
+            if cache_key in self.l1_cache:
+                value, timestamp = self.l1_cache[cache_key]
+                if self._is_cache_valid(timestamp):
+                    self.metrics["hits"] += 1
+                    return value == "true"
+
+            self._load_l2_entry(cache_key)
             if cache_key in self.l1_cache:
                 value, timestamp = self.l1_cache[cache_key]
                 if self._is_cache_valid(timestamp):

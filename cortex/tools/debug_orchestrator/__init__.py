@@ -20,6 +20,7 @@ Version: 1.0.0
 # CORE-035 — domain-scoped class names, not CORE-035 violations
 
 import json
+import logging
 import os
 import re
 import uuid
@@ -28,6 +29,9 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
+
+
+logger = logging.getLogger(__name__)
 
 # CORTEX imports
 try:
@@ -582,7 +586,11 @@ def debug_cleanup(
         # Update session status
         session_path = debug_dir / "session.json"
         if session_path.exists():
-            session_data = json.loads(session_path.read_text())
+            try:
+                session_data = json.loads(session_path.read_text())
+            except (json.JSONDecodeError, TypeError) as error:
+                logger.warning("Corrupted JSON in debug session record: %s", error)
+                session_data = {}
             session_data["status"] = "cleaned"
             session_data["cleanupTime"] = datetime.now().isoformat()
             session_data["cleanupStats"] = stats
@@ -630,7 +638,11 @@ def debug_status(path: str) -> ToolResult:
             }
         )
 
-    session_data = json.loads(session_path.read_text())
+    try:
+        session_data = json.loads(session_path.read_text())
+    except (json.JSONDecodeError, TypeError) as error:
+        logger.warning("Corrupted JSON in debug session record: %s", error)
+        session_data = {}
 
     # Check available files
     available_files = {}

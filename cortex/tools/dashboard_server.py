@@ -18,6 +18,7 @@ import re
 import subprocess
 import sys
 import time
+from urllib.parse import quote
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -263,8 +264,9 @@ class DashboardServerTool:
     def check_dashboard_data_loaded(self, repo: str = "KSESSIONS") -> HealthCheckResult:
         """Check if dashboard data is loaded."""
         try:
+            safe_repo = quote(repo, safe="")
             response = requests.get(
-                f"http://localhost:{self.port}/spa/dashboard.html?repo={repo}",
+                f"http://localhost:{self.port}/spa/dashboard.html?repo={safe_repo}",
                 timeout=5
             )
 
@@ -459,7 +461,8 @@ class DashboardServerTool:
     def launch_dashboard(self, repo: str = "KSESSIONS") -> Tuple[bool, str]:
         """Launch dashboard in browser."""
         try:
-            dashboard_url = f"http://localhost:{self.port}/spa/dashboard.html?repo={repo}"
+            safe_repo = quote(repo, safe="")
+            dashboard_url = f"http://localhost:{self.port}/spa/dashboard.html?repo={safe_repo}"
             subprocess.run(["open", dashboard_url], check=False)
             return True, f"✅ Launched dashboard: {dashboard_url}"
         except Exception as e:
@@ -539,7 +542,7 @@ def main() -> None:
         # Launch
         print("\n[4/4] Launching dashboard...")
         tool.launch_dashboard(args.repo)
-        print(f"✅ Dashboard ready at http://localhost:8080/spa/dashboard.html?repo={args.repo}")
+        print(f"✅ Dashboard ready at http://localhost:8080/spa/dashboard.html?repo={quote(args.repo, safe='')}")
 
         return 0
 

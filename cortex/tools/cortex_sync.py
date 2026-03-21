@@ -386,7 +386,10 @@ def _load_baseline(baseline_dir: Path, rel_path: str) -> Optional[dict]:
     if bp.exists():
         try:
             return json.loads(bp.read_text(encoding="utf-8"))
-        except Exception:
+        except (json.JSONDecodeError, TypeError) as error:
+            logging.getLogger("cortex_sync").warning(
+                "Corrupted JSON in baseline record %s: %s", bp, error
+            )
             return None
     return None
 
@@ -686,7 +689,13 @@ def run_sync(
         try:
             base_snapshot_checksum = baseline.get("content_snapshot_checksum", "")
             base_baseline_path = _baseline_path(baseline_dir, rel)
-            base_data = json.loads(base_baseline_path.read_text(encoding="utf-8"))
+            try:
+                base_data = json.loads(base_baseline_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, TypeError) as error:
+                logging.getLogger("cortex_sync").warning(
+                    "Corrupted JSON in baseline record %s: %s", base_baseline_path, error
+                )
+                base_data = {}
             # We stored the content via checksum — read from target at baseline point
             # Since we don't store full content, use diff approach:
             # base ≈ target at last sync (since tgt was clean then)

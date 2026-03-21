@@ -43,6 +43,12 @@ class OperationState(Enum):  # CORE-035-scoped — domain-specific variant
     COMPLETED = auto()     # Successfully finished
 
 
+class CheckpointPersistError(Exception):
+    """Raised when checkpoint persistence fails."""
+
+    pass
+
+
 @dataclass
 class CheckpointMetadata:
     """Metadata about a checkpoint."""
@@ -197,7 +203,10 @@ class CheckpointManager:
             self._checkpoints[checkpoint_id] = checkpoint
 
             # Persist to database
-            self._persist_checkpoint(checkpoint)
+            try:
+                self._persist_checkpoint(checkpoint)
+            except CheckpointPersistError as error:
+                return Err(str(error))
 
             return Ok(checkpoint)
 
@@ -240,7 +249,10 @@ class CheckpointManager:
             checkpoint.metadata.operation_state = OperationState.IN_PROGRESS
 
             # Persist update
-            self._persist_checkpoint(checkpoint)
+            try:
+                self._persist_checkpoint(checkpoint)
+            except CheckpointPersistError as error:
+                return Err(str(error))
 
             return Ok(state)
 
@@ -279,7 +291,10 @@ class CheckpointManager:
             checkpoint.data_digest = hashlib.sha256(state_bytes).hexdigest()
 
             # Persist update
-            self._persist_checkpoint(checkpoint)
+            try:
+                self._persist_checkpoint(checkpoint)
+            except CheckpointPersistError as error:
+                return Err(str(error))
 
             return Ok(checkpoint)
 
@@ -303,7 +318,10 @@ class CheckpointManager:
             checkpoint.metadata.operation_state = OperationState.COMPLETED
 
             # Persist update
-            self._persist_checkpoint(checkpoint)
+            try:
+                self._persist_checkpoint(checkpoint)
+            except CheckpointPersistError as error:
+                return Err(str(error))
 
             return Ok(f"Checkpoint {checkpoint_id} committed")
 
@@ -390,7 +408,10 @@ class CheckpointManager:
             checkpoint.metadata.metadata_json["rollback_reason"] = reason
 
             # Persist update
-            self._persist_checkpoint(checkpoint)
+            try:
+                self._persist_checkpoint(checkpoint)
+            except CheckpointPersistError as error:
+                return Err(str(error))
 
             return Ok(f"Checkpoint {checkpoint_id} rolled back")
 
@@ -438,8 +459,10 @@ class CheckpointManager:
 
             # Store to database (would be implemented with actual DB calls)
             # For now, just keep in memory as implemented above
-        except Exception:
-            pass  # Log error but don't fail
+        except Exception as error:
+            raise CheckpointPersistError(
+                f"Failed to persist checkpoint {checkpoint.checkpoint_id}: {error}"
+            ) from error
 
     def set_recovery_time_estimate(
         self,
@@ -464,6 +487,9 @@ class CheckpointManager:
             checkpoint.metadata.estimated_recovery_time_seconds = estimated_seconds
 
             # Persist update
-            self._persist_checkpoint(checkpoint)
+            try:
+                self._persist_checkpoint(checkpoint)
+            except CheckpointPersistError as error:
+                return Err(str(error))
 
             return Ok(f"Recovery time estimate set to {estimated_seconds}s")

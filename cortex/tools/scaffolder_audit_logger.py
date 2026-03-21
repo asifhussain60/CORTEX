@@ -12,12 +12,16 @@ All logs stored in governance.db with AC markers for compliance auditing.
 """
 
 import json
+import logging
 import sqlite3
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+
+logger = logging.getLogger(__name__)
 
 
 class AuditOperation(Enum):
@@ -333,7 +337,17 @@ class ScaffolderAuditLogger:
                     operation=row[1],
                     orchestrator_name=row[2],
                     ac_marker=row[3],
-                    details=json.loads(row[4]),
+                    details=self._safe_load_details(row[4]),
                 )
                 for row in rows
             ]
+
+    @staticmethod
+    def _safe_load_details(raw_details: Any) -> Dict[str, Any]:
+        """Safely parse stored JSON details payload."""
+        try:
+            parsed = json.loads(raw_details)
+            return parsed if isinstance(parsed, dict) else {}
+        except (json.JSONDecodeError, TypeError) as error:
+            logger.warning("Corrupted JSON in scaffolder audit record: %s", error)
+            return {}

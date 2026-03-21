@@ -12,6 +12,7 @@ These templates are used by OrchestratorScaffolder.
 """
 
 from abc import ABC, abstractmethod
+import ast
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum, auto
@@ -126,10 +127,8 @@ class TemplateBlock:
                 return repr(value)
             elif value is None:
                 return "None"
-            elif isinstance(value, list):
-                return f"len({repr(value)}) > 0"
             else:
-                return "True"  # Non-falsy objects
+                return repr(value)
 
         # Replace {var_name} patterns with values
         safe_condition = re.sub(r'\{\s*(\w+)\s*\}', replace_var, condition)
@@ -138,27 +137,81 @@ class TemplateBlock:
         allowed_names = {'True', 'False', 'None', 'and', 'or', 'not', 'len'}
         # Check that only allowed names/operators are used
         identifiers = set(re.findall(r'\b([a-zA-Z_]\w*)\b', safe_condition))
-        disallowed = identifiers - allowed_names - set(str(i) for i in range(10))
+        disallowed = identifiers - allowed_names - set(context.keys()) - set(str(i) for i in range(10))
         if disallowed:
             raise ValueError(f"Condition contains disallowed identifiers: {disallowed}")
 
         # AC_START: AC-ENH063-P0-002-004
-        # Description: Enhanced safe evaluation with minimal builtins
-        # Security: Restrict to comparison operations only
-        # Safely evaluate the condition using compile + limited namespace
+        # Description: Enhanced safe evaluation with AST whitelist
+        # Security: Restrict to boolean and comparison operations only
         try:
-            code = compile(safe_condition, '<condition>', 'eval')
-            # Only allow len() and basic comparison operators
-            safe_builtins = {
-                'len': len,
-                'True': True,
-                'False': False,
-                'None': None,
-            }
-            result = eval(code, {'__builtins__': safe_builtins}, {})
-            return bool(result)
+            expr = ast.parse(safe_condition, mode='eval')
         except SyntaxError as e:
             raise ValueError(f"Invalid condition syntax: {e}")
+
+        def eval_node(node: ast.AST) -> Any:
+            if isinstance(node, ast.Expression):
+                return eval_node(node.body)
+            if isinstance(node, ast.BoolOp):
+                values = [bool(eval_node(v)) for v in node.values]
+                if isinstance(node.op, ast.And):
+                    return all(values)
+                if isinstance(node.op, ast.Or):
+                    return any(values)
+                raise ValueError("Unsupported boolean operator")
+            if isinstance(node, ast.UnaryOp):
+                if isinstance(node.op, ast.Not):
+                    return not bool(eval_node(node.operand))
+                raise ValueError("Unsupported unary operator")
+            if isinstance(node, ast.Compare):
+                left = eval_node(node.left)
+                for op, comparator in zip(node.ops, node.comparators):
+                    right = eval_node(comparator)
+                    if isinstance(op, ast.Eq):
+                        ok = left == right
+                    elif isinstance(op, ast.NotEq):
+                        ok = left != right
+                    elif isinstance(op, ast.Lt):
+                        ok = left < right
+                    elif isinstance(op, ast.LtE):
+                        ok = left <= right
+                    elif isinstance(op, ast.Gt):
+                        ok = left > right
+                    elif isinstance(op, ast.GtE):
+                        ok = left >= right
+                    elif isinstance(op, ast.In):
+                        ok = left in right
+                    elif isinstance(op, ast.NotIn):
+                        ok = left not in right
+                    else:
+                        raise ValueError("Unsupported comparison operator")
+                    if not ok:
+                        return False
+                    left = right
+                return True
+            if isinstance(node, ast.Constant):
+                return node.value
+            if isinstance(node, ast.Name):
+                allowed_names = {'True': True, 'False': False, 'None': None}
+                if node.id in allowed_names:
+                    return allowed_names[node.id]
+                if node.id in context:
+                    return context[node.id]
+                raise ValueError(f"Disallowed identifier: {node.id}")
+            if isinstance(node, ast.List):
+                return [eval_node(elt) for elt in node.elts]
+            if isinstance(node, ast.Tuple):
+                return tuple(eval_node(elt) for elt in node.elts)
+            if isinstance(node, ast.Set):
+                return {eval_node(elt) for elt in node.elts}
+            if isinstance(node, ast.Dict):
+                return {
+                    eval_node(k): eval_node(v)
+                    for k, v in zip(node.keys, node.values)
+                }
+            raise ValueError(f"Disallowed expression node: {type(node).__name__}")
+
+        return bool(eval_node(expr))
         # AC_COMPLETE: AC-ENH063-P0-002-004
 
     def _interpolate(self, text: str, context: Dict[str, Any]) -> str:

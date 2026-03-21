@@ -70,13 +70,19 @@ class ScanOutput:
 class RepositoryScanner:
     """Scans a repository and categorises files for cleanup."""
 
-    def __init__(self, workspace_root: Optional[Path] = None) -> None:
+    def __init__(
+        self,
+        workspace_root: Optional[Path] = None,
+        max_depth: int = 10,
+    ) -> None:
         """Initialize scanner with optional workspace root.
 
         Args:
             workspace_root: Root directory of workspace. Defaults to cwd.
+            max_depth: Maximum directory depth for recursive scanning.
         """
         self.workspace_root = workspace_root or Path.cwd()
+        self.max_depth = max_depth
 
     def scan(self, context: ScanContext) -> ScanOutput:
         """Execute a full repository scan using ScanContext.
@@ -92,7 +98,7 @@ class RepositoryScanner:
 
         start = time.time()
         root = context.workspace_root
-        exclude = set(context.exclude_patterns)
+        exclude_patterns = set(context.exclude_patterns)
         files: List[Dict[str, Any]] = []
         class_count = 0
         func_count = 0
@@ -100,19 +106,36 @@ class RepositoryScanner:
         errors: List[str] = []
 
         targets = context.target_paths or [root]
+
+        def _is_excluded(path_str: str) -> bool:
+            return any(pattern in path_str for pattern in exclude_patterns)
+
+        def _within_depth(base: Path, candidate: Path) -> bool:
+            try:
+                relative = candidate.relative_to(base)
+            except ValueError:
+                return False
+            return len(relative.parts) <= self.max_depth + 1
+
         for target in targets:
             target_path = Path(target) if not isinstance(target, Path) else target
             if not target_path.exists():
                 continue
             for py_file in target_path.rglob("*.py"):
-                if any(pat in str(py_file) for pat in exclude):
+                path_text = str(py_file)
+                if _is_excluded(path_text) or not _within_depth(target_path, py_file):
                     continue
                 try:
                     src = py_file.read_text(errors="replace")
                     tree = _ast.parse(src)
                     loc = len(src.splitlines())
-                    classes = sum(1 for n in _ast.walk(tree) if isinstance(n, _ast.ClassDef))
-                    funcs = sum(1 for n in _ast.walk(tree) if isinstance(n, (_ast.FunctionDef, _ast.AsyncFunctionDef)))
+                    classes = 0
+                    funcs = 0
+                    for node in _ast.walk(tree):
+                        if isinstance(node, _ast.ClassDef):
+                            classes += 1
+                        elif isinstance(node, (_ast.FunctionDef, _ast.AsyncFunctionDef)):
+                            funcs += 1
                     files.append({"path": str(py_file), "lines": loc, "classes": classes, "functions": funcs})
                     class_count += classes
                     func_count += funcs

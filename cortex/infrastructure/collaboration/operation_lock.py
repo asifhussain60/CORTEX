@@ -17,13 +17,15 @@ Lock files are stored in .cortex-runtime/locks/.
 from __future__ import annotations
 
 import os
+import signal
 import sys
+import threading
 import time
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Callable, Generator, Optional, TypeVar
 
 # fcntl is Unix-only, provide Windows fallback
 if sys.platform != "win32":
@@ -49,6 +51,53 @@ class LockTimeoutError(OperationLockError):
 class LockAcquisitionError(OperationLockError):
     """Raised when lock cannot be acquired for other reasons."""
     pass
+
+
+class FileLockIOTimeout(OperationLockError):
+    """Raised when lock metadata file I/O times out."""
+
+    pass
+
+
+T = TypeVar("T")
+
+
+def _run_io_with_timeout(operation: Callable[[], T], timeout_seconds: float) -> T:
+    """Run lock file I/O with timeout protection."""
+    if timeout_seconds <= 0:
+        return operation()
+
+    if sys.platform != "win32" and threading.current_thread() is threading.main_thread():
+        def _timeout_handler(signum, frame):
+            raise TimeoutError("Lock metadata I/O timed out")
+
+        previous_handler = signal.getsignal(signal.SIGALRM)
+        try:
+            signal.signal(signal.SIGALRM, _timeout_handler)
+            signal.setitimer(signal.ITIMER_REAL, timeout_seconds)
+            return operation()
+        finally:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+            signal.signal(signal.SIGALRM, previous_handler)
+
+    result: dict[str, T] = {}
+    error: dict[str, Exception] = {}
+
+    def _worker() -> None:
+        try:
+            result["value"] = operation()
+        except Exception as exc:
+            error["error"] = exc
+
+    thread = threading.Thread(target=_worker, daemon=True)
+    thread.start()
+    thread.join(timeout_seconds)
+
+    if thread.is_alive():
+        raise TimeoutError("Lock metadata I/O timed out")
+    if "error" in error:
+        raise error["error"]
+    return result["value"]
 
 
 @dataclass
@@ -113,6 +162,7 @@ def _sanitize_resource_id(resource_id: str) -> str:
 def operation_lock(
     resource_id: str,
     timeout_seconds: float = 30.0,
+    io_timeout: float = 10.0,
     user_id: Optional[str] = None,
 ) -> Generator[LockInfo, None, None]:
     """
@@ -126,6 +176,7 @@ def operation_lock(
         resource_id: Unique identifier for the resource to lock.
             Examples: "file:src/main.py", "orchestrator:refactoring", "operation:deploy"
         timeout_seconds: Maximum time to wait for lock acquisition (default: 30s)
+        io_timeout: Maximum time for lock metadata file I/O operations (default: 10s)
         user_id: Optional user ID override (defaults to current user)
 
     Yields:
@@ -176,12 +227,20 @@ def operation_lock(
                 # Windows fallback: no-op (file existence is the lock)
 
                 # Lock acquired - write holder info
-                os.ftruncate(fd, 0)
-                os.lseek(fd, 0, os.SEEK_SET)
-                lock_info_str = f"{user_id}|{acquired_at.isoformat()}|{resource_id}"
-                os.write(fd, lock_info_str.encode())
+                def _write_lock_info() -> None:
+                    os.ftruncate(fd, 0)
+                    os.lseek(fd, 0, os.SEEK_SET)
+                    lock_info_str = f"{user_id}|{acquired_at.isoformat()}|{resource_id}"
+                    os.write(fd, lock_info_str.encode())
+
+                _run_io_with_timeout(_write_lock_info, io_timeout)
 
                 break  # Successfully acquired
+
+            except TimeoutError as e:
+                raise FileLockIOTimeout(
+                    f"Timed out writing lock metadata for '{resource_id}' after {io_timeout:.1f}s"
+                ) from e
 
             except BlockingIOError:
                 # Lock is held by another process
@@ -189,10 +248,15 @@ def operation_lock(
                 if elapsed >= timeout_seconds:
                     # Read who holds the lock for error message
                     try:
-                        os.lseek(fd, 0, os.SEEK_SET)
-                        holder_info = os.read(fd, 1024).decode()
+                        def _read_holder_info() -> str:
+                            os.lseek(fd, 0, os.SEEK_SET)
+                            return os.read(fd, 1024).decode()
+
+                        holder_info = _run_io_with_timeout(_read_holder_info, io_timeout)
                         holder_parts = holder_info.split("|")
                         holder_user = holder_parts[0] if holder_parts else "unknown"
+                    except TimeoutError:
+                        holder_user = "unknown (metadata read timeout)"
                     except Exception:
                         holder_user = "unknown"
 

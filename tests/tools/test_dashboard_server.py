@@ -10,6 +10,35 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
+try:
+    import psutil
+except ImportError:
+    psutil = None
+
+
+def _kill_processes_on_port(port: int) -> None:
+    """Kill processes listening on a given port without shell invocation."""
+    if psutil is not None:
+        for proc in psutil.process_iter(["pid"]):
+            try:
+                connections = proc.net_connections(kind="inet")
+                for conn in connections:
+                    if conn.laddr and conn.laddr.port == port:
+                        proc.kill()
+                        break
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                continue
+    else:
+        lsof = subprocess.run(
+            ["lsof", "-ti", f":{port}"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        for pid in lsof.stdout.split():
+            if pid.isdigit():
+                subprocess.run(["kill", "-9", pid], capture_output=True, check=False)
+
 
 class TestDashboardServerKill:
     """Test killing HTTP processes on specified ports."""
@@ -20,11 +49,7 @@ class TestDashboardServerStart:
     def test_server_starts_on_port_8080(self):
         """Should start server on port 8080."""
         # Kill any existing process
-        subprocess.run(
-            "lsof -i :8080 | grep -v COMMAND | awk '{print $2}' | xargs kill -9 2>/dev/null",
-            shell=True,
-            capture_output=True
-        )
+        _kill_processes_on_port(8080)
         time.sleep(1)
         
         # Start server
@@ -50,20 +75,12 @@ class TestDashboardServerStart:
             assert "python" in check.stdout.lower()
         finally:
             proc.kill()
-            subprocess.run(
-                "lsof -i :8080 | grep -v COMMAND | awk '{print $2}' | xargs kill -9 2>/dev/null",
-                shell=True,
-                capture_output=True
-            )
+            _kill_processes_on_port(8080)
     
     def test_server_serves_index_html(self):
         """Should serve index.html at root."""
         # Kill existing, start fresh
-        subprocess.run(
-            "lsof -i :8080 | grep -v COMMAND | awk '{print $2}' | xargs kill -9 2>/dev/null",
-            shell=True,
-            capture_output=True
-        )
+        _kill_processes_on_port(8080)
         time.sleep(1)
         
         dashboards_dir = Path(__file__).parent.parent.parent / "cortex-registry" / "company" / "dashboards"
@@ -83,11 +100,7 @@ class TestDashboardServerStart:
             assert "html" in response.text.lower()
         finally:
             proc.kill()
-            subprocess.run(
-                "lsof -i :8080 | grep -v COMMAND | awk '{print $2}' | xargs kill -9 2>/dev/null",
-                shell=True,
-                capture_output=True
-            )
+            _kill_processes_on_port(8080)
 
 
 class TestDashboardLogsCheck:

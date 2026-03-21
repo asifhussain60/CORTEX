@@ -14,11 +14,15 @@ maintaining consistency between vision and implementation.
 # CORE-035 — domain-scoped class names, not CORE-035 violations
 
 import json
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
+
+
+logger = logging.getLogger(__name__)
 
 
 class TierLevel(Enum):  # CORE-035-scoped — domain-specific variant
@@ -572,6 +576,5 @@ class OrchestratorDependencyRegistry:
 
             for tier_str, orch_ids in data.get("tier_assignments", {}).items():
                 self.tier_assignments[tier_str] = set(orch_ids)
-        except Exception:
-            # If loading fails, start fresh
-            pass
+        except (json.JSONDecodeError, TypeError) as error:
+            logger.warning("Corrupted JSON in dependency registry storage: %s", error)

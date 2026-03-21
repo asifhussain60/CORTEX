@@ -111,6 +111,8 @@ class FileLock:
             FileLockError: If lock acquisition fails
         """
         start_time = time.time()
+        backoff = self.check_interval
+        max_backoff = min(self.timeout / 4, 2.0)
 
         logger.debug(f"Acquiring lock: {self.lock_path}")
 
@@ -153,8 +155,9 @@ class FileLock:
                         f"after {elapsed:.2f}s (timeout: {self.timeout}s)"
                     )
 
-                # Wait and retry
-                time.sleep(self.check_interval)
+                # Wait and retry with exponential backoff
+                time.sleep(backoff)
+                backoff = min(backoff * 2, max_backoff)
 
                 if self.lock_file:
                     self.lock_file.close()
@@ -200,9 +203,6 @@ class FileLock:
                     # CORE-013: Specific exception handling for unlock failures
                     logger.debug(f"Lock unlock warning: {type(e).__name__}: {e}")
 
-            self.lock_file.close()
-            self.lock_file = None
-
             # Clean up lock file
             try:
                 self.lock_path.unlink()
@@ -214,6 +214,13 @@ class FileLock:
         except Exception as e:
             logger.error(f"Error releasing lock: {self.lock_path}: {e}")
             raise FileLockError(f"Failed to release lock: {e}")
+        finally:
+            if self.lock_file is not None:
+                try:
+                    self.lock_file.close()
+                except Exception:
+                    pass
+                self.lock_file = None
 
 
 @contextmanager

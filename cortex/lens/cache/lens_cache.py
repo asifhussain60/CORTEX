@@ -5,9 +5,11 @@ Implements TTL-based LRU eviction with multi-layer caching.
 """
 
 import hashlib
+import threading
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, Optional
+from pathlib import Path
+from typing import Any, Dict, Optional, Union
 
 
 @dataclass
@@ -128,8 +130,8 @@ class LENSCache:
 
     def generate_key(
         self,
-        file_path: object,  # Path or str
-        repo_path: object,  # Path or str
+        file_path: Union[str, Path],
+        repo_path: Union[str, Path],
         additional_context: Optional[Dict[str, Any]] = None,
     ) -> str:
         """Generate cache key for file analysis.
@@ -146,12 +148,13 @@ class LENSCache:
         Returns:
             Cache key string
         """
-        import hashlib
-        from pathlib import Path
+        if not isinstance(file_path, (str, Path)):
+            raise TypeError("file_path must be str or Path")
+        if not isinstance(repo_path, (str, Path)):
+            raise TypeError("repo_path must be str or Path")
 
-        # Convert to Path objects if strings
-        file_path = Path(file_path) if isinstance(file_path, str) else file_path
-        repo_path = Path(repo_path) if isinstance(repo_path, str) else repo_path
+        file_path = Path(file_path)
+        repo_path = Path(repo_path)
 
         # Get relative path
         try:
@@ -176,6 +179,7 @@ class LENSCache:
 
 # Phase 65 S6: Canonical LENSCache singleton accessor
 _lens_cache_instance: Optional['LENSCache'] = None
+_lens_cache_lock = threading.Lock()
 
 
 def get_lens_cache(backend_type: str = "memory", **kwargs) -> 'LENSCache':
@@ -194,14 +198,16 @@ def get_lens_cache(backend_type: str = "memory", **kwargs) -> 'LENSCache':
     global _lens_cache_instance
 
     if _lens_cache_instance is None:
-        # Import concrete implementation
-        from cortex.lens.cache.memory_backend import MemoryBackend
+        with _lens_cache_lock:
+            if _lens_cache_instance is None:
+                # Import concrete implementation
+                from cortex.lens.cache.memory_backend import MemoryBackend
 
-        if backend_type == "memory":
-            _lens_cache_instance = MemoryBackend(**kwargs)
-        else:
-            # Redis backend (future)
-            raise NotImplementedError(f"Backend '{backend_type}' not yet implemented")
+                if backend_type == "memory":
+                    _lens_cache_instance = MemoryBackend(**kwargs)
+                else:
+                    # Redis backend (future)
+                    raise NotImplementedError(f"Backend '{backend_type}' not yet implemented")
 
     return _lens_cache_instance
 

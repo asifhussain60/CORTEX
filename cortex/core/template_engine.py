@@ -173,9 +173,8 @@ class TemplateEngine:
             # Load all .json and .yaml templates from directory
             for filename in os.listdir(self.template_dir):
                 if filename.endswith(('.json', '.yaml', '.yml')):
-                    filepath = os.path.join(self.template_dir, filename)
                     try:
-                        self._load_single_template(filepath, filename)
+                        self._load_single_template(filename)
                         loaded_count += 1
                     except Exception as e:
                         if self.logger:
@@ -206,8 +205,14 @@ class TemplateEngine:
                 )
             return Err(f"Failed to load templates: {str(e)}")
 
-    def _load_single_template(self, filepath: str, filename: str) -> None:
+    def _load_single_template(self, filename: str) -> None:
         """Load a single template file"""
+        base_dir = Path(self.template_dir).resolve()
+        resolved = (base_dir / filename).resolve()
+        if not str(resolved).startswith(str(base_dir)):
+            raise ValueError(f"Path traversal detected: {filename}")
+
+        filepath = str(resolved)
         with open(filepath, 'r') as f:
             if filename.endswith('.json'):
                 data = json.load(f)
