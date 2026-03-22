@@ -34,6 +34,7 @@ from .constants import (
     LEGACY_ROOT_FOLDERS_RELOCATION,
     PROTECTED_DIRS,
     PROTECTED_FILES,
+    ROOT_CLEANUP_RECENCY_EXEMPT_SUFFIXES,
     VACUUM_PROTECTED_ROOTS,
     VACUUM_RECENCY_GUARD_HOURS,
 )
@@ -1296,7 +1297,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         """
         ops: List[Dict[str, Any]] = []
         exempt = {"__init__.py", "__main__.py", "conftest.py", "Makefile",
-                  "Pipfile", ".gitignore", ".gitattributes",
+                  "Pipfile", "CLAUDE.md", ".gitignore", ".gitattributes",
                   ".editorconfig", ".pre-commit-config.yaml"}
         for f in ctx.all_files:
             if f.name in exempt:
@@ -1334,7 +1335,9 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
             if f.name.startswith("."):
                 continue
             # GAP-130-01: Skip recently modified files
-            if self._is_recent(f):
+            if self._is_recent(f) and not f.name.lower().endswith(
+                tuple(ROOT_CLEANUP_RECENCY_EXEMPT_SUFFIXES)
+            ):
                 continue
             ops.append({
                 "type": "relocate",
@@ -1417,6 +1420,10 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
             if f.suffix != ".md":
                 continue
             rel = f.relative_to(self.workspace_root)
+            if len(rel.parts) == 1 and f.name.lower().endswith(
+                tuple(ROOT_CLEANUP_RECENCY_EXEMPT_SUFFIXES)
+            ):
+                continue
             # Root-level protected names
             if len(rel.parts) == 1:
                 stem = f.stem.upper()
@@ -1427,7 +1434,10 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
             if top_dir in PROTECTED_DIRS or top_dir in doc_dirs:
                 continue
             # GAP-130-01: Skip recently modified markdown files
-            if self._is_recent(f):
+            if self._is_recent(f) and not (
+                len(rel.parts) == 1
+                and f.name.lower().endswith(tuple(ROOT_CLEANUP_RECENCY_EXEMPT_SUFFIXES))
+            ):
                 continue
             ops.append({
                 "type": "relocate",

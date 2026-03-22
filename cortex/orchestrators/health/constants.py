@@ -57,6 +57,7 @@ PROTECTED_FILES: FrozenSet[str] = frozenset({
     "LICENSE",
     "LICENSE.md",
     "CONTRIBUTING.md",
+    "CLAUDE.md",
     # Git
     ".gitignore",
     ".gitattributes",
@@ -89,6 +90,15 @@ ALLOWED_MARKDOWN_PREFIXES: FrozenSet[str] = frozenset({
 })
 """Markdown files whose stem (uppercase) starts with these are allowed in root."""
 
+ROOT_CLEANUP_RECENCY_EXEMPT_SUFFIXES: FrozenSet[str] = frozenset({
+    ".prompt.md",
+})
+"""Root-level filename suffixes exempt from recency guard during root cleanup.
+
+These files are considered root clutter by policy and should be relocated even
+when recently created (for example, ad-hoc review prompts created at repo root).
+"""
+
 PROTECTED_DIRS: FrozenSet[str] = frozenset({
     # Core source directories — NEVER modified by Vacuum
     "cortex",
@@ -96,6 +106,7 @@ PROTECTED_DIRS: FrozenSet[str] = frozenset({
     "scripts",
     # Configuration and governance
     ".github",
+    ".claude",
     ".vscode",
     "cortex-registry",
     # Documentation and deployment
@@ -155,6 +166,7 @@ VACUUM_PROTECTED_ROOTS: FrozenSet[str] = frozenset({
     "tests",
     # CI / agents / prompts
     ".github",
+    ".claude",
     # Cross-platform scripts
     "scripts",
     # User-facing HTML documentation
@@ -264,6 +276,7 @@ __all__ = [
     "PROTECTED_FILES",
     "PROTECTED_ROOT_EXTENSIONS",
     "ALLOWED_MARKDOWN_PREFIXES",
+    "ROOT_CLEANUP_RECENCY_EXEMPT_SUFFIXES",
     "PROTECTED_DIRS",
     "VACUUM_PROTECTED_ROOTS",
     "KEBAB_MAX_LEN",

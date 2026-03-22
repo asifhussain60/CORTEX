@@ -284,3 +284,72 @@ class TestRecencyGuardInRootCleanup:
         assert old_tmp in _sources(ops), (
             "Old root-level junk file must still be flagged"
         )
+
+    def test_recent_root_prompt_markdown_is_in_plan(self, tmp_path: Path) -> None:
+        """Recent root *.prompt.md files are exempt from recency protection."""
+        from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator, FileContext
+
+        recent_prompt = tmp_path / "code-review-fixes.prompt.md"
+        _touch_recent(recent_prompt, hours_ago=1)
+
+        ctx = FileContext(workspace_root=tmp_path, all_files=[recent_prompt], directories=[])
+        vacuum = VacuumOrchestrator(workspace_root=tmp_path)
+        ops = vacuum._plan_root_cleanup(ctx)
+        assert recent_prompt in _sources(ops), (
+            "Recent root prompt markdown must be relocated to keep root clean"
+        )
+
+    def test_required_claude_md_stays_in_root(self, tmp_path: Path) -> None:
+        """CLAUDE.md is a protected root artifact and must never be relocated."""
+        from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator, FileContext
+
+        claude_md = tmp_path / "CLAUDE.md"
+        _touch_old(claude_md, hours_ago=30)
+
+        ctx = FileContext(workspace_root=tmp_path, all_files=[claude_md], directories=[])
+        vacuum = VacuumOrchestrator(workspace_root=tmp_path)
+        ops = vacuum._plan_root_cleanup(ctx)
+        assert claude_md not in _sources(ops), (
+            "CLAUDE.md must remain in root as required backbone artifact"
+        )
+
+
+class TestRootPromptPlanningDeduplication:
+    """Root *.prompt.md should be planned once (root cleanup), not double-planned."""
+
+    def test_root_prompt_markdown_not_in_markdown_archive_plan(self, tmp_path: Path) -> None:
+        """Root *.prompt.md is handled by root cleanup and excluded from markdown archive."""
+        from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator, FileContext
+
+        prompt_md = tmp_path / "code-review-fixes.prompt.md"
+        _touch_old(prompt_md, hours_ago=30)
+
+        ctx = FileContext(workspace_root=tmp_path, all_files=[prompt_md], directories=[])
+        vacuum = VacuumOrchestrator(workspace_root=tmp_path)
+        archive_ops = vacuum._plan_markdown_archive(ctx)
+        root_ops = vacuum._plan_root_cleanup(ctx)
+
+        assert prompt_md not in _sources(archive_ops), (
+            "Root prompt markdown must not be archived when root cleanup owns relocation"
+        )
+        assert prompt_md in _sources(root_ops), (
+            "Root prompt markdown must still be relocated by root cleanup"
+        )
+
+
+class TestNamingPlannerRequiredArtifacts:
+    """Required root artifacts must not be renamed by naming cleanup."""
+
+    def test_claude_md_not_in_naming_fix_plan(self, tmp_path: Path) -> None:
+        """CLAUDE.md must not be targeted by naming fix operations."""
+        from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator, FileContext
+
+        claude_md = tmp_path / "CLAUDE.md"
+        _touch_old(claude_md, hours_ago=30)
+
+        ctx = FileContext(workspace_root=tmp_path, all_files=[claude_md], directories=[])
+        vacuum = VacuumOrchestrator(workspace_root=tmp_path)
+        ops = vacuum._plan_naming_fixes(ctx)
+        assert claude_md not in _sources(ops), (
+            "CLAUDE.md must remain unchanged by naming planner"
+        )
