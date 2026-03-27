@@ -20,16 +20,16 @@ metadata:
     - "Claude v3.1 analysis (10 agents, 11 ADRs, 63 DoD)"
     - "GPT v3.1 review (operational risk mitigations)"
     - "Claude Code v3.2 consolidation (repo-validated, overengineering removed)"
-    - "ADLC-copilot onboarding intelligence (36 skills, 12 agents)"
-    - "Purple-platform-copilot onboarding intelligence (82 skills, 10 agents)"
+    - "Workflow-repo onboarding intelligence (36 skills, 12 agents)"
+    - "Knowledge-repo onboarding intelligence (82 skills, 10 agents)"
     - "CORTEX live prompt (381 orchestrators, 74 MCP tool files, 35 logical tools)"
 
 summary:
   vision: >
     CORTEX v3.2 layers a lightweight agent+skill architecture on top of the proven
     Python MCP engine. Foundations.Cortex provides the governance engine and stateful
-    MCP tools. adlc-copilot provides the ADLC delivery workflow (dev+PM tracks,
-    36 skills, 12 agents). purple-platform-copilot provides the organizational
+    MCP tools. workflow-repo provides the WORKFLOW delivery workflow (dev+PM tracks,
+    36 skills, 12 agents). knowledge-repo provides the organizational
     knowledge library (82 skills, 10 specialist agents, 9 domains). Together they
     form a single unified system. Agents handle the conversational layer. Python
     handles the stateful engine. The orchestrator monolith is incrementally
@@ -37,9 +37,9 @@ summary:
 
   key_outcomes:
     - "381 Python orchestrators incrementally deprecated — stateful logic preserved as MCP tools, routing logic replaced by agents"
-    - "10 CORTEX agents + 12 ADLC agents + 10 Purple agents = 32 total agents"
-    - "19 existing CORTEX skills + 36 ADLC + 82 Purple = 137 unified skills (registered, not duplicated)"
-    - "Three-repo integration: Foundations.Cortex (engine) + adlc-copilot (workflow) + purple-platform-copilot (knowledge)"
+    - "10 CORTEX agents + 12 WORKFLOW agents + 10 Knowledge agents = 32 total agents"
+    - "19 existing CORTEX skills + 36 WORKFLOW + 82 Knowledge = 137 unified skills (registered, not duplicated)"
+    - "Three-repo integration: Foundations.Cortex (engine) + workflow-repo (workflow) + knowledge-repo (knowledge)"
     - "2 primary deployment surfaces: Claude Code CLI + VS Code Copilot (Cowork, Cursor, Gemini = bonus)"
     - "Python MCP tools retained as stateful engine layer — agents invoke, not replace"
     - "WorkflowComposer retained as MCP bridge — enforcement spine elevated, not replaced"
@@ -47,7 +47,7 @@ summary:
     - "Governance preserved: 40 SKULL rules + 70+ CORE rules (no new governance tiers added)"
     - "40 DoD checks across 8 categories (was 76 across 15 — ceremony removed)"
     - "4 gate skills (was 7 — deduplicated against existing enforcement)"
-    - "Feature Delivery Lifecycle delegates to adlc-copilot — CORTEX orchestrates, not reinvents"
+    - "Feature Delivery Lifecycle delegates to workflow-repo — CORTEX orchestrates, not reinvents"
 
   principles:
     - name: Agent-First
@@ -73,8 +73,8 @@ summary:
         enforcement (SKULL/CORE rules, CI checks, PR process).
     - name: Three-Repo Unity
       description: >
-        Foundations.Cortex (engine) + adlc-copilot (workflow) + purple-platform-copilot
-        (knowledge) form one system. CORTEX orchestrates the lifecycle that adlc-copilot
+        Foundations.Cortex (engine) + workflow-repo (workflow) + knowledge-repo
+        (knowledge) form one system. CORTEX orchestrates the lifecycle that workflow-repo
         already defines — it does not redefine it.
 
 three_repo_ecosystem:
@@ -110,9 +110,9 @@ three_repo_ecosystem:
         tool_files: 74
         rate_limit: "50 rps steady-state, 100 burst"
 
-    - name: adlc-copilot
+    - name: workflow-repo
       role: "Workflow & Delivery"
-      description: "ADLC reference implementation — structured dev+PM workflows, intent-to-code pipeline"
+      description: "WORKFLOW reference implementation — structured dev+PM workflows, intent-to-code pipeline"
       key_assets:
         - "36 skills (22 dev + 14 PM)"
         - "12 agents (7 dev + 5 PM)"
@@ -121,7 +121,7 @@ three_repo_ecosystem:
       deployment_surfaces:
         - "VS Code Copilot via skills/dev and skills/pm paths"
 
-    - name: purple-platform-copilot
+    - name: knowledge-repo
       role: "Knowledge & Expertise"
       description: "Organizational knowledge library — 82 domain skills, 10 specialist agents"
       key_assets:
@@ -146,17 +146,17 @@ three_repo_ecosystem:
     skill_path_registration:
       description: "VS Code discovers skills from registered paths at session start"
       paths:
-        - path: "purple-platform-copilot/skills"
+        - path: "knowledge-repo/skills"
           contents: "Platform-wide skills (82)"
-        - path: "adlc-copilot/skills/dev"
-          contents: "ADLC developer workflow skills (22)"
-        - path: "adlc-copilot/skills/pm"
-          contents: "ADLC product management skills (14)"
+        - path: "workflow-repo/skills/dev"
+          contents: "WORKFLOW developer workflow skills (22)"
+        - path: "workflow-repo/skills/pm"
+          contents: "WORKFLOW product management skills (14)"
     conflict_resolution:
       precedence:
         - "1. CORTEX governance (SKULL/CORE rules) — immutable"
         - "2. Project-level skills (.github/skills/) — repo-specific"
-        - "3. Registered skill paths (purple-platform, adlc) — cross-repo"
+        - "3. Registered skill paths (knowledge, workflow) — cross-repo"
 
 architecture_decisions:
   adr_count: 13
@@ -206,18 +206,18 @@ architecture_decisions:
         - "_legacy/ used as staging — files move there only after agent replacement proves parity"
 
     - id: ADR-V3-006
-      title: Feature Delivery Lifecycle delegates to adlc-copilot pipeline
+      title: Feature Delivery Lifecycle delegates to workflow-repo pipeline
       status: ACCEPTED
       version: 3.2.0
       rationale: >
-        adlc-copilot already implements a proven Intent→Story→Archetype→Skill→Code
+        workflow-repo already implements a proven Intent→Story→Archetype→Skill→Code
         delivery chain with 12 agents and 36 skills. CORTEX should orchestrate this
         pipeline, not reinvent it. cortex-orchestrate acts as the conductor that
-        calls ADLC agents at each stage and enforces CORTEX governance gates.
+        calls WORKFLOW agents at each stage and enforces CORTEX governance gates.
       consequences:
-        - "cortex-orchestrate delegates to ADLC smart-delegator, architect, story-implementer"
+        - "cortex-orchestrate delegates to WORKFLOW smart-delegator, architect, story-implementer"
         - "4 gate skills enforce quality at key boundaries (not every boundary)"
-        - "No duplicate lifecycle definition — adlc-copilot IS the lifecycle"
+        - "No duplicate lifecycle definition — workflow-repo IS the lifecycle"
 
     - id: ADR-V3-007
       title: Domain skill catalogs with team self-service
@@ -330,7 +330,7 @@ overlap_zones:
     - id: Z9
       severity: HIGH
       name: Cross-Repo Skill Duplication
-      resolution: "Precedence model (Purple=knowledge, CORTEX=governance, ADLC=workflow)"
+      resolution: "Precedence model (Knowledge=knowledge, CORTEX=governance, WORKFLOW=workflow)"
       status: RESOLVED
 
 workflow_composer:
@@ -407,8 +407,8 @@ architecture:
       name: Agent Layer
       description: "Conversational agents from all three repos"
       cortex_agents: "10 (engine + governance)"
-      adlc_agents: "12 (workflow + delivery)"
-      purple_agents: "10 (knowledge + expertise)"
+      workflow_agents: "12 (workflow + delivery)"
+      secondary_agents: "10 (knowledge + expertise)"
       total_agents: 32
 
   request_flow: >
@@ -453,13 +453,13 @@ agents:
       lens_required: true
 
     - name: cortex-orchestrate
-      purpose: "Feature delivery lifecycle — delegates to adlc-copilot pipeline, enforces CORTEX gates"
+      purpose: "Feature delivery lifecycle — delegates to workflow-repo pipeline, enforces CORTEX gates"
       absorbs: [cortex-feature-orchestrator, cortex-plan, cortex-smart-delegator]
-      intents_served: [PLAN, DESIGN, REQUIREMENTS, CHANGE_INTELLIGENCE, ADLC, MIGRATE]
-      triggers: ["plan", "roadmap", "architect", "design", "requirements", "/adlc", "migrate"]
-      adlc_delegation: >
-        Delegates to ADLC smart-delegator, architect, pm-intent-creator, story-implementer.
-        CORTEX provides governance enforcement at gate boundaries. adlc-copilot provides
+      intents_served: [PLAN, DESIGN, REQUIREMENTS, CHANGE_INTELLIGENCE, WORKFLOW, MIGRATE]
+      triggers: ["plan", "roadmap", "architect", "design", "requirements", "/workflow", "migrate"]
+      workflow_delegation: >
+        Delegates to WORKFLOW smart-delegator, architect, pm-intent-creator, story-implementer.
+        CORTEX provides governance enforcement at gate boundaries. workflow-repo provides
         the workflow execution.
       mcp_dependencies: ["cortex_workflow (templates)", "cortex_context (session)"]
 
@@ -546,45 +546,45 @@ gate_skills:
         - "MCP server health verified"
 
 feature_delivery_lifecycle:
-  name: "CORTEX Feature Delivery Lifecycle (Delegates to ADLC)"
+  name: "CORTEX Feature Delivery Lifecycle (Delegates to WORKFLOW)"
   note: >
-    CORTEX orchestrates the lifecycle. adlc-copilot executes it. The
-    Intent→Story→Archetype→Skill→Code chain in adlc-copilot IS the lifecycle.
+    CORTEX orchestrates the lifecycle. workflow-repo executes it. The
+    Intent→Story→Archetype→Skill→Code chain in workflow-repo IS the lifecycle.
     CORTEX adds governance gates at 4 boundaries.
   stages:
     - stage: 1
       name: Express Intent
       cortex_agent: cortex-orchestrate
-      adlc_agent: pm-intent-creator
+      workflow_agent: pm-intent-creator
       gate: gate-readiness
       description: "User describes what they want. DoR validated. Requirements structured."
 
     - stage: 2
       name: Understand
       cortex_agent: cortex-intel
-      adlc_agent: architect
+      workflow_agent: architect
       gate: null
       description: "LENS scans repo. Architecture patterns loaded. Story decomposed."
 
     - stage: 3
       name: Implement
       cortex_agent: cortex-code
-      adlc_agent: dev-story-implementer
+      workflow_agent: dev-story-implementer
       gate: gate-security
-      description: "TDD-first implementation. ADLC story-implementer follows Intent→Story→Code chain."
+      description: "TDD-first implementation. WORKFLOW story-implementer follows Intent→Story→Code chain."
       feedback_loop: "← Stage 5 (needs_refinement) · max 3 cycles"
 
     - stage: 4
       name: Test + Document
       cortex_agent: cortex-lint + cortex-present
-      adlc_agent: test-proposer
+      workflow_agent: test-proposer
       gate: null
       description: "Coverage validation, documentation synthesis, PR walkthrough generation."
 
     - stage: 5
       name: Review
       cortex_agent: cortex-present
-      adlc_agent: test-critic
+      workflow_agent: test-critic
       gate: gate-review
       description: "PR created with walkthrough. Challenge gate fires. Review feedback."
       feedback_loop: "→ Stage 3 (refine) or → Stage 6"
@@ -592,7 +592,7 @@ feature_delivery_lifecycle:
     - stage: 6
       name: Deploy
       cortex_agent: cortex-platform
-      adlc_agent: gate-deployment-readiness
+      workflow_agent: gate-deployment-readiness
       gate: gate-deployment
       description: "Git publish, CI/CD pipeline, deployment verification."
 
@@ -812,16 +812,16 @@ phases:
       - step: 5
         name: "Create cortex-orchestrate agent"
         file: ".github/agents/cortex-orchestrate.agent.md"
-        description: "Feature delivery conductor — delegates to ADLC, enforces CORTEX gates"
+        description: "Feature delivery conductor — delegates to WORKFLOW, enforces CORTEX gates"
         required_sections:
           - "## Identity"
-          - "## Intents Served: PLAN, DESIGN, REQUIREMENTS, CHANGE_INTELLIGENCE, ADLC, MIGRATE"
-          - "## ADLC Delegation Protocol"
+          - "## Intents Served: PLAN, DESIGN, REQUIREMENTS, CHANGE_INTELLIGENCE, WORKFLOW, MIGRATE"
+          - "## WORKFLOW Delegation Protocol"
           - "## MCP Dependencies: cortex_workflow, cortex_context"
           - "## 7-Stage Lifecycle Reference"
           - "## Quality Checklist"
           - "## Security Checklist"
-        pass_criteria: "ADLC delegation explicitly wired, all 7 stages referenced"
+        pass_criteria: "WORKFLOW delegation explicitly wired, all 7 stages referenced"
 
       - step: 6
         name: "Create cortex-intel agent"
@@ -967,7 +967,7 @@ phases:
     status: PLANNED
     duration_weeks: 3
     description: >
-      Wire CORTEX lifecycle conductor (cortex-orchestrate) to ADLC pipeline, integrate Purple
+      Wire CORTEX lifecycle conductor (cortex-orchestrate) to WORKFLOW pipeline, integrate Knowledge
       skills via skill path registration, create 4 gate skills, wire 7-stage lifecycle E2E.
     prerequisite: "P2 gate must be GREEN before P3 begins"
     execution_order:
@@ -1021,19 +1021,19 @@ phases:
         pass_criteria: "MCP health check criterion present, health probe format defined"
 
       - step: 5
-        name: "Update cortex-orchestrate to wire ADLC delegation"
+        name: "Update cortex-orchestrate to wire WORKFLOW delegation"
         file: ".github/agents/cortex-orchestrate.agent.md"
-        description: "Add explicit ADLC agent delegation protocol to cortex-orchestrate"
+        description: "Add explicit WORKFLOW agent delegation protocol to cortex-orchestrate"
         additions:
-          - "## ADLC Delegation Map: Stage1→pm-intent-creator, Stage2→architect, Stage3→dev-story-implementer, Stage5→test-critic, Stage6→gate-deployment-readiness"
+          - "## WORKFLOW Delegation Map: Stage1→pm-intent-creator, Stage2→architect, Stage3→dev-story-implementer, Stage5→test-critic, Stage6→gate-deployment-readiness"
           - "## Gate Invocation: gate-readiness at Stage1, gate-security at Stage3, gate-review at Stage5, gate-deployment at Stage6"
           - "## Feedback Loops: Stage5→Stage3 on needs_refinement (max 3 cycles per CORE-068), Stage7→Stage2 on degradation"
-        pass_criteria: "All 5 ADLC agents mapped, all 4 gates invoked at correct stages"
+        pass_criteria: "All 5 WORKFLOW agents mapped, all 4 gates invoked at correct stages"
 
       - step: 6
         name: "Register skill paths for VS Code"
         file: ".vscode/settings.json"
-        description: "Cross-repo skill discovery for adlc-copilot and purple-platform-copilot"
+        description: "Cross-repo skill discovery for workflow-repo and knowledge-repo"
         content_spec: |
           {
             "github.copilot.chat.codeGeneration.instructions": [],
@@ -1044,13 +1044,13 @@ phases:
           content: |
             {
               "skill_paths": [
-                "../adlc-copilot/skills/dev",
-                "../adlc-copilot/skills/pm",
-                "../purple-platform-copilot/skills"
+                "../workflow-repo/skills/dev",
+                "../workflow-repo/skills/pm",
+                "../knowledge-repo/skills"
               ],
               "agent_paths": [
-                "../adlc-copilot/agents/dev",
-                "../adlc-copilot/agents/pm"
+                "../workflow-repo/agents/dev",
+                "../workflow-repo/agents/pm"
               ]
             }
         pass_criteria: "skill-paths.json present, 3 skill paths + 2 agent paths registered"
@@ -1080,7 +1080,7 @@ phases:
         test_intent: "IMPLEMENT a simple Python utility function with TDD"
         expected_flow:
           - "Stage1: gate-readiness PASS (ACs defined, scope <500 LOC)"
-          - "Stage2: cortex-intel produces model.yaml, ADLC architect loads patterns"
+          - "Stage2: cortex-intel produces model.yaml, WORKFLOW architect loads patterns"
           - "Stage3: cortex-code executes TDD, gate-security PASS"
           - "Stage4: cortex-lint 0 P0/P1, cortex-present generates PR walkthrough"
           - "Stage5: gate-review PASS (walkthrough present, CI configured)"
@@ -1088,7 +1088,7 @@ phases:
           - "Stage7: cortex-audit monitoring active"
         pass_criteria: "All 7 stages execute, all 4 gates return PASS, walkthrough HTML generated"
 
-    gate: "4 gate skill files present with all required sections, ADLC delegation mapped in cortex-orchestrate, 9 domain catalog directories with skill-catalog.yaml, lifecycle E2E test passes all 7 stages"
+    gate: "4 gate skill files present with all required sections, WORKFLOW delegation mapped in cortex-orchestrate, 9 domain catalog directories with skill-catalog.yaml, lifecycle E2E test passes all 7 stages"
     gate_verification:
       - "find .github/agents/gates -name '*.agent.md' | wc -l  # must be 4"
       - "find cortex-registry/skills -name 'skill-catalog.yaml' | wc -l  # must be 9"
@@ -1096,7 +1096,7 @@ phases:
     failure_modes:
       - mode: "Lifecycle E2E test stalls at Stage 3"
         action: "Verify TDD orchestrator MCP tool is reachable; test independently first"
-      - mode: "ADLC agents not found via skill paths"
+      - mode: "WORKFLOW agents not found via skill paths"
         action: "Verify sibling repo checkout paths; update skill-paths.json accordingly"
       - mode: "Gate returns invalid verdict format"
         action: "Fix gate SKILL.md PASS/BLOCK output schema before proceeding"
@@ -1156,9 +1156,9 @@ phases:
       - wave: 3
         name: "Delegation Chain Orchestrators"
         estimated_files: "~80-100"
-        target_pattern: "Orchestrators that chain multiple sub-orchestrators in a sequence that agents now handle via ADLC delegation"
+        target_pattern: "Orchestrators that chain multiple sub-orchestrators in a sequence that agents now handle via WORKFLOW delegation"
         candidate_files:
-          - "cortex/orchestrators/core/adlc_orchestrator.py  (routing layer only — delegate to agent)"
+          - "cortex/orchestrators/core/workflow_orchestrator.py  (routing layer only — delegate to agent)"
           - "cortex/orchestrators/domain/ (pure delegation chains)"
           - "cortex/orchestrators/planning/ (planning delegation chains)"
           - "cortex/orchestrators/synthesis/ (synthesis delegation chains)"
@@ -1264,7 +1264,7 @@ phases:
             - "grep -r 'cortex/orchestrators' .github/agents/*.agent.md | wc -l  # must be 0 — DOD-A03"
             - "grep -c 'Quality Checklist\\|Security Checklist\\|MCP Dependencies' .github/agents/*.agent.md  # each agent has all 3 — DOD-A04"
             - "grep -c 'repo-intelligence-model.yaml' .github/agents/cortex-intel.agent.md  # >=1 — DOD-A05"
-            - "grep -c 'ADLC Delegation' .github/agents/cortex-orchestrate.agent.md  # >=1 — DOD-A06"
+            - "grep -c 'WORKFLOW Delegation' .github/agents/cortex-orchestrate.agent.md  # >=1 — DOD-A06"
           W_workflow:
             - "wc -l cortex/orchestrators/core/workflow_composer*.py  # >=1 file — DOD-W01"
             - "python -c \"from cortex.mcp import server; print('MCP OK')\"  # DOD-W02"
@@ -1281,7 +1281,7 @@ phases:
             - "cortex-intel onboard self → model.yaml references Foundations.Cortex correctly  # DOD-T03"
             - "python scripts/run_tests.py unit  # all 1428 pass — DOD-T04"
             - "run comparison tests for each deprecation wave  # DOD-T05"
-            - "cortex-orchestrate + adlc-copilot + purple-platform-copilot integration test  # DOD-T06"
+            - "cortex-orchestrate + workflow-repo + knowledge-repo integration test  # DOD-T06"
           C_convergence:
             - "python scripts/run_tests.py preflight && python scripts/run_tests.py smoke  # DOD-C01 (0 P0/P1)"
             - "grep -r 'TODO\\|FIXME\\|HACK' cortex/ --include='*.py' | grep -v '#' | wc -l  # DOD-C02"
@@ -1318,13 +1318,13 @@ phases:
 
       - step: 5
         name: "Cross-repo integration test"
-        description: "Verify CORTEX + adlc-copilot + purple-platform-copilot work together"
-        test_scenario: "Run full feature delivery from intent through ADLC with Purple skill consultation"
+        description: "Verify CORTEX + workflow-repo + knowledge-repo work together"
+        test_scenario: "Run full feature delivery from intent through WORKFLOW with Knowledge skill consultation"
         validation:
-          - "cortex-orchestrate delegates Stage1 to pm-intent-creator (adlc-copilot)"
+          - "cortex-orchestrate delegates Stage1 to pm-intent-creator (workflow-repo)"
           - "cortex-intel consults model.yaml from Foundations.Cortex scan"
-          - "cortex-code invokes dev-story-implementer (adlc-copilot)"
-          - "cortex-lint validates against domain skills from purple-platform-copilot"
+          - "cortex-code invokes dev-story-implementer (workflow-repo)"
+          - "cortex-lint validates against domain skills from knowledge-repo"
           - "cortex-present generates walkthrough HTML via design-tokens.yaml"
         pass_criteria: "All 5 cross-repo handoffs complete, no MCP connectivity errors"
 
@@ -1397,7 +1397,7 @@ dod:
         - "DOD-A03: No agent SKILL.md references a deprecated Python orchestrator path"
         - "DOD-A04: Every agent SKILL.md has Quality/Security/MCP sections"
         - "DOD-A05: cortex-intel produces valid model.yaml consumed by downstream agents"
-        - "DOD-A06: cortex-orchestrate delegates to ADLC agents (not reinvents lifecycle)"
+        - "DOD-A06: cortex-orchestrate delegates to WORKFLOW agents (not reinvents lifecycle)"
 
     - category: "W — WorkflowComposer & Response"
       count: 4
@@ -1423,7 +1423,7 @@ dod:
         - "DOD-T03: CORTEX self-onboard succeeds (cortex-intel scans itself)"
         - "DOD-T04: All 1428 existing test files still pass after deprecation"
         - "DOD-T05: Comparison tests prove agent output matches orchestrator output"
-        - "DOD-T06: Cross-repo integration test passes (CORTEX + ADLC + Purple)"
+        - "DOD-T06: Cross-repo integration test passes (CORTEX + WORKFLOW + Knowledge)"
 
     - category: "C — Convergence & Ecosystem"
       count: 5
@@ -1546,7 +1546,7 @@ removed_from_v31:
 team_adoption:
   onboarding_steps:
     - step: 1
-      action: "Clone all 3 repos (Foundations.Cortex, adlc-copilot, purple-platform-copilot)"
+      action: "Clone all 3 repos (Foundations.Cortex, workflow-repo, knowledge-repo)"
       duration: "5 minutes"
     - step: 2
       action: "Register skill paths and agent paths in VS Code settings"

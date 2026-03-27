@@ -523,7 +523,7 @@
       <section class="section" id="lifecycle">
         <h2>7-Stage Feature Delivery Pipeline</h2>
         <p>
-          CORTEX is the <strong>conductor</strong> of adlc-copilot's existing pipeline, not a replacement. The 7 stages are owned by adlc-copilot; CORTEX enforces gates at key handoffs. CORTEX fires at stages 1, 3, 4, and 6—the 4 real decision points. Stages 0, 2, 5, and 7 are owned entirely by adlc-copilot or the developer.
+          CORTEX is the <strong>conductor</strong> of workflow-repo's existing pipeline, not a replacement. The 7 stages are owned by workflow-repo; CORTEX enforces gates at key handoffs. CORTEX fires at stages 1, 3, 4, and 6—the 4 real decision points. Stages 0, 2, 5, and 7 are owned entirely by workflow-repo or the developer.
         </p>
 
         <div class="diagram-container">
@@ -539,19 +539,19 @@
             <rect width="800" height="980" rx="16" fill="rgba(26,31,58,0.6)"/>
             <!-- Title -->
             <text x="400" y="38" text-anchor="middle" font-size="15" font-weight="700" fill="#f0f4f8">7-Stage Feature Delivery Lifecycle</text>
-            <text x="400" y="58" text-anchor="middle" font-size="11" fill="#64748b">CORTEX fires at 4 real decision gates · adlc-copilot owns the rest</text>
+            <text x="400" y="58" text-anchor="middle" font-size="11" fill="#64748b">CORTEX fires at 4 real decision gates · workflow-repo owns the rest</text>
 
             <!-- Legend -->
             <rect x="500" y="68" width="12" height="12" rx="3" fill="rgba(0,212,255,0.15)" stroke="#00d4ff" stroke-width="1.5"/>
             <text x="518" y="79" font-size="10" fill="#00d4ff">CORTEX Gate</text>
             <rect x="620" y="68" width="12" height="12" rx="3" fill="rgba(100,116,139,0.12)" stroke="rgba(100,116,139,0.35)" stroke-width="1.5"/>
-            <text x="638" y="79" font-size="10" fill="#94a3b8">adlc-copilot / Dev</text>
+            <text x="638" y="79" font-size="10" fill="#94a3b8">workflow-repo / Dev</text>
 
-            <!-- STAGE 0: Idea — adlc-copilot (y=96) -->
+            <!-- STAGE 0: Idea — workflow-repo (y=96) -->
             <rect x="40" y="96" width="720" height="72" rx="10" fill="rgba(100,116,139,0.10)" stroke="rgba(100,116,139,0.35)" stroke-width="1.5"/>
             <text x="70" y="120" font-size="13" font-weight="700" fill="#94a3b8">Stage 0 · Idea</text>
             <text x="70" y="140" font-size="11" fill="#64748b">GitHub issue created · problem statement written · no CORTEX involvement</text>
-            <text x="750" y="136" text-anchor="end" font-size="10" fill="#64748b">adlc-copilot</text>
+            <text x="750" y="136" text-anchor="end" font-size="10" fill="#64748b">workflow-repo</text>
             <!-- Arrow -->
             <line x1="400" y1="168" x2="400" y2="208" stroke="rgba(0,212,255,0.4)" stroke-width="1.5" marker-end="url(#lfarr)"/>
 
@@ -590,11 +590,11 @@
             <!-- Arrow -->
             <line x1="400" y1="632" x2="400" y2="672" stroke="rgba(0,212,255,0.4)" stroke-width="1.5" marker-end="url(#lfarr)"/>
 
-            <!-- STAGE 5: Staging Deploy — adlc-copilot (y=676) -->
+            <!-- STAGE 5: Staging Deploy — workflow-repo (y=676) -->
             <rect x="40" y="676" width="720" height="72" rx="10" fill="rgba(100,116,139,0.10)" stroke="rgba(100,116,139,0.35)" stroke-width="1.5"/>
             <text x="70" y="700" font-size="13" font-weight="700" fill="#94a3b8">Stage 5 · Staging Deploy</text>
             <text x="70" y="720" font-size="11" fill="#64748b">Deployed to staging · smoke tests run · UAT if applicable</text>
-            <text x="750" y="716" text-anchor="end" font-size="10" fill="#64748b">adlc-copilot</text>
+            <text x="750" y="716" text-anchor="end" font-size="10" fill="#64748b">workflow-repo</text>
             <!-- Arrow -->
             <line x1="400" y1="748" x2="400" y2="788" stroke="rgba(0,212,255,0.4)" stroke-width="1.5" marker-end="url(#lfarr)"/>
 
@@ -617,7 +617,7 @@
 
         <h3 style="font-family: Space Grotesk, sans-serif; margin-top: 1.5rem; color: #cbd5e1;">Key Insight</h3>
         <p>
-          CORTEX enforces decision gates at the critical handoff points: readiness before work begins, code review before merge, security before production, and final go/no-go before deployment. Between gates, adlc-copilot owns the execution.
+          CORTEX enforces decision gates at the critical handoff points: readiness before work begins, code review before merge, security before production, and final go/no-go before deployment. Between gates, workflow-repo owns the execution.
         </p>
       </section>
 

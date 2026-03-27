@@ -25,8 +25,8 @@ The canonical plan has been reconciled to the repo-validated v3.2 baseline. This
 | Metric | Value | Notes |
 |--------|-------|-------|
 | CORTEX Agents | 10 | Consolidated from a larger orchestrator surface |
-| Total Agents (all repos) | 32 | 10 CORTEX + 12 ADLC + 10 Purple |
-| Total Skills | 137 | 19 CORTEX + 36 ADLC + 82 Purple |
+| Total Agents (all repos) | 32 | 10 CORTEX + 12 WORKFLOW + 10 Knowledge |
+| Total Skills | 137 | 19 CORTEX + 36 WORKFLOW + 82 Knowledge |
 | ADRs | 14 | ADR-V3-001 through ADR-V3-014, with ADR-V3-013 and ADR-V3-014 withdrawn |
 | Gate Skills | 4 | readiness, security, review, deployment |
 | DoD Checks | 40 | Across 8 categories |
@@ -47,7 +47,7 @@ The canonical plan has been reconciled to the repo-validated v3.2 baseline. This
 2. Release Evidence Mesh was removed as overengineered and ADR-V3-014 was withdrawn.
 3. Plugin governance/signing was removed as premature and ADR-V3-013 was withdrawn.
 4. Governance ceremony was reduced from 76 DoD checks and 7 gates to 40 DoD checks and 4 gates.
-5. The feature lifecycle now explicitly delegates to adlc-copilot rather than redefining it inside CORTEX.
+5. The feature lifecycle now explicitly delegates to workflow-repo rather than redefining it inside CORTEX.
 6. Python orchestrators are deprecated incrementally instead of archived in a big-bang move.
 7. Testing is now a 3-layer pragmatic model: smoke, agent-routing E2E, and self-onboard.
 
@@ -60,7 +60,7 @@ The canonical plan has been reconciled to the repo-validated v3.2 baseline. This
 | cortex-code | TDD implementation, bug fixing, refactoring, test generation | IMPLEMENT, FIX, REFACTOR, TEST |
 | cortex-diagnose | Multi-stack debugging and root cause analysis | DEBUG, RCA |
 | cortex-audit | Governance scanning, health, cleanup, YAML validation | AUDIT, TOTALRECALL, HEALTH, GOVERNANCE, VALIDATE, VACUUM |
-| cortex-orchestrate | Feature delivery conductor with ADLC delegation | PLAN, DESIGN, REQUIREMENTS, CHANGE_INTELLIGENCE, ADLC, MIGRATE |
+| cortex-orchestrate | Feature delivery conductor with WORKFLOW delegation | PLAN, DESIGN, REQUIREMENTS, CHANGE_INTELLIGENCE, WORKFLOW, MIGRATE |
 | cortex-intel | Onboarding, LENS 4-phase scan, model.yaml production | ONBOARD, ANALYZE, INVESTIGATE |
 | cortex-distill | Digest, distillation, training, feedback | DIGEST, DISTILL, TRAIN, FEEDBACK, SYNC |
 | cortex-present | PR walkthroughs, HTML exhibits, documentation | REVIEW, CONVERT_TO_HTML, DOCUMENT |
@@ -84,7 +84,7 @@ The canonical plan has been reconciled to the repo-validated v3.2 baseline. This
 2. 381 orchestrators is the repo-validated baseline for deprecation planning.
 3. 3-wave deprecation is the approved migration strategy.
 4. WorkflowComposer remains part of the retained Python engine layer.
-5. Cross-repo integration stays split across Foundations.Cortex, adlc-copilot, and purple-platform-copilot.
+5. Cross-repo integration stays split across Foundations.Cortex, workflow-repo, and knowledge-repo.
 
 ---
 
