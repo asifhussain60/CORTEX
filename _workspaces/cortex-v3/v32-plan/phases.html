@@ -705,7 +705,7 @@
             <tr style="border-bottom: 1px solid var(--border-color);">
               <td style="padding: 0.75rem; color: var(--color-text-primary);">P3</td>
               <td style="padding: 0.75rem; color: var(--color-text-secondary);">3 weeks</td>
-              <td style="padding: 0.75rem; color: var(--color-text-secondary);">Feature Delivery Lifecycle + Unified Capability Integration <span style="font-size:0.72rem; color:var(--color-warning);">· 10 steps · 5 MVS agents (32 deferred to M2)</span></td>
+              <td style="padding: 0.75rem; color: var(--color-text-secondary);">Feature Delivery Lifecycle + Unified Capability Integration <span style="font-size:0.72rem; color:var(--accent-primary);">· 12 steps · full scope · parallel workstreams</span></td>
               <td style="text-align: center; padding: 0.75rem;"><span style="color: var(--accent-primary);">📋 PLANNED</span></td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border-color);">
@@ -786,25 +786,27 @@
               <div class="phase-card-title">P3 — Feature Delivery Lifecycle + Capability Integration</div>
               <span class="phase-badge planned">📋 PLANNED</span>
             </div>
-            <div class="phase-meta">Duration: <strong>3 weeks · 10 steps</strong></div>
+            <div class="phase-meta">Duration: <strong>3 weeks · 12 steps · no deferred scope</strong></div>
             <div class="phase-content">
-              <strong>Goal:</strong> 4 gate skills, 5 MVS WORKFLOW delegation agents, lifecycle E2E.
-              <div style="background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.25); border-radius:6px; padding:0.5rem 0.75rem; margin:0.6rem 0; font-size:0.78rem; color:var(--color-text-secondary);">
-                <strong style="color:var(--color-warning);">Scope de-risked:</strong> Full 22+10=32 workflow &amp; knowledge agents deferred to <strong>Milestone 2</strong> (post-P5). P3 delivers only the 5 MVS WORKFLOW agents directly required for 7-stage lifecycle E2E: pm-intent-creator, architect, dev-story-implementer, test-critic, gate-deployment-readiness.
+              <strong>Goal:</strong> Complete lifecycle implementation — 4 gate agents, 22 workflow + 10 knowledge agents, 137 unified skills, lifecycle E2E.
+              <div style="background:rgba(0,212,255,0.06); border:1px solid rgba(0,212,255,0.2); border-radius:6px; padding:0.5rem 0.75rem; margin:0.6rem 0; font-size:0.78rem; color:var(--color-text-secondary);">
+                <strong style="color:var(--accent-primary);">Execution model:</strong> Parallelise by workstream — gates, workflow agents, knowledge agents, and skill catalogs run concurrently. Hard sequence gates enforced at integration, convergence, and quality verification checkpoints.
               </div>
               <ul>
                 <li>gate-readiness.agent.md (Stage 1 DoR gate)</li>
                 <li>gate-security.agent.md (Stage 3 — 6-point checklist)</li>
                 <li>gate-review.agent.md (Stage 5 — PR quality)</li>
                 <li>gate-deployment.agent.md (Stage 6 — CI/health/MCP)</li>
-                <li>5 MVS WORKFLOW delegation agents (.github/agents/workflow/)</li>
-                <li>cortex-orchestrate wired to WORKFLOW delegation map</li>
-                <li>Capability-area directories scaffolded (full skills deferred to M2)</li>
-                <li>.vscode/settings.json + skill-paths.json (CORTEX-internal reference)</li>
-                <li>Domain skill catalog structure (9 directories)</li>
-                <li>Lifecycle E2E test — all 7 stages, all 4 gates PASS</li>
+                <li>22 workflow-delivery agents (.github/agents/workflow/)</li>
+                <li>10 knowledge-domain agents (.github/agents/knowledge/)</li>
+                <li>cortex-orchestrate wired to full WORKFLOW delegation map</li>
+                <li>118 capability-area skills (36 workflow + 82 knowledge) scaffolded</li>
+                <li>Discovery wiring validated for all capability areas</li>
+                <li>9 domain skill catalog directories + manifests</li>
+                <li>Lifecycle + integration E2E matrix — all 7 stages, all 4 gates PASS</li>
+                <li>Execution dashboard sync for P3</li>
               </ul>
-              <strong style="display: block; margin-top: 0.75rem;">Gate:</strong> 4 gate agents + 5 MVS WORKFLOW agents present, lifecycle E2E passes all 7 stages
+              <strong style="display: block; margin-top: 0.75rem;">Gate:</strong> 4 gate agents + 32 capability agents, 137 skills registered, lifecycle E2E passes all 7 stages
             </div>
           </div>
 
@@ -925,9 +927,9 @@
             <div style="font-size:0.78rem; font-weight:700; color:var(--color-error); margin-bottom:0.3rem;">RISK-02 · Agent Naming Ambiguity <span style="color:var(--color-success);">✓ FIXED</span></div>
             <p style="font-size:0.76rem; color:var(--color-text-secondary);"><code>.github/agents/core/*.md</code> are legacy stubs (pre-v3.2). v3.2 agents are <code>*.agent.md</code> in <code>.github/agents/</code> root. <strong>naming_convention_note</strong> added to P2 in YAML.</p>
           </div>
-          <div style="border:1px solid rgba(245,158,11,0.25); border-radius:8px; padding:0.7rem; background:rgba(245,158,11,0.05);">
-            <div style="font-size:0.78rem; font-weight:700; color:var(--color-warning); margin-bottom:0.3rem;">RISK-03 · P3 Agent Scope Overload <span style="color:var(--color-success);">✓ FIXED</span></div>
-            <p style="font-size:0.76rem; color:var(--color-text-secondary);">32 agent authoring in 3 weeks was excess scope. P3 now delivers <strong>5 MVS agents</strong> for lifecycle E2E. Remaining 27 agents deferred to <strong>Milestone 2</strong>. P3 steps: 9 → 10.</p>
+          <div style="border:1px solid rgba(0,212,255,0.25); border-radius:8px; padding:0.7rem; background:rgba(0,212,255,0.05);">
+            <div style="font-size:0.78rem; font-weight:700; color:var(--accent-primary); margin-bottom:0.3rem;">RISK-03 · P3 Agent Scope Overload <span style="color:var(--color-success);">✓ RESOLVED</span></div>
+            <p style="font-size:0.76rem; color:var(--color-text-secondary);">Risk addressed via <strong>parallel execution model</strong> — gates, workflow agents, knowledge agents, and skill catalogs authored concurrently with hard sequence gates at integration checkpoints. Full 22+10 agent scope retained. P3 steps: 12.</p>
           </div>
           <div style="border:1px solid rgba(245,158,11,0.25); border-radius:8px; padding:0.7rem; background:rgba(245,158,11,0.05);">
             <div style="font-size:0.78rem; font-weight:700; color:var(--color-warning); margin-bottom:0.3rem;">RISK-04 · VS Code Skill Discovery Unverified <span style="color:var(--color-success);">✓ MITIGATED</span></div>
