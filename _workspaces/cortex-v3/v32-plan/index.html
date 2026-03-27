@@ -53,6 +53,15 @@
     .cards-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:1.25rem; }
     .section-card { background:rgba(26,31,58,0.7); border:1px solid var(--border-subtle); border-radius:16px; padding:1.75rem; backdrop-filter:blur(8px); transition:all 0.25s; display:flex; flex-direction:column; text-decoration:none; color:inherit; }
     .section-card:hover { border-color:var(--border-accent); transform:translateY(-4px); box-shadow:0 8px 32px rgba(0,212,255,0.08); }
+    .section-card.execution-tile {
+      background: linear-gradient(135deg, rgba(0,212,255,0.18) 0%, rgba(123,97,255,0.2) 100%);
+      border: 1px solid rgba(0,212,255,0.38);
+      box-shadow: 0 10px 34px rgba(0,212,255,0.18);
+    }
+    .section-card.execution-tile:hover {
+      border-color: rgba(0,212,255,0.55);
+      box-shadow: 0 14px 38px rgba(0,212,255,0.28);
+    }
     .card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:0.75rem; }
     .card-icon { font-size:1.6rem; }
     .card-tag { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-primary); background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.15); border-radius:4px; padding:0.2rem 0.5rem; }
@@ -84,7 +93,7 @@
       Asif Hussain
     </div>
     <div class="meta-row">
-      <span class="meta-chip repo">Foundations.Cortex</span>
+      <span class="meta-chip repo">Cortex</span>
       <span class="meta-chip ok">Planning Complete</span>
       <span class="meta-chip open">P1 Complete · P2–P5 Planned</span>
       <span class="meta-chip">14 ADRs · 2 Withdrawn</span>
@@ -106,104 +115,126 @@
 
   <!-- NAV CARDS -->
   <div class="nav-cards-section">
-    <h2>Plan Sections</h2>
+    <h2>Plan Sections &#8212; Read in Order</h2>
     <div class="cards-grid">
 
+      <!-- 1 - START HERE -->
       <a class="section-card" href="./overview.html">
         <div class="card-header">
           <span class="card-icon">🗺️</span>
-          <span class="card-tag">Start Here</span>
+          <span class="card-tag">1 &middot; Start Here</span>
         </div>
         <div class="card-title">Overview &amp; Ecosystem</div>
-        <p class="card-desc">What v3.2.0 is, what changed from v3.1, the three-repo ecosystem, and the key decisions made during consolidation.</p>
+        <p class="card-desc">What v3.2.0 is, what changed from v3.1, the unified single-repo capability architecture, and the key consolidation decisions.</p>
         <ul class="card-bullets">
-          <li>v3.0 → v3.1 → v3.2 before/after table</li>
-          <li>Three-repo ecosystem map</li>
+          <li>v3.0 &rarr; v3.1 &rarr; v3.2 before/after table</li>
+          <li>Single-repo capability areas map</li>
           <li>What was removed and why</li>
         </ul>
         <span class="card-link">View Overview</span>
       </a>
 
+      <!-- 2 - THE BLUEPRINT -->
       <a class="section-card" href="./architecture.html">
         <div class="card-header">
           <span class="card-icon">🏗️</span>
-          <span class="card-tag">Core Design</span>
+          <span class="card-tag">2 &middot; The Blueprint</span>
         </div>
         <div class="card-title">Architecture &amp; Agents</div>
-        <p class="card-desc">The 4-layer stack, Agent+Engine complement pattern, LENS pipeline, and intent routing with confidence-based dispatch.</p>
+        <p class="card-desc">The 4-layer stack, Agent+Engine complement pattern, LENS intelligence pipeline, and intent routing with confidence-based dispatch.</p>
         <ul class="card-bullets">
           <li>4-layer architecture stack diagram</li>
           <li>Agent+Engine complement pattern</li>
-          <li>34 intent types · routing confidence table</li>
+          <li>34 intent types &middot; routing confidence table</li>
         </ul>
         <span class="card-link">View Architecture</span>
       </a>
 
+      <!-- 3 - THE RULES -->
+      <a class="section-card" href="./governance.html">
+        <div class="card-header">
+          <span class="card-icon">⚖️</span>
+          <span class="card-tag">3 &middot; The Rules</span>
+        </div>
+        <div class="card-title">Governance, DoD &amp; ADRs</div>
+        <p class="card-desc">40 DoD checks across 8 categories, 14 architectural decision records, and the SKULL/CORE enforcement hierarchy that underpins everything.</p>
+        <ul class="card-bullets">
+          <li>40 DoD checks by category (bar chart)</li>
+          <li>14 ADRs total (2 withdrawn)</li>
+          <li>SKULL &rarr; CORE &rarr; Gate enforcement chain</li>
+        </ul>
+        <span class="card-link">View Governance</span>
+      </a>
+
+      <!-- 4 - HOW DELIVERY WORKS -->
       <a class="section-card" href="./lifecycle.html">
         <div class="card-header">
           <span class="card-icon">🔄</span>
-          <span class="card-tag">Delivery</span>
+          <span class="card-tag">4 &middot; How Delivery Works</span>
         </div>
         <div class="card-title">Feature Lifecycle &amp; Testing</div>
         <p class="card-desc">The 7-stage feature delivery pipeline, 4 gate skills at real decision points, and the 3-layer testing strategy.</p>
         <ul class="card-bullets">
           <li>7-stage lifecycle swim-lane diagram</li>
           <li>4 gate skills with trigger conditions</li>
-          <li>3-layer testing pyramid (smoke → E2E → self-onboard)</li>
+          <li>3-layer testing pyramid (smoke &rarr; E2E &rarr; self-onboard)</li>
         </ul>
         <span class="card-link">View Lifecycle</span>
       </a>
 
+      <!-- 5 - THE ROADMAP -->
       <a class="section-card" href="./phases.html">
         <div class="card-header">
           <span class="card-icon">📅</span>
-          <span class="card-tag">Execution</span>
+          <span class="card-tag">5 &middot; The Roadmap</span>
         </div>
         <div class="card-title">Phases &amp; Deprecation</div>
-        <p class="card-desc">All 5 delivery phases with absolute step-by-step execution detail, 3-wave orchestrator deprecation plan, and Gantt timeline.</p>
+        <p class="card-desc">All 5 delivery phases with step-by-step execution detail, 3-wave orchestrator deprecation plan, and Gantt timeline.</p>
         <ul class="card-bullets">
-          <li>P1–P5 detailed execution steps with pass criteria</li>
-          <li>3-wave deprecation: routing → formatting → delegation</li>
+          <li>P1&ndash;P5 detailed execution steps with pass criteria</li>
+          <li>3-wave deprecation: routing &rarr; formatting &rarr; delegation</li>
           <li>Exact file targets, rollback commands, failure modes</li>
         </ul>
         <span class="card-link">View Phases</span>
       </a>
 
-      <a class="section-card" href="./governance.html">
-        <div class="card-header">
-          <span class="card-icon">⚖️</span>
-          <span class="card-tag">Rules &amp; Quality</span>
-        </div>
-        <div class="card-title">Governance, DoD &amp; ADRs</div>
-        <p class="card-desc">40 DoD checks across 8 categories, 14 architectural decision records, and the SKULL/CORE enforcement hierarchy.</p>
-        <ul class="card-bullets">
-          <li>40 DoD checks by category (bar chart)</li>
-          <li>14 ADRs total (2 withdrawn)</li>
-          <li>SKULL → CORE → Gate enforcement chain</li>
-        </ul>
-        <span class="card-link">View Governance</span>
-      </a>
-
+      <!-- 6 - APPENDIX -->
       <a class="section-card" href="./registry.html">
         <div class="card-header">
           <span class="card-icon">🗂️</span>
-          <span class="card-tag">Appendix</span>
+          <span class="card-tag">6 &middot; Appendix</span>
         </div>
         <div class="card-title">Registry Guidance</div>
-        <p class="card-desc">Registry organization guidance for the 802-YAML cortex-registry. Taxonomy, TTL policy ideas, schema-first creation, and namespace cleanup concepts.</p>
+        <p class="card-desc">Registry organization guidance for the 802-YAML cortex-registry. Taxonomy, TTL policy, schema-first creation, and namespace cleanup concepts.</p>
         <ul class="card-bullets">
-          <li>Current sprawl diagnosis: templates in 4 places, governance in 3</li>
+          <li>Current sprawl: templates in 4 places, governance in 3</li>
           <li>8 canonical namespaces replacing 23 ad-hoc directories</li>
           <li>TTL policy to auto-archive completed planning YAMLs</li>
         </ul>
         <span class="card-link">View Registry Plan</span>
       </a>
 
+      <!-- 7 - LIVE PLAN (LAST) -->
+      <a class="section-card execution-tile" href="./execution.html">
+        <div class="card-header">
+          <span class="card-icon">⚡</span>
+          <span class="card-tag">7 &middot; Live Plan</span>
+        </div>
+        <div class="card-title">Plan Execution Dashboard</div>
+        <p class="card-desc">Live end-to-end execution tracking: phase status board, gate verdicts, step-level progress, and automatic refresh. Read sections 1&ndash;6 first, then come here to execute.</p>
+        <ul class="card-bullets">
+          <li>Auto-refresh every 30 seconds</li>
+          <li>P1&ndash;P5 phase status and gate focus board</li>
+          <li>Execution activity stream and status sync target</li>
+        </ul>
+        <span class="card-link">Open Dashboard</span>
+      </a>
+
     </div>
   </div>
 
   <footer>
-    CORTEX v3.2.0 "Consolidated Sharp Knife" · Foundations.Cortex · 2026-03-27 ·
+    CORTEX v3.2.0 "Consolidated Sharp Knife" · Cortex · 2026-03-27 ·
     <a href="https://asifhussain60.github.io/CORTEX/index.html">CORTEX Framework © 2025–2026 · Asif Hussain</a>
   </footer>
 

@@ -10,7 +10,7 @@ metadata:
   quality_security_review: '2026-03-27'
   consolidation_notes: >
     v3.2 consolidates v3.1 after independent review by Claude Code AI (Opus)
-    against the live Foundations.Cortex repo (381 orchestrators, 1362 Python files,
+    against the live Cortex repo (381 orchestrators, 1362 Python files,
     74 MCP tool files, 802 registry YAMLs, 1428 test files). Key changes:
     corrected file counts to match actual repo, removed overengineered components
     (Release Evidence Mesh, plugin governance, surface parity testing), reduced
@@ -24,22 +24,36 @@ metadata:
     - "Knowledge-repo onboarding intelligence (82 skills, 10 agents)"
     - "CORTEX live prompt (381 orchestrators, 74 MCP tool files, 35 logical tools)"
 
+execution_contract:
+  objective: "Execute P2→P5 end-to-end on a single clean branch with deterministic gates"
+  target_branch: "cortex-v3-clean"
+  status_dashboard:
+    path: "_workspaces/cortex-v3/v32-plan/execution.html"
+    refresh_interval_seconds: 30
+  branch_rules:
+    - "Start only from a clean working tree (git status --porcelain must be empty)"
+    - "Create/switch branch before P2: git switch -c cortex-v3-clean (or git switch cortex-v3-clean if it already exists)"
+    - "All phase work lands on the target branch until P5 completion"
+  completion_definition:
+    - "P2, P3, P4, and P5 gates all PASS in sequence"
+    - "Convergence gate returns 0 P0/P1 findings"
+    - "Test gates required by phase criteria pass"
+    - "Working tree is clean at handoff (no unstaged/uncommitted plan changes)"
+
 summary:
   vision: >
     CORTEX v3.2 layers a lightweight agent+skill architecture on top of the proven
-    Python MCP engine. Foundations.Cortex provides the governance engine and stateful
-    MCP tools. workflow-repo provides the WORKFLOW delivery workflow (dev+PM tracks,
-    36 skills, 12 agents). knowledge-repo provides the organizational
-    knowledge library (82 skills, 10 specialist agents, 9 domains). Together they
-    form a single unified system. Agents handle the conversational layer. Python
-    handles the stateful engine. The orchestrator monolith is incrementally
-    deprecated — not big-bang archived.
+    Python MCP engine — all within a single monorepo (Cortex).
+    The governance engine, MCP tools, 10 CORTEX agents, 36 workflow delivery skills,
+    and 82 knowledge domain skills all live here. Agents handle the conversational
+    layer. Python handles the stateful engine. The orchestrator monolith is
+    incrementally deprecated — not big-bang archived.
 
   key_outcomes:
     - "381 Python orchestrators incrementally deprecated — stateful logic preserved as MCP tools, routing logic replaced by agents"
-    - "10 CORTEX agents + 12 WORKFLOW agents + 10 Knowledge agents = 32 total agents"
-    - "19 existing CORTEX skills + 36 WORKFLOW + 82 Knowledge = 137 unified skills (registered, not duplicated)"
-    - "Three-repo integration: Foundations.Cortex (engine) + workflow-repo (workflow) + knowledge-repo (knowledge)"
+    - "10 CORTEX agents + 22 capability agents (workflow + knowledge) = 32 total agents — all within single repo"
+    - "19 existing CORTEX skills + 36 workflow-delivery skills + 82 knowledge-domain skills = 137 unified skills in one repo"
+    - "Single-repo architecture: Cortex contains everything — engine, governance, agents, skills, and domain knowledge"
     - "2 primary deployment surfaces: Claude Code CLI + VS Code Copilot (Cowork, Cursor, Gemini = bonus)"
     - "Python MCP tools retained as stateful engine layer — agents invoke, not replace"
     - "WorkflowComposer retained as MCP bridge — enforcement spine elevated, not replaced"
@@ -71,22 +85,24 @@ summary:
       description: >
         4 gates at real decision points. No ceremonial gates that duplicate existing
         enforcement (SKULL/CORE rules, CI checks, PR process).
-    - name: Three-Repo Unity
+    - name: Unified Repository
       description: >
-        Foundations.Cortex (engine) + workflow-repo (workflow) + knowledge-repo
-        (knowledge) form one system. CORTEX orchestrates the lifecycle that workflow-repo
-        already defines — it does not redefine it.
+        Everything lives in Cortex — engine, governance, 10 CORTEX
+        agents, workflow-delivery skills (.github/skills/workflow/), and
+        knowledge-domain skills (.github/skills/knowledge/). No split across
+        sibling repos. Single checkout, single context, single truth.
 
-three_repo_ecosystem:
+capability_areas:
   overview: >
-    The CORTEX ecosystem spans three repositories. Each repo has a distinct
-    responsibility. No repo duplicates another's concern. Integration is via
-    skill path registration and shared MCP config — not monorepo merging.
+    CORTEX is a single monorepo. All capability areas live within Cortex.
+    Three logical capability areas are organized as skill/agent directories —
+    not separate repos. This preserves single checkout, single context, single
+    governance, and zero cross-repo dependency management.
 
-  repos:
-    - name: Foundations.Cortex
-      role: "Engine & Governance"
-      description: "Governance engine, MCP tools, design tokens, orchestration pipeline, convergence gates"
+  areas:
+    - name: Cortex
+      role: "Engine & Governance (primary repo root)"
+      description: "Governance engine, MCP tools, design tokens, orchestration pipeline, convergence gates, all agents and all skills"
       actual_state:
         python_orchestrators: 381
         python_source_files: 1362
@@ -110,25 +126,23 @@ three_repo_ecosystem:
         tool_files: 74
         rate_limit: "50 rps steady-state, 100 burst"
 
-    - name: workflow-repo
-      role: "Workflow & Delivery"
-      description: "WORKFLOW reference implementation — structured dev+PM workflows, intent-to-code pipeline"
+    - name: Workflow Delivery Capability Area
+      role: "Workflow & Delivery Skills (within Cortex)"
+      description: "Structured dev+PM workflows, intent-to-code pipeline — lives at .github/skills/workflow/ within this repo"
+      planned_location: ".github/skills/workflow/"
       key_assets:
-        - "36 skills (22 dev + 14 PM)"
-        - "12 agents (7 dev + 5 PM)"
-        - "3 plugins (all-skills, dev-skills, pm-skills)"
+        - "36 skills (22 dev + 14 PM) at .github/skills/workflow/dev/ and .github/skills/workflow/pm/"
+        - "12 agents (7 dev + 5 PM) at .github/agents/workflow/"
         - "Intent→Story→Archetype→Skill→Code delivery chain"
-      deployment_surfaces:
-        - "VS Code Copilot via skills/dev and skills/pm paths"
+      note: "These are capability-area directories WITHIN Cortex. No separate repo required."
 
-    - name: knowledge-repo
-      role: "Knowledge & Expertise"
-      description: "Organizational knowledge library — 82 domain skills, 10 specialist agents"
+    - name: Knowledge Domain Capability Area
+      role: "Knowledge & Expertise Skills (within Cortex)"
+      description: "Organizational knowledge library — 82 domain skills, 10 specialist agents — lives at .github/skills/knowledge/ within this repo"
+      planned_location: ".github/skills/knowledge/"
       key_assets:
-        - "82 foundational skills (9 domains)"
-        - "10 specialized agents"
-        - "Pattern library (.ai/patterns/)"
-        - "Template library (.ai/templates/)"
+        - "82 foundational skills (9 domains) at .github/skills/knowledge/"
+        - "10 specialized agents at .github/agents/knowledge/"
       domains:
         - "Python (14 skills)"
         - "Testing (5 skills)"
@@ -139,27 +153,28 @@ three_repo_ecosystem:
         - "APIs (6 skills)"
         - "Data (5 skills)"
         - "General development (20 skills)"
-      deployment_surfaces:
-        - "VS Code Copilot via skills/ path auto-discovery"
+      note: "These are capability-area directories WITHIN Cortex. No separate repo required."
 
   integration_model:
     skill_path_registration:
-      description: "VS Code discovers skills from registered paths at session start"
+      description: "VS Code discovers all skills from within Cortex itself — no sibling repo paths needed"
       paths:
-        - path: "knowledge-repo/skills"
-          contents: "Platform-wide skills (82)"
-        - path: "workflow-repo/skills/dev"
-          contents: "WORKFLOW developer workflow skills (22)"
-        - path: "workflow-repo/skills/pm"
-          contents: "WORKFLOW product management skills (14)"
+        - path: ".github/skills/knowledge"
+          contents: "Knowledge domain skills (82) — within this repo"
+        - path: ".github/skills/workflow/dev"
+          contents: "Workflow developer skills (22) — within this repo"
+        - path: ".github/skills/workflow/pm"
+          contents: "Workflow PM skills (14) — within this repo"
+        - path: ".github/skills"
+          contents: "CORTEX core skills (19+) — within this repo"
     conflict_resolution:
       precedence:
         - "1. CORTEX governance (SKULL/CORE rules) — immutable"
-        - "2. Project-level skills (.github/skills/) — repo-specific"
-        - "3. Registered skill paths (knowledge, workflow) — cross-repo"
+        - "2. CORTEX core skills (.github/skills/) — governance-level"
+        - "3. Capability-area skills (knowledge, workflow) — domain-level"
 
 architecture_decisions:
-  adr_count: 13
+  adr_count: 14
   note: >
     ADRs 001-004 from v3.0.1, ADRs 005-012 from v3.1+. ADR-013 (Plugin governance)
     and ADR-014 (Release Evidence Mesh) WITHDRAWN as premature — to be reconsidered
@@ -405,10 +420,9 @@ architecture:
 
     - layer: 4
       name: Agent Layer
-      description: "Conversational agents from all three repos"
-      cortex_agents: "10 (engine + governance)"
-      workflow_agents: "12 (workflow + delivery)"
-      secondary_agents: "10 (knowledge + expertise)"
+      description: "All 32 agents within this single repo, organized by capability area"
+      cortex_agents: "10 (engine + governance) — .github/agents/"
+      workflow_agents: "22 (workflow-delivery + knowledge-domain) — .github/agents/workflow/ and .github/agents/knowledge/"
       total_agents: 32
 
   request_flow: >
@@ -712,7 +726,7 @@ testing_strategy:
     name: "Self-Onboard"
     description: "CORTEX onboards itself — the ultimate integration test"
     includes:
-      - "cortex-intel scans Foundations.Cortex itself"
+      - "cortex-intel scans Cortex itself"
       - "Produces valid repo-intelligence-model.yaml"
       - "All downstream agents consume model.yaml successfully"
       - "Cross-repo skill discovery finds 137 skills across 3 repos"
@@ -736,12 +750,19 @@ phases:
     status: COMPLETE
     duration_weeks: 2
     description: "ADRs established, design tokens confirmed, design system purity achieved."
+    execution_progress:
+      total_steps: 6
+      completed_steps: 6
+      percent: 100
+      status_note: "P1 complete; baseline established"
+      last_updated: "2026-03-27T00:00:00Z"
     tasks:
       - "4 ADRs authored and accepted (ADR-V3-001 through 004)"
       - "repo-intelligence-model-schema.yaml created at cortex-registry/schemas/"
       - "design-tokens.yaml confirmed as SSOT (cyan #00d4ff, Inter/Space Grotesk/JetBrains Mono)"
       - "HTML instructions updated to v2.0, SVG layout rules added to walkthrough-html-spec.md"
       - "Zero Lato/v1 references across repo (verified via grep)"
+      - "Update _workspaces/cortex-v3/v32-plan/execution.html phase board to reflect P1 COMPLETE status"
     gate: "4 ADRs accepted, schema valid YAML, design tokens v2.0, 0 Lato refs, 0 #7c3aed as primary"
     verification:
       - "python -c \"import yaml; yaml.safe_load(open('cortex-registry/schemas/repo-intelligence-model-schema.yaml').read())\""
@@ -756,6 +777,12 @@ phases:
       Build all 10 agent SKILL.md files in .github/agents/, wire AGENT-INDEX.md to route
       all 34 intent types, build LENS intelligence pipeline within cortex-intel. Validate
       top-10 intents route correctly before proceeding to remaining 24.
+    execution_progress:
+      total_steps: 15
+      completed_steps: 0
+      percent: 0
+      status_note: "Planned; awaiting P2 execution start"
+      last_updated: "2026-03-27T00:00:00Z"
     execution_order:
       - step: 1
         name: "Create AGENT-INDEX.md"
@@ -941,16 +968,22 @@ phases:
         failure_action: "Fall back to Python orchestrators for failed intents, log failures"
 
       - step: 14
-        name: "LENS E2E smoke test on Foundations.Cortex"
-        description: "cortex-intel scans the Foundations.Cortex repo itself"
-        command: "Run cortex-intel with ONBOARD intent pointed at Foundations.Cortex root"
+        name: "LENS E2E smoke test on Cortex"
+        description: "cortex-intel scans the Cortex repo itself"
+        command: "Run cortex-intel with ONBOARD intent pointed at Cortex root"
         expected_output: "repo-intelligence-model.yaml with all 4 LENS phases complete"
         pass_criteria: "model.yaml is schema-valid, tech stack detected correctly, structure validated"
+
+      - step: 15
+        name: "Update execution dashboard status for P2"
+        file: "_workspaces/cortex-v3/v32-plan/execution.html"
+        description: "Sync P2 row with latest phase status, current focus, and gate state"
+        pass_criteria: "Dashboard reflects P2 status and next gate before P3 starts"
 
     gate: "10 agent files present with all required sections, AGENT-INDEX.md routes 34 intents, LENS E2E produces schema-valid model.yaml, top-10 intent routing passes"
     gate_verification:
       - "find .github/agents -name '*.agent.md' | wc -l  # must be >= 10"
-      - "python -c \"import yaml; [yaml.safe_load(open(f).read()) for f in __import__('glob').glob('.github/agents/*.agent.md')]\"  # all valid YAML frontmatter"
+      - "python -c \"import pathlib,yaml; files=pathlib.Path('.github/agents').glob('*.agent.md'); [yaml.safe_load(next(iter(pathlib.Path(f).read_text(encoding='utf-8').split('---',2)[1:2]), '')) for f in files]; print('agent frontmatter valid')\"  # all valid YAML frontmatter"
       - "grep -c '|' .github/agents/AGENT-INDEX.md  # must be >= 34 routing rows"
       - "python -c \"import yaml; yaml.safe_load(open('repo-intelligence-model.yaml').read()); print('LENS output valid')\""
     rollback: "Agent routing failures fall back to existing Python orchestrators (IntentRouter.py active)"
@@ -963,12 +996,19 @@ phases:
         action: "Fix malformed YAML before any step continues"
 
   - phase: P3
-    title: "Feature Delivery Lifecycle + Three-Repo Integration"
+    title: "Feature Delivery Lifecycle + Unified Capability Integration"
     status: PLANNED
     duration_weeks: 3
     description: >
-      Wire CORTEX lifecycle conductor (cortex-orchestrate) to WORKFLOW pipeline, integrate Knowledge
-      skills via skill path registration, create 4 gate skills, wire 7-stage lifecycle E2E.
+      Wire CORTEX lifecycle conductor (cortex-orchestrate) to deliver the 7-stage pipeline,
+      create workflow-delivery and knowledge-domain skill directories within this repo,
+      create 4 gate skills, wire 7-stage lifecycle E2E.
+    execution_progress:
+      total_steps: 9
+      completed_steps: 0
+      percent: 0
+      status_note: "Planned; waiting for P2 gate"
+      last_updated: "2026-03-27T00:00:00Z"
     prerequisite: "P2 gate must be GREEN before P3 begins"
     execution_order:
       - step: 1
@@ -1031,9 +1071,15 @@ phases:
         pass_criteria: "All 5 WORKFLOW agents mapped, all 4 gates invoked at correct stages"
 
       - step: 6
-        name: "Register skill paths for VS Code"
+        name: "Create internal skill path directories and register in VS Code"
+        files_to_create:
+          - ".github/skills/workflow/dev/  (22 workflow developer skills)"
+          - ".github/skills/workflow/pm/   (14 workflow PM skills)"
+          - ".github/skills/knowledge/     (82 knowledge domain skills by subdomain)"
+          - ".github/agents/workflow/      (12 workflow delivery agents)"
+          - ".github/agents/knowledge/     (10 knowledge specialist agents)"
         file: ".vscode/settings.json"
-        description: "Cross-repo skill discovery for workflow-repo and knowledge-repo"
+        description: "Register all capability-area skill paths pointing within this single repo"
         content_spec: |
           {
             "github.copilot.chat.codeGeneration.instructions": [],
@@ -1044,16 +1090,16 @@ phases:
           content: |
             {
               "skill_paths": [
-                "../workflow-repo/skills/dev",
-                "../workflow-repo/skills/pm",
-                "../knowledge-repo/skills"
+                ".github/skills/workflow/dev",
+                ".github/skills/workflow/pm",
+                ".github/skills/knowledge"
               ],
               "agent_paths": [
-                "../workflow-repo/agents/dev",
-                "../workflow-repo/agents/pm"
+                ".github/agents/workflow",
+                ".github/agents/knowledge"
               ]
             }
-        pass_criteria: "skill-paths.json present, 3 skill paths + 2 agent paths registered"
+        pass_criteria: "All capability directories created within repo, skill-paths.json uses internal paths"
 
       - step: 7
         name: "Create domain skill catalog structure"
@@ -1088,11 +1134,18 @@ phases:
           - "Stage7: cortex-audit monitoring active"
         pass_criteria: "All 7 stages execute, all 4 gates return PASS, walkthrough HTML generated"
 
-    gate: "4 gate skill files present with all required sections, WORKFLOW delegation mapped in cortex-orchestrate, 9 domain catalog directories with skill-catalog.yaml, lifecycle E2E test passes all 7 stages"
+      - step: 9
+        name: "Update execution dashboard status for P3"
+        file: "_workspaces/cortex-v3/v32-plan/execution.html"
+        description: "Sync P3 row with integration readiness and lifecycle gate outcome"
+        pass_criteria: "Dashboard reflects P3 status and readiness for P4"
+
+    gate: "4 gate skill files present with all required sections, workflow-delivery and knowledge-domain directories created within repo, lifecycle E2E test passes all 7 stages"
     gate_verification:
       - "find .github/agents/gates -name '*.agent.md' | wc -l  # must be 4"
-      - "find cortex-registry/skills -name 'skill-catalog.yaml' | wc -l  # must be 9"
-      - "grep -c 'pm-intent-creator\\|dev-story-implementer' .github/agents/cortex-orchestrate.agent.md  # must be >=2"
+      - "find .github/skills/workflow -name '*.md' | wc -l  # must be >=1 (at least scaffold)"
+      - "find .github/skills/knowledge -name '*.md' | wc -l  # must be >=1 (at least scaffold)"
+      - "grep -c 'workflow/dev\\|workflow/pm' .vscode/skill-paths.json  # must be >=2"
     failure_modes:
       - mode: "Lifecycle E2E test stalls at Stage 3"
         action: "Verify TDD orchestrator MCP tool is reachable; test independently first"
@@ -1109,6 +1162,12 @@ phases:
       Execute 3 sequential deprecation waves with test validation at each step. No wave
       proceeds without its predecessor passing. Deploy to Claude Code CLI and VS Code Copilot
       primary surfaces. All 1,428 test files must continue passing throughout.
+    execution_progress:
+      total_steps: 6
+      completed_steps: 0
+      percent: 0
+      status_note: "Planned; waiting for P3 gate"
+      last_updated: "2026-03-27T00:00:00Z"
     prerequisite: "P3 gate must be GREEN before P4 begins"
     execution_order:
       - wave: 1
@@ -1199,12 +1258,18 @@ phases:
           - ".vscode/mcp.json  (created in P2)"
           - ".vscode/skill-paths.json  (created in P3)"
         validation:
-          - "Open Foundations.Cortex in VS Code with GitHub Copilot enabled"
+          - "Open Cortex in VS Code with GitHub Copilot enabled"
           - "Verify @cortex agent appears in Copilot Chat"
           - "Run @cortex introduce — responds with CORTEX identity"
           - "Run @cortex audit — responds with governance scan"
           - "Verify 137 skills discoverable via skill path registration"
         pass_criteria: "@cortex responds correctly in VS Code Copilot Chat, skill discovery works"
+
+      - step: "Execution Status Sync"
+        name: "Update execution dashboard status for P4"
+        file: "_workspaces/cortex-v3/v32-plan/execution.html"
+        description: "Sync P4 row with wave completion progress and deployment surface validation state"
+        pass_criteria: "Dashboard reflects P4 status and readiness for P5"
 
     gate: "All 3 deprecation waves complete with tests passing, both surfaces validated with 3 smoke commands each, 1428 tests all pass, _legacy/ contains deprecated files"
     gate_verification:
@@ -1227,6 +1292,12 @@ phases:
     description: >
       Full 40-check DoD validation, convergence gate, cortex-intel self-onboard, cross-repo
       integration test, 3-layer test suite completion, v3.2.0 git tag.
+    execution_progress:
+      total_steps: 8
+      completed_steps: 0
+      percent: 0
+      status_note: "Planned; waiting for P4 gate"
+      last_updated: "2026-03-27T00:00:00Z"
     prerequisite: "P4 gate must be GREEN before P5 begins"
     execution_order:
       - step: 1
@@ -1241,8 +1312,8 @@ phases:
         description: "Execute all 40 DoD checks across 8 categories"
         categories_and_commands:
           S_structural:
-            - "ls cortex-master-v2.yaml  # DOD-S01"
-            - "grep '#00d4ff' Foundations.Cortex/CLAUDE.md  # DOD-S02"
+            - "ls cortex-registry/cortex-master-v2.yaml  # DOD-S01"
+            - "grep '#00d4ff' CLAUDE.md  # DOD-S02"
             - "ls .github/assets/css/  # DOD-S03"
             - "grep -r 'Lato\\|#7c3aed' . --include='*.yaml' --include='*.html' | grep -v '.git' | wc -l  # must be 0 — DOD-S04"
           I_intelligence:
@@ -1254,9 +1325,9 @@ phases:
             - "find cortex-registry -name '*.yaml' | wc -l  # >=802 — DOD-I06"
             - "ls cortex-registry/core/prompt-learning-protocol.yaml  # DOD-I07"
           G_governance:
-            - "python scripts/run_tests.py preflight  # DOD-G01 (exits 0)"
-            - "grep -c 'CORE-' cortex-registry/governance/*.yaml | awk -F: '{sum+=$2} END {print sum}'  # DOD-G02 (>=26)"
-            - "sort | uniq -d on all CORE-* IDs  # DOD-G03 (0 duplicates)"
+            - "python3 scripts/validate_governance_alignment.py  # DOD-G01 (exits 0)"
+            - "grep -Rho 'CORE-[0-9][0-9][0-9]' cortex-registry/governance | wc -l  # DOD-G02 (>=26)"
+            - "grep -Rho 'CORE-[0-9][0-9][0-9]' cortex-registry/governance | sort | uniq -d | wc -l  # DOD-G03 (must be 0 duplicates)"
             - "python -c \"import yaml,glob; [yaml.safe_load(open(f).read()) for f in glob.glob('cortex-registry/**/*.yaml',recursive=True)]\"  # DOD-G04"
           A_agents:
             - "find .github/agents -name '*.agent.md' | wc -l  # >=10 — DOD-A01"
@@ -1277,15 +1348,15 @@ phases:
             - "grep '#00d4ff' cortex-registry/core/design-tokens.yaml  # DOD-H04"
           T_testing:
             - "python scripts/run_tests.py smoke  # DOD-T01"
-            - "cortex-intel onboard Foundations.Cortex → verify model.yaml produced  # DOD-T02 (routing E2E)"
-            - "cortex-intel onboard self → model.yaml references Foundations.Cortex correctly  # DOD-T03"
+            - "cortex-intel onboard Cortex → verify model.yaml produced  # DOD-T02 (routing E2E)"
+            - "cortex-intel onboard self → model.yaml references Cortex correctly  # DOD-T03"
             - "python scripts/run_tests.py unit  # all 1428 pass — DOD-T04"
             - "run comparison tests for each deprecation wave  # DOD-T05"
-            - "cortex-orchestrate + workflow-repo + knowledge-repo integration test  # DOD-T06"
+            - "unified capability integration test (workflow-delivery + knowledge-domain agents within repo)  # DOD-T06"
           C_convergence:
             - "python scripts/run_tests.py preflight && python scripts/run_tests.py smoke  # DOD-C01 (0 P0/P1)"
             - "grep -r 'TODO\\|FIXME\\|HACK' cortex/ --include='*.py' | grep -v '#' | wc -l  # DOD-C02"
-            - "cat .vscode/skill-paths.json  # shows 3 skill paths — DOD-C03"
+            - "cat .vscode/skill-paths.json  # shows internal capability-area skill paths — DOD-C03"
             - "cortex introduce on Claude Code CLI + VS Code Copilot  # DOD-C04"
             - "cat .vscode/mcp.json  # contains github MCP — DOD-C05"
         pass_criteria: "All 40 checks return expected values, 0 failures"
@@ -1294,7 +1365,7 @@ phases:
         name: "Convergence gate"
         description: "Detect and fix all P0/P1 findings — max 3 iterations"
         protocol:
-          - "Iteration 1: Run cortex-audit AUDIT on entire Foundations.Cortex repo"
+          - "Iteration 1: Run cortex-audit AUDIT on entire Cortex repo"
           - "Fix all P0/P1 findings before iteration 2"
           - "Iteration 2: Re-run cortex-audit — must see count decreasing"
           - "Fix remaining P0/P1 before iteration 3"
@@ -1304,10 +1375,10 @@ phases:
 
       - step: 4
         name: "CORTEX self-onboard"
-        description: "cortex-intel scans Foundations.Cortex itself"
-        command: "Run /cortex onboard on Foundations.Cortex root directory"
+        description: "cortex-intel scans Cortex itself"
+        command: "Run /cortex onboard on Cortex root directory"
         expected_model_yaml_fields:
-          - "repo_name: Foundations.Cortex"
+          - "repo_name: Cortex"
           - "primary_language: Python"
           - "framework: CORTEX"
           - "agent_count: 10"
@@ -1317,16 +1388,16 @@ phases:
         pass_criteria: "model.yaml produced, all expected fields present, schema-valid"
 
       - step: 5
-        name: "Cross-repo integration test"
-        description: "Verify CORTEX + workflow-repo + knowledge-repo work together"
-        test_scenario: "Run full feature delivery from intent through WORKFLOW with Knowledge skill consultation"
+        name: "Cross-repo capability integration test (within single repo)"
+        description: "Verify all 32 agents and 137 skills work together within Cortex"
+        test_scenario: "Run full feature delivery from intent through workflow-delivery agents with knowledge-domain skill consultation"
         validation:
-          - "cortex-orchestrate delegates Stage1 to pm-intent-creator (workflow-repo)"
-          - "cortex-intel consults model.yaml from Foundations.Cortex scan"
-          - "cortex-code invokes dev-story-implementer (workflow-repo)"
-          - "cortex-lint validates against domain skills from knowledge-repo"
+          - "cortex-orchestrate delegates Stage1 to workflow pm agent (within .github/agents/workflow/)"
+          - "cortex-intel consults model.yaml from Cortex scan"
+          - "cortex-code invokes workflow dev story-implementer agent"
+          - "cortex-lint validates against knowledge-domain skills from .github/skills/knowledge/"
           - "cortex-present generates walkthrough HTML via design-tokens.yaml"
-        pass_criteria: "All 5 cross-repo handoffs complete, no MCP connectivity errors"
+        pass_criteria: "All 5 capability handoffs complete, all within single repo, no external dependency errors"
 
       - step: 6
         name: "3-layer test suite final run"
@@ -1343,6 +1414,12 @@ phases:
         command: "git tag -a v3.2.0 -m 'CORTEX v3.2.0 Consolidated Sharp Knife — 10 agents, 4 gates, 40 DoD checks, 3-wave deprecation complete'"
         prerequisite: "Steps 1-6 all PASS. If ANY step fails: do not tag."
         pass_criteria: "git tag v3.2.0 exists, all P5 steps confirmed PASS"
+
+      - step: 8
+        name: "Update execution dashboard status for P5"
+        file: "_workspaces/cortex-v3/v32-plan/execution.html"
+        description: "Sync final certification status, convergence outcome, and tag state"
+        pass_criteria: "Dashboard reflects P5 COMPLETE with certification summary"
 
     gate: "40 DoD checks pass, 0 P0/P1 findings (max 3 convergence cycles), self-onboard model.yaml valid, cross-repo integration test passes, 3-layer test suite passes, v3.2.0 tag created"
     cleanup:
@@ -1423,14 +1500,14 @@ dod:
         - "DOD-T03: CORTEX self-onboard succeeds (cortex-intel scans itself)"
         - "DOD-T04: All 1428 existing test files still pass after deprecation"
         - "DOD-T05: Comparison tests prove agent output matches orchestrator output"
-        - "DOD-T06: Cross-repo integration test passes (CORTEX + WORKFLOW + Knowledge)"
+        - "DOD-T06: Unified capability integration test passes (cortex-agents + workflow-delivery + knowledge-domain all within single repo)"
 
     - category: "C — Convergence & Ecosystem"
       count: 5
       checks:
         - "DOD-C01: Convergence gate converged (0 P0/P1, max 3 iterations)"
         - "DOD-C02: No open sweep catalogues (all CORE-064 sweeps closed)"
-        - "DOD-C03: VS Code skill paths registered for all 3 repos"
+        - "DOD-C03: VS Code skill paths registered for all capability areas within this repo"
         - "DOD-C04: Both primary surfaces validated (Claude Code CLI + VS Code Copilot)"
         - "DOD-C05: .vscode/mcp.json present with GitHub MCP server config"
 
@@ -1546,7 +1623,7 @@ removed_from_v31:
 team_adoption:
   onboarding_steps:
     - step: 1
-      action: "Clone all 3 repos (Foundations.Cortex, workflow-repo, knowledge-repo)"
+      action: "Clone all 3 repos (Cortex, workflow-repo, knowledge-repo)"
       duration: "5 minutes"
     - step: 2
       action: "Register skill paths and agent paths in VS Code settings"

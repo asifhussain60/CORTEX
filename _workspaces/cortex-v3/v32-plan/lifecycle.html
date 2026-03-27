@@ -145,58 +145,61 @@
       border-top: 1px solid rgba(0, 212, 255, 0.15);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 1.5rem;
+      padding: 0 2rem;
+      gap: 2rem;
       z-index: 100;
     }
 
-    .hub-nav-left, .hub-nav-right {
+    .hub-nav-left, .hub-nav-center, .hub-nav-right {
       display: flex;
       align-items: center;
       gap: 1rem;
     }
 
-    .hub-nav-link {
-      font-size: 0.8rem;
-      color: var(--color-text-tertiary);
-      text-decoration: none;
-      transition: color 0.2s;
-      font-weight: 500;
+    .hub-nav-left {
+      flex: 0 0 auto;
     }
 
-    .hub-nav-link:hover {
-      color: var(--accent-primary);
+    .hub-nav-center {
+      flex: 1;
+      justify-content: center;
+      gap: 0.5rem;
     }
 
-    .hub-nav-pills {
-      display: flex;
-      gap: 0.25rem;
-      align-items: center;
+    .hub-nav-right {
+      flex: 0 0 auto;
     }
 
-    .hub-pill {
-      padding: 0.4rem 0.9rem;
-      border-radius: 20px;
+    .hub-btn {
+      font-family: Space Grotesk, sans-serif;
       font-size: 0.75rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
-      text-decoration: none;
+      letter-spacing: 0.04em;
       color: var(--color-text-tertiary);
-      transition: all 0.2s;
+      background: transparent;
       border: 1px solid transparent;
+      padding: 0.35rem 0.65rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      white-space: nowrap;
     }
 
-    .hub-pill:hover {
+    .hub-btn:hover, .hub-btn.active {
       color: var(--accent-primary);
-      background: rgba(0, 212, 255, 0.08);
-      border-color: rgba(0, 212, 255, 0.2);
+      background: rgba(0, 212, 255, 0.12);
+      border-color: rgba(0, 212, 255, 0.25);
     }
 
-    .hub-pill.active {
-      color: var(--accent-primary);
+    .hub-btn.active {
+      border-color: var(--accent-primary);
+    }
+
+    .hub-sep {
+      width: 1px;
+      height: 16px;
       background: rgba(0, 212, 255, 0.15);
-      border-color: rgba(0, 212, 255, 0.3);
     }
 
     .jump-nav {
@@ -465,7 +468,7 @@
         gap: 0.5rem;
       }
 
-      .hub-nav-pills {
+      .hub-nav-center {
         flex-wrap: wrap;
       }
 
@@ -501,7 +504,7 @@
       <div class="header-content">
         <h1>CORTEX v3.2.0 — Feature Lifecycle & Testing</h1>
         <div class="header-meta">
-          <span class="meta-chip repo">Foundations.Cortex</span>
+          <span class="meta-chip repo">Cortex</span>
           <span class="meta-chip ok">v3.2.0</span>
           <span class="meta-chip">Spoke 3 of 5</span>
         </div>
@@ -753,7 +756,7 @@
     </div>
 
     <footer>
-      <p>CORTEX v3.2.0 · Spoke 3 of 5 · Feature Lifecycle & Testing | Foundations.Cortex Repository</p>
+      <p>CORTEX v3.2.0 · Spoke 3 of 5 · Feature Lifecycle & Testing | Cortex Repository</p>
     </footer>
   </main>
 
@@ -761,15 +764,22 @@
 
   <nav class="hub-nav">
     <div class="hub-nav-left">
-      <a href="./index.html" class="hub-nav-link">← Hub</a>
+      <a href="./index.html" class="hub-btn">← Hub</a>
     </div>
-    <div class="hub-nav-pills">
-      <a href="./overview.html" class="hub-pill">Overview</a>
-      <a href="./architecture.html" class="hub-pill">Architecture</a>
-      <a href="./lifecycle.html" class="hub-pill active">Lifecycle</a>
-      <a href="./phases.html" class="hub-pill">Phases</a>
-      <a href="./governance.html" class="hub-pill">Governance</a>
-      <a href="./registry.html" class="hub-pill">Registry</a>
+    <div class="hub-nav-center">
+      <a href="./overview.html" class="hub-btn">Overview</a>
+      <div class="hub-sep"></div>
+      <a href="./architecture.html" class="hub-btn">Architecture</a>
+      <div class="hub-sep"></div>
+      <a href="./governance.html" class="hub-btn">Governance</a>
+      <div class="hub-sep"></div>
+      <a href="./lifecycle.html" class="hub-btn active">Lifecycle</a>
+      <div class="hub-sep"></div>
+      <a href="./phases.html" class="hub-btn">Phases</a>
+      <div class="hub-sep"></div>
+      <a href="./registry.html" class="hub-btn">Registry</a>
+      <div class="hub-sep"></div>
+      <a href="./execution.html" class="hub-btn">Execution</a>
     </div>
     <div class="hub-nav-right"></div>
   </nav>

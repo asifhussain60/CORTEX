@@ -479,7 +479,7 @@
       <div class="page-header-content">
         <h1>CORTEX v3.2.0 — Architecture & Agents</h1>
         <div class="meta-chip-row">
-          <span class="meta-chip repo">Foundations.Cortex</span>
+          <span class="meta-chip repo">Cortex</span>
           <span class="meta-chip ok">v3.2.0</span>
           <span class="meta-chip">Spoke 2 of 5</span>
           <span class="meta-chip">2026-03-27</span>
@@ -650,7 +650,7 @@
         </ul>
 
         <h3>Post-Phase 2 Evolution</h3>
-        <p>IntentRouter and response formatting steps become agent-defined, routing to <code>cortex-code.agent.md</code>, <code>cortex-review.agent.md</code>, etc. The execution layer remains Python, preserving state and compliance enforcement.</p>
+        <p>IntentRouter and response formatting steps become agent-defined, routing to <code>cortex-code.agent.md</code>, <code>cortex-orchestrate.agent.md</code>, <code>cortex-diagnose.agent.md</code>, etc. The execution layer remains Python, preserving state and compliance enforcement.</p>
 
         <div class="diagram-container">
           <svg viewBox="0 0 800 816" width="100%" xmlns="http://www.w3.org/2000/svg">
@@ -763,37 +763,37 @@
               <td><strong>DESIGN</strong></td>
               <td>architect, design, plan structure</td>
               <td>DesignCoordinator</td>
-              <td>cortex-architect.agent.md</td>
+              <td>cortex-orchestrate.agent.md</td>
             </tr>
             <tr>
               <td><strong>PLAN</strong></td>
               <td>plan, phase, roadmap, milestone</td>
               <td>PlanningCoordinator</td>
-              <td>cortex-architect.agent.md</td>
+              <td>cortex-orchestrate.agent.md</td>
             </tr>
             <tr>
               <td><strong>RCA</strong></td>
               <td>root cause, rca, investigate, why</td>
               <td>InvestigationOrchestrator + RCAEngine</td>
-              <td>cortex-rca.agent.md</td>
+              <td>cortex-diagnose.agent.md</td>
             </tr>
             <tr>
               <td><strong>REVIEW</strong></td>
               <td><code>/review</code>, code review, critique</td>
               <td>CodeReviewOrchestrator</td>
-              <td>cortex-review.agent.md</td>
+              <td>cortex-present.agent.md</td>
             </tr>
             <tr>
               <td><strong>ONBOARD</strong></td>
               <td>onboard, bootstrap, setup, init</td>
               <td>OnboardingOrchestrator</td>
-              <td>cortex-onboard.agent.md</td>
+              <td>cortex-intel.agent.md</td>
             </tr>
             <tr>
               <td><strong>DEBUG</strong></td>
               <td><code>/debug</code>, trace, step, inspect</td>
               <td>DebuggerOrchestrator</td>
-              <td>cortex-debug.agent.md</td>
+              <td>cortex-diagnose.agent.md</td>
             </tr>
           </tbody>
         </table>
@@ -870,16 +870,17 @@
       <div class="hub-sep"></div>
       <a href="./architecture.html" class="hub-btn active">Architecture</a>
       <div class="hub-sep"></div>
+      <a href="./governance.html" class="hub-btn">Governance</a>
+      <div class="hub-sep"></div>
       <a href="./lifecycle.html" class="hub-btn">Lifecycle</a>
       <div class="hub-sep"></div>
       <a href="./phases.html" class="hub-btn">Phases</a>
       <div class="hub-sep"></div>
-      <a href="./governance.html" class="hub-btn">Governance</a>
-      <div class="hub-sep"></div>
       <a href="./registry.html" class="hub-btn">Registry</a>
+      <div class="hub-sep"></div>
+      <a href="./execution.html" class="hub-btn">Execution</a>
     </div>
-    <div class="hub-nav-right">
-    </div>
+    <div class="hub-nav-right"></div>
   </nav>
 
   <script>

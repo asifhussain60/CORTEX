@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="30">
+  <title>CORTEX v3.2.0 — Plan Execution Dashboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --accent-primary: #00d4ff;
+      --accent-secondary: #7b61ff;
+      --bg-primary: #0a0e27;
+      --bg-secondary: #1a1f3a;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-error: #ef4444;
+      --color-text-primary: #f0f4f8;
+      --color-text-secondary: #cbd5e1;
+      --color-text-tertiary: #94a3b8;
+      --color-text-muted: #64748b;
+      --border-subtle: rgba(0, 212, 255, 0.15);
+      --panel-bg: rgba(26, 31, 58, 0.55);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: Inter, sans-serif;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      color: var(--color-text-primary);
+      min-height: 100vh;
+    }
+
+    .page-header {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 2rem;
+      padding: 2.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      position: relative;
+    }
+
+    .page-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-primary), var(--accent-secondary), transparent);
+    }
+
+    .header-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .header-logo img {
+      width: 150px;
+      height: 150px;
+      filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+    }
+
+    .back-link {
+      font-size: 0.78rem;
+      color: var(--color-text-tertiary);
+      text-decoration: none;
+    }
+
+    .back-link:hover { color: var(--accent-primary); }
+
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .header-content h1 {
+      font-family: Space Grotesk, sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.4px;
+    }
+
+    .header-desc {
+      color: var(--color-text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      max-width: 980px;
+    }
+
+    .meta-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 1px solid rgba(0, 212, 255, 0.24);
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.11);
+    }
+
+    .meta-chip.ok {
+      border-color: rgba(16, 185, 129, 0.24);
+      color: var(--color-success);
+      background: rgba(16, 185, 129, 0.11);
+    }
+
+    .meta-chip.warn {
+      border-color: rgba(245, 158, 11, 0.24);
+      color: var(--color-warning);
+      background: rgba(245, 158, 11, 0.11);
+    }
+
+    .container {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 1.25rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .panel h2 {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.85rem;
+      color: var(--color-text-primary);
+      letter-spacing: 0.02em;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(110px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .stat-card {
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 0.85rem;
+      background: rgba(10, 14, 39, 0.45);
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-value {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      line-height: 1.1;
+    }
+
+    .refresh-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      height: 100%;
+      justify-content: center;
+    }
+
+    .refresh-box .clock {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--color-text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .refresh-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.7rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: var(--color-success);
+      border: 1px solid rgba(16, 185, 129, 0.28);
+      background: rgba(16, 185, 129, 0.12);
+      width: fit-content;
+    }
+
+    .overall-progress {
+      margin-top: 0.65rem;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 0.7rem;
+      background: rgba(10, 14, 39, 0.4);
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.6rem;
+      font-size: 0.78rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.45rem;
+    }
+
+    .bar-wrap {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.18);
+      overflow: hidden;
+      border: 1px solid rgba(0, 212, 255, 0.18);
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      background-size: 200% 100%;
+      animation: moving 1.6s linear infinite;
+      transition: width 0.4s ease;
+    }
+
+    @keyframes moving {
+      from { background-position: 0 0; }
+      to { background-position: 200% 0; }
+    }
+
+    .phase-list {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 0.65rem;
+    }
+
+    .phase-item {
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 0.7rem;
+      background: rgba(10, 14, 39, 0.42);
+    }
+
+    .phase-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.82rem;
+    }
+
+    .phase-name {
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .phase-metrics {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--color-text-secondary);
+      font-size: 0.74rem;
+    }
+
+    .phase-note {
+      margin-top: 0.35rem;
+      font-size: 0.76rem;
+      color: var(--color-text-tertiary);
+      line-height: 1.4;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      border-radius: 999px;
+      padding: 0.24rem 0.6rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .status-pill.complete {
+      color: var(--color-success);
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-pill.planned {
+      color: var(--color-warning);
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .status-pill.in-progress {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.15);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .status-pill.blocked {
+      color: var(--color-error);
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .activity-list {
+      list-style: none;
+      display: grid;
+      gap: 0.55rem;
+      margin-top: 0.2rem;
+    }
+
+    .activity-list li {
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.55rem 0.65rem;
+      background: rgba(10, 14, 39, 0.4);
+      display: grid;
+      grid-template-columns: 95px 1fr;
+      gap: 0.6rem;
+      font-size: 0.78rem;
+      color: var(--color-text-secondary);
+    }
+
+    .activity-list .ts {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--color-text-tertiary);
+      font-size: 0.74rem;
+    }
+
+    .footer-note {
+      margin-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* HUB NAV (fixed bottom) */
+    .hub-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: rgba(10, 14, 39, 0.95);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 2rem;
+      z-index: 40;
+    }
+
+    .hub-nav-left, .hub-nav-center, .hub-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hub-nav-left { flex: 0 0 auto; }
+
+    .hub-nav-center {
+      flex: 1;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .hub-nav-right { flex: 0 0 auto; }
+
+    .hub-btn {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-tertiary);
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 0.35rem 0.65rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .hub-btn:hover, .hub-btn.active {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.12);
+      border-color: rgba(0, 212, 255, 0.25);
+    }
+
+    .hub-btn.active { border-color: var(--accent-primary); }
+
+    .hub-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--border-subtle);
+    }
+
+    @media (max-width: 980px) {
+      .page-header { grid-template-columns: 1fr; }
+      .header-logo { align-items: flex-start; }
+      .header-logo img { width: 110px; height: 110px; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, minmax(110px, 1fr)); }
+      .container { padding: 1.25rem; }
+    }
+  </style>
+  <!-- PROGRESS-DATA-START --><script>window.__CORTEX_PROGRESS__=[{"id":"P1","title":"Governance & Design System Foundation","status":"COMPLETE","totalSteps":6,"completedSteps":6,"percent":100,"note":"P1 complete; baseline established","updated":"2026-03-27T00:00:00Z"},{"id":"P2","title":"Agent Architecture + LENS Pipeline","status":"PLANNED","totalSteps":15,"completedSteps":0,"percent":0,"note":"Planned; awaiting P2 execution start","updated":"2026-03-27T00:00:00Z"},{"id":"P3","title":"Feature Delivery Lifecycle + Unified Capability Integration","status":"PLANNED","totalSteps":9,"completedSteps":0,"percent":0,"note":"Planned; waiting for P2 gate","updated":"2026-03-27T00:00:00Z"},{"id":"P4","title":"Python Deprecation Waves + Surface Deployment","status":"PLANNED","totalSteps":6,"completedSteps":0,"percent":0,"note":"Planned; waiting for P3 gate","updated":"2026-03-27T00:00:00Z"},{"id":"P5","title":"Certification & v3.2 Tag","status":"PLANNED","totalSteps":8,"completedSteps":0,"percent":0,"note":"Planned; waiting for P4 gate","updated":"2026-03-27T00:00:00Z"}];</script><!-- PROGRESS-DATA-END -->
+</head>
+<body>
+  <header class="page-header">
+    <div class="header-logo">
+      <img src="./assets/images/cortex-logo-200.png" alt="CORTEX Logo">
+      <a href="./index.html" class="back-link">← Back to Hub</a>
+    </div>
+    <div class="header-content">
+      <h1>Plan Execution Dashboard</h1>
+      <p class="header-desc">
+        Running spoke view for v3.2 execution. Progress bars are connected to per-phase execution_progress values in the YAML plan and refresh continuously.
+      </p>
+      <div class="meta-chip-row">
+        <span class="meta-chip">Target Branch: cortex-v3-clean</span>
+        <span class="meta-chip ok">Auto Refresh: 30s + Live Polling</span>
+        <span class="meta-chip warn">Source: ../v3.2-unified-architecture-plan.yaml</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="dashboard-grid">
+      <article class="panel">
+        <h2>Execution Snapshot</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Phases</div>
+            <div class="stat-value" id="stat-total-phases">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Complete</div>
+            <div class="stat-value" id="stat-complete">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">In Progress</div>
+            <div class="stat-value" id="stat-in-progress">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Planned</div>
+            <div class="stat-value" id="stat-planned">0</div>
+          </div>
+        </div>
+
+        <div class="overall-progress">
+          <div class="progress-head">
+            <span>Overall Execution Progress</span>
+            <span id="overall-progress-label">0%</span>
+          </div>
+          <div class="bar-wrap" aria-label="Overall execution progress">
+            <div class="bar-fill" id="overall-progress-fill" style="width:0%;"></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel refresh-box">
+        <h2>Refresh &amp; Clock</h2>
+        <span class="refresh-pill">● YAML Polling Active</span>
+        <div class="clock" id="current-clock">Last refresh: --</div>
+        <div class="clock" id="next-refresh">Next YAML sync: --</div>
+        <div class="clock" id="last-yaml-update">YAML update: --</div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Phase Progress Bars (Connected to YAML)</h2>
+      <div class="phase-list" id="phase-progress-list"></div>
+      <p class="footer-note">
+        To advance bars during autonomous execution, update each phase execution_progress.completed_steps (and optional status_note / last_updated) in the YAML plan.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Recent Execution Activity</h2>
+      <ul class="activity-list" id="activity-list"></ul>
+      <p class="footer-note">
+        This view is connected to the YAML plan and refreshes automatically, so progress remains observable while execution runs.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const pageRefreshSeconds = 30;
+      const yamlPollSeconds = 5;
+      const yamlUrl = '../v3.2-unified-architecture-plan.yaml';
+      const boot = Date.now();
+
+      const elClock = document.getElementById('current-clock');
+      const elNext = document.getElementById('next-refresh');
+      const elYaml = document.getElementById('last-yaml-update');
+
+      function pad(n) {
+        return String(n).padStart(2, '0');
+      }
+
+      function timeStamp(date) {
+        return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+      }
+
+      function normalizedStatus(status, percent) {
+        const s = (status || '').toUpperCase();
+        if (s === 'COMPLETE') return 'complete';
+        if (s === 'BLOCKED') return 'blocked';
+        if (percent > 0 && percent < 100) return 'in-progress';
+        return 'planned';
+      }
+
+      function parsePlanProgress(yamlText) {
+        const lines = yamlText.split('\n');
+        const phases = [];
+        let current = null;
+        let inExec = false;
+
+        function commit() {
+          if (!current) return;
+          if (typeof current.totalSteps !== 'number') current.totalSteps = 0;
+          if (typeof current.completedSteps !== 'number') current.completedSteps = 0;
+          if (typeof current.percent !== 'number') {
+            current.percent = current.totalSteps > 0
+              ? Math.round((current.completedSteps / current.totalSteps) * 100)
+              : 0;
+          }
+          current.percent = Math.max(0, Math.min(100, current.percent));
+          phases.push(current);
+        }
+
+        for (const line of lines) {
+          const phaseMatch = line.match(/^\s*-\s+phase:\s+(P\d+)\s*$/);
+          if (phaseMatch) {
+            commit();
+            current = {
+              id: phaseMatch[1],
+              title: phaseMatch[1],
+              status: 'PLANNED',
+              totalSteps: 0,
+              completedSteps: 0,
+              percent: 0,
+              note: 'No status note set',
+              updated: '--'
+            };
+            inExec = false;
+            continue;
+          }
+
+          if (!current) continue;
+
+          if (/^\s{4}execution_progress:\s*$/.test(line)) {
+            inExec = true;
+            continue;
+          }
+
+          if (/^\s{4}[a-z_]+:\s/.test(line) && !/^\s{4}execution_progress:\s*$/.test(line)) {
+            inExec = false;
+          }
+
+          const titleMatch = line.match(/^\s{4}title:\s+"([^"]+)"\s*$/);
+          if (titleMatch) current.title = titleMatch[1];
+
+          const statusMatch = line.match(/^\s{4}status:\s+([A-Z_]+)\s*$/);
+          if (statusMatch) current.status = statusMatch[1];
+
+          if (inExec) {
+            const totalMatch = line.match(/^\s{6}total_steps:\s+(\d+)\s*$/);
+            if (totalMatch) current.totalSteps = Number(totalMatch[1]);
+
+            const doneMatch = line.match(/^\s{6}completed_steps:\s+(\d+)\s*$/);
+            if (doneMatch) current.completedSteps = Number(doneMatch[1]);
+
+            const pctMatch = line.match(/^\s{6}percent:\s+(\d+)\s*$/);
+            if (pctMatch) current.percent = Number(pctMatch[1]);
+
+            const noteMatch = line.match(/^\s{6}status_note:\s+"([^"]*)"\s*$/);
+            if (noteMatch) current.note = noteMatch[1] || 'No status note set';
+
+            const updatedMatch = line.match(/^\s{6}last_updated:\s+"([^"]+)"\s*$/);
+            if (updatedMatch) current.updated = updatedMatch[1];
+          }
+        }
+
+        commit();
+        return phases;
+      }
+
+      function renderProgress(phases) {
+        const totalPhases = phases.length;
+        const completeCount = phases.filter(p => normalizedStatus(p.status, p.percent) === 'complete').length;
+        const inProgressCount = phases.filter(p => normalizedStatus(p.status, p.percent) === 'in-progress').length;
+        const plannedCount = phases.filter(p => normalizedStatus(p.status, p.percent) === 'planned').length;
+
+        const totalSteps = phases.reduce((sum, phase) => sum + (phase.totalSteps || 0), 0);
+        const doneSteps = phases.reduce((sum, phase) => sum + (phase.completedSteps || 0), 0);
+        const overallPercent = totalSteps > 0 ? Math.round((doneSteps / totalSteps) * 100) : 0;
+
+        document.getElementById('stat-total-phases').textContent = String(totalPhases);
+        document.getElementById('stat-complete').textContent = String(completeCount);
+        document.getElementById('stat-in-progress').textContent = String(inProgressCount);
+        document.getElementById('stat-planned').textContent = String(plannedCount);
+
+        document.getElementById('overall-progress-label').textContent = `${overallPercent}%`;
+        document.getElementById('overall-progress-fill').style.width = `${overallPercent}%`;
+
+        const list = document.getElementById('phase-progress-list');
+        list.innerHTML = '';
+
+        phases.forEach(phase => {
+          const statusClass = normalizedStatus(phase.status, phase.percent);
+
+          const card = document.createElement('article');
+          card.className = 'phase-item';
+          card.innerHTML = `
+            <div class="phase-top">
+              <span class="phase-name">${phase.id} — ${phase.title}</span>
+              <span class="status-pill ${statusClass}">${statusClass.replace('-', ' ')}</span>
+            </div>
+            <div class="progress-head">
+              <span>Step Completion</span>
+              <span class="phase-metrics">${phase.completedSteps}/${phase.totalSteps} · ${phase.percent}%</span>
+            </div>
+            <div class="bar-wrap" aria-label="${phase.id} progress bar">
+              <div class="bar-fill" style="width:${phase.percent}%;"></div>
+            </div>
+            <div class="phase-note">${phase.note}</div>
+            <div class="phase-note">Last YAML update: ${phase.updated}</div>
+          `;
+          list.appendChild(card);
+        });
+
+        const activity = document.getElementById('activity-list');
+        activity.innerHTML = '';
+
+        phases.slice(0, 5).forEach(phase => {
+          const row = document.createElement('li');
+          row.innerHTML = `<span class="ts">${phase.id}</span><span>${phase.title}: ${phase.completedSteps}/${phase.totalSteps} steps complete (${phase.percent}%). ${phase.note}</span>`;
+          activity.appendChild(row);
+        });
+      }
+
+      async function refreshFromYaml() {
+        // file:// protocol blocks fetch() — use embedded inline snapshot instead
+        if (location.protocol === 'file:') {
+          const data = window.__CORTEX_PROGRESS__;
+          if (data && data.length) {
+            renderProgress(data);
+            elYaml.textContent = 'Snapshot mode: run update_phase_progress.py then reload to advance bars';
+          } else {
+            elYaml.textContent = 'file:// mode — no embedded snapshot found';
+          }
+          return;
+        }
+        // HTTP: live YAML polling
+        try {
+          const response = await fetch(`${yamlUrl}?t=${Date.now()}`, { cache: 'no-store' });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const text = await response.text();
+          const phases = parsePlanProgress(text);
+          renderProgress(phases);
+          elYaml.textContent = `YAML update: ${timeStamp(new Date())}`;
+        } catch (error) {
+          const fallback = [{ id: 'P1', title: 'YAML fetch unavailable', status: 'BLOCKED', totalSteps: 1, completedSteps: 0, percent: 0, note: 'Unable to fetch YAML. Open via local server or VS Code webview for live polling.', updated: '--' }];
+          renderProgress(fallback);
+          elYaml.textContent = `YAML update: unavailable (${error.message})`;
+        }
+      }
+
+      function tickClock() {
+        const now = new Date();
+        const elapsed = Math.floor((Date.now() - boot) / 1000);
+        const remainPage = pageRefreshSeconds - (elapsed % pageRefreshSeconds);
+        elClock.textContent = `Last refresh: ${timeStamp(now)}`;
+        if (location.protocol === 'file:') {
+          elNext.textContent = `file:// mode · Page reload in: ${remainPage}s`;
+        } else {
+          const remainYaml = yamlPollSeconds - (elapsed % yamlPollSeconds);
+          elNext.textContent = `Next page refresh in: ${remainPage}s · YAML sync in: ${remainYaml}s`;
+        }
+      }
+
+      // In file:// mode, update pill label and skip YAML polling interval
+      if (location.protocol === 'file:') {
+        document.querySelector('.refresh-pill').textContent = '● Embedded Snapshot (file:// mode)';
+      }
+
+      tickClock();
+      refreshFromYaml();
+      setInterval(tickClock, 1000);
+      if (location.protocol !== 'file:') {
+        setInterval(refreshFromYaml, yamlPollSeconds * 1000);
+      }
+    })();
+  <nav class="hub-nav">
+    <div class="hub-nav-left">
+      <a href="./index.html" class="hub-btn">← Hub</a>
+    </div>
+    <div class="hub-nav-center">
+      <a href="./overview.html" class="hub-btn">Overview</a>
+      <div class="hub-sep"></div>
+      <a href="./architecture.html" class="hub-btn">Architecture</a>
+      <div class="hub-sep"></div>
+      <a href="./governance.html" class="hub-btn">Governance</a>
+      <div class="hub-sep"></div>
+      <a href="./lifecycle.html" class="hub-btn">Lifecycle</a>
+      <div class="hub-sep"></div>
+      <a href="./phases.html" class="hub-btn">Phases</a>
+      <div class="hub-sep"></div>
+      <a href="./registry.html" class="hub-btn">Registry</a>
+      <div class="hub-sep"></div>
+      <a href="./execution.html" class="hub-btn active">Execution</a>
+    </div>
+    <div class="hub-nav-right"></div>
+  </nav>
+</body>
+</html>

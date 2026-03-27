@@ -479,7 +479,7 @@
       <div class="page-header-content">
         <h1>CORTEX v3.2.0 — Overview & Ecosystem</h1>
         <div class="meta-chip-row">
-          <span class="meta-chip repo">Foundations.Cortex</span>
+          <span class="meta-chip repo">Cortex</span>
           <span class="meta-chip ok">Planning Complete</span>
           <span class="meta-chip">Spoke 1 of 5</span>
           <span class="meta-chip">2026-03-27</span>
@@ -503,7 +503,7 @@
       <!-- SECTION 1: SUMMARY -->
       <section class="section" id="summary">
         <h2>What is v3.2.0?</h2>
-        <p>Consolidated Sharp Knife — an independent, comprehensive review of the live Foundations.Cortex repository state, followed by corrected planning and architecture simplification.</p>
+        <p>Consolidated Sharp Knife — an independent, comprehensive review of the live Cortex repository state, followed by corrected planning and architecture simplification.</p>
 
         <h3>The Reality Check</h3>
         <p>The v3.1 plan claimed 275 orchestrators and 8 phases, but an independent audit of the live repo revealed the truth:</p>
@@ -657,71 +657,76 @@
 
       <!-- SECTION 3: ECOSYSTEM -->
       <section class="section" id="ecosystem">
-        <h2>Three-Repo Ecosystem</h2>
+        <h2>CORTEX Capability Architecture</h2>
 
-        <p>CORTEX v3.2.0 operates within a broader ecosystem of three repositories that have distinct but complementary roles:</p>
+        <p>CORTEX v3.2.0 is a <strong>single monorepo</strong>. All capability areas — engine, governance, agents, skills, and domain knowledge — live within one repository. There are no sibling or external repos.</p>
 
-        <h3>Foundations.Cortex</h3>
-        <p>The CORTEX engine and governance framework. Contains:</p>
+        <h3>Core Engine &amp; Governance</h3>
+        <p>The CORTEX runtime. Contains:</p>
         <ul>
           <li>381 orchestrators (the coordination layer)</li>
-          <li>74 MCP tool files (Python-based stateful engine)</li>
-          <li>19 core skills unified to 137 total</li>
-          <li>Gate and phase management</li>
+          <li>74 MCP tool files (35 logical tools, Python-based stateful engine)</li>
+          <li>10 CORTEX agents (<code>.github/agents/</code>)</li>
+          <li>Gate and phase management (4 gate skills)</li>
           <li>ADR and decision traceability</li>
         </ul>
 
-        <h3>workflow-repo</h3>
-        <p>Feature delivery workflow. Contains 7 agents and 26+ skills focused on the WORKFLOW pipeline. CORTEX <strong>delegates delivery TO this repo</strong> — it does not reinvent feature workflows. CORTEX is the conductor, workflow-repo is the implementor.</p>
+        <h3>Workflow Delivery Area — <code>.github/skills/workflow/</code></h3>
+        <p>Feature delivery capability living <em>inside</em> the same repo. Planned workflow agents at <code>.github/agents/workflow/</code> handle the WORKFLOW pipeline. CORTEX orchestrates delivery using these internal skills — no external repo delegation required.</p>
 
-        <h3>knowledge-repo</h3>
-        <p>Domain expertise library with 78+ skills across 9 domains. Serves as a knowledge source that CORTEX consumes when domain expertise is needed.</p>
+        <h3>Knowledge Domain Area — <code>.github/skills/knowledge/</code></h3>
+        <p>Domain expertise library inside the same repo. Knowledge agents at <code>.github/agents/knowledge/</code> serve domain expertise. All skills are registered via internal VS Code skill-path discovery — no cross-repo paths needed.</p>
 
         <div class="diagram-container">
-          <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg">
             <!-- Background -->
-            <rect width="800" height="400" fill="rgba(26,31,58,0.3)"/>
+            <rect width="800" height="420" fill="rgba(26,31,58,0.3)"/>
 
-            <!-- Left: workflow-repo -->
-            <rect x="40" y="120" width="220" height="160" rx="8" fill="none" stroke="rgba(123,97,255,0.4)" stroke-width="2"/>
-            <text x="150" y="145" font-family="Space Grotesk" font-size="14" font-weight="600" fill="#7b61ff" text-anchor="middle">workflow-repo</text>
-            <text x="150" y="165" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">7 agents</text>
-            <text x="150" y="185" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">26+ skills</text>
-            <text x="150" y="205" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">Feature delivery</text>
-            <text x="150" y="225" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">pipeline owner</text>
+            <!-- Outer: single repo boundary -->
+            <rect x="40" y="30" width="720" height="360" rx="12" fill="none" stroke="rgba(0,212,255,0.5)" stroke-width="3" stroke-dasharray="8,4"/>
+            <text x="400" y="22" font-family="Space Grotesk" font-size="15" font-weight="700" fill="#00d4ff" text-anchor="middle">Cortex — Single Monorepo</text>
 
-            <!-- Center: Foundations.Cortex -->
-            <rect x="320" y="80" width="220" height="240" rx="8" fill="none" stroke="rgba(0,212,255,0.5)" stroke-width="3"/>
-            <text x="430" y="110" font-family="Space Grotesk" font-size="16" font-weight="600" fill="#00d4ff" text-anchor="middle">Foundations.Cortex</text>
-            <text x="430" y="135" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">381 orchestrators</text>
-            <text x="430" y="155" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">74 MCP tools</text>
-            <text x="430" y="175" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">137 unified skills</text>
-            <text x="430" y="195" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">Gate + phase mgmt</text>
-            <text x="430" y="215" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">Conductor</text>
+            <!-- Left inner: Workflow Delivery Area -->
+            <rect x="60" y="60" width="200" height="300" rx="8" fill="rgba(123,97,255,0.07)" stroke="rgba(123,97,255,0.45)" stroke-width="2"/>
+            <text x="160" y="88" font-family="Space Grotesk" font-size="12" font-weight="600" fill="#7b61ff" text-anchor="middle">Workflow Delivery</text>
+            <text x="160" y="106" font-family="Inter" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">.github/skills/workflow/</text>
+            <text x="160" y="140" font-family="Inter" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">workflow agents</text>
+            <text x="160" y="158" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">.github/agents/workflow/</text>
+            <text x="160" y="186" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">dev + pm skill trees</text>
 
-            <!-- Right: knowledge -->
-            <rect x="600" y="120" width="220" height="160" rx="8" fill="none" stroke="rgba(123,97,255,0.4)" stroke-width="2"/>
-            <text x="710" y="145" font-family="Space Grotesk" font-size="14" font-weight="600" fill="#7b61ff" text-anchor="middle">knowledge-repo</text>
-            <text x="710" y="165" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">78+ skills</text>
-            <text x="710" y="185" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">9 domains</text>
-            <text x="710" y="205" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">Domain knowledge</text>
-            <text x="710" y="225" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">source</text>
+            <!-- Center inner: Core Engine -->
+            <rect x="300" y="50" width="200" height="320" rx="8" fill="rgba(0,212,255,0.07)" stroke="rgba(0,212,255,0.5)" stroke-width="2.5"/>
+            <text x="400" y="80" font-family="Space Grotesk" font-size="13" font-weight="700" fill="#00d4ff" text-anchor="middle">Core Engine</text>
+            <text x="400" y="100" font-family="Inter" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">381 orchestrators</text>
+            <text x="400" y="118" font-family="Inter" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">74 MCP tools</text>
+            <text x="400" y="136" font-family="Inter" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">10 agents</text>
+            <text x="400" y="154" font-family="Inter" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">4 gate skills</text>
+            <text x="400" y="172" font-family="Inter" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">governance + ADRs</text>
+            <text x="400" y="200" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">Orchestrates all</text>
+            <text x="400" y="216" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">capability areas</text>
 
-            <!-- Arrows -->
-            <!-- Cortex -> workflow -->
-            <path d="M 320 200 Q 260 200 260 200" fill="none" stroke="rgba(123,97,255,0.5)" stroke-width="2" marker-end="url(#arrowhead-secondary)"/>
-            <text x="280" y="190" font-family="Inter" font-size="11" fill="var(--color-text-muted)">delegates</text>
-            <text x="280" y="205" font-family="Inter" font-size="11" fill="var(--color-text-muted)">delivery</text>
+            <!-- Right inner: Knowledge Domain Area -->
+            <rect x="540" y="60" width="200" height="300" rx="8" fill="rgba(123,97,255,0.07)" stroke="rgba(123,97,255,0.45)" stroke-width="2"/>
+            <text x="640" y="88" font-family="Space Grotesk" font-size="12" font-weight="600" fill="#7b61ff" text-anchor="middle">Knowledge Domain</text>
+            <text x="640" y="106" font-family="Inter" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">.github/skills/knowledge/</text>
+            <text x="640" y="140" font-family="Inter" font-size="11" fill="var(--color-text-secondary)" text-anchor="middle">knowledge agents</text>
+            <text x="640" y="158" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">.github/agents/knowledge/</text>
+            <text x="640" y="186" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">domain expertise</text>
 
-            <!-- Cortex <- secondary -->
-            <path d="M 540 200 Q 600 200 600 200" fill="none" stroke="rgba(123,97,255,0.5)" stroke-width="2" marker-end="url(#arrowhead-secondary)"/>
-            <text x="560" y="190" font-family="Inter" font-size="11" fill="var(--color-text-muted)">consumes</text>
-            <text x="560" y="205" font-family="Inter" font-size="11" fill="var(--color-text-muted)">expertise</text>
+            <!-- Arrows: Core &lt;-> Workflow -->
+            <path d="M 300 200 L 260 200" fill="none" stroke="rgba(123,97,255,0.6)" stroke-width="1.5" marker-end="url(#arr-left)"/>
+            <path d="M 260 215 L 300 215" fill="none" stroke="rgba(123,97,255,0.6)" stroke-width="1.5" marker-end="url(#arr-right)"/>
 
-            <!-- Arrow markers -->
+            <!-- Arrows: Core &lt;-> Knowledge -->
+            <path d="M 500 200 L 540 200" fill="none" stroke="rgba(123,97,255,0.6)" stroke-width="1.5" marker-end="url(#arr-right)"/>
+            <path d="M 540 215 L 500 215" fill="none" stroke="rgba(123,97,255,0.6)" stroke-width="1.5" marker-end="url(#arr-left)"/>
+
             <defs>
-              <marker id="arrowhead-secondary" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                <polygon points="0 0, 10 3, 0 6" fill="rgba(123,97,255,0.5)"/>
+              <marker id="arr-left" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                <polygon points="8 0, 8 6, 0 3" fill="rgba(123,97,255,0.6)"/>
+              </marker>
+              <marker id="arr-right" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="rgba(123,97,255,0.6)"/>
               </marker>
             </defs>
           </svg>
@@ -812,7 +817,7 @@
     <!-- FOOTER -->
     <footer>
       <p>CORTEX v3.2.0 Architecture Plan — Spoke 1: Overview & Ecosystem</p>
-      <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--color-text-muted);">Generated 2026-03-27 | Foundations.Cortex Repository</p>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--color-text-muted);">Generated 2026-03-27 | Cortex Repository</p>
     </footer>
   </main>
 
@@ -829,13 +834,15 @@
       <div class="hub-sep"></div>
       <a href="./architecture.html" class="hub-btn">Architecture</a>
       <div class="hub-sep"></div>
+      <a href="./governance.html" class="hub-btn">Governance</a>
+      <div class="hub-sep"></div>
       <a href="./lifecycle.html" class="hub-btn">Lifecycle</a>
       <div class="hub-sep"></div>
       <a href="./phases.html" class="hub-btn">Phases</a>
       <div class="hub-sep"></div>
-      <a href="./governance.html" class="hub-btn">Governance</a>
-      <div class="hub-sep"></div>
       <a href="./registry.html" class="hub-btn">Registry</a>
+      <div class="hub-sep"></div>
+      <a href="./execution.html" class="hub-btn">Execution</a>
     </div>
     <div class="hub-nav-right"></div>
   </nav>

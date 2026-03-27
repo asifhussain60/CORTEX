@@ -43,7 +43,7 @@ The canonical plan has been reconciled to the repo-validated v3.2 baseline. This
 
 ## What Changed in v3.2
 
-1. Repo counts were corrected to match the live Foundations.Cortex state.
+1. Repo counts were corrected to match the live Cortex state.
 2. Release Evidence Mesh was removed as overengineered and ADR-V3-014 was withdrawn.
 3. Plugin governance/signing was removed as premature and ADR-V3-013 was withdrawn.
 4. Governance ceremony was reduced from 76 DoD checks and 7 gates to 40 DoD checks and 4 gates.
@@ -84,7 +84,7 @@ The canonical plan has been reconciled to the repo-validated v3.2 baseline. This
 2. 381 orchestrators is the repo-validated baseline for deprecation planning.
 3. 3-wave deprecation is the approved migration strategy.
 4. WorkflowComposer remains part of the retained Python engine layer.
-5. Cross-repo integration stays split across Foundations.Cortex, workflow-repo, and knowledge-repo.
+5. Cross-repo integration stays split across Cortex, workflow-repo, and knowledge-repo.
 
 ---
 

@@ -251,32 +251,68 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 50px;
+      height: 44px;
       background: rgba(10, 14, 39, 0.95);
       backdrop-filter: blur(10px);
       border-top: 1px solid rgba(0, 212, 255, 0.15);
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 1rem;
+      padding: 0 2rem;
+      gap: 2rem;
       z-index: 999;
     }
 
-    .hub-nav a, .hub-nav span {
-      font-size: 0.85rem;
-      color: var(--color-text-secondary);
-      text-decoration: none;
-      transition: color 0.2s;
+    .hub-nav-left, .hub-nav-center, .hub-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
-    .hub-nav a:hover { color: var(--accent-primary); }
+    .hub-nav-left {
+      flex: 0 0 auto;
+    }
 
-    .hub-nav a.active {
-      color: var(--accent-primary);
+    .hub-nav-center {
+      flex: 1;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .hub-nav-right {
+      flex: 0 0 auto;
+    }
+
+    .hub-btn {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 0.75rem;
       font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-tertiary);
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 0.35rem 0.65rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      white-space: nowrap;
     }
 
-    .hub-sep { color: var(--color-text-muted); }
+    .hub-btn:hover, .hub-btn.active {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.12);
+      border-color: rgba(0, 212, 255, 0.25);
+    }
+
+    .hub-btn.active {
+      border-color: var(--accent-primary);
+    }
+
+    .hub-sep {
+      width: 1px;
+      height: 16px;
+      background: rgba(0, 212, 255, 0.15);
+    }
 
     main { padding-bottom: 60px; }
 
@@ -316,7 +352,7 @@
         <h1>CORTEX v3.2.0 — Registry Guidance</h1>
         <div class="header-subtitle">Registry Taxonomy Guidance</div>
         <div class="meta-chips">
-          <span class="meta-chip repo">Foundations.Cortex</span>
+          <span class="meta-chip repo">Cortex</span>
           <span class="meta-chip ok">v3.2.0</span>
           <span class="meta-chip open">Appendix · Non-canonical</span>
           <span class="meta-chip">Spoke 6 of 6</span>
@@ -720,19 +756,25 @@ git commit -m "chore: add schema_version + namespace to all registry YAMLs"</cod
 
   <!-- HUB NAV (fixed bottom) -->
   <nav class="hub-nav">
-    <a href="./index.html">← Hub</a>
-    <span class="hub-sep">·</span>
-    <a href="./overview.html">Overview</a>
-    <span class="hub-sep">·</span>
-    <a href="./architecture.html">Architecture</a>
-    <span class="hub-sep">·</span>
-    <a href="./lifecycle.html">Lifecycle</a>
-    <span class="hub-sep">·</span>
-    <a href="./phases.html">Phases</a>
-    <span class="hub-sep">·</span>
-    <a href="./governance.html">Governance</a>
-    <span class="hub-sep">·</span>
-    <a href="./registry.html" class="active">Registry</a>
+    <div class="hub-nav-left">
+      <a href="./index.html" class="hub-btn">← Hub</a>
+    </div>
+    <div class="hub-nav-center">
+      <a href="./overview.html" class="hub-btn">Overview</a>
+      <div class="hub-sep"></div>
+      <a href="./architecture.html" class="hub-btn">Architecture</a>
+      <div class="hub-sep"></div>
+      <a href="./governance.html" class="hub-btn">Governance</a>
+      <div class="hub-sep"></div>
+      <a href="./lifecycle.html" class="hub-btn">Lifecycle</a>
+      <div class="hub-sep"></div>
+      <a href="./phases.html" class="hub-btn">Phases</a>
+      <div class="hub-sep"></div>
+      <a href="./registry.html" class="hub-btn active">Registry</a>
+      <div class="hub-sep"></div>
+      <a href="./execution.html" class="hub-btn">Execution</a>
+    </div>
+    <div class="hub-nav-right"></div>
   </nav>
 
   <script>
