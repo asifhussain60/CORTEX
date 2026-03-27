@@ -778,12 +778,30 @@ phases:
       all 34 intent types, build LENS intelligence pipeline within cortex-intel. Validate
       top-10 intents route correctly before proceeding to remaining 24.
     execution_progress:
-      total_steps: 15
+      total_steps: 16
       completed_steps: 0
       percent: 0
       status_note: "Planned; awaiting P2 execution start"
       last_updated: "2026-03-27T00:00:00Z"
+    naming_convention_note: >
+      CRITICAL — Agent file naming: The v3.2 agent layer uses {name}.agent.md files
+      in .github/agents/ root (e.g. cortex-code.agent.md, cortex-audit.agent.md).
+      The legacy .github/agents/core/*.md files (cortex-auditor.md, cortex-executor.md,
+      cortex-interactive.md etc.) are PRE-v3.2 agent stubs with a different naming
+      convention and are NOT the v3.2 agents. Do not modify or confuse them with the
+      10 new agents. The 10 new agents are created fresh in .github/agents/ root only.
     execution_order:
+      - step: 0
+        name: "Branch pre-condition (MANDATORY — execute before any other step)"
+        description: "Ensure clean working tree and switch to execution branch"
+        commands:
+          - "git status --porcelain  # must output nothing (empty = clean)"
+          - "git stash  # if working tree is dirty, stash before proceeding"
+          - "git switch cortex-v3-clean 2>/dev/null || git switch -c cortex-v3-clean"
+          - "git status --porcelain  # verify clean again after branch switch"
+        pass_criteria: "Active branch is cortex-v3-clean, working tree clean (git status --porcelain empty)"
+        failure_action: "Do not proceed to Step 1 until branch is cortex-v3-clean and tree is clean"
+
       - step: 1
         name: "Create AGENT-INDEX.md"
         file: ".github/agents/AGENT-INDEX.md"
@@ -1001,10 +1019,18 @@ phases:
     duration_weeks: 3
     description: >
       Wire CORTEX lifecycle conductor (cortex-orchestrate) to deliver the 7-stage pipeline,
-      create workflow-delivery and knowledge-domain skill directories within this repo,
-      create 4 gate skills, wire 7-stage lifecycle E2E.
+      create 4 gate skills, scaffold minimum-viable WORKFLOW delegation agents for E2E test,
+      register capability-area directories within this repo. Full workflow-delivery
+      agent authoring (22+10 agents) is deferred post-P5 as Milestone 2.
+    scope_risk_note: >
+      RESOLVED SCOPE RISK: The original plan implied authoring all 22 workflow-delivery
+      agents and 10 knowledge-domain agents (32 total) within P3's 3-week window alongside
+      gate skills, directory scaffolding, and VS Code config. This is excessive scope for
+      one phase. P3 is scoped to 5 minimum-viable WORKFLOW delegation agents (those
+      directly invoked in the 7-stage lifecycle E2E) plus directory scaffolding for the
+      full agent set. Remaining 27 agents are Milestone 2, post-P5 certification.
     execution_progress:
-      total_steps: 9
+      total_steps: 10
       completed_steps: 0
       percent: 0
       status_note: "Planned; waiting for P2 gate"
@@ -1071,13 +1097,40 @@ phases:
         pass_criteria: "All 5 WORKFLOW agents mapped, all 4 gates invoked at correct stages"
 
       - step: 6
+        name: "Scaffold 5 minimum-viable WORKFLOW delegation agents (required for E2E)"
+        description: >
+          Author the 5 WORKFLOW agents that cortex-orchestrate directly invokes in the
+          7-stage lifecycle E2E test. Full agent authoring (22+10=32) is Milestone 2.
+        agents_to_create:
+          - file: ".github/agents/workflow/pm-intent-creator.agent.md"
+            stage: "Stage 1 — Express Intent"
+            required_sections: ["## Identity", "## Intent: PM_INTENT_CREATE", "## Output: structured requirements + ACs", "## Quality Checklist"]
+          - file: ".github/agents/workflow/architect.agent.md"
+            stage: "Stage 2 — Understand"
+            required_sections: ["## Identity", "## Intent: ARCHITECTURE_REVIEW", "## Output: architecture patterns loaded", "## Quality Checklist"]
+          - file: ".github/agents/workflow/dev-story-implementer.agent.md"
+            stage: "Stage 3 — Implement"
+            required_sections: ["## Identity", "## Intent: DEV_STORY_IMPLEMENT", "## TDD: RED-GREEN-REFACTOR", "## Output: implemented story + tests", "## Quality Checklist"]
+          - file: ".github/agents/workflow/test-critic.agent.md"
+            stage: "Stage 5 — Review"
+            required_sections: ["## Identity", "## Intent: TEST_CRITIQUE", "## Output: needs_refinement or PASS", "## Quality Checklist"]
+          - file: ".github/agents/workflow/gate-deployment-readiness.agent.md"
+            stage: "Stage 6 — Deploy"
+            required_sections: ["## Identity", "## Intent: DEPLOYMENT_READINESS", "## Output: PASS or BLOCK verdict", "## Quality Checklist"]
+        pass_criteria: "5 agent files present with all required sections and valid YAML frontmatter"
+        deferred: >
+          Remaining 17 workflow-delivery agents (.github/agents/workflow/) and
+          10 knowledge-domain agents (.github/agents/knowledge/) are Milestone 2 scope,
+          to be executed after P5 certification. Directories scaffolded now as placeholders.
+
+      - step: 6b
         name: "Create internal skill path directories and register in VS Code"
         files_to_create:
-          - ".github/skills/workflow/dev/  (22 workflow developer skills)"
-          - ".github/skills/workflow/pm/   (14 workflow PM skills)"
-          - ".github/skills/knowledge/     (82 knowledge domain skills by subdomain)"
-          - ".github/agents/workflow/      (12 workflow delivery agents)"
-          - ".github/agents/knowledge/     (10 knowledge specialist agents)"
+          - ".github/skills/workflow/dev/  (scaffold — full 22 skills are Milestone 2)"
+          - ".github/skills/workflow/pm/   (scaffold — full 14 skills are Milestone 2)"
+          - ".github/skills/knowledge/     (scaffold — full 82 skills are Milestone 2)"
+          - ".github/agents/workflow/      (5 MVS agents created in Step 6; dir scaffolded for remainder)"
+          - ".github/agents/knowledge/     (scaffold — full 10 agents are Milestone 2)"
         file: ".vscode/settings.json"
         description: "Register all capability-area skill paths pointing within this single repo"
         content_spec: |
@@ -1085,8 +1138,16 @@ phases:
             "github.copilot.chat.codeGeneration.instructions": [],
             "github.copilot.chat.agent.thinkingEnabled": true
           }
+        skill_paths_note: >
+          RISK: skill-paths.json is a CORTEX-internal reference file. VS Code Copilot
+          skill discovery does not natively read skill-paths.json. Actual VS Code Copilot
+          agent discovery uses .vscode/mcp.json (MCP agents) and workspace agent manifests.
+          Verify the correct VS Code Copilot skill registration mechanism before P4
+          Surface B validation. skill-paths.json is created for CORTEX internal reference
+          and may need to align with the actual VS Code extension's discovery config key.
         additional_config:
           path: ".vscode/skill-paths.json"
+          purpose: "CORTEX internal reference — not a VS Code Copilot native config"
           content: |
             {
               "skill_paths": [
@@ -1099,7 +1160,7 @@ phases:
                 ".github/agents/knowledge"
               ]
             }
-        pass_criteria: "All capability directories created within repo, skill-paths.json uses internal paths"
+        pass_criteria: "All capability directories scaffolded within repo, skill-paths.json created, VS Code discovery mechanism noted for P4 pre-validation"
 
       - step: 7
         name: "Create domain skill catalog structure"
@@ -1140,19 +1201,22 @@ phases:
         description: "Sync P3 row with integration readiness and lifecycle gate outcome"
         pass_criteria: "Dashboard reflects P3 status and readiness for P4"
 
-    gate: "4 gate skill files present with all required sections, workflow-delivery and knowledge-domain directories created within repo, lifecycle E2E test passes all 7 stages"
+    gate: "4 gate skill files present with all required sections, 5 MVS WORKFLOW delegation agents present, capability-area directories scaffolded within repo, lifecycle E2E test passes all 7 stages"
     gate_verification:
       - "find .github/agents/gates -name '*.agent.md' | wc -l  # must be 4"
-      - "find .github/skills/workflow -name '*.md' | wc -l  # must be >=1 (at least scaffold)"
-      - "find .github/skills/knowledge -name '*.md' | wc -l  # must be >=1 (at least scaffold)"
+      - "find .github/agents/workflow -name '*.agent.md' | wc -l  # must be >=5 (MVS)"
+      - "find .github/skills/workflow -name '*.md' | wc -l  # must be >=1 (scaffold)"
+      - "find .github/skills/knowledge -name '*.md' | wc -l  # must be >=1 (scaffold)"
       - "grep -c 'workflow/dev\\|workflow/pm' .vscode/skill-paths.json  # must be >=2"
     failure_modes:
       - mode: "Lifecycle E2E test stalls at Stage 3"
-        action: "Verify TDD orchestrator MCP tool is reachable; test independently first"
-      - mode: "WORKFLOW agents not found via skill paths"
-        action: "Verify sibling repo checkout paths; update skill-paths.json accordingly"
+        action: "Verify TDD orchestrator MCP tool is reachable; test dev-story-implementer MVS agent independently first"
+      - mode: "WORKFLOW MVS agents not found"
+        action: "Verify 5 agents exist in .github/agents/workflow/ — these are created in Step 6, not from a sibling repo"
       - mode: "Gate returns invalid verdict format"
         action: "Fix gate SKILL.md PASS/BLOCK output schema before proceeding"
+      - mode: "VS Code skill-paths.json not recognized by Copilot"
+        action: "Defer to P4 Surface B pre-validation; P3 gate only requires directory scaffolding, not VS Code discovery proof"
 
   - phase: P4
     title: "Python Deprecation Waves + Surface Deployment"
@@ -1254,16 +1318,28 @@ phases:
       - step: "Surface Deployment B"
         name: "VS Code Copilot Surface"
         description: "Package CORTEX for VS Code Copilot via skill paths + MCP config"
+        pre_validation_required: >
+          BEFORE running surface validation: verify the actual VS Code Copilot skill
+          discovery mechanism. VS Code Copilot does not natively read skill-paths.json.
+          Check whether agent discovery uses: (a) mcp.json agent registration,
+          (b) github.copilot.chat.codeGeneration.instructions in settings.json,
+          (c) a workspace .github/agents/ manifest, or (d) another mechanism.
+          Update .vscode/skill-paths.json or settings.json accordingly before
+          expecting 137 skills to be discoverable. This is a MUST-DO before validation.
         files_to_validate:
           - ".vscode/mcp.json  (created in P2)"
-          - ".vscode/skill-paths.json  (created in P3)"
+          - ".vscode/skill-paths.json  (created in P3 — verify VS Code reads this)"
+        pre_validation_steps:
+          - "Check VS Code Copilot release notes for skill/agent discovery config key"
+          - "Test with 1 skill path first before assuming all 137 are discoverable"
+          - "Verify @cortex agent is loadable via mcp.json or workspace agent manifest"
         validation:
           - "Open Cortex in VS Code with GitHub Copilot enabled"
           - "Verify @cortex agent appears in Copilot Chat"
           - "Run @cortex introduce — responds with CORTEX identity"
           - "Run @cortex audit — responds with governance scan"
-          - "Verify 137 skills discoverable via skill path registration"
-        pass_criteria: "@cortex responds correctly in VS Code Copilot Chat, skill discovery works"
+          - "Verify at least 19 core skills discoverable (19 existing + MVS scaffold)"
+        pass_criteria: "@cortex responds correctly in VS Code Copilot Chat; skill discovery validated for at least core CORTEX skills (137 total deferred to Milestone 2 when all agents authored)"
 
       - step: "Execution Status Sync"
         name: "Update execution dashboard status for P4"

@@ -496,6 +496,8 @@
       <a href="#ecosystem" class="jump-btn">Ecosystem</a>
       <div class="jump-sep"></div>
       <a href="#decisions" class="jump-btn">Decisions</a>
+      <div class="jump-sep"></div>
+      <a href="#risks" class="jump-btn" style="color:var(--color-warning);">⚠ Risks</a>
     </nav>
 
     <!-- MAIN CONTENT -->
@@ -810,6 +812,60 @@
 
         <div class="ac-satisfaction-badge">
           <span class="ac-badge">Overview-4</span>
+        </div>
+      </section>
+    </div>
+
+    <!-- SECTION 5: EXECUTION RISK REGISTER -->
+    <div class="container" style="padding-bottom:0; margin-bottom:0;">
+      <section class="section" id="risks" style="border-color: rgba(245,158,11,0.35);">
+        <h2 style="color:var(--color-warning);">⚠ Pre-Execution Risk Register</h2>
+        <p>Four issues identified in holistic review (2026-03-27) before autonomous execution of P2. All resolved in YAML plan v3.2.0-r1 and reflected across all HTML views.</p>
+
+        <table style="width:100%; border-collapse:collapse; font-size:0.85rem; margin-top:1rem;">
+          <thead>
+            <tr style="border-bottom:1px solid rgba(245,158,11,0.25);">
+              <th style="text-align:left; padding:0.6rem; color:var(--color-text-secondary);">ID</th>
+              <th style="text-align:left; padding:0.6rem; color:var(--color-text-secondary);">Phase</th>
+              <th style="text-align:left; padding:0.6rem; color:var(--color-text-secondary);">Issue</th>
+              <th style="text-align:left; padding:0.6rem; color:var(--color-text-secondary);">Fix Applied</th>
+              <th style="text-align:center; padding:0.6rem; color:var(--color-text-secondary);">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+              <td style="padding:0.6rem; color:var(--color-error); font-weight:700;">RISK-01</td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);">P2</td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);">No explicit branch switch step — execution contract requires <code>cortex-v3-clean</code> but plan started from <code>develop</code></td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);">P2 Step 0 added: clean tree check + <code>git switch -c cortex-v3-clean</code>. P2 steps 15 → 16.</td>
+              <td style="padding:0.6rem; text-align:center;"><span style="background:rgba(16,185,129,0.15); color:var(--color-success); border:1px solid rgba(16,185,129,0.3); border-radius:999px; padding:0.2rem 0.55rem; font-size:0.7rem; font-weight:700;">RESOLVED</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+              <td style="padding:0.6rem; color:var(--color-error); font-weight:700;">RISK-02</td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);">P2</td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);">Legacy <code>.github/agents/core/*.md</code> stubs could be confused with the 10 new <code>*.agent.md</code> files — different naming convention</td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);"><code>naming_convention_note</code> added to P2 YAML: v3.2 agents are <code>*.agent.md</code> in <code>.github/agents/</code> root only.</td>
+              <td style="padding:0.6rem; text-align:center;"><span style="background:rgba(16,185,129,0.15); color:var(--color-success); border:1px solid rgba(16,185,129,0.3); border-radius:999px; padding:0.2rem 0.55rem; font-size:0.7rem; font-weight:700;">RESOLVED</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+              <td style="padding:0.6rem; color:var(--color-warning); font-weight:700;">RISK-03</td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);">P3</td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);">Step 6 implied authoring 22+10=32 workflow/knowledge agents in 3 weeks alongside gate skills, scaffolding, and VS Code config — excessive scope</td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);">Step 6 split: 5 MVS WORKFLOW agents for E2E (P3) + 27 remaining agents deferred to Milestone 2. P3 steps 9 → 10.</td>
+              <td style="padding:0.6rem; text-align:center;"><span style="background:rgba(16,185,129,0.15); color:var(--color-success); border:1px solid rgba(16,185,129,0.3); border-radius:999px; padding:0.2rem 0.55rem; font-size:0.7rem; font-weight:700;">RESOLVED</span></td>
+            </tr>
+            <tr>
+              <td style="padding:0.6rem; color:var(--color-warning); font-weight:700;">RISK-04</td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);">P4</td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);"><code>skill-paths.json</code> is not a native VS Code Copilot config. Surface B validation assumed 137 skills discoverable without verifying the actual discovery mechanism</td>
+              <td style="padding:0.6rem; color:var(--color-text-secondary);">P4 Surface B now requires pre-validation step. Pass criteria updated to 19 core skills (not 137). Full discovery deferred to Milestone 2.</td>
+              <td style="padding:0.6rem; text-align:center;"><span style="background:rgba(245,158,11,0.15); color:var(--color-warning); border:1px solid rgba(245,158,11,0.3); border-radius:999px; padding:0.2rem 0.55rem; font-size:0.7rem; font-weight:700;">MITIGATED</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="ac-satisfaction-badge" style="margin-top:1rem;">
+          <span class="ac-badge">Overview-5</span>
         </div>
       </section>
     </div>

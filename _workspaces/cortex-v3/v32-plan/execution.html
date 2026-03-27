@@ -434,7 +434,7 @@
       .container { padding: 1.25rem; }
     }
   </style>
-  <!-- PROGRESS-DATA-START --><script>window.__CORTEX_PROGRESS__=[{"id":"P1","title":"Governance & Design System Foundation","status":"COMPLETE","totalSteps":6,"completedSteps":6,"percent":100,"note":"P1 complete; baseline established","updated":"2026-03-27T00:00:00Z"},{"id":"P2","title":"Agent Architecture + LENS Pipeline","status":"PLANNED","totalSteps":15,"completedSteps":0,"percent":0,"note":"Planned; awaiting P2 execution start","updated":"2026-03-27T00:00:00Z"},{"id":"P3","title":"Feature Delivery Lifecycle + Unified Capability Integration","status":"PLANNED","totalSteps":9,"completedSteps":0,"percent":0,"note":"Planned; waiting for P2 gate","updated":"2026-03-27T00:00:00Z"},{"id":"P4","title":"Python Deprecation Waves + Surface Deployment","status":"PLANNED","totalSteps":6,"completedSteps":0,"percent":0,"note":"Planned; waiting for P3 gate","updated":"2026-03-27T00:00:00Z"},{"id":"P5","title":"Certification & v3.2 Tag","status":"PLANNED","totalSteps":8,"completedSteps":0,"percent":0,"note":"Planned; waiting for P4 gate","updated":"2026-03-27T00:00:00Z"}];</script><!-- PROGRESS-DATA-END -->
+  <!-- PROGRESS-DATA-START --><script>window.__CORTEX_PROGRESS__=[{"id":"P1","title":"Governance & Design System Foundation","status":"COMPLETE","totalSteps":6,"completedSteps":6,"percent":100,"note":"P1 complete; baseline established","updated":"2026-03-27T00:00:00Z"},{"id":"P2","title":"Agent Architecture + LENS Pipeline","status":"PLANNED","totalSteps":16,"completedSteps":0,"percent":0,"note":"Planned; awaiting P2 execution start. Step 0 (branch pre-condition) added — switch to cortex-v3-clean before any agent authoring.","updated":"2026-03-27T00:00:00Z"},{"id":"P3","title":"Feature Delivery Lifecycle + Unified Capability Integration","status":"PLANNED","totalSteps":10,"completedSteps":0,"percent":0,"note":"Planned; waiting for P2 gate. Scope de-risked: 5 MVS WORKFLOW agents (not 32) required for E2E. Full 22+10 agents deferred to Milestone 2.","updated":"2026-03-27T00:00:00Z"},{"id":"P4","title":"Python Deprecation Waves + Surface Deployment","status":"PLANNED","totalSteps":6,"completedSteps":0,"percent":0,"note":"Planned; waiting for P3 gate. Surface B requires pre-validation of VS Code Copilot skill discovery mechanism before claiming 137 skills discoverable.","updated":"2026-03-27T00:00:00Z"},{"id":"P5","title":"Certification & v3.2 Tag","status":"PLANNED","totalSteps":8,"completedSteps":0,"percent":0,"note":"Planned; waiting for P4 gate","updated":"2026-03-27T00:00:00Z"}];</script><!-- PROGRESS-DATA-END -->
 </head>
 <body>
   <header class="page-header">
@@ -512,6 +512,46 @@
       <p class="footer-note">
         This view is connected to the YAML plan and refreshes automatically, so progress remains observable while execution runs.
       </p>
+    </section>
+
+    <section class="panel" style="border-color: rgba(245,158,11,0.3);">
+      <h2 style="color: var(--color-warning);">⚠ Execution Risk Register — v3.2 Holistic Review (2026-03-27)</h2>
+      <p style="font-size:0.82rem; color:var(--color-text-secondary); margin-bottom:1rem;">Four issues identified during pre-execution review. All resolved in YAML plan v3.2.0-r1. Listed here for observability.</p>
+      <div style="display:grid; gap:0.7rem;">
+
+        <div style="border:1px solid rgba(239,68,68,0.3); border-radius:10px; padding:0.75rem; background:rgba(239,68,68,0.06);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <span style="font-weight:700; font-size:0.82rem; color:var(--color-error);">RISK-01 · P2 Branch Pre-condition</span>
+            <span style="font-size:0.7rem; font-weight:700; background:rgba(16,185,129,0.15); color:var(--color-success); border:1px solid rgba(16,185,129,0.3); border-radius:999px; padding:0.2rem 0.55rem;">RESOLVED</span>
+          </div>
+          <p style="font-size:0.78rem; color:var(--color-text-secondary);">Execution contract requires <code style="font-size:0.75rem; color:var(--accent-primary);">cortex-v3-clean</code> branch. Working tree was on <code style="font-size:0.75rem; color:var(--color-warning);">develop</code> with no explicit Step 0 in plan. <strong>Fix:</strong> P2 Step 0 added — clean tree check + <code>git switch -c cortex-v3-clean</code> before any agent authoring.</p>
+        </div>
+
+        <div style="border:1px solid rgba(239,68,68,0.3); border-radius:10px; padding:0.75rem; background:rgba(239,68,68,0.06);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <span style="font-weight:700; font-size:0.82rem; color:var(--color-error);">RISK-02 · P2 Agent Naming Convention Ambiguity</span>
+            <span style="font-size:0.7rem; font-weight:700; background:rgba(16,185,129,0.15); color:var(--color-success); border:1px solid rgba(16,185,129,0.3); border-radius:999px; padding:0.2rem 0.55rem;">RESOLVED</span>
+          </div>
+          <p style="font-size:0.78rem; color:var(--color-text-secondary);">Legacy <code style="font-size:0.75rem; color:var(--color-warning);">.github/agents/core/*.md</code> files (pre-v3.2 stubs) could be confused with the 10 new v3.2 agents. <strong>Fix:</strong> <code>naming_convention_note</code> added to P2 — v3.2 agents are <code>*.agent.md</code> in <code>.github/agents/</code> root only; core/ stubs are untouched legacy.</p>
+        </div>
+
+        <div style="border:1px solid rgba(245,158,11,0.3); border-radius:10px; padding:0.75rem; background:rgba(245,158,11,0.06);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <span style="font-weight:700; font-size:0.82rem; color:var(--color-warning);">RISK-03 · P3 Workflow Agent Scope Overload</span>
+            <span style="font-size:0.7rem; font-weight:700; background:rgba(16,185,129,0.15); color:var(--color-success); border:1px solid rgba(16,185,129,0.3); border-radius:999px; padding:0.2rem 0.55rem;">RESOLVED</span>
+          </div>
+          <p style="font-size:0.78rem; color:var(--color-text-secondary);">P3 Step 6 implied authoring 22+10=32 agents in a 3-week phase already loaded with gate skills, directory scaffolding, and VS Code config. <strong>Fix:</strong> Step 6 split — 5 minimum-viable WORKFLOW agents for lifecycle E2E (in Step 6), full 32-agent authoring deferred to Milestone 2 post-P5 (noted in Step 6b). P3 steps updated from 9 to 10.</p>
+        </div>
+
+        <div style="border:1px solid rgba(245,158,11,0.3); border-radius:10px; padding:0.75rem; background:rgba(245,158,11,0.06);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <span style="font-weight:700; font-size:0.82rem; color:var(--color-warning);">RISK-04 · P4 VS Code Skill Discovery Mechanism Unverified</span>
+            <span style="font-size:0.7rem; font-weight:700; background:rgba(16,185,129,0.15); color:var(--color-success); border:1px solid rgba(16,185,129,0.3); border-radius:999px; padding:0.2rem 0.55rem;">MITIGATED</span>
+          </div>
+          <p style="font-size:0.78rem; color:var(--color-text-secondary);"><code style="font-size:0.75rem; color:var(--color-warning);">skill-paths.json</code> is a CORTEX-internal reference file. VS Code Copilot does not natively read it — skill discovery uses <code>mcp.json</code> or workspace agent manifests. <strong>Fix:</strong> P4 Surface B now requires a pre-validation step to confirm the actual VS Code discovery mechanism before claiming 137 skills are discoverable. Pass criteria updated to 19 core skills (achievable now), 137 deferred to Milestone 2.</p>
+        </div>
+
+      </div>
     </section>
   </main>
 
@@ -724,6 +764,7 @@
         setInterval(refreshFromYaml, yamlPollSeconds * 1000);
       }
     })();
+  </script>
   <nav class="hub-nav">
     <div class="hub-nav-left">
       <a href="./index.html" class="hub-btn">← Hub</a>

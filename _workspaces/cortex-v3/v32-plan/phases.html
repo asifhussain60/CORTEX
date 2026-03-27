@@ -699,13 +699,13 @@
             <tr style="border-bottom: 1px solid var(--border-color);">
               <td style="padding: 0.75rem; color: var(--color-text-primary);">P2</td>
               <td style="padding: 0.75rem; color: var(--color-text-secondary);">4 weeks</td>
-              <td style="padding: 0.75rem; color: var(--color-text-secondary);">Agent Architecture + LENS Pipeline</td>
-              <td style="text-align: center; padding: 0.75rem;"><span style="color: var(--color-warning);">🟡 IN PROGRESS</span></td>
+              <td style="padding: 0.75rem; color: var(--color-text-secondary);">Agent Architecture + LENS Pipeline <span style="font-size:0.72rem; color:var(--color-warning);">· 16 steps (Step 0: branch pre-condition added)</span></td>
+              <td style="text-align: center; padding: 0.75rem;"><span style="color: var(--color-warning);">⏳ PLANNED</span></td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border-color);">
               <td style="padding: 0.75rem; color: var(--color-text-primary);">P3</td>
               <td style="padding: 0.75rem; color: var(--color-text-secondary);">3 weeks</td>
-              <td style="padding: 0.75rem; color: var(--color-text-secondary);">Skill Consolidation + WORKFLOW Wiring</td>
+              <td style="padding: 0.75rem; color: var(--color-text-secondary);">Feature Delivery Lifecycle + Unified Capability Integration <span style="font-size:0.72rem; color:var(--color-warning);">· 10 steps · 5 MVS agents (32 deferred to M2)</span></td>
               <td style="text-align: center; padding: 0.75rem;"><span style="color: var(--accent-primary);">📋 PLANNED</span></td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border-color);">
@@ -750,45 +750,61 @@
           <div class="phase-card">
             <div class="phase-card-header">
               <div class="phase-card-title">P2 — Agent Architecture + LENS</div>
-              <span class="phase-badge progress">🟡 IN PROGRESS</span>
+              <span class="phase-badge planned">⏳ PLANNED</span>
             </div>
-            <div class="phase-meta">Duration: <strong>4 weeks</strong></div>
+            <div class="phase-meta">Duration: <strong>4 weeks · 16 steps</strong></div>
             <div class="phase-content">
-              <strong>Goal:</strong> Create 10+ agent files, AGENT-INDEX.md (34 intent entries).
+              <strong>Goal:</strong> Create 10 agent files, AGENT-INDEX.md (34 intent entries), LENS pipeline.
+              <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.3); border-radius:6px; padding:0.5rem 0.75rem; margin:0.6rem 0; font-size:0.78rem; color:var(--color-text-secondary);">
+                <strong style="color:var(--color-error);">Step 0 (MANDATORY FIRST):</strong> git status --porcelain (must be empty) → git switch -c cortex-v3-clean. Do not begin agent authoring on <code>develop</code>.
+              </div>
+              <div style="background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.25); border-radius:6px; padding:0.5rem 0.75rem; margin:0.6rem 0; font-size:0.78rem; color:var(--color-text-secondary);">
+                <strong style="color:var(--color-warning);">Naming convention:</strong> v3.2 agents are <code>*.agent.md</code> in <code>.github/agents/</code> root only. Legacy <code>.github/agents/core/*.md</code> stubs are pre-v3.2 — do not modify or confuse them with the 10 new agents.
+              </div>
               <ul>
                 <li>.github/agents/AGENT-INDEX.md (34 intents)</li>
-                <li>cortex-code.agent.md (IMPLEMENT/FIX/REFACTOR)</li>
-                <li>cortex-present.agent.md (REVIEW)</li>
-                <li>cortex-audit.agent.md (AUDIT)</li>
-                <li>cortex-orchestrate.agent.md (DESIGN/PLAN)</li>
-                <li>cortex-diagnose.agent.md (DEBUG, 8 strategies)</li>
-                <li>cortex-diagnose.agent.md (RCA, 4 methodologies)</li>
-                <li>cortex-intel.agent.md (ONBOARD, LENS)</li>
-                <li>cortex-governance.agent.md (GOVERNANCE)</li>
-                <li>cortex-query.agent.md (QUERY/INTRODUCE)</li>
-                <li>Agent routing E2E tests (≥9/10 intents)</li>
+                <li>cortex-code.agent.md (IMPLEMENT/FIX/REFACTOR/TEST)</li>
+                <li>cortex-diagnose.agent.md (DEBUG 8 strategies + RCA 4 methodologies)</li>
+                <li>cortex-audit.agent.md (AUDIT/HEALTH/VACUUM/GOVERNANCE)</li>
+                <li>cortex-orchestrate.agent.md (PLAN/DESIGN/WORKFLOW — delegates to WORKFLOW)</li>
+                <li>cortex-intel.agent.md (ONBOARD/ANALYZE — LENS 4-phase pipeline)</li>
+                <li>cortex-distill.agent.md (DIGEST/DISTILL/TRAIN)</li>
+                <li>cortex-present.agent.md (REVIEW/CONVERT_TO_HTML/DOCUMENT)</li>
+                <li>cortex-lint.agent.md (13-dimension DoD — internal gate)</li>
+                <li>cortex-interact.agent.md (QUERY/INTRODUCE/REPHRASE)</li>
+                <li>cortex-platform.agent.md (DEPLOY/WORKFLOW_COMPOSE)</li>
+                <li>.vscode/mcp.json (GitHub Remote HTTP MCP)</li>
+                <li>Top-10 intent routing E2E validation</li>
+                <li>LENS E2E smoke: cortex-intel scans Cortex → schema-valid model.yaml</li>
               </ul>
-              <strong style="display: block; margin-top: 0.75rem;">Gate:</strong> agent-e2e tests &lt;5min, ≥9/10 pass
+              <strong style="display: block; margin-top: 0.75rem;">Gate:</strong> 10 *.agent.md present, AGENT-INDEX routes 34 intents, LENS E2E valid, top-10 routing passes
             </div>
           </div>
 
           <div class="phase-card">
             <div class="phase-card-header">
-              <div class="phase-card-title">P3 — Skills + WORKFLOW Wiring</div>
+              <div class="phase-card-title">P3 — Feature Delivery Lifecycle + Capability Integration</div>
               <span class="phase-badge planned">📋 PLANNED</span>
             </div>
-            <div class="phase-meta">Duration: <strong>3 weeks</strong></div>
+            <div class="phase-meta">Duration: <strong>3 weeks · 10 steps</strong></div>
             <div class="phase-content">
-              <strong>Goal:</strong> Consolidate 137 unified skills, register all, wire gate skills.
+              <strong>Goal:</strong> 4 gate skills, 5 MVS WORKFLOW delegation agents, lifecycle E2E.
+              <div style="background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.25); border-radius:6px; padding:0.5rem 0.75rem; margin:0.6rem 0; font-size:0.78rem; color:var(--color-text-secondary);">
+                <strong style="color:var(--color-warning);">Scope de-risked:</strong> Full 22+10=32 workflow &amp; knowledge agents deferred to <strong>Milestone 2</strong> (post-P5). P3 delivers only the 5 MVS WORKFLOW agents directly required for 7-stage lifecycle E2E: pm-intent-creator, architect, dev-story-implementer, test-critic, gate-deployment-readiness.
+              </div>
               <ul>
-                <li>Create 4 gate skill files (readiness, review, security, deployment)</li>
-                <li>Register gate skills in cortex-registry</li>
-                <li>Wire gates to workflow-repo Stages 1/3/4/6</li>
-                <li>Inventory 19 existing + 118 new = 137 skills</li>
-                <li>Create missing skill stubs with schema</li>
-                <li>Self-onboard test on Cortex</li>
+                <li>gate-readiness.agent.md (Stage 1 DoR gate)</li>
+                <li>gate-security.agent.md (Stage 3 — 6-point checklist)</li>
+                <li>gate-review.agent.md (Stage 5 — PR quality)</li>
+                <li>gate-deployment.agent.md (Stage 6 — CI/health/MCP)</li>
+                <li>5 MVS WORKFLOW delegation agents (.github/agents/workflow/)</li>
+                <li>cortex-orchestrate wired to WORKFLOW delegation map</li>
+                <li>Capability-area directories scaffolded (full skills deferred to M2)</li>
+                <li>.vscode/settings.json + skill-paths.json (CORTEX-internal reference)</li>
+                <li>Domain skill catalog structure (9 directories)</li>
+                <li>Lifecycle E2E test — all 7 stages, all 4 gates PASS</li>
               </ul>
-              <strong style="display: block; margin-top: 0.75rem;">Pass criteria:</strong> grep -c "name:" cortex-registry/skills/*.yaml ≥ 137
+              <strong style="display: block; margin-top: 0.75rem;">Gate:</strong> 4 gate agents + 5 MVS WORKFLOW agents present, lifecycle E2E passes all 7 stages
             </div>
           </div>
 
@@ -897,8 +913,32 @@
       </section>
     </div>
 
+    <div class="container" style="margin-bottom: 0; padding-bottom: 0;">
+      <section style="background:rgba(26,31,58,0.55); border:1px solid rgba(245,158,11,0.3); border-radius:14px; padding:1.5rem; margin-bottom:1.5rem;">
+        <h2 style="font-size:1.05rem; margin-bottom:1rem; color:var(--color-warning); font-family:'Space Grotesk',sans-serif;">⚠ Holistic Review — 4 Issues Fixed (2026-03-27)</h2>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+          <div style="border:1px solid rgba(239,68,68,0.25); border-radius:8px; padding:0.7rem; background:rgba(239,68,68,0.05);">
+            <div style="font-size:0.78rem; font-weight:700; color:var(--color-error); margin-bottom:0.3rem;">RISK-01 · Branch Pre-condition <span style="color:var(--color-success);">✓ FIXED</span></div>
+            <p style="font-size:0.76rem; color:var(--color-text-secondary);">P2 was missing an explicit branch switch step. <strong>Step 0</strong> added to P2: verify clean tree + <code>git switch -c cortex-v3-clean</code>. P2 total steps: 15 → 16.</p>
+          </div>
+          <div style="border:1px solid rgba(239,68,68,0.25); border-radius:8px; padding:0.7rem; background:rgba(239,68,68,0.05);">
+            <div style="font-size:0.78rem; font-weight:700; color:var(--color-error); margin-bottom:0.3rem;">RISK-02 · Agent Naming Ambiguity <span style="color:var(--color-success);">✓ FIXED</span></div>
+            <p style="font-size:0.76rem; color:var(--color-text-secondary);"><code>.github/agents/core/*.md</code> are legacy stubs (pre-v3.2). v3.2 agents are <code>*.agent.md</code> in <code>.github/agents/</code> root. <strong>naming_convention_note</strong> added to P2 in YAML.</p>
+          </div>
+          <div style="border:1px solid rgba(245,158,11,0.25); border-radius:8px; padding:0.7rem; background:rgba(245,158,11,0.05);">
+            <div style="font-size:0.78rem; font-weight:700; color:var(--color-warning); margin-bottom:0.3rem;">RISK-03 · P3 Agent Scope Overload <span style="color:var(--color-success);">✓ FIXED</span></div>
+            <p style="font-size:0.76rem; color:var(--color-text-secondary);">32 agent authoring in 3 weeks was excess scope. P3 now delivers <strong>5 MVS agents</strong> for lifecycle E2E. Remaining 27 agents deferred to <strong>Milestone 2</strong>. P3 steps: 9 → 10.</p>
+          </div>
+          <div style="border:1px solid rgba(245,158,11,0.25); border-radius:8px; padding:0.7rem; background:rgba(245,158,11,0.05);">
+            <div style="font-size:0.78rem; font-weight:700; color:var(--color-warning); margin-bottom:0.3rem;">RISK-04 · VS Code Skill Discovery Unverified <span style="color:var(--color-success);">✓ MITIGATED</span></div>
+            <p style="font-size:0.76rem; color:var(--color-text-secondary);"><code>skill-paths.json</code> is not a native VS Code Copilot discovery config. P4 Surface B now requires pre-validation of the actual discovery mechanism. Pass criteria updated to 19 core skills (not 137).</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
     <footer>
-      <p>CORTEX v3.2.0 — Phases & Deprecation Plan</p>
+      <p>CORTEX v3.2.0 — Phases & Deprecation Plan · <span style="color:var(--color-success);">4 pre-execution issues resolved 2026-03-27</span></p>
       <p style="margin-top: 0.5rem; color: var(--color-text-muted);">Part of the consolidated sharp knife architecture roadmap. See <strong>Spoke 1: Overview</strong>, <strong>Spoke 2: Architecture</strong>, <strong>Spoke 3: Lifecycle</strong>, <strong>Spoke 5: Governance</strong> for complete context.</p>
     </footer>
   </main>
