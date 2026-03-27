@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORTEX v3.2.0 — Overview & Ecosystem</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --accent-primary: #00d4ff;
+      --accent-secondary: #7b61ff;
+      --bg-primary: #0a0e27;
+      --bg-secondary: #1a1f3a;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-error: #ef4444;
+      --color-text-primary: #f0f4f8;
+      --color-text-secondary: #cbd5e1;
+      --color-text-tertiary: #94a3b8;
+      --color-text-muted: #64748b;
+      --border-subtle: rgba(0, 212, 255, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, sans-serif;
+      background: var(--bg-primary);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 2rem;
+      padding: 2.5rem 2rem;
+      border-bottom: 1px solid var(--border-subtle);
+      position: relative;
+      margin-bottom: 0;
+    }
+
+    .page-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--accent-primary) 20%, var(--accent-secondary) 50%, transparent 80%);
+    }
+
+    .page-header-logo {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .page-header-logo img {
+      width: 150px;
+      height: 150px;
+      filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+    }
+
+    .back-link {
+      font-size: 0.85rem;
+      color: var(--color-text-tertiary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover {
+      color: var(--accent-primary);
+    }
+
+    .page-header-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .page-header h1 {
+      font-family: Space Grotesk, sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .meta-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .meta-chip {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      background: rgba(0, 212, 255, 0.12);
+      color: var(--accent-primary);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      font-family: Inter, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .meta-chip.ok {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--color-success);
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+
+    .meta-chip.repo {
+      background: rgba(123, 97, 255, 0.12);
+      color: var(--accent-secondary);
+      border-color: rgba(123, 97, 255, 0.25);
+    }
+
+    /* ===== STICKY JUMP NAV ===== */
+    .jump-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(10, 14, 39, 0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border-subtle);
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      z-index: 50;
+    }
+
+    .jump-btn {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-tertiary);
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 0.4rem 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .jump-btn:hover {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.08);
+      border-color: rgba(0, 212, 255, 0.15);
+    }
+
+    .jump-btn.active {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.12);
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .jump-sep {
+      width: 1px;
+      height: 20px;
+      background: var(--border-subtle);
+      margin: 0 0.25rem;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .section {
+      margin-bottom: 4rem;
+      padding: 2.5rem;
+      border-radius: 12px;
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .section-alt {
+      background: rgba(26, 31, 58, 0.4);
+    }
+
+    .section h2 {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.4px;
+    }
+
+    .section h3 {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--color-text-secondary);
+    }
+
+    .section p {
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .section ul {
+      margin-left: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section li {
+      margin-bottom: 0.5rem;
+      color: var(--color-text-secondary);
+    }
+
+    /* ===== DIAGRAM CONTAINER ===== */
+    .diagram-container {
+      background: rgba(26, 31, 58, 0.6);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .diagram-container svg {
+      width: 100%;
+      height: auto;
+      max-height: 350px;
+      display: block;
+    }
+
+    /* ===== TABLE ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: rgba(0, 212, 255, 0.08);
+    }
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--accent-primary);
+      font-family: Space Grotesk, sans-serif;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.08);
+      color: var(--color-text-secondary);
+      font-size: 0.95rem;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ===== AC SATISFACTION BADGE ===== */
+    .ac-satisfaction-badge {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .ac-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.6rem;
+      border-radius: 16px;
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .ac-badge:hover {
+      background: rgba(0, 212, 255, 0.2);
+      border-color: rgba(0, 212, 255, 0.4);
+    }
+
+    /* ===== HUB NAV BAR (fixed bottom) ===== */
+    .hub-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: rgba(10, 14, 39, 0.95);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 2rem;
+      z-index: 40;
+    }
+
+    .hub-nav-left, .hub-nav-center, .hub-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hub-nav-left {
+      flex: 0 0 auto;
+    }
+
+    .hub-nav-center {
+      flex: 1;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .hub-nav-right {
+      flex: 0 0 auto;
+    }
+
+    .hub-btn {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-tertiary);
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 0.35rem 0.65rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .hub-btn:hover, .hub-btn.active {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.12);
+      border-color: rgba(0, 212, 255, 0.25);
+    }
+
+    .hub-btn.active {
+      border-color: var(--accent-primary);
+    }
+
+    .hub-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--border-subtle);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      margin-top: 6rem;
+      margin-bottom: 44px;
+      padding: 2rem;
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+      color: var(--color-text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* ===== BACK TO TOP BUTTON ===== */
+    .back-top-btn {
+      position: fixed;
+      bottom: 60px;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      background: rgba(10, 14, 39, 0.9);
+      border: 2px solid var(--accent-primary);
+      border-radius: 50%;
+      color: var(--accent-primary);
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 30;
+    }
+
+    .back-top-btn.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-top-btn:hover {
+      background: rgba(0, 212, 255, 0.15);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .page-header {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.5rem 1.5rem;
+      }
+
+      .page-header-logo {
+        align-items: center;
+      }
+
+      .meta-chip-row {
+        justify-content: center;
+      }
+
+      .container {
+        padding: 2rem 1.5rem;
+      }
+
+      .section {
+        padding: 1.5rem;
+      }
+
+      .hub-nav {
+        padding: 0 1rem;
+        gap: 1rem;
+      }
+
+      .jump-nav {
+        gap: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .jump-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-logo">
+        <img src="./assets/images/cortex-logo-200.png" alt="CORTEX Logo">
+        <a href="./index.html" class="back-link">← All Walkthroughs</a>
+      </div>
+      <div class="page-header-content">
+        <h1>CORTEX v3.2.0 — Overview & Ecosystem</h1>
+        <div class="meta-chip-row">
+          <span class="meta-chip repo">Foundations.Cortex</span>
+          <span class="meta-chip ok">Planning Complete</span>
+          <span class="meta-chip">Spoke 1 of 5</span>
+          <span class="meta-chip">2026-03-27</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STICKY JUMP NAV -->
+    <nav class="jump-nav">
+      <a href="#summary" class="jump-btn active">Summary</a>
+      <div class="jump-sep"></div>
+      <a href="#evolution" class="jump-btn">Evolution</a>
+      <div class="jump-sep"></div>
+      <a href="#ecosystem" class="jump-btn">Ecosystem</a>
+      <div class="jump-sep"></div>
+      <a href="#decisions" class="jump-btn">Decisions</a>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+      <!-- SECTION 1: SUMMARY -->
+      <section class="section" id="summary">
+        <h2>What is v3.2.0?</h2>
+        <p>Consolidated Sharp Knife — an independent, comprehensive review of the live Foundations.Cortex repository state, followed by corrected planning and architecture simplification.</p>
+
+        <h3>The Reality Check</h3>
+        <p>The v3.1 plan claimed 275 orchestrators and 8 phases, but an independent audit of the live repo revealed the truth:</p>
+        <ul>
+          <li><strong>381 orchestrators</strong> actually exist (not 275)</li>
+          <li><strong>74 MCP tool files</strong> defined</li>
+          <li><strong>19 skills</strong> in the original manifest, unified to <strong>137 total</strong></li>
+          <li><strong>1,428 test files</strong> covering live behavior</li>
+        </ul>
+
+        <p>The v3.1 plan also proposed overengineered features (Release Evidence Mesh, SHA-256 plugin signing) that didn't match real repo needs. <strong>v3.2.0 is the corrected, simplified, executable plan</strong> based on what actually exists and what stakeholders genuinely require.</p>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="800" height="300" fill="rgba(26,31,58,0.3)"/>
+
+            <!-- Left box: v3.1 -->
+            <rect x="40" y="40" width="320" height="220" rx="8" fill="none" stroke="rgba(245,158,11,0.4)" stroke-width="2"/>
+            <text x="200" y="65" font-family="Space Grotesk, sans-serif" font-size="18" font-weight="600" fill="#f59e0b" text-anchor="middle">v3.1 Original</text>
+
+            <!-- v3.1 items (crossed out) -->
+            <line x1="55" y1="100" x2="120" y2="100" stroke="#f59e0b" stroke-width="2"/>
+            <text x="130" y="105" font-family="Inter" font-size="13" fill="rgba(245,158,11,0.6)">275 claimed orch</text>
+
+            <line x1="55" y1="130" x2="100" y2="130" stroke="#f59e0b" stroke-width="2"/>
+            <text x="130" y="135" font-family="Inter" font-size="13" fill="rgba(245,158,11,0.6)">8 phases</text>
+
+            <line x1="55" y1="160" x2="105" y2="160" stroke="#f59e0b" stroke-width="2"/>
+            <text x="130" y="165" font-family="Inter" font-size="13" fill="rgba(245,158,11,0.6)">76 DoD checks</text>
+
+            <line x1="55" y1="190" x2="80" y2="190" stroke="#f59e0b" stroke-width="2"/>
+            <text x="130" y="195" font-family="Inter" font-size="13" fill="rgba(245,158,11,0.6)">7 gate skills</text>
+
+            <!-- Right box: v3.2.0 -->
+            <rect x="440" y="40" width="320" height="220" rx="8" fill="none" stroke="rgba(0,212,255,0.4)" stroke-width="2"/>
+            <text x="600" y="65" font-family="Space Grotesk, sans-serif" font-size="18" font-weight="600" fill="#00d4ff" text-anchor="middle">v3.2.0 Actual</text>
+
+            <!-- v3.2.0 items (checked) -->
+            <text x="475" y="105" font-family="Inter" font-size="16" fill="#10b981">✓</text>
+            <text x="510" y="105" font-family="Inter" font-size="13" fill="#10b981">381 real orch</text>
+
+            <text x="475" y="135" font-family="Inter" font-size="16" fill="#10b981">✓</text>
+            <text x="510" y="135" font-family="Inter" font-size="13" fill="#10b981">5 phases</text>
+
+            <text x="475" y="165" font-family="Inter" font-size="16" fill="#10b981">✓</text>
+            <text x="510" y="165" font-family="Inter" font-size="13" fill="#10b981">40 DoD checks</text>
+
+            <text x="475" y="195" font-family="Inter" font-size="16" fill="#10b981">✓</text>
+            <text x="510" y="195" font-family="Inter" font-size="13" fill="#10b981">4 gate skills</text>
+          </svg>
+        </div>
+
+        <div class="ac-satisfaction-badge">
+          <span class="ac-badge">Overview-1</span>
+        </div>
+      </section>
+
+      <!-- SECTION 2: EVOLUTION -->
+      <section class="section section-alt" id="evolution">
+        <h2>Evolution: v3.0 → v3.1 → v3.2.0</h2>
+
+        <p>Three snapshots of the CORTEX framework, showing how understanding evolved:</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>v3.0 (2025)</th>
+              <th>v3.1 (Early 2026)</th>
+              <th>v3.2.0 (Mar 2026)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Orchestrators Claimed</strong></td>
+              <td>275</td>
+              <td>275 (incorrect)</td>
+              <td>381 (verified)</td>
+            </tr>
+            <tr>
+              <td><strong>Phases</strong></td>
+              <td>8</td>
+              <td>8</td>
+              <td>5 (consolidated)</td>
+            </tr>
+            <tr>
+              <td><strong>DoD Checks</strong></td>
+              <td>76</td>
+              <td>76</td>
+              <td>40 (meaningful)</td>
+            </tr>
+            <tr>
+              <td><strong>Gate Skills</strong></td>
+              <td>7</td>
+              <td>7</td>
+              <td>4 (real decisions)</td>
+            </tr>
+            <tr>
+              <td><strong>Active ADRs</strong></td>
+              <td>14</td>
+              <td>14</td>
+              <td>12 (2 withdrawn)</td>
+            </tr>
+            <tr>
+              <td><strong>Skills Unified</strong></td>
+              <td>133</td>
+              <td>133</td>
+              <td>137</td>
+            </tr>
+            <tr>
+              <td><strong>Key Removals</strong></td>
+              <td>—</td>
+              <td>none</td>
+              <td>Release Evidence Mesh, Plugin Governance, 2 ADRs</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="800" height="200" fill="rgba(26,31,58,0.3)"/>
+
+            <!-- Timeline line -->
+            <line x1="80" y1="100" x2="720" y2="100" stroke="rgba(0,212,255,0.3)" stroke-width="2"/>
+
+            <!-- v3.0 node -->
+            <circle cx="120" cy="100" r="8" fill="#f59e0b"/>
+            <text x="120" y="135" font-family="Space Grotesk" font-size="13" font-weight="600" fill="#f59e0b" text-anchor="middle">v3.0</text>
+            <text x="120" y="150" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">2025</text>
+
+            <!-- v3.1 node -->
+            <circle cx="420" cy="100" r="8" fill="#f59e0b"/>
+            <text x="420" y="135" font-family="Space Grotesk" font-size="13" font-weight="600" fill="#f59e0b" text-anchor="middle">v3.1</text>
+            <text x="420" y="150" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">Early 2026</text>
+            <text x="420" y="165" font-family="Inter" font-size="10" fill="rgba(245,158,11,0.6)" text-anchor="middle">Incomplete audit</text>
+
+            <!-- v3.2.0 node -->
+            <circle cx="720" cy="100" r="10" fill="#00d4ff"/>
+            <text x="720" y="135" font-family="Space Grotesk" font-size="13" font-weight="600" fill="#00d4ff" text-anchor="middle">v3.2.0</text>
+            <text x="720" y="150" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">Mar 2026</text>
+            <text x="720" y="165" font-family="Inter" font-size="10" fill="#10b981" text-anchor="middle">Verified actual</text>
+          </svg>
+        </div>
+
+        <div class="ac-satisfaction-badge">
+          <span class="ac-badge">Overview-2</span>
+        </div>
+      </section>
+
+      <!-- SECTION 3: ECOSYSTEM -->
+      <section class="section" id="ecosystem">
+        <h2>Three-Repo Ecosystem</h2>
+
+        <p>CORTEX v3.2.0 operates within a broader ecosystem of three repositories that have distinct but complementary roles:</p>
+
+        <h3>Foundations.Cortex</h3>
+        <p>The CORTEX engine and governance framework. Contains:</p>
+        <ul>
+          <li>381 orchestrators (the coordination layer)</li>
+          <li>74 MCP tool files (Python-based stateful engine)</li>
+          <li>19 core skills unified to 137 total</li>
+          <li>Gate and phase management</li>
+          <li>ADR and decision traceability</li>
+        </ul>
+
+        <h3>adlc-copilot</h3>
+        <p>Feature delivery workflow. Contains 7 agents and 26+ skills focused on the ADLC pipeline. CORTEX <strong>delegates delivery TO this repo</strong> — it does not reinvent feature workflows. CORTEX is the conductor, adlc-copilot is the implementor.</p>
+
+        <h3>purple-platform-copilot</h3>
+        <p>Domain expertise library with 78+ skills across 9 domains. Serves as a knowledge source that CORTEX consumes when domain expertise is needed.</p>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="800" height="400" fill="rgba(26,31,58,0.3)"/>
+
+            <!-- Left: adlc-copilot -->
+            <rect x="40" y="120" width="220" height="160" rx="8" fill="none" stroke="rgba(123,97,255,0.4)" stroke-width="2"/>
+            <text x="150" y="145" font-family="Space Grotesk" font-size="14" font-weight="600" fill="#7b61ff" text-anchor="middle">adlc-copilot</text>
+            <text x="150" y="165" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">7 agents</text>
+            <text x="150" y="185" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">26+ skills</text>
+            <text x="150" y="205" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">Feature delivery</text>
+            <text x="150" y="225" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">pipeline owner</text>
+
+            <!-- Center: Foundations.Cortex -->
+            <rect x="320" y="80" width="220" height="240" rx="8" fill="none" stroke="rgba(0,212,255,0.5)" stroke-width="3"/>
+            <text x="430" y="110" font-family="Space Grotesk" font-size="16" font-weight="600" fill="#00d4ff" text-anchor="middle">Foundations.Cortex</text>
+            <text x="430" y="135" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">381 orchestrators</text>
+            <text x="430" y="155" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">74 MCP tools</text>
+            <text x="430" y="175" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">137 unified skills</text>
+            <text x="430" y="195" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">Gate + phase mgmt</text>
+            <text x="430" y="215" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">Conductor</text>
+
+            <!-- Right: purple-platform -->
+            <rect x="600" y="120" width="220" height="160" rx="8" fill="none" stroke="rgba(123,97,255,0.4)" stroke-width="2"/>
+            <text x="710" y="145" font-family="Space Grotesk" font-size="14" font-weight="600" fill="#7b61ff" text-anchor="middle">purple-platform-copilot</text>
+            <text x="710" y="165" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">78+ skills</text>
+            <text x="710" y="185" font-family="Inter" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">9 domains</text>
+            <text x="710" y="205" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">Domain knowledge</text>
+            <text x="710" y="225" font-family="Inter" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">source</text>
+
+            <!-- Arrows -->
+            <!-- Cortex -> adlc -->
+            <path d="M 320 200 Q 260 200 260 200" fill="none" stroke="rgba(123,97,255,0.5)" stroke-width="2" marker-end="url(#arrowhead-purple)"/>
+            <text x="280" y="190" font-family="Inter" font-size="11" fill="var(--color-text-muted)">delegates</text>
+            <text x="280" y="205" font-family="Inter" font-size="11" fill="var(--color-text-muted)">delivery</text>
+
+            <!-- Cortex <- purple -->
+            <path d="M 540 200 Q 600 200 600 200" fill="none" stroke="rgba(123,97,255,0.5)" stroke-width="2" marker-end="url(#arrowhead-purple)"/>
+            <text x="560" y="190" font-family="Inter" font-size="11" fill="var(--color-text-muted)">consumes</text>
+            <text x="560" y="205" font-family="Inter" font-size="11" fill="var(--color-text-muted)">expertise</text>
+
+            <!-- Arrow markers -->
+            <defs>
+              <marker id="arrowhead-purple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                <polygon points="0 0, 10 3, 0 6" fill="rgba(123,97,255,0.5)"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="ac-satisfaction-badge">
+          <span class="ac-badge">Overview-3</span>
+        </div>
+      </section>
+
+      <!-- SECTION 4: DECISIONS -->
+      <section class="section section-alt" id="decisions">
+        <h2>Key Decisions Made</h2>
+
+        <p>Based on an independent GitHub Copilot AI recommendation and stakeholder review, the following decisions were made for v3.2.0:</p>
+
+        <h3>What We Agreed With</h3>
+        <ul>
+          <li><strong>3-wave incremental deprecation:</strong> Retire old skills gradually, not with a big-bang archive cutover</li>
+          <li><strong>Agent + Engine complement:</strong> Conversational agents (Claude in browser) handle user interaction; Python MCP handles stateful engine logic</li>
+          <li><strong>Reduce gate skills 7 → 4:</strong> Keep only real decision points (compliance, traceability, performance, quality)</li>
+          <li><strong>Reduce DoD 76 → 40:</strong> Focus on checks that meaningfully impact delivery quality</li>
+        </ul>
+
+        <h3>What We Disagreed With or Removed</h3>
+        <ul>
+          <li><strong>Release Evidence Mesh (ADR-V3-014 WITHDRAWN):</strong> Proposed 8-layer certification for markdown files — overengineered. Real evidence is in git history and test files.</li>
+          <li><strong>Plugin Governance with SHA-256 signing (ADR-V3-013 WITHDRAWN):</strong> Premature cryptographic overhead. Not required for v3.2 scope.</li>
+          <li><strong>Surface parity testing (5 IDEs):</strong> Out of scope. CORTEX orchestrates, agents render — parity is agent problem, not CORTEX.</li>
+          <li><strong>gate-compliance and gate-traceability skills:</strong> Redundant. SKULL hook + CORE plugin + git hooks already cover this.</li>
+        </ul>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="800" height="350" fill="rgba(26,31,58,0.3)"/>
+
+            <!-- Left column: Agreed -->
+            <rect x="40" y="30" width="320" height="300" rx="8" fill="none" stroke="rgba(16,185,129,0.3)" stroke-width="2"/>
+            <text x="200" y="60" font-family="Space Grotesk" font-size="16" font-weight="600" fill="#10b981" text-anchor="middle">✓ Agreed</text>
+
+            <!-- Agreed items -->
+            <text x="60" y="95" font-family="Inter" font-size="12" fill="var(--color-text-secondary)">3-wave incremental</text>
+            <text x="60" y="112" font-family="Inter" font-size="12" fill="var(--color-text-secondary)">deprecation</text>
+            <circle cx="55" cy="103" r="3" fill="#10b981"/>
+
+            <text x="60" y="155" font-family="Inter" font-size="12" fill="var(--color-text-secondary)">Agent + Engine</text>
+            <text x="60" y="172" font-family="Inter" font-size="12" fill="var(--color-text-secondary)">complement</text>
+            <circle cx="55" cy="163" r="3" fill="#10b981"/>
+
+            <text x="60" y="215" font-family="Inter" font-size="12" fill="var(--color-text-secondary)">4 real gate</text>
+            <text x="60" y="232" font-family="Inter" font-size="12" fill="var(--color-text-secondary)">decision points</text>
+            <circle cx="55" cy="223" r="3" fill="#10b981"/>
+
+            <text x="60" y="275" font-family="Inter" font-size="12" fill="var(--color-text-secondary)">40 meaningful</text>
+            <text x="60" y="292" font-family="Inter" font-size="12" fill="var(--color-text-secondary)">DoD checks</text>
+            <circle cx="55" cy="283" r="3" fill="#10b981"/>
+
+            <!-- Right column: Disagreed -->
+            <rect x="440" y="30" width="320" height="300" rx="8" fill="none" stroke="rgba(239,68,68,0.3)" stroke-width="2"/>
+            <text x="600" y="60" font-family="Space Grotesk" font-size="16" font-weight="600" fill="#ef4444" text-anchor="middle">✗ Removed</text>
+
+            <!-- Disagreed items -->
+            <text x="460" y="95" font-family="Inter" font-size="12" fill="var(--color-text-muted)">Release Evidence</text>
+            <text x="460" y="112" font-family="Inter" font-size="12" fill="var(--color-text-muted)">Mesh (ADR-014)</text>
+            <circle cx="455" cy="103" r="3" fill="#ef4444"/>
+
+            <text x="460" y="155" font-family="Inter" font-size="12" fill="var(--color-text-muted)">Plugin SHA-256</text>
+            <text x="460" y="172" font-family="Inter" font-size="12" fill="var(--color-text-muted)">signing (ADR-013)</text>
+            <circle cx="455" cy="163" r="3" fill="#ef4444"/>
+
+            <text x="460" y="215" font-family="Inter" font-size="12" fill="var(--color-text-muted)">IDE parity testing</text>
+            <text x="460" y="232" font-family="Inter" font-size="12" fill="var(--color-text-muted)">(5 surfaces)</text>
+            <circle cx="455" cy="223" r="3" fill="#ef4444"/>
+
+            <text x="460" y="275" font-family="Inter" font-size="12" fill="var(--color-text-muted)">Redundant gate</text>
+            <text x="460" y="292" font-family="Inter" font-size="12" fill="var(--color-text-muted)">skills</text>
+            <circle cx="455" cy="283" r="3" fill="#ef4444"/>
+          </svg>
+        </div>
+
+        <div class="ac-satisfaction-badge">
+          <span class="ac-badge">Overview-4</span>
+        </div>
+      </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>CORTEX v3.2.0 Architecture Plan — Spoke 1: Overview & Ecosystem</p>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--color-text-muted);">Generated 2026-03-27 | Foundations.Cortex Repository</p>
+    </footer>
+  </main>
+
+  <!-- BACK TO TOP BUTTON -->
+  <a href="#" class="back-top-btn" aria-label="Back to top">↑</a>
+
+  <!-- HUB NAV BAR (fixed bottom) -->
+  <nav class="hub-nav">
+    <div class="hub-nav-left">
+      <a href="./index.html" class="hub-btn">← Hub</a>
+    </div>
+    <div class="hub-nav-center">
+      <a href="./overview.html" class="hub-btn active">Overview</a>
+      <div class="hub-sep"></div>
+      <a href="./architecture.html" class="hub-btn">Architecture</a>
+      <div class="hub-sep"></div>
+      <a href="./lifecycle.html" class="hub-btn">Lifecycle</a>
+      <div class="hub-sep"></div>
+      <a href="./phases.html" class="hub-btn">Phases</a>
+      <div class="hub-sep"></div>
+      <a href="./governance.html" class="hub-btn">Governance</a>
+      <div class="hub-sep"></div>
+      <a href="./registry.html" class="hub-btn">Registry</a>
+    </div>
+    <div class="hub-nav-right"></div>
+  </nav>
+
+  <script>
+    // Jump nav active state tracking
+    const jumpButtons = document.querySelectorAll('.jump-btn');
+    const sections = document.querySelectorAll('.section');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          jumpButtons.forEach(btn => btn.classList.remove('active'));
+          const activeBtn = document.querySelector(`a[href="#${entry.target.id}"]`);
+          if (activeBtn) activeBtn.classList.add('active');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    sections.forEach(section => observer.observe(section));
+
+    // Back to top button
+    const backTopBtn = document.querySelector('.back-top-btn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backTopBtn.classList.add('show');
+      } else {
+        backTopBtn.classList.remove('show');
+      }
+    });
+
+    backTopBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1693 @@
+metadata:
+  version: 3.2.0
+  date: '2026-03-27'
+  previous_version: 3.1.0
+  codename: Consolidated Sharp Knife
+  migration_status: planning-complete
+  estimated_completion: "2026-05-15"
+  review_date: '2026-03-27'
+  review_status: consolidated-final
+  quality_security_review: '2026-03-27'
+  consolidation_notes: >
+    v3.2 consolidates v3.1 after independent review by Claude Code AI (Opus)
+    against the live Foundations.Cortex repo (381 orchestrators, 1362 Python files,
+    74 MCP tool files, 802 registry YAMLs, 1428 test files). Key changes:
+    corrected file counts to match actual repo, removed overengineered components
+    (Release Evidence Mesh, plugin governance, surface parity testing), reduced
+    DoD from 76 to 40 checks, gates from 7 to 4, phases from 8 to 5, adopted
+    incremental deprecation over big-bang archival of Python orchestrators.
+  cross_analysis_sources:
+    - "Claude v3.1 analysis (10 agents, 11 ADRs, 63 DoD)"
+    - "GPT v3.1 review (operational risk mitigations)"
+    - "Claude Code v3.2 consolidation (repo-validated, overengineering removed)"
+    - "ADLC-copilot onboarding intelligence (36 skills, 12 agents)"
+    - "Purple-platform-copilot onboarding intelligence (82 skills, 10 agents)"
+    - "CORTEX live prompt (381 orchestrators, 74 MCP tool files, 35 logical tools)"
+
+summary:
+  vision: >
+    CORTEX v3.2 layers a lightweight agent+skill architecture on top of the proven
+    Python MCP engine. Foundations.Cortex provides the governance engine and stateful
+    MCP tools. adlc-copilot provides the ADLC delivery workflow (dev+PM tracks,
+    36 skills, 12 agents). purple-platform-copilot provides the organizational
+    knowledge library (82 skills, 10 specialist agents, 9 domains). Together they
+    form a single unified system. Agents handle the conversational layer. Python
+    handles the stateful engine. The orchestrator monolith is incrementally
+    deprecated — not big-bang archived.
+
+  key_outcomes:
+    - "381 Python orchestrators incrementally deprecated — stateful logic preserved as MCP tools, routing logic replaced by agents"
+    - "10 CORTEX agents + 12 ADLC agents + 10 Purple agents = 32 total agents"
+    - "19 existing CORTEX skills + 36 ADLC + 82 Purple = 137 unified skills (registered, not duplicated)"
+    - "Three-repo integration: Foundations.Cortex (engine) + adlc-copilot (workflow) + purple-platform-copilot (knowledge)"
+    - "2 primary deployment surfaces: Claude Code CLI + VS Code Copilot (Cowork, Cursor, Gemini = bonus)"
+    - "Python MCP tools retained as stateful engine layer — agents invoke, not replace"
+    - "WorkflowComposer retained as MCP bridge — enforcement spine elevated, not replaced"
+    - "Universal Response Contract: 46K-token Python system → 500-token YAML spec"
+    - "Governance preserved: 40 SKULL rules + 70+ CORE rules (no new governance tiers added)"
+    - "40 DoD checks across 8 categories (was 76 across 15 — ceremony removed)"
+    - "4 gate skills (was 7 — deduplicated against existing enforcement)"
+    - "Feature Delivery Lifecycle delegates to adlc-copilot — CORTEX orchestrates, not reinvents"
+
+  principles:
+    - name: Agent-First
+      description: Every capability is an agent. Agents are markdown files, not Python classes.
+    - name: Skill as Contract
+      description: Skills define what an agent can do. SKILL.md is the interface, not code.
+    - name: Engine Stays
+      description: >
+        Python MCP tools are the stateful engine layer. Agents handle conversation
+        and routing. Orchestrators with stateful logic (TDD state machine, RCA with
+        SQLite, enforcement hooks, WorkflowComposer templates) are preserved as MCP
+        tools. Only pure routing/delegation orchestrators are deprecated.
+    - name: Incremental Deprecation
+      description: >
+        No big-bang archive. Orchestrators are deprecated in waves as agents prove
+        they can replace them. Each wave validates zero capability loss before
+        proceeding. _legacy/ is the staging area, not a graveyard.
+    - name: Progressive Intelligence
+      description: Repository understanding builds in layers. Agents consume what they need.
+    - name: Gate What Matters
+      description: >
+        4 gates at real decision points. No ceremonial gates that duplicate existing
+        enforcement (SKULL/CORE rules, CI checks, PR process).
+    - name: Three-Repo Unity
+      description: >
+        Foundations.Cortex (engine) + adlc-copilot (workflow) + purple-platform-copilot
+        (knowledge) form one system. CORTEX orchestrates the lifecycle that adlc-copilot
+        already defines — it does not redefine it.
+
+three_repo_ecosystem:
+  overview: >
+    The CORTEX ecosystem spans three repositories. Each repo has a distinct
+    responsibility. No repo duplicates another's concern. Integration is via
+    skill path registration and shared MCP config — not monorepo merging.
+
+  repos:
+    - name: Foundations.Cortex
+      role: "Engine & Governance"
+      description: "Governance engine, MCP tools, design tokens, orchestration pipeline, convergence gates"
+      actual_state:
+        python_orchestrators: 381
+        python_source_files: 1362
+        mcp_tool_files: 74
+        mcp_logical_tools: 35
+        governance_yamls: 59
+        registry_yamls: 802
+        workflow_templates: "~80"
+        existing_skills: 19
+        existing_agents: 3
+        test_files: 1428
+      deployment_surfaces:
+        - "Claude Code CLI via global CLAUDE.md + /cortex command (PRIMARY)"
+        - "VS Code Copilot via .vscode/settings.json MCP config (PRIMARY)"
+        - "Claude Desktop (Cowork) via cortex.skill (BONUS)"
+        - "Cursor / Gemini CLI — auto-discover SKILL.md (BONUS)"
+      mcp_config:
+        type: "stdio"
+        command: "python -m cortex.mcp"
+        logical_tools: 35
+        tool_files: 74
+        rate_limit: "50 rps steady-state, 100 burst"
+
+    - name: adlc-copilot
+      role: "Workflow & Delivery"
+      description: "ADLC reference implementation — structured dev+PM workflows, intent-to-code pipeline"
+      key_assets:
+        - "36 skills (22 dev + 14 PM)"
+        - "12 agents (7 dev + 5 PM)"
+        - "3 plugins (all-skills, dev-skills, pm-skills)"
+        - "Intent→Story→Archetype→Skill→Code delivery chain"
+      deployment_surfaces:
+        - "VS Code Copilot via skills/dev and skills/pm paths"
+
+    - name: purple-platform-copilot
+      role: "Knowledge & Expertise"
+      description: "Organizational knowledge library — 82 domain skills, 10 specialist agents"
+      key_assets:
+        - "82 foundational skills (9 domains)"
+        - "10 specialized agents"
+        - "Pattern library (.ai/patterns/)"
+        - "Template library (.ai/templates/)"
+      domains:
+        - "Python (14 skills)"
+        - "Testing (5 skills)"
+        - "Security (8 skills)"
+        - "Architecture (9 skills)"
+        - "Infrastructure/Kubernetes (8 skills)"
+        - "Operations (7 skills)"
+        - "APIs (6 skills)"
+        - "Data (5 skills)"
+        - "General development (20 skills)"
+      deployment_surfaces:
+        - "VS Code Copilot via skills/ path auto-discovery"
+
+  integration_model:
+    skill_path_registration:
+      description: "VS Code discovers skills from registered paths at session start"
+      paths:
+        - path: "purple-platform-copilot/skills"
+          contents: "Platform-wide skills (82)"
+        - path: "adlc-copilot/skills/dev"
+          contents: "ADLC developer workflow skills (22)"
+        - path: "adlc-copilot/skills/pm"
+          contents: "ADLC product management skills (14)"
+    conflict_resolution:
+      precedence:
+        - "1. CORTEX governance (SKULL/CORE rules) — immutable"
+        - "2. Project-level skills (.github/skills/) — repo-specific"
+        - "3. Registered skill paths (purple-platform, adlc) — cross-repo"
+
+architecture_decisions:
+  adr_count: 13
+  note: >
+    ADRs 001-004 from v3.0.1, ADRs 005-012 from v3.1+. ADR-013 (Plugin governance)
+    and ADR-014 (Release Evidence Mesh) WITHDRAWN as premature — to be reconsidered
+    when third-party plugins or multi-team releases are needed.
+  decisions:
+    - id: ADR-V3-001
+      title: cortex-onboard as primary repo intelligence orchestrator
+      status: ACCEPTED
+      version: 3.0.1
+
+    - id: ADR-V3-002
+      title: Centralized HTML rendering via cortex-html-render
+      status: ACCEPTED
+      version: 3.0.1
+
+    - id: ADR-V3-003
+      title: Canonical repo intelligence model as shared contract
+      status: ACCEPTED
+      version: 3.0.1
+
+    - id: ADR-V3-004
+      title: Archive pr-walkthrough-generator as duplicate
+      status: ACCEPTED
+      version: 3.0.1
+
+    - id: ADR-V3-005
+      title: Incrementally deprecate Python orchestrators — agents layer on top of MCP engine
+      status: ACCEPTED
+      version: 3.2.0
+      rationale: >
+        The 381 Python orchestrator files contain two categories of logic:
+        (A) Stateful engine logic — TDD state machine, RCA with SQLite persistence,
+        enforcement hooks, WorkflowComposer template execution, challenge engine.
+        These MUST be preserved as MCP tools.
+        (B) Routing/delegation logic — intent classification, workflow selection,
+        response formatting. These are replaceable by agents + SKILL.md.
+        v3.2 deprecates category B incrementally. Category A stays as the Python
+        engine layer. No big-bang archive.
+      consequences:
+        - "Orchestrators deprecated in 3 waves (routing → formatting → delegation)"
+        - "10 agents defined as SKILL.md files in .github/agents/"
+        - "Stateful orchestrators (TDD, RCA, Enforcement, WorkflowComposer) preserved as MCP tools"
+        - "Python cortex/ package retains: MCP tools + stateful engines + utilities"
+        - "_legacy/ used as staging — files move there only after agent replacement proves parity"
+
+    - id: ADR-V3-006
+      title: Feature Delivery Lifecycle delegates to adlc-copilot pipeline
+      status: ACCEPTED
+      version: 3.2.0
+      rationale: >
+        adlc-copilot already implements a proven Intent→Story→Archetype→Skill→Code
+        delivery chain with 12 agents and 36 skills. CORTEX should orchestrate this
+        pipeline, not reinvent it. cortex-orchestrate acts as the conductor that
+        calls ADLC agents at each stage and enforces CORTEX governance gates.
+      consequences:
+        - "cortex-orchestrate delegates to ADLC smart-delegator, architect, story-implementer"
+        - "4 gate skills enforce quality at key boundaries (not every boundary)"
+        - "No duplicate lifecycle definition — adlc-copilot IS the lifecycle"
+
+    - id: ADR-V3-007
+      title: Domain skill catalogs with team self-service
+      status: ACCEPTED
+      version: 3.1.0
+
+    - id: ADR-V3-008
+      title: Gate skills as quality enforcement primitives (4 gates, not 7)
+      status: ACCEPTED
+      version: 3.2.0
+      rationale: >
+        4 gates at real decision points: readiness (before work starts), security
+        (before code merges), review (before PR approval), deployment (before ship).
+        Removed: gate-compliance (SKULL/CORE already enforce this), gate-traceability
+        (git hooks and PR templates already enforce this), gate-evidence (premature
+        certification infrastructure).
+      consequences:
+        - "4 gate skills: readiness, security, review, deployment"
+        - "Gates return PASS/BLOCK verdicts"
+        - "Existing SKULL/CORE enforcement + CI checks handle compliance and traceability"
+
+    - id: ADR-V3-009
+      title: ADRs document decisions — governance enforcement stays in SKULL/CORE
+      status: ACCEPTED
+      version: 3.2.0
+      rationale: >
+        ADRs record WHY decisions were made (historical, immutable). SKULL/CORE rules
+        enforce WHAT must be done (living, automated). Gate skills enforce HOW at
+        boundaries. This is NOT a formal "3-tier governance model" — it's just good
+        engineering practice. No new governance surface to maintain.
+
+    - id: ADR-V3-010
+      title: "Quality-First, Security-First mindset embedded in every pipeline stage"
+      status: ACCEPTED
+      version: 3.1.0
+
+    - id: ADR-V3-011
+      title: "All agents connect to GitHub MCP server via standardized configuration"
+      status: ACCEPTED
+      version: 3.1.0
+
+    - id: ADR-V3-012
+      title: "Three-repo ecosystem with distinct responsibilities"
+      status: ACCEPTED
+      version: 3.1.0
+
+    - id: ADR-V3-013
+      title: "Plugin governance — versioning, signing, trust, and compatibility"
+      status: WITHDRAWN
+      version: 3.2.0
+      rationale: >
+        Premature. 3 known repos with 1 author. SHA-256 signing, trust levels, and
+        compatibility matrices solve a problem that doesn't exist yet. Revisit when
+        third-party contributors actually appear.
+
+    - id: ADR-V3-014
+      title: "Release Evidence Mesh replaces one-shot golden test"
+      status: WITHDRAWN
+      version: 3.2.0
+      rationale: >
+        8-layer verification with 7 signed proof artifacts is NASA-level certification
+        for markdown skill files. Replace with pragmatic 3-layer testing: smoke tests,
+        agent routing E2E, and self-onboard. Revisit signed evidence bundles when
+        multi-team releases require audit trails.
+
+overlap_zones:
+  total: 9
+  outstanding: 0
+  zones:
+    - id: Z1
+      severity: CRITICAL
+      name: Repo Analysis Duplication
+      resolution: "cortex-onboard = single source; others consume model.yaml"
+      status: RESOLVED
+    - id: Z2
+      severity: CRITICAL
+      name: HTML Generation Scatter
+      resolution: "Centralize to cortex-html-render; agents emit data only"
+      status: RESOLVED
+    - id: Z3
+      severity: HIGH
+      name: PR Walkthrough Duplication
+      resolution: "Archive pr-walkthrough-generator; cortex-pr is canonical"
+      status: ARCHIVED
+    - id: Z4
+      severity: HIGH
+      name: Design System v1/v2 Conflict
+      resolution: "Eradicate v1; design-tokens.yaml SSOT"
+      status: PURGED
+    - id: Z5
+      severity: MEDIUM
+      name: PR Review Scope Bleed
+      resolution: "cortex-pr-review scoped to deep review only"
+      status: SCOPED
+    - id: Z6
+      severity: HIGH
+      name: PR Generation Overlap
+      resolution: "Merge into cortex-pr sub-workflow"
+      status: MERGED
+    - id: Z7
+      severity: HIGH
+      name: Verification Overlap
+      resolution: "AC verification absorbed as lint dimension"
+      status: MERGED
+    - id: Z8
+      severity: MEDIUM
+      name: Planning & Orchestration Overlap
+      resolution: "Absorbed into feature orchestrator"
+      status: ABSORBED
+    - id: Z9
+      severity: HIGH
+      name: Cross-Repo Skill Duplication
+      resolution: "Precedence model (Purple=knowledge, CORTEX=governance, ADLC=workflow)"
+      status: RESOLVED
+
+workflow_composer:
+  status: "RETAINED — elevated to MCP bridge"
+  rationale: >
+    WorkflowComposer is CORTEX's enforcement spine. It contains stateful logic
+    that agents cannot replicate: template resolution, governance rule injection,
+    convergence tracking. Elevated to MCP tool, not replaced.
+  components:
+    python_core_files: 5
+    template_count: "~80 YAML workflow templates"
+    template_hierarchy: [Primitives, "Mode Workflows", Composites]
+    mcp_endpoint: cortex_workflow
+    mcp_operations: [op=compose, op=validate, op=execute]
+    enforced_rules: [CORE-008, CORE-048, CORE-064, CORE-068]
+
+response_contract:
+  status: "MIGRATION — Python engine → declarative YAML spec"
+  before:
+    files: 27
+    tokens: "46K"
+    ides_supported: 1
+  after:
+    files: 5
+    tokens: "~500"
+    ides_supported: "2 primary + 3 bonus"
+    spec_file: "cortex-response-spec.yaml (~500 tokens)"
+    content_pools: ["300 curated quotes", "200 SDLC principles", "300 AI adoption sparks"]
+    golden_format:
+      name: "5-Section Golden Format"
+      sections: [BLUF, "VP Coffee Test Narrative", "Structured Content", "Evidence/Traceability", Summary]
+      status: "Preserved exactly — enforcement mechanism changes, structure unchanged"
+
+architecture:
+  note: >
+    Key insight: agents handle the CONVERSATIONAL layer. Python MCP tools handle
+    the STATEFUL ENGINE layer. This is a complement pattern, not a replacement.
+  layers:
+    - layer: 1
+      name: Source Layer
+      description: "Repository file system, git history, AST, dependency graph"
+
+    - layer: 2
+      name: Intelligence Layer
+      description: "Single repo understanding pipeline — scans once, shares everywhere"
+      owner: cortex-intel
+      components:
+        - "LENS Pipeline (4 phases within cortex-intel agent)"
+        - "repo-intelligence-model.yaml (canonical shared contract)"
+      fallback: "LENS phases run independently; model.yaml cached; manual override via cortex-interact"
+
+    - layer: 3
+      name: Engine Layer
+      description: "Python MCP tools providing stateful logic, database access, enforcement"
+      components:
+        - name: "MCP Tool Server"
+          purpose: "35 logical tools via stdio (74 tool files)"
+        - name: "WorkflowComposer"
+          purpose: "~80 YAML templates, governance rule injection"
+        - name: "TDD State Machine"
+          purpose: "RED-GREEN-REFACTOR cycle tracking"
+        - name: "RCA Engine"
+          purpose: "4 methodologies, SQLite persistence"
+        - name: "Enforcement Engine"
+          purpose: "Pre-commit hooks, SKULL/CORE rule checking"
+        - name: "Challenge Engine"
+          purpose: "3-alternative generation, blind spot detection"
+        - name: "Gate Engine"
+          purpose: "4 gate skills, PASS/BLOCK verdicts"
+        - name: "Governance Engine"
+          purpose: "SKULL rules, drift locks, convergence gates"
+
+    - layer: 4
+      name: Agent Layer
+      description: "Conversational agents from all three repos"
+      cortex_agents: "10 (engine + governance)"
+      adlc_agents: "12 (workflow + delivery)"
+      purple_agents: "10 (knowledge + expertise)"
+      total_agents: 32
+
+  request_flow: >
+    User → /cortex → Agent (SKILL.md routes intent)
+      → MCP Tools (Python, stateful logic, DB)
+      → Governance Engine (SKULL/CORE rules, enforcement)
+      → Response Assembly (golden format, content pools)
+
+agents:
+  total: 10
+  design_principle: >
+    Users never see agent names — /cortex routes automatically. Agents handle the
+    conversational layer. Python MCP tools handle stateful logic. No agent replaces
+    TDD state machine, RCA engine, or WorkflowComposer — they invoke them via MCP.
+  reduction: "24 → 10 (58% fewer agents, zero capability loss)"
+
+  roster:
+    - name: cortex-code
+      purpose: "All code-touching work — TDD implementation, bug fixing, refactoring, test generation"
+      absorbs: [cortex-build, cortex-fix, cortex-refactor]
+      intents_served: [IMPLEMENT, FIX, REFACTOR, TEST]
+      triggers: ["build", "create", "add", "fix", "bug", "refactor", "improve", "test", "tdd"]
+      governance: [CORE-008, CORE-048, CORE-064, CORE-068]
+      mcp_dependencies: ["cortex_workflow (TDD templates)", "cortex_tdd (state machine)", "cortex_context (session)"]
+      lens_required: true
+      dor_required: true
+
+    - name: cortex-diagnose
+      purpose: "All troubleshooting — multi-stack debugging (8 strategies), root cause analysis (4 methodologies)"
+      absorbs: [cortex-debug, cortex-root-cause]
+      intents_served: [DEBUG, RCA]
+      triggers: ["debug", "trace", "root cause", "rca", "diagnose"]
+      mcp_dependencies: ["cortex_rca (4 methodologies, SQLite)", "cortex_context (session)"]
+      lens_required: true
+
+    - name: cortex-audit
+      purpose: "Governance scanning, health, cleanup, YAML cross-validation, convergence"
+      absorbs: [cortex-audit, cortex-cleanup, cortex-knowledge-guardian]
+      intents_served: [AUDIT, TOTALRECALL, HEALTH, GOVERNANCE, VALIDATE, VACUUM]
+      triggers: ["/audit", "scan", "check", "/totalrecall", "/health", "governance", "/vacuum"]
+      mcp_dependencies: ["cortex_governance (rule checking)", "cortex_registry (YAML validation)"]
+      lens_required: true
+
+    - name: cortex-orchestrate
+      purpose: "Feature delivery lifecycle — delegates to adlc-copilot pipeline, enforces CORTEX gates"
+      absorbs: [cortex-feature-orchestrator, cortex-plan, cortex-smart-delegator]
+      intents_served: [PLAN, DESIGN, REQUIREMENTS, CHANGE_INTELLIGENCE, ADLC, MIGRATE]
+      triggers: ["plan", "roadmap", "architect", "design", "requirements", "/adlc", "migrate"]
+      adlc_delegation: >
+        Delegates to ADLC smart-delegator, architect, pm-intent-creator, story-implementer.
+        CORTEX provides governance enforcement at gate boundaries. adlc-copilot provides
+        the workflow execution.
+      mcp_dependencies: ["cortex_workflow (templates)", "cortex_context (session)"]
+
+    - name: cortex-intel
+      purpose: "All repo intelligence — onboarding, LENS 4-phase scan, model.yaml production"
+      absorbs: [cortex-onboard, cortex-lens-language, cortex-lens-structure, cortex-lens-mapping, cortex-lens-synthesis]
+      intents_served: [ONBOARD, ANALYZE, INVESTIGATE]
+      triggers: ["onboard", "bootstrap", "scan repo", "analyze", "investigate"]
+      output: "repo-intelligence-model.yaml (canonical shared contract)"
+      fallback: "LENS phases run independently; model.yaml cached; manual override"
+
+    - name: cortex-distill
+      purpose: "Content ingestion and learning — 3-pipeline digest, session distillation, training"
+      absorbs: [cortex-distill]
+      intents_served: [DIGEST, DISTILL, TRAIN, FEEDBACK, SYNC]
+      triggers: ["digest", "summarize", "ingest", "/distill", "/train", "/feedback", "/sync"]
+
+    - name: cortex-present
+      purpose: "All output generation — PR walkthroughs, HTML exhibits, documentation"
+      absorbs: [cortex-pr, cortex-html-render, cortex-document]
+      intents_served: [REVIEW, CONVERT_TO_HTML, DOCUMENT]
+      triggers: ["/review", "review PR", "html", "generate report"]
+      design_system: "CORTEX Dark Glassmorphism v2.0 (Inter + cyan #00d4ff)"
+
+    - name: cortex-lint
+      purpose: "13-dimension holistic Definition of Done enforcement + AC verification"
+      intents_served: ["(quality gate — invoked by other agents, not directly by users)"]
+      dimensions: 13
+
+    - name: cortex-interact
+      purpose: "Q&A, codebase questions, requirement clarification, onboarding introduction"
+      absorbs: [cortex-query, cortex-ask]
+      intents_served: [QUERY, INTRODUCE, REPHRASE]
+      triggers: ["explain", "how", "what", "why", "hello"]
+
+    - name: cortex-platform
+      purpose: "CI/CD deployment, skill catalog management, archetype loading"
+      absorbs: [cortex-deploy, cortex-skill-catalog, cortex-archetype-loader]
+      intents_served: [DEPLOY, WORKFLOW_COMPOSE]
+      triggers: ["deploy", "release", "ship"]
+
+gate_skills:
+  total: 4
+  note: >
+    Reduced from 7 to 4. Removed gate-compliance (SKULL/CORE already enforce),
+    gate-traceability (git hooks + PR templates already enforce), gate-evidence
+    (premature certification infrastructure). 4 gates at real decision points.
+  gates:
+    - id: gate-readiness
+      stage: "Before work starts"
+      purpose: "DoR enforcement — validates ACs, scope, dependencies, security scope"
+      criteria:
+        - "Acceptance criteria defined (≥3 measurable ACs)"
+        - "Scope bounded (≤500 LOC estimated)"
+        - "Dependencies identified"
+        - "Security scope assessed (auth/PII/external data)"
+
+    - id: gate-security
+      stage: "Before code merges"
+      purpose: "6-point security checklist"
+      criteria:
+        - "No untrusted external data sources"
+        - "No prompt injection vectors"
+        - "No arbitrary code execution"
+        - "No hardcoded credentials"
+        - "Dependencies pinned to versions"
+        - "Permissions match stated scope"
+
+    - id: gate-review
+      stage: "Before PR approval"
+      purpose: "PR quality readiness — walkthrough + approval"
+      criteria:
+        - "PR walkthrough generated"
+        - "≥1 reviewer approval"
+        - "CI green"
+
+    - id: gate-deployment
+      stage: "Before ship"
+      purpose: "Deployment readiness — CI/CD + health"
+      criteria:
+        - "All CI checks pass"
+        - "Health probe returns 200"
+        - "No P0 errors"
+        - "MCP server health verified"
+
+feature_delivery_lifecycle:
+  name: "CORTEX Feature Delivery Lifecycle (Delegates to ADLC)"
+  note: >
+    CORTEX orchestrates the lifecycle. adlc-copilot executes it. The
+    Intent→Story→Archetype→Skill→Code chain in adlc-copilot IS the lifecycle.
+    CORTEX adds governance gates at 4 boundaries.
+  stages:
+    - stage: 1
+      name: Express Intent
+      cortex_agent: cortex-orchestrate
+      adlc_agent: pm-intent-creator
+      gate: gate-readiness
+      description: "User describes what they want. DoR validated. Requirements structured."
+
+    - stage: 2
+      name: Understand
+      cortex_agent: cortex-intel
+      adlc_agent: architect
+      gate: null
+      description: "LENS scans repo. Architecture patterns loaded. Story decomposed."
+
+    - stage: 3
+      name: Implement
+      cortex_agent: cortex-code
+      adlc_agent: dev-story-implementer
+      gate: gate-security
+      description: "TDD-first implementation. ADLC story-implementer follows Intent→Story→Code chain."
+      feedback_loop: "← Stage 5 (needs_refinement) · max 3 cycles"
+
+    - stage: 4
+      name: Test + Document
+      cortex_agent: cortex-lint + cortex-present
+      adlc_agent: test-proposer
+      gate: null
+      description: "Coverage validation, documentation synthesis, PR walkthrough generation."
+
+    - stage: 5
+      name: Review
+      cortex_agent: cortex-present
+      adlc_agent: test-critic
+      gate: gate-review
+      description: "PR created with walkthrough. Challenge gate fires. Review feedback."
+      feedback_loop: "→ Stage 3 (refine) or → Stage 6"
+
+    - stage: 6
+      name: Deploy
+      cortex_agent: cortex-platform
+      adlc_agent: gate-deployment-readiness
+      gate: gate-deployment
+      description: "Git publish, CI/CD pipeline, deployment verification."
+
+    - stage: 7
+      name: Monitor
+      cortex_agent: cortex-audit
+      gate: null
+      description: "Post-deployment health probe. Degradation triggers Stage 2."
+      feedback_loop: "→ Stage 2 (degradation detected)"
+
+python_deprecation_strategy:
+  approach: "Incremental 3-Wave Deprecation"
+  note: >
+    The repo has 381 orchestrator files containing two categories of logic.
+    Category A (stateful engine) stays as MCP tools. Category B (routing/delegation)
+    is deprecated as agents prove replacement. No big-bang archive.
+
+  category_a_retained:
+    name: "Stateful Engine Logic — KEPT as MCP tools"
+    components:
+      - "MasterOrchestrator with 7 mixins (knowledge, registry, request, response, stages)"
+      - "TDDOrchestrator with RED-GREEN-REFACTOR state machine"
+      - "RCAEngine with 4 methodologies and SQLite persistence"
+      - "EnforcementOrchestrator with pre-commit hooks"
+      - "HolisticValidationOrchestrator with 3-alternative challenge engine"
+      - "WorkflowComposer with ~80 YAML templates"
+      - "IntentRouter with challenge generation (routing logic kept until agents prove parity)"
+      - "InteractionOrchestrator with DoR tracking"
+
+  category_b_deprecated:
+    name: "Routing/Delegation Logic — DEPRECATED as agents replace"
+    waves:
+      - wave: 1
+        name: "Pure Routing"
+        scope: "Orchestrators that only classify intent and delegate"
+        estimated_files: "~80-100"
+        validation: "Agent routing E2E test covers all 34 intent types"
+        rollback: "Restore from _legacy/ if agent routing fails for >3 intents"
+
+      - wave: 2
+        name: "Response Formatting"
+        scope: "Orchestrators that only format/template responses"
+        estimated_files: "~60-80"
+        validation: "Response contract test verifies golden format across 2 surfaces"
+        rollback: "Restore from _legacy/ if format degradation detected"
+
+      - wave: 3
+        name: "Delegation Chains"
+        scope: "Orchestrators that chain multiple sub-orchestrators"
+        estimated_files: "~80-100"
+        validation: "E2E lifecycle test exercises all 7 stages"
+        rollback: "Restore from _legacy/ if lifecycle test fails"
+
+  test_preservation:
+    note: >
+      1,428 test files exist in the repo. These are NOT archived. Tests remain
+      active and validate that agent replacements produce identical behavior to
+      the orchestrators they replace. Test files are the proof mechanism for
+      zero-capability-loss during deprecation.
+    strategy:
+      - "All existing tests remain active throughout deprecation"
+      - "Each deprecation wave adds comparison tests: agent output vs orchestrator output"
+      - "Tests that cover deprecated orchestrators are refactored to test the replacement agent + MCP tool combination"
+      - "Smoke test suite (26 drift-lock checks) runs before and after each wave"
+      - "No orchestrator file moves to _legacy/ until its tests pass against the agent replacement"
+
+testing_strategy:
+  name: "3-Layer Pragmatic Testing"
+  note: >
+    Replaces the 8-layer Release Evidence Mesh. Focuses on tests that actually
+    catch bugs, not ceremony that produces signed artifacts.
+
+  existing_test_base:
+    test_files: 1428
+    test_runner: "python scripts/run_tests.py"
+    modes:
+      - mode: preflight
+        command: "python scripts/run_tests.py preflight"
+        duration: "<10s"
+        when: "Every audit gate"
+      - mode: changed
+        command: "python scripts/run_tests.py changed"
+        duration: "varies"
+        when: "TDD inner loop"
+      - mode: smoke
+        command: "python scripts/run_tests.py smoke"
+        duration: "<60s"
+        when: "Pre-commit, pre-merge"
+      - mode: unit
+        command: "python scripts/run_tests.py unit"
+        duration: "varies"
+        when: "Default local dev"
+
+  layer_1_smoke:
+    name: "Smoke Tests"
+    description: "Fast validation that nothing is broken"
+    includes:
+      - "26 drift-lock checks (governance alignment)"
+      - "YAML schema validation (802+ YAMLs parse clean)"
+      - "MCP tool server starts and responds to health check"
+      - "All agent SKILL.md files have valid YAML frontmatter"
+    frequency: "Every commit, every PR, every deprecation wave"
+    duration: "<60s"
+
+  layer_2_agent_routing_e2e:
+    name: "Agent Routing E2E"
+    description: "Validates all 34 intent types route to correct agents and produce valid output"
+    includes:
+      - "34 intent type → agent routing tests"
+      - "Top 10 most-used intents validated with full response"
+      - "Agent → MCP tool invocation chain tested"
+      - "Comparison tests: agent output vs deprecated orchestrator output"
+    frequency: "Before each deprecation wave, every release"
+    duration: "<5 min"
+
+  layer_3_self_onboard:
+    name: "Self-Onboard"
+    description: "CORTEX onboards itself — the ultimate integration test"
+    includes:
+      - "cortex-intel scans Foundations.Cortex itself"
+      - "Produces valid repo-intelligence-model.yaml"
+      - "All downstream agents consume model.yaml successfully"
+      - "Cross-repo skill discovery finds 137 skills across 3 repos"
+    frequency: "Every release, P5 certification"
+    duration: "<2 min"
+
+  deprecation_wave_test_protocol:
+    description: "Protocol executed for each of the 3 deprecation waves"
+    steps:
+      - "1. Run full smoke suite — establish baseline"
+      - "2. Run agent routing E2E for all intents affected by this wave"
+      - "3. Run comparison tests: agent output vs orchestrator output for affected intents"
+      - "4. If all pass: move orchestrator files to _legacy/"
+      - "5. Re-run full smoke suite — confirm no regression"
+      - "6. If any failure: restore from _legacy/, investigate, fix, retry"
+      - "7. Existing 1428 test files must still pass (refactored to test agent+MCP path)"
+
+phases:
+  - phase: P1
+    title: "Governance & Design System Foundation"
+    status: COMPLETE
+    duration_weeks: 2
+    description: "ADRs established, design tokens confirmed, design system purity achieved."
+    tasks:
+      - "4 ADRs authored and accepted (ADR-V3-001 through 004)"
+      - "repo-intelligence-model-schema.yaml created at cortex-registry/schemas/"
+      - "design-tokens.yaml confirmed as SSOT (cyan #00d4ff, Inter/Space Grotesk/JetBrains Mono)"
+      - "HTML instructions updated to v2.0, SVG layout rules added to walkthrough-html-spec.md"
+      - "Zero Lato/v1 references across repo (verified via grep)"
+    gate: "4 ADRs accepted, schema valid YAML, design tokens v2.0, 0 Lato refs, 0 #7c3aed as primary"
+    verification:
+      - "python -c \"import yaml; yaml.safe_load(open('cortex-registry/schemas/repo-intelligence-model-schema.yaml').read())\""
+      - "grep -r 'Lato' . --include='*.yaml' --include='*.md' --include='*.html' | grep -v '.git' | wc -l  # must be 0"
+      - "grep -r '#7c3aed' . --include='*.yaml' --include='*.md' --include='*.html' | grep -v '.git' | wc -l  # must be 0"
+
+  - phase: P2
+    title: "Agent Architecture + LENS Pipeline"
+    status: PLANNED
+    duration_weeks: 4
+    description: >
+      Build all 10 agent SKILL.md files in .github/agents/, wire AGENT-INDEX.md to route
+      all 34 intent types, build LENS intelligence pipeline within cortex-intel. Validate
+      top-10 intents route correctly before proceeding to remaining 24.
+    execution_order:
+      - step: 1
+        name: "Create AGENT-INDEX.md"
+        file: ".github/agents/AGENT-INDEX.md"
+        description: "Master routing table mapping all 34 intent types to agents"
+        required_sections:
+          - "## Intent Routing Table (34 intents)"
+          - "## Confidence Thresholds"
+          - "## Fallback Protocol"
+        pass_criteria: "34 intent entries present, all agents referenced exist"
+
+      - step: 2
+        name: "Create cortex-code agent"
+        file: ".github/agents/cortex-code.agent.md"
+        description: "TDD implementation, bug fixing, refactoring, test generation"
+        required_sections:
+          - "## Identity"
+          - "## Intents Served: IMPLEMENT, FIX, REFACTOR, TEST"
+          - "## MCP Dependencies: cortex_workflow, cortex_tdd, cortex_context"
+          - "## Quality Checklist"
+          - "## Security Checklist"
+          - "## Execution Protocol"
+          - "## Governance: CORE-008, CORE-048, CORE-064, CORE-068"
+        pass_criteria: "All sections present, YAML frontmatter valid, MCP deps declared"
+
+      - step: 3
+        name: "Create cortex-diagnose agent"
+        file: ".github/agents/cortex-diagnose.agent.md"
+        description: "Multi-stack debugging (8 strategies), RCA (4 methodologies)"
+        required_sections:
+          - "## Identity"
+          - "## Intents Served: DEBUG, RCA"
+          - "## Debug Strategies (8)"
+          - "## RCA Methodologies (4)"
+          - "## MCP Dependencies: cortex_rca, cortex_context"
+          - "## Quality Checklist"
+          - "## Security Checklist"
+        pass_criteria: "All 8 debug strategies listed, all 4 RCA methodologies listed"
+
+      - step: 4
+        name: "Create cortex-audit agent"
+        file: ".github/agents/cortex-audit.agent.md"
+        description: "Governance scanning, health, cleanup, YAML cross-validation, convergence"
+        required_sections:
+          - "## Identity"
+          - "## Intents Served: AUDIT, TOTALRECALL, HEALTH, GOVERNANCE, VALIDATE, VACUUM"
+          - "## MCP Dependencies: cortex_governance, cortex_registry"
+          - "## SKULL Rule Enforcement (40+ rules)"
+          - "## PLIP-001 Cross-Validation"
+          - "## Quality Checklist"
+          - "## Security Checklist"
+        pass_criteria: "All intents listed, SKULL reference confirmed, PLIP-001 referenced"
+
+      - step: 5
+        name: "Create cortex-orchestrate agent"
+        file: ".github/agents/cortex-orchestrate.agent.md"
+        description: "Feature delivery conductor — delegates to ADLC, enforces CORTEX gates"
+        required_sections:
+          - "## Identity"
+          - "## Intents Served: PLAN, DESIGN, REQUIREMENTS, CHANGE_INTELLIGENCE, ADLC, MIGRATE"
+          - "## ADLC Delegation Protocol"
+          - "## MCP Dependencies: cortex_workflow, cortex_context"
+          - "## 7-Stage Lifecycle Reference"
+          - "## Quality Checklist"
+          - "## Security Checklist"
+        pass_criteria: "ADLC delegation explicitly wired, all 7 stages referenced"
+
+      - step: 6
+        name: "Create cortex-intel agent"
+        file: ".github/agents/cortex-intel.agent.md"
+        description: "LENS 4-phase repo scan, model.yaml production"
+        required_sections:
+          - "## Identity"
+          - "## Intents Served: ONBOARD, ANALYZE, INVESTIGATE"
+          - "## LENS Phase 1: Language Detection"
+          - "## LENS Phase 2: Structure Validation"
+          - "## LENS Phase 3: Dependency Mapping"
+          - "## LENS Phase 4: Intelligence Synthesis"
+          - "## Output: repo-intelligence-model.yaml"
+          - "## Fallback Protocol"
+          - "## MCP Dependencies: cortex_context"
+          - "## Quality Checklist"
+          - "## Security Checklist"
+        pass_criteria: "All 4 LENS phases present, model.yaml output defined, fallback documented"
+
+      - step: 7
+        name: "Create cortex-distill agent"
+        file: ".github/agents/cortex-distill.agent.md"
+        description: "3-pipeline content ingestion, session distillation, training"
+        required_sections:
+          - "## Identity"
+          - "## Intents Served: DIGEST, DISTILL, TRAIN, FEEDBACK, SYNC"
+          - "## Pipeline 1: Chat Session Learning"
+          - "## Pipeline 2: Repository Content Analysis"
+          - "## Pipeline 3: External Knowledge Extraction"
+          - "## MCP Dependencies: cortex_context"
+          - "## Quality Checklist"
+          - "## Security Checklist"
+        pass_criteria: "All 3 pipelines documented, all 5 intents listed"
+
+      - step: 8
+        name: "Create cortex-present agent"
+        file: ".github/agents/cortex-present.agent.md"
+        description: "PR walkthroughs, HTML exhibits, documentation"
+        required_sections:
+          - "## Identity"
+          - "## Intents Served: REVIEW, CONVERT_TO_HTML, DOCUMENT"
+          - "## Design System: CORTEX Dark Glassmorphism v2.0"
+          - "## Output Types"
+          - "## HTML Spec Reference: .github/skills/cortex-pr/references/walkthrough-html-spec.md"
+          - "## Quality Checklist"
+          - "## Security Checklist"
+        pass_criteria: "Design system reference confirmed, HTML spec referenced"
+
+      - step: 9
+        name: "Create cortex-lint agent"
+        file: ".github/agents/cortex-lint.agent.md"
+        description: "13-dimension DoD enforcement, internal quality gate"
+        required_sections:
+          - "## Identity"
+          - "## 13 DoD Dimensions"
+          - "## Invocation Protocol (called by other agents)"
+          - "## PASS/BLOCK verdict format"
+          - "## Quality Checklist"
+          - "## Security Checklist"
+        pass_criteria: "All 13 dimensions enumerated, verdict format specified"
+
+      - step: 10
+        name: "Create cortex-interact agent"
+        file: ".github/agents/cortex-interact.agent.md"
+        description: "Q&A, codebase questions, introduction"
+        required_sections:
+          - "## Identity"
+          - "## Intents Served: QUERY, INTRODUCE, REPHRASE"
+          - "## MCP Dependencies: cortex_context"
+          - "## Quality Checklist"
+          - "## Security Checklist"
+        pass_criteria: "All 3 intents listed"
+
+      - step: 11
+        name: "Create cortex-platform agent"
+        file: ".github/agents/cortex-platform.agent.md"
+        description: "CI/CD deployment, skill catalog management, archetype loading"
+        required_sections:
+          - "## Identity"
+          - "## Intents Served: DEPLOY, WORKFLOW_COMPOSE"
+          - "## Skill Discovery Protocol (3 repos)"
+          - "## MCP Dependencies: cortex_workflow"
+          - "## Quality Checklist"
+          - "## Security Checklist"
+        pass_criteria: "3-repo skill discovery documented, deployment health check defined"
+
+      - step: 12
+        name: "Create .vscode/mcp.json"
+        file: ".vscode/mcp.json"
+        description: "GitHub Remote HTTP MCP server config for VS Code"
+        content_spec: |
+          {
+            "servers": {
+              "github/github-mcp-server": {
+                "type": "http",
+                "url": "https://api.githubcopilot.com/mcp/"
+              }
+            }
+          }
+        pass_criteria: "Valid JSON, GitHub MCP server URL present"
+
+      - step: 13
+        name: "Validate agent routing top-10 intents"
+        description: "Run E2E routing test for 10 most-used intents before all 34"
+        top_10_intents:
+          - "IMPLEMENT → cortex-code"
+          - "FIX → cortex-code"
+          - "AUDIT → cortex-audit"
+          - "DEBUG → cortex-diagnose"
+          - "REVIEW → cortex-present"
+          - "PLAN → cortex-orchestrate"
+          - "ONBOARD → cortex-intel"
+          - "QUERY → cortex-interact"
+          - "REFACTOR → cortex-code"
+          - "HEALTH → cortex-audit"
+        pass_criteria: "All 10 route to correct agent, response format matches golden format"
+        failure_action: "Fall back to Python orchestrators for failed intents, log failures"
+
+      - step: 14
+        name: "LENS E2E smoke test on Foundations.Cortex"
+        description: "cortex-intel scans the Foundations.Cortex repo itself"
+        command: "Run cortex-intel with ONBOARD intent pointed at Foundations.Cortex root"
+        expected_output: "repo-intelligence-model.yaml with all 4 LENS phases complete"
+        pass_criteria: "model.yaml is schema-valid, tech stack detected correctly, structure validated"
+
+    gate: "10 agent files present with all required sections, AGENT-INDEX.md routes 34 intents, LENS E2E produces schema-valid model.yaml, top-10 intent routing passes"
+    gate_verification:
+      - "find .github/agents -name '*.agent.md' | wc -l  # must be >= 10"
+      - "python -c \"import yaml; [yaml.safe_load(open(f).read()) for f in __import__('glob').glob('.github/agents/*.agent.md')]\"  # all valid YAML frontmatter"
+      - "grep -c '|' .github/agents/AGENT-INDEX.md  # must be >= 34 routing rows"
+      - "python -c \"import yaml; yaml.safe_load(open('repo-intelligence-model.yaml').read()); print('LENS output valid')\""
+    rollback: "Agent routing failures fall back to existing Python orchestrators (IntentRouter.py active)"
+    failure_modes:
+      - mode: "Agent routing fails for >3 intent types"
+        action: "Revert to Python IntentRouter for failed intents; do NOT proceed to P3"
+      - mode: "LENS scan produces invalid model.yaml"
+        action: "Fix LENS phases incrementally; run individual phase tests"
+      - mode: "SKILL.md frontmatter fails YAML parse"
+        action: "Fix malformed YAML before any step continues"
+
+  - phase: P3
+    title: "Feature Delivery Lifecycle + Three-Repo Integration"
+    status: PLANNED
+    duration_weeks: 3
+    description: >
+      Wire CORTEX lifecycle conductor (cortex-orchestrate) to ADLC pipeline, integrate Purple
+      skills via skill path registration, create 4 gate skills, wire 7-stage lifecycle E2E.
+    prerequisite: "P2 gate must be GREEN before P3 begins"
+    execution_order:
+      - step: 1
+        name: "Create gate-readiness skill"
+        file: ".github/agents/gates/gate-readiness.agent.md"
+        description: "DoR enforcement — validates ACs, scope, dependencies, security scope"
+        required_sections:
+          - "## Purpose: Gate Stage 1 (Before work starts)"
+          - "## Input Schema: intent + acceptance_criteria + scope_estimate"
+          - "## DoR Criteria (5 checks)"
+          - "## PASS Verdict: all 5 criteria met"
+          - "## BLOCK Verdict: format with which criteria failed and remediation"
+          - "## SLA: <5 seconds"
+        pass_criteria: "PASS/BLOCK verdict defined, all 5 DoR criteria listed, SLA declared"
+
+      - step: 2
+        name: "Create gate-security skill"
+        file: ".github/agents/gates/gate-security.agent.md"
+        description: "6-point security checklist before code merges"
+        required_sections:
+          - "## Purpose: Gate Stage 3 (Before code merges)"
+          - "## Security Checklist (6 points)"
+          - "## PASS Verdict"
+          - "## BLOCK Verdict: which check failed, severity, remediation"
+          - "## SLA: <5 seconds"
+        pass_criteria: "All 6 security checks enumerated, BLOCK format includes severity"
+
+      - step: 3
+        name: "Create gate-review skill"
+        file: ".github/agents/gates/gate-review.agent.md"
+        description: "PR quality readiness before approval"
+        required_sections:
+          - "## Purpose: Gate Stage 5 (Before PR approval)"
+          - "## Review Criteria: walkthrough present, CI green, reviewer approved"
+          - "## PASS Verdict"
+          - "## BLOCK Verdict"
+          - "## SLA: <5 seconds"
+        pass_criteria: "3 review criteria enumerated, PASS/BLOCK format defined"
+
+      - step: 4
+        name: "Create gate-deployment skill"
+        file: ".github/agents/gates/gate-deployment.agent.md"
+        description: "Deployment readiness before ship"
+        required_sections:
+          - "## Purpose: Gate Stage 6 (Before ship)"
+          - "## Deployment Criteria: CI green, health probe, MCP verified"
+          - "## PASS Verdict"
+          - "## BLOCK Verdict"
+          - "## SLA: <5 seconds"
+        pass_criteria: "MCP health check criterion present, health probe format defined"
+
+      - step: 5
+        name: "Update cortex-orchestrate to wire ADLC delegation"
+        file: ".github/agents/cortex-orchestrate.agent.md"
+        description: "Add explicit ADLC agent delegation protocol to cortex-orchestrate"
+        additions:
+          - "## ADLC Delegation Map: Stage1→pm-intent-creator, Stage2→architect, Stage3→dev-story-implementer, Stage5→test-critic, Stage6→gate-deployment-readiness"
+          - "## Gate Invocation: gate-readiness at Stage1, gate-security at Stage3, gate-review at Stage5, gate-deployment at Stage6"
+          - "## Feedback Loops: Stage5→Stage3 on needs_refinement (max 3 cycles per CORE-068), Stage7→Stage2 on degradation"
+        pass_criteria: "All 5 ADLC agents mapped, all 4 gates invoked at correct stages"
+
+      - step: 6
+        name: "Register skill paths for VS Code"
+        file: ".vscode/settings.json"
+        description: "Cross-repo skill discovery for adlc-copilot and purple-platform-copilot"
+        content_spec: |
+          {
+            "github.copilot.chat.codeGeneration.instructions": [],
+            "github.copilot.chat.agent.thinkingEnabled": true
+          }
+        additional_config:
+          path: ".vscode/skill-paths.json"
+          content: |
+            {
+              "skill_paths": [
+                "../adlc-copilot/skills/dev",
+                "../adlc-copilot/skills/pm",
+                "../purple-platform-copilot/skills"
+              ],
+              "agent_paths": [
+                "../adlc-copilot/agents/dev",
+                "../adlc-copilot/agents/pm"
+              ]
+            }
+        pass_criteria: "skill-paths.json present, 3 skill paths + 2 agent paths registered"
+
+      - step: 7
+        name: "Create domain skill catalog structure"
+        directories:
+          - "cortex-registry/skills/security/"
+          - "cortex-registry/skills/architecture/"
+          - "cortex-registry/skills/testing/"
+          - "cortex-registry/skills/development/"
+          - "cortex-registry/skills/planning/"
+          - "cortex-registry/skills/documentation/"
+          - "cortex-registry/skills/review/"
+          - "cortex-registry/skills/operations/"
+          - "cortex-registry/skills/intelligence/"
+        manifest_file_per_domain: "skill-catalog.yaml"
+        manifest_schema:
+          domain: "string"
+          owner_team: "string"
+          skills: "list[{name, file, description, mcp_deps}]"
+        pass_criteria: "9 directories exist, each has skill-catalog.yaml with valid YAML"
+
+      - step: 8
+        name: "Run lifecycle E2E test"
+        description: "Test a complete feature request through all 7 stages"
+        test_intent: "IMPLEMENT a simple Python utility function with TDD"
+        expected_flow:
+          - "Stage1: gate-readiness PASS (ACs defined, scope <500 LOC)"
+          - "Stage2: cortex-intel produces model.yaml, ADLC architect loads patterns"
+          - "Stage3: cortex-code executes TDD, gate-security PASS"
+          - "Stage4: cortex-lint 0 P0/P1, cortex-present generates PR walkthrough"
+          - "Stage5: gate-review PASS (walkthrough present, CI configured)"
+          - "Stage6: gate-deployment PASS (health check configured)"
+          - "Stage7: cortex-audit monitoring active"
+        pass_criteria: "All 7 stages execute, all 4 gates return PASS, walkthrough HTML generated"
+
+    gate: "4 gate skill files present with all required sections, ADLC delegation mapped in cortex-orchestrate, 9 domain catalog directories with skill-catalog.yaml, lifecycle E2E test passes all 7 stages"
+    gate_verification:
+      - "find .github/agents/gates -name '*.agent.md' | wc -l  # must be 4"
+      - "find cortex-registry/skills -name 'skill-catalog.yaml' | wc -l  # must be 9"
+      - "grep -c 'pm-intent-creator\\|dev-story-implementer' .github/agents/cortex-orchestrate.agent.md  # must be >=2"
+    failure_modes:
+      - mode: "Lifecycle E2E test stalls at Stage 3"
+        action: "Verify TDD orchestrator MCP tool is reachable; test independently first"
+      - mode: "ADLC agents not found via skill paths"
+        action: "Verify sibling repo checkout paths; update skill-paths.json accordingly"
+      - mode: "Gate returns invalid verdict format"
+        action: "Fix gate SKILL.md PASS/BLOCK output schema before proceeding"
+
+  - phase: P4
+    title: "Python Deprecation Waves + Surface Deployment"
+    status: PLANNED
+    duration_weeks: 3
+    description: >
+      Execute 3 sequential deprecation waves with test validation at each step. No wave
+      proceeds without its predecessor passing. Deploy to Claude Code CLI and VS Code Copilot
+      primary surfaces. All 1,428 test files must continue passing throughout.
+    prerequisite: "P3 gate must be GREEN before P4 begins"
+    execution_order:
+      - wave: 1
+        name: "Pure Routing Orchestrators"
+        estimated_files: "~80-100"
+        target_pattern: "Orchestrators whose only logic is: receive intent → select sub-orchestrator → call sub-orchestrator → return result"
+        candidate_files:
+          - "cortex/orchestrators/core/capability_router.py"
+          - "cortex/orchestrators/core/central_brain_orchestrator.py"
+          - "cortex/orchestrators/core/collaboration_orchestrator.py"
+          - "cortex/orchestrators/support/ (pure delegators)"
+        protocol:
+          - "1. Run: python scripts/run_tests.py smoke  (baseline must pass)"
+          - "2. Run: python scripts/run_tests.py unit --filter=routing  (routing tests must pass)"
+          - "3. For each candidate file: compare agent output vs orchestrator output (10 sample intents)"
+          - "4. If all comparison tests pass: git mv cortex/orchestrators/{file} _legacy/orchestrators/wave1/{file}"
+          - "5. Run: python scripts/run_tests.py smoke  (must still pass after move)"
+          - "6. Run: python scripts/run_tests.py unit  (all 1428 tests must still pass)"
+          - "7. If any failure: git mv _legacy/orchestrators/wave1/{file} cortex/orchestrators/{file}  (restore)"
+        pass_criteria: "Smoke suite passes, 1428 tests pass, agent routing covers all Wave 1 intents"
+        rollback_command: "git mv _legacy/orchestrators/wave1/* cortex/orchestrators/ && python scripts/run_tests.py smoke"
+        failure_mode: "Any test failure → immediate restore, stop wave, diagnose before retry"
+
+      - wave: 2
+        name: "Response Formatting Orchestrators"
+        estimated_files: "~60-80"
+        target_pattern: "Orchestrators whose only logic is: receive structured data → format for golden format → return formatted response"
+        candidate_files:
+          - "cortex/orchestrators/response/ (formatting logic that agents now handle via cortex-response-spec.yaml)"
+          - "cortex/orchestrators/core/business_wisdom_formatter.py"
+          - "cortex/orchestrators/core/bluf_system.py"
+          - "cortex/orchestrators/core/chat_response_policy.py"
+          - "cortex/orchestrators/core/ascii_progress_bar.py"
+        protocol:
+          - "1. Wave 1 must be COMPLETE and tests passing"
+          - "2. Run: python scripts/run_tests.py smoke  (baseline)"
+          - "3. Verify cortex-response-spec.yaml handles all formatting patterns from Wave 2 candidates"
+          - "4. Run comparison tests: agent formatted response vs orchestrator formatted response (10 samples)"
+          - "5. If pass: git mv cortex/orchestrators/{file} _legacy/orchestrators/wave2/{file}"
+          - "6. Run: python scripts/run_tests.py smoke && python scripts/run_tests.py unit"
+          - "7. If any failure: restore and stop"
+        pass_criteria: "Golden format output identical, smoke passes, 1428 tests pass"
+        rollback_command: "git mv _legacy/orchestrators/wave2/* cortex/orchestrators/ && python scripts/run_tests.py smoke"
+
+      - wave: 3
+        name: "Delegation Chain Orchestrators"
+        estimated_files: "~80-100"
+        target_pattern: "Orchestrators that chain multiple sub-orchestrators in a sequence that agents now handle via ADLC delegation"
+        candidate_files:
+          - "cortex/orchestrators/core/adlc_orchestrator.py  (routing layer only — delegate to agent)"
+          - "cortex/orchestrators/domain/ (pure delegation chains)"
+          - "cortex/orchestrators/planning/ (planning delegation chains)"
+          - "cortex/orchestrators/synthesis/ (synthesis delegation chains)"
+        excluded_from_all_waves:
+          - "cortex/orchestrators/core/audit_orchestrator.py  (stateful — keep)"
+          - "cortex/orchestrators/strategies/  (8 debug strategies — keep)"
+          - "cortex/orchestrators/core/approval_gate.py  (enforcement — keep)"
+          - "cortex/orchestrators/core/autonomous_plan_executor.py  (stateful — keep)"
+          - "cortex/orchestrators/core/challenge_engine_plugins.py  (stateful — keep)"
+        protocol:
+          - "1. Wave 2 must be COMPLETE and tests passing"
+          - "2. Run: python scripts/run_tests.py smoke  (baseline)"
+          - "3. Verify cortex-orchestrate agent handles all Wave 3 delegation chains"
+          - "4. Run E2E lifecycle test (all 7 stages) with Wave 3 candidates retired"
+          - "5. If E2E passes: git mv cortex/orchestrators/{file} _legacy/orchestrators/wave3/{file}"
+          - "6. Run: python scripts/run_tests.py smoke && python scripts/run_tests.py unit"
+          - "7. Final check: grep -r 'from cortex.orchestrators' cortex/ --include='*.py' | grep -v _legacy | wc -l  # decreasing"
+        pass_criteria: "E2E lifecycle test passes, smoke passes, 1428 tests pass, import count decreasing"
+        rollback_command: "git mv _legacy/orchestrators/wave3/* cortex/orchestrators/ && python scripts/run_tests.py smoke"
+
+      - step: "Surface Deployment A"
+        name: "Claude Code CLI Surface"
+        description: "Package CORTEX for Claude Code CLI global installation"
+        files_to_create:
+          - "cortex-registry/cowork-setup/claude-code/CLAUDE.md  (global CLAUDE.md with CORTEX live prompt)"
+          - "cortex-registry/cowork-setup/claude-code/install.sh  (copies CLAUDE.md to ~/.claude/CLAUDE.md)"
+        validation:
+          - "install.sh creates ~/.claude/CLAUDE.md on test machine"
+          - "Run /cortex introduce in Claude Code CLI — CORTEX responds with correct identity"
+          - "Run /cortex audit in Claude Code CLI — cortex-audit responds with governance scan"
+          - "Run /cortex implement 'hello world test' — cortex-code responds with TDD protocol"
+        pass_criteria: "3 smoke commands return valid CORTEX responses in CLI"
+
+      - step: "Surface Deployment B"
+        name: "VS Code Copilot Surface"
+        description: "Package CORTEX for VS Code Copilot via skill paths + MCP config"
+        files_to_validate:
+          - ".vscode/mcp.json  (created in P2)"
+          - ".vscode/skill-paths.json  (created in P3)"
+        validation:
+          - "Open Foundations.Cortex in VS Code with GitHub Copilot enabled"
+          - "Verify @cortex agent appears in Copilot Chat"
+          - "Run @cortex introduce — responds with CORTEX identity"
+          - "Run @cortex audit — responds with governance scan"
+          - "Verify 137 skills discoverable via skill path registration"
+        pass_criteria: "@cortex responds correctly in VS Code Copilot Chat, skill discovery works"
+
+    gate: "All 3 deprecation waves complete with tests passing, both surfaces validated with 3 smoke commands each, 1428 tests all pass, _legacy/ contains deprecated files"
+    gate_verification:
+      - "find _legacy/orchestrators -name '*.py' | wc -l  # must be 240-260 (80-100 + 60-80 + 80-100)"
+      - "python scripts/run_tests.py smoke  # must pass"
+      - "python scripts/run_tests.py unit  # must pass (all 1428)"
+      - "find cortex/orchestrators -name '*.py' ! -name '__init__.py' ! -path '*__pycache__*' | wc -l  # fewer than 381"
+    failure_modes:
+      - mode: "Wave deprecation causes test failures"
+        action: "Immediately restore wave files from _legacy/, diagnose failing tests, fix before retry"
+      - mode: "Surface validation fails (agent not found in VS Code)"
+        action: "Verify skill path registration, check .vscode/settings.json, re-register paths"
+      - mode: "Import errors after deprecation"
+        action: "grep for broken imports, update import paths or create thin compatibility shims"
+
+  - phase: P5
+    title: "Certification & v3.2 Tag"
+    status: PLANNED
+    duration_weeks: 1
+    description: >
+      Full 40-check DoD validation, convergence gate, cortex-intel self-onboard, cross-repo
+      integration test, 3-layer test suite completion, v3.2.0 git tag.
+    prerequisite: "P4 gate must be GREEN before P5 begins"
+    execution_order:
+      - step: 1
+        name: "cortex-lint all 10 agents"
+        description: "Run 13-dimension DoD validation on each agent SKILL.md"
+        command: "cortex-lint against each of: cortex-code, cortex-diagnose, cortex-audit, cortex-orchestrate, cortex-intel, cortex-distill, cortex-present, cortex-lint, cortex-interact, cortex-platform"
+        pass_criteria: "All 10 agents score 13/13 dimensions, 0 P0/P1 findings"
+        failure_action: "Fix agent SKILL.md deficiencies; re-run lint before proceeding"
+
+      - step: 2
+        name: "Run 40 DoD checks"
+        description: "Execute all 40 DoD checks across 8 categories"
+        categories_and_commands:
+          S_structural:
+            - "ls cortex-master-v2.yaml  # DOD-S01"
+            - "grep '#00d4ff' Foundations.Cortex/CLAUDE.md  # DOD-S02"
+            - "ls .github/assets/css/  # DOD-S03"
+            - "grep -r 'Lato\\|#7c3aed' . --include='*.yaml' --include='*.html' | grep -v '.git' | wc -l  # must be 0 — DOD-S04"
+          I_intelligence:
+            - "find cortex-registry/core -name '*.yaml' | wc -l  # >=41 — DOD-I01"
+            - "find cortex-registry/governance -name '*.yaml' | wc -l  # >=54 — DOD-I02"
+            - "find cortex-registry/knowledge -name '*.yaml' | wc -l  # >=174 — DOD-I03"
+            - "python -c \"import yaml; idx=yaml.safe_load(open('cortex-registry/knowledge/INDEX.yaml')); print(len(idx))\"  # DOD-I04"
+            - "find cortex-registry/company -name '*.yaml' | wc -l  # >=65 — DOD-I05"
+            - "find cortex-registry -name '*.yaml' | wc -l  # >=802 — DOD-I06"
+            - "ls cortex-registry/core/prompt-learning-protocol.yaml  # DOD-I07"
+          G_governance:
+            - "python scripts/run_tests.py preflight  # DOD-G01 (exits 0)"
+            - "grep -c 'CORE-' cortex-registry/governance/*.yaml | awk -F: '{sum+=$2} END {print sum}'  # DOD-G02 (>=26)"
+            - "sort | uniq -d on all CORE-* IDs  # DOD-G03 (0 duplicates)"
+            - "python -c \"import yaml,glob; [yaml.safe_load(open(f).read()) for f in glob.glob('cortex-registry/**/*.yaml',recursive=True)]\"  # DOD-G04"
+          A_agents:
+            - "find .github/agents -name '*.agent.md' | wc -l  # >=10 — DOD-A01"
+            - "grep -c '|' .github/agents/AGENT-INDEX.md  # >=34 — DOD-A02"
+            - "grep -r 'cortex/orchestrators' .github/agents/*.agent.md | wc -l  # must be 0 — DOD-A03"
+            - "grep -c 'Quality Checklist\\|Security Checklist\\|MCP Dependencies' .github/agents/*.agent.md  # each agent has all 3 — DOD-A04"
+            - "grep -c 'repo-intelligence-model.yaml' .github/agents/cortex-intel.agent.md  # >=1 — DOD-A05"
+            - "grep -c 'ADLC Delegation' .github/agents/cortex-orchestrate.agent.md  # >=1 — DOD-A06"
+          W_workflow:
+            - "wc -l cortex/orchestrators/core/workflow_composer*.py  # >=1 file — DOD-W01"
+            - "python -c \"from cortex.mcp import server; print('MCP OK')\"  # DOD-W02"
+            - "find cortex-registry/workflows/templates -name '*.yaml' | wc -l  # >=80 — DOD-W03"
+            - "python -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-response-spec.yaml').read()); print('OK')\"  # DOD-W04"
+          H_html:
+            - "grep -c 'CONVERT_TO_HTML\\|REVIEW\\|DOCUMENT' .github/agents/cortex-present.agent.md  # >=1 — DOD-H01"
+            - "grep -c 'glassmorphism\\|#00d4ff' .github/skills/cortex-pr/SKILL.md  # >=1 — DOD-H02"
+            - "grep -r 'style=' cortex-registry/company/repos/cortex/analysis/*.html | grep -v '<!--' | wc -l  # must be 0 — DOD-H03"
+            - "grep '#00d4ff' cortex-registry/core/design-tokens.yaml  # DOD-H04"
+          T_testing:
+            - "python scripts/run_tests.py smoke  # DOD-T01"
+            - "cortex-intel onboard Foundations.Cortex → verify model.yaml produced  # DOD-T02 (routing E2E)"
+            - "cortex-intel onboard self → model.yaml references Foundations.Cortex correctly  # DOD-T03"
+            - "python scripts/run_tests.py unit  # all 1428 pass — DOD-T04"
+            - "run comparison tests for each deprecation wave  # DOD-T05"
+            - "cortex-orchestrate + adlc-copilot + purple-platform-copilot integration test  # DOD-T06"
+          C_convergence:
+            - "python scripts/run_tests.py preflight && python scripts/run_tests.py smoke  # DOD-C01 (0 P0/P1)"
+            - "grep -r 'TODO\\|FIXME\\|HACK' cortex/ --include='*.py' | grep -v '#' | wc -l  # DOD-C02"
+            - "cat .vscode/skill-paths.json  # shows 3 skill paths — DOD-C03"
+            - "cortex introduce on Claude Code CLI + VS Code Copilot  # DOD-C04"
+            - "cat .vscode/mcp.json  # contains github MCP — DOD-C05"
+        pass_criteria: "All 40 checks return expected values, 0 failures"
+
+      - step: 3
+        name: "Convergence gate"
+        description: "Detect and fix all P0/P1 findings — max 3 iterations"
+        protocol:
+          - "Iteration 1: Run cortex-audit AUDIT on entire Foundations.Cortex repo"
+          - "Fix all P0/P1 findings before iteration 2"
+          - "Iteration 2: Re-run cortex-audit — must see count decreasing"
+          - "Fix remaining P0/P1 before iteration 3"
+          - "Iteration 3: Re-run cortex-audit — must see 0 P0/P1"
+          - "If still P0/P1 after 3 iterations: BLOCK tag, escalate"
+        pass_criteria: "0 P0/P1 findings after max 3 convergence iterations"
+
+      - step: 4
+        name: "CORTEX self-onboard"
+        description: "cortex-intel scans Foundations.Cortex itself"
+        command: "Run /cortex onboard on Foundations.Cortex root directory"
+        expected_model_yaml_fields:
+          - "repo_name: Foundations.Cortex"
+          - "primary_language: Python"
+          - "framework: CORTEX"
+          - "agent_count: 10"
+          - "skill_count: >=19"
+          - "test_files: >=1428"
+          - "governance_yamls: >=802"
+        pass_criteria: "model.yaml produced, all expected fields present, schema-valid"
+
+      - step: 5
+        name: "Cross-repo integration test"
+        description: "Verify CORTEX + adlc-copilot + purple-platform-copilot work together"
+        test_scenario: "Run full feature delivery from intent through ADLC with Purple skill consultation"
+        validation:
+          - "cortex-orchestrate delegates Stage1 to pm-intent-creator (adlc-copilot)"
+          - "cortex-intel consults model.yaml from Foundations.Cortex scan"
+          - "cortex-code invokes dev-story-implementer (adlc-copilot)"
+          - "cortex-lint validates against domain skills from purple-platform-copilot"
+          - "cortex-present generates walkthrough HTML via design-tokens.yaml"
+        pass_criteria: "All 5 cross-repo handoffs complete, no MCP connectivity errors"
+
+      - step: 6
+        name: "3-layer test suite final run"
+        description: "Run all 3 test layers in sequence"
+        commands:
+          - "python scripts/run_tests.py smoke  # Layer 1 (<60s)"
+          - "# Layer 2: manual E2E routing test for all 34 intents"
+          - "# Layer 3: cortex-intel self-onboard (already verified in Step 4)"
+        pass_criteria: "All 3 layers pass with 0 failures"
+
+      - step: 7
+        name: "Tag v3.2.0"
+        description: "Create annotated git tag"
+        command: "git tag -a v3.2.0 -m 'CORTEX v3.2.0 Consolidated Sharp Knife — 10 agents, 4 gates, 40 DoD checks, 3-wave deprecation complete'"
+        prerequisite: "Steps 1-6 all PASS. If ANY step fails: do not tag."
+        pass_criteria: "git tag v3.2.0 exists, all P5 steps confirmed PASS"
+
+    gate: "40 DoD checks pass, 0 P0/P1 findings (max 3 convergence cycles), self-onboard model.yaml valid, cross-repo integration test passes, 3-layer test suite passes, v3.2.0 tag created"
+    cleanup:
+      - "Verify 0 orphan files in _legacy/ (no files without a corresponding _moved_reason.txt)"
+      - "grep -r 'from cortex.orchestrators' cortex/ --include='*.py' | grep -v _legacy | grep -v __pycache__  # must be empty or only stateful engine imports"
+      - "Verify .github/agents/ has exactly 10 agent files + AGENT-INDEX.md + gates/ subdirectory"
+
+phases_timeline:
+  total_weeks: "~11 (P1 complete, P2-P5 = 11 weeks)"
+  parallelization: "P2 LENS work can overlap with agent authoring. P4 waves sequential."
+  estimated_completion: "2026-05-15"
+
+dod:
+  total_checks: 40
+  note: >
+    Reduced from 76 to 40. Removed: V-category (7 evidence checks — premature
+    certification), K-category (5 skill catalog ceremony), E-category reduced (6→3),
+    P-category reduced (4→2). Merged F and T into one Testing category.
+  categories:
+    - category: "S — Structural"
+      count: 4
+      checks:
+        - "DOD-S01: cortex-master-v2.yaml present (architect mode marker)"
+        - "DOD-S02: CLAUDE.md present with CORTEX Dark v2.0 tokens (#00d4ff)"
+        - "DOD-S03: .github/assets/css/ has design system CSS files"
+        - "DOD-S04: No v1 design system references (0 Lato, 0 #7c3aed as primary)"
+
+    - category: "I — Intelligence Preservation"
+      count: 7
+      checks:
+        - "DOD-I01: All core governance YAMLs present (41+)"
+        - "DOD-I02: All governance tier YAMLs present (54+)"
+        - "DOD-I03: All knowledge YAMLs present (174+ across 24 domains)"
+        - "DOD-I04: knowledge/INDEX.yaml validates all knowledge YAMLs (0 orphans)"
+        - "DOD-I05: All company profile YAMLs present (65+)"
+        - "DOD-I06: Grand total cortex-registry YAML count >= 802"
+        - "DOD-I07: PLIP-001 prompt-learning-protocol.yaml present"
+
+    - category: "G — Governance"
+      count: 4
+      checks:
+        - "DOD-G01: Governance alignment script exits 0 (26+ drift-lock checks)"
+        - "DOD-G02: 0 duplicate CORE-* rule IDs across all governance YAMLs"
+        - "DOD-G03: All governance YAMLs schema-valid"
+        - "DOD-G04: 4 gate skills present and return PASS/BLOCK verdicts"
+
+    - category: "A — Agents"
+      count: 6
+      checks:
+        - "DOD-A01: 10 agent SKILL.md files present in .github/agents/"
+        - "DOD-A02: AGENT-INDEX.md routes all 34 intent types"
+        - "DOD-A03: No agent SKILL.md references a deprecated Python orchestrator path"
+        - "DOD-A04: Every agent SKILL.md has Quality/Security/MCP sections"
+        - "DOD-A05: cortex-intel produces valid model.yaml consumed by downstream agents"
+        - "DOD-A06: cortex-orchestrate delegates to ADLC agents (not reinvents lifecycle)"
+
+    - category: "W — WorkflowComposer & Response"
+      count: 4
+      checks:
+        - "DOD-W01: WorkflowComposer 5 core Python files retained and functional"
+        - "DOD-W02: cortex_workflow MCP tool endpoint operational"
+        - "DOD-W03: ~80 YAML workflow templates accessible via MCP"
+        - "DOD-W04: cortex-response-spec.yaml present (~500 tokens)"
+
+    - category: "H — HTML Views"
+      count: 4
+      checks:
+        - "DOD-H01: cortex-html-render (via cortex-present) has 4+ output types"
+        - "DOD-H02: All HTML outputs pass governance checks"
+        - "DOD-H03: 0 inline style= attributes in generated HTML"
+        - "DOD-H04: design-tokens.yaml is v2.0 (Inter + cyan #00d4ff)"
+
+    - category: "T — Testing"
+      count: 6
+      checks:
+        - "DOD-T01: Smoke test suite passes (26 drift-lock checks)"
+        - "DOD-T02: Agent routing E2E covers all 34 intent types"
+        - "DOD-T03: CORTEX self-onboard succeeds (cortex-intel scans itself)"
+        - "DOD-T04: All 1428 existing test files still pass after deprecation"
+        - "DOD-T05: Comparison tests prove agent output matches orchestrator output"
+        - "DOD-T06: Cross-repo integration test passes (CORTEX + ADLC + Purple)"
+
+    - category: "C — Convergence & Ecosystem"
+      count: 5
+      checks:
+        - "DOD-C01: Convergence gate converged (0 P0/P1, max 3 iterations)"
+        - "DOD-C02: No open sweep catalogues (all CORE-064 sweeps closed)"
+        - "DOD-C03: VS Code skill paths registered for all 3 repos"
+        - "DOD-C04: Both primary surfaces validated (Claude Code CLI + VS Code Copilot)"
+        - "DOD-C05: .vscode/mcp.json present with GitHub MCP server config"
+
+mcp_connectivity:
+  dual_architecture:
+    github_remote:
+      standard: "GitHub Remote HTTP MCP Server"
+      type: "http"
+      authentication: "VS Code GitHub session"
+      capabilities: "Issues, PRs, branches, repos, search"
+
+    cortex_local:
+      standard: "CORTEX Local MCP Server"
+      command: "python -m cortex.mcp"
+      transport: "stdio"
+      logical_tools: 35
+      tool_files: 74
+      rate_limit: "50 rps steady-state, 100 burst"
+
+  workspace_config:
+    path: ".vscode/mcp.json"
+
+deployment_surfaces:
+  primary:
+    - name: "Claude Code CLI"
+      setup: "Copy CLAUDE.md to ~/.claude/CLAUDE.md + /cortex command"
+      best_for: "Terminal-based coding, TDD cycles, git workflows"
+    - name: "VS Code Copilot"
+      setup: "Register skill paths + configure MCP servers"
+      best_for: "IDE-integrated coding with Copilot Chat"
+  bonus:
+    - name: "Claude Desktop (Cowork)"
+      setup: "Install cortex.skill"
+      best_for: "File automation, doc creation"
+    - name: "Cursor"
+      setup: "SKILL.md auto-discovered via project context"
+    - name: "Gemini CLI"
+      setup: "SKILL.md auto-discovered via context"
+  note: >
+    Primary surfaces get tested and validated. Bonus surfaces work because
+    SKILL.md is markdown — they either work or they don't. No surface parity
+    testing needed for markdown files.
+
+governance_model:
+  approach: "2-Layer Governance (not 3-tier)"
+  note: >
+    ADRs document decisions for human reference. They are NOT a governance tier.
+    Governance enforcement has 2 layers: SKULL/CORE rules (what) and gate skills (how).
+  layers:
+    - layer: 1
+      name: "SKULL + CORE Rules — Enforceable Policies"
+      purpose: "Define requirements that must be enforced"
+      count: "40+ SKULL + 70+ CORE"
+      nature: "Living rules (versioned evolution)"
+
+    - layer: 2
+      name: "Gate Skills — Automated Enforcement"
+      purpose: "Enforce compliance through PASS/BLOCK verdicts at 4 boundaries"
+      count: "4 gate skills"
+      nature: "Mutable (update with rules)"
+
+  adrs:
+    purpose: "Historical record of WHY decisions were made — documentation, not enforcement"
+    count: 13
+    nature: "Immutable (append-only via supersede)"
+
+removed_from_v31:
+  note: >
+    The following v3.1 components were withdrawn as overengineered for the current
+    stage of the framework (single developer, 3 known repos, no third-party plugins).
+    Each can be reintroduced when the trigger condition is met.
+  items:
+    - component: "Release Evidence Mesh (ADR-V3-014)"
+      reason: "8-layer verification with 7 signed artifacts is NASA-level for markdown skills"
+      replacement: "3-layer pragmatic testing (smoke, routing E2E, self-onboard)"
+      reintroduce_when: "Multi-team releases require formal audit trails"
+
+    - component: "Plugin Governance (ADR-V3-013)"
+      reason: "SHA-256 signing, trust levels, compatibility matrices — no third-party plugins exist"
+      replacement: "Simple skill path registration with CORTEX governance override"
+      reintroduce_when: "Third-party contributors actually appear"
+
+    - component: "gate-compliance"
+      reason: "SKULL/CORE rules already enforce code quality and patterns"
+      replacement: "SKULL/CORE enforcement via existing infrastructure"
+      reintroduce_when: "Teams bypass SKULL/CORE — unlikely since it's automated"
+
+    - component: "gate-traceability"
+      reason: "Git hooks and PR templates already enforce commit→story→feature tracing"
+      replacement: "Existing git hooks and PR templates"
+      reintroduce_when: "Traceability gaps appear in audit"
+
+    - component: "gate-evidence"
+      reason: "Premature certification infrastructure"
+      replacement: "3-layer testing validates release readiness"
+      reintroduce_when: "Compliance or regulatory requirements demand signed evidence"
+
+    - component: "Surface Parity Testing"
+      reason: "SKILL.md files are markdown — they work or they don't across surfaces"
+      replacement: "Test 2 primary surfaces. Bonus surfaces work by definition."
+      reintroduce_when: "Behavior actually diverges across IDEs (unlikely for markdown)"
+
+    - component: "76 DoD checks across 15 categories"
+      reason: "More verification than most production SaaS — ceremony without value"
+      replacement: "40 DoD checks across 8 categories — focused on what matters"
+      reintroduce_when: "Team size grows beyond single developer"
+
+    - component: "cortex-master-v3.yaml"
+      reason: "cortex-master-v2.yaml already serves as architect mode marker"
+      replacement: "Continue using cortex-master-v2.yaml"
+      reintroduce_when: "v2 schema is genuinely insufficient"
+
+team_adoption:
+  onboarding_steps:
+    - step: 1
+      action: "Clone all 3 repos (Foundations.Cortex, adlc-copilot, purple-platform-copilot)"
+      duration: "5 minutes"
+    - step: 2
+      action: "Register skill paths and agent paths in VS Code settings"
+      duration: "2 minutes"
+    - step: 3
+      action: "Configure .vscode/mcp.json with GitHub MCP server"
+      duration: "1 minute"
+    - step: 4
+      action: "Run cortex-onboard to generate model.yaml for team's repo"
+      duration: "2 minutes"
+    - step: 5
+      action: "Author first domain skill using SKILL-AUTHORING.md guide"
+      duration: "30 minutes"
+    - step: 6
+      action: "Submit skill PR — gate-security validates before merge"
+
+registry_governance:
+  adr: ADR-V3-015
+  title: "Registry Taxonomy Freeze — Anti-Sprawl Governance"
+  status: ACCEPTED
+  date: "2026-03-27"
+
+  problem_statement: >
+    The cortex-registry has grown to 802 YAMLs across 23 top-level directories with no
+    declared schema for where new files belong. Templates exist in 4 locations, governance
+    concepts span 3 directories, phases are duplicated in 3 locations, and 200 planning
+    YAMLs have no expiry. Any agent or developer can create a new top-level directory
+    without governance — causing the registry to sprawl indefinitely.
+
+  current_state:
+    total_yamls: 802
+    top_level_directories: 23
+    sprawl_symptoms:
+      - issue: "Templates in 4 locations"
+        locations: ["artifacts/templates/", "metrics/dashboards/templates/", "templates/", "workflows/templates/"]
+      - issue: "Governance in 3 locations"
+        locations: ["governance/", "rules/", "core/"]
+      - issue: "Phases in 3 locations"
+        locations: [".archive/cortex-master-v1/phases/", "artifacts/templates/phases/", "planning/phases/"]
+      - issue: "Loose files at registry root"
+        offenders: ["cortex-master-v2.yaml (exception — it IS the index)", "yaml-reader.html (must move)"]
+      - issue: "No schema_version or namespace on most YAMLs"
+      - issue: "200 planning YAMLs with no TTL — completed plans never archived"
+
+  solution:
+    rules:
+      - rule: "REGISTRY-001: Taxonomy Freeze"
+        description: >
+          No new top-level directories without a new ADR. Attempting to create a directory
+          outside the 8 canonical namespaces fails with a governance error from registry_manager.py.
+
+      - rule: "REGISTRY-002: Schema-First YAML Creation"
+        description: >
+          Every new YAML must declare schema_version and namespace in its front-matter.
+          registry_manager.py validates before write. YAMLs missing these fields are flagged
+          UNREGISTERED on next convergence gate run.
+        required_fields:
+          - "schema_version: '1.0'"
+          - "namespace: <one of the 8 canonical namespaces>"
+
+      - rule: "REGISTRY-003: No Loose Files at Registry Root"
+        description: >
+          Registry root may only contain README.md and cortex-master-v2.yaml (the index).
+          All other files must live in a canonical namespace directory.
+
+      - rule: "REGISTRY-004: TTL Policy (Time-to-Live)"
+        description: >
+          Every YAML in planning/ must declare status (ACTIVE|COMPLETED) or expires_after date.
+          Convergence gate auto-archives COMPLETED files 30 days after completion_date,
+          and ACTIVE files past their expires_after date, moving them to _archive/.
+        status_values:
+          - "ACTIVE: reviewed quarterly, no TTL"
+          - "COMPLETED + completion_date: auto-archived 30 days post-completion"
+          - "expires_after: YYYY-MM-DD: auto-archived on date"
+
+      - rule: "REGISTRY-005: Duplicate Detection on Write"
+        description: >
+          Before any new YAML is written, CORTEX checks for an existing YAML with the same
+          (namespace + entity_type + entity_name) combination. If found, the write is rejected
+          and the existing file path is returned instead.
+
+    eight_canonical_namespaces:
+      - namespace: company
+        contains: ["repos/", "domains/", "infrastructure/", "dashboards/"]
+        absorbs: ["existing company/ — no change"]
+
+      - namespace: governance
+        contains: ["core-rules", "skull-rules", "compliance", "security", "gates", "policies", "audit-checklists"]
+        absorbs: ["governance/", "rules/", "core/"]
+
+      - namespace: knowledge
+        contains: ["domains", "archetypes", "best-practices", "glossary", "repositories", "sdlc", "security", "testing-validation"]
+        absorbs: ["existing knowledge/ — no change"]
+
+      - namespace: planning
+        contains: ["decisions/", "phases/", "migration/", "roadmaps/", "repo-specific-plans/"]
+        absorbs: ["existing planning/ — add TTL enforcement"]
+        ttl_enforced: true
+
+      - namespace: workflows
+        contains: ["templates/", "patterns/", "components/"]
+        absorbs: ["workflows/", "artifacts/", "templates/", "metrics/dashboards/templates/"]
+        note: "Consolidates all 4 template locations into one"
+
+      - namespace: config
+        contains: ["system config", "memory", "metrics", "cowork-setup"]
+        absorbs: ["config/", "memory/", "metrics/", "cowork-setup/"]
+
+      - namespace: specs
+        contains: ["HTML view specs", "theme specs", "formal schema definitions"]
+        absorbs: ["specs/", "html-views/"]
+
+      - namespace: _archive
+        contains: ["completed plans (auto-moved by TTL)", "versioned history"]
+        absorbs: [".archive/ (renamed)"]
+        read_only: true
+
+  implementation_phases:
+    - phase: "P3 Week 1"
+      action: "Tag existing YAMLs"
+      command: "python scripts/tag_existing_yamls.py --add-namespace --dry-run"
+      commit_message: "chore: add schema_version + namespace to all 802 registry YAMLs"
+
+    - phase: "P3 Week 2"
+      action: "Merge duplicate directories"
+      steps:
+        - "Move governance/ + rules/ + core/ → merged governance/"
+        - "Move artifacts/templates/ + metrics/dashboards/templates/ + templates/ → workflows/templates/"
+        - "Move .archive/ → _archive/"
+        - "Update all references in cortex-master-v2.yaml"
+
+    - phase: "P3 Week 3"
+      action: "Enable enforcement"
+      steps:
+        - "Update registry_manager.py with namespace validation"
+        - "Add convergence gate step: run_registry_sweep.py --validate-namespaces"
+        - "Enable duplicate detection on write"
+
+    - phase: "Ongoing"
+      action: "TTL sweep in every convergence gate run"
+      command: "python scripts/run_registry_sweep.py --ttl-archive"
+      log_target: "_archive/sweep-log.yaml"
+
+  html_exhibit: "cortex-registry/company/repos/cortex/analysis/v32-plan/registry.html"

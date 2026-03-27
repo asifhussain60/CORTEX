@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORTEX v3.2.0 — Architecture & Agents</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --accent-primary: #00d4ff;
+      --accent-secondary: #7b61ff;
+      --bg-primary: #0a0e27;
+      --bg-secondary: #1a1f3a;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-error: #ef4444;
+      --color-text-primary: #f0f4f8;
+      --color-text-secondary: #cbd5e1;
+      --color-text-tertiary: #94a3b8;
+      --color-text-muted: #64748b;
+      --border-subtle: rgba(0, 212, 255, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, sans-serif;
+      background: var(--bg-primary);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 2rem;
+      padding: 2.5rem 2rem;
+      border-bottom: 1px solid var(--border-subtle);
+      position: relative;
+      margin-bottom: 0;
+    }
+
+    .page-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--accent-primary) 20%, var(--accent-secondary) 50%, transparent 80%);
+    }
+
+    .page-header-logo {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .page-header-logo img {
+      width: 150px;
+      height: 150px;
+      filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+    }
+
+    .back-link {
+      font-size: 0.85rem;
+      color: var(--color-text-tertiary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover {
+      color: var(--accent-primary);
+    }
+
+    .page-header-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .page-header h1 {
+      font-family: Space Grotesk, sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .meta-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .meta-chip {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      background: rgba(0, 212, 255, 0.12);
+      color: var(--accent-primary);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      font-family: Inter, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .meta-chip.ok {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--color-success);
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+
+    .meta-chip.repo {
+      background: rgba(123, 97, 255, 0.12);
+      color: var(--accent-secondary);
+      border-color: rgba(123, 97, 255, 0.25);
+    }
+
+    /* ===== STICKY JUMP NAV ===== */
+    .jump-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(10, 14, 39, 0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border-subtle);
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      z-index: 50;
+    }
+
+    .jump-btn {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-tertiary);
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 0.4rem 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .jump-btn:hover {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.08);
+      border-color: rgba(0, 212, 255, 0.15);
+    }
+
+    .jump-btn.active {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.12);
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .jump-sep {
+      width: 1px;
+      height: 20px;
+      background: var(--border-subtle);
+      margin: 0 0.25rem;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .section {
+      margin-bottom: 4rem;
+      padding: 2.5rem;
+      border-radius: 12px;
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .section-alt {
+      background: rgba(26, 31, 58, 0.4);
+    }
+
+    .section h2 {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.4px;
+    }
+
+    .section h3 {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--color-text-secondary);
+    }
+
+    .section p {
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .section ul {
+      margin-left: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section li {
+      margin-bottom: 0.5rem;
+      color: var(--color-text-secondary);
+    }
+
+    /* ===== DIAGRAM CONTAINER ===== */
+    .diagram-container {
+      background: rgba(26, 31, 58, 0.6);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .diagram-container svg {
+      width: 100%;
+      height: auto;
+      max-height: 350px;
+      display: block;
+    }
+
+    /* ===== TABLE ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: rgba(0, 212, 255, 0.08);
+    }
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--accent-primary);
+      font-family: Space Grotesk, sans-serif;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.08);
+      color: var(--color-text-secondary);
+      font-size: 0.95rem;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ===== AC SATISFACTION BADGE ===== */
+    .ac-satisfaction-badge {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .ac-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.6rem;
+      border-radius: 16px;
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .ac-badge:hover {
+      background: rgba(0, 212, 255, 0.2);
+      border-color: rgba(0, 212, 255, 0.4);
+    }
+
+    /* ===== HUB NAV BAR (fixed bottom) ===== */
+    .hub-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: rgba(10, 14, 39, 0.95);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 2rem;
+      z-index: 40;
+    }
+
+    .hub-nav-left, .hub-nav-center, .hub-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hub-nav-left {
+      flex: 0 0 auto;
+    }
+
+    .hub-nav-center {
+      flex: 1;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .hub-nav-right {
+      flex: 0 0 auto;
+    }
+
+    .hub-btn {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-tertiary);
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 0.35rem 0.65rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .hub-btn:hover, .hub-btn.active {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.12);
+      border-color: rgba(0, 212, 255, 0.25);
+    }
+
+    .hub-btn.active {
+      border-color: var(--accent-primary);
+    }
+
+    .hub-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--border-subtle);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      margin-top: 6rem;
+      margin-bottom: 44px;
+      padding: 2rem;
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+      color: var(--color-text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* ===== BACK TO TOP BUTTON ===== */
+    .back-top-btn {
+      position: fixed;
+      bottom: 60px;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      background: rgba(10, 14, 39, 0.9);
+      border: 2px solid var(--accent-primary);
+      border-radius: 50%;
+      color: var(--accent-primary);
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 30;
+    }
+
+    .back-top-btn.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-top-btn:hover {
+      background: rgba(0, 212, 255, 0.15);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .page-header {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.5rem 1.5rem;
+      }
+
+      .page-header-logo {
+        align-items: center;
+      }
+
+      .meta-chip-row {
+        justify-content: center;
+      }
+
+      .container {
+        padding: 2rem 1.5rem;
+      }
+
+      .section {
+        padding: 1.5rem;
+      }
+
+      .hub-nav {
+        padding: 0 1rem;
+        gap: 1rem;
+      }
+
+      .jump-nav {
+        gap: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .jump-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-logo">
+        <img src="./assets/images/cortex-logo-200.png" alt="CORTEX Logo">
+        <a href="./index.html" class="back-link">← All Walkthroughs</a>
+      </div>
+      <div class="page-header-content">
+        <h1>CORTEX v3.2.0 — Architecture & Agents</h1>
+        <div class="meta-chip-row">
+          <span class="meta-chip repo">Foundations.Cortex</span>
+          <span class="meta-chip ok">v3.2.0</span>
+          <span class="meta-chip">Spoke 2 of 5</span>
+          <span class="meta-chip">2026-03-27</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STICKY JUMP NAV -->
+    <nav class="jump-nav">
+      <a href="#stack" class="jump-btn active">Stack</a>
+      <div class="jump-sep"></div>
+      <a href="#complement" class="jump-btn">Complement</a>
+      <div class="jump-sep"></div>
+      <a href="#lens" class="jump-btn">LENS</a>
+      <div class="jump-sep"></div>
+      <a href="#routing" class="jump-btn">Routing</a>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+      <!-- SECTION 1: STACK -->
+      <section class="section" id="stack">
+        <h2>4-Layer Architecture Stack</h2>
+        <p>The v3.2.0 architecture is organized into four distinct layers, each with clear responsibilities and interfaces. These layers work together through the MCP protocol, creating a clean separation of concerns.</p>
+
+        <h3>The Four Layers (Bottom to Top)</h3>
+        <ul>
+          <li><strong>Layer 4 — Foundation:</strong> Python Orchestrators (381 files) — stateful TDD engine with state machines, RCA SQLite persistence, WorkflowComposer, and SKULL/CORE enforcement. PERMANENTLY KEPT. Never deprecated.</li>
+          <li><strong>Layer 3 — Tools:</strong> MCP Tool Layer (74 files / 35 logical tools) — the bridge between stateless agents and stateful orchestrators. Thin Python wrappers that expose orchestrator logic via the MCP protocol.</li>
+          <li><strong>Layer 2 — Intelligence:</strong> Agent Layer (.github/agents/*.agent.md) — conversational, stateless, markdown-defined agents. 10+ agents post-Phase 2. Handle intent routing, response formatting, and delegation coordination.</li>
+          <li><strong>Layer 1 — Surface:</strong> Claude Code CLI + VS Code Extension — user-facing interfaces. Two primary surfaces in v3.2.0, providing a unified entry point for all CORTEX operations.</li>
+        </ul>
+
+        <h3>The Core Rule</h3>
+        <p>Agents <strong>NEVER</strong> bypass the MCP layer to call orchestrators directly. All communication flows through the MCP protocol, maintaining isolation and enabling consistent audit trails, state validation, and DoR enforcement at every interaction.</p>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 800 468" width="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <style>text { font-family: 'Space Grotesk', 'Inter', sans-serif; }</style>
+              <marker id="arch-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#00d4ff"/>
+              </marker>
+            </defs>
+
+            <!-- LAYER 1: User-Facing Surfaces (top, brightest) -->
+            <rect x="40" y="24" width="720" height="72" rx="10" fill="rgba(0,212,255,0.25)" stroke="#00d4ff" stroke-width="2"/>
+            <text x="400" y="48" text-anchor="middle" font-size="14" font-weight="700" fill="#00d4ff">LAYER 1: User-Facing Surfaces</text>
+            <text x="400" y="70" text-anchor="middle" font-size="11" fill="rgba(0,212,255,0.9)">Claude Code CLI · VS Code Extension · Two primary entry points</text>
+
+            <!-- Arrow L1→L2 -->
+            <line x1="400" y1="96" x2="400" y2="140" stroke="rgba(0,212,255,0.5)" stroke-width="1.5" marker-end="url(#arch-arrow)"/>
+            <text x="416" y="121" font-size="10" fill="#64748b">agent dispatch</text>
+
+            <!-- LAYER 2: Intelligent Agent Layer -->
+            <rect x="40" y="140" width="720" height="72" rx="10" fill="rgba(0,212,255,0.15)" stroke="#00d4ff" stroke-width="2"/>
+            <text x="400" y="164" text-anchor="middle" font-size="14" font-weight="700" fill="#00d4ff">LAYER 2: Intelligent Agent Layer</text>
+            <text x="400" y="186" text-anchor="middle" font-size="11" fill="rgba(0,212,255,0.8)">10+ agents · Markdown-defined · Stateless · Intent routing · Response formatting</text>
+
+            <!-- Arrow L2→L3 -->
+            <line x1="400" y1="212" x2="400" y2="256" stroke="rgba(0,212,255,0.5)" stroke-width="1.5" marker-end="url(#arch-arrow)"/>
+            <text x="416" y="237" font-size="10" fill="#64748b">MCP calls</text>
+
+            <!-- LAYER 3: MCP Tool Bridge -->
+            <rect x="40" y="256" width="720" height="72" rx="10" fill="rgba(26,31,58,0.7)" stroke="rgba(0,212,255,0.4)" stroke-width="2"/>
+            <text x="400" y="280" text-anchor="middle" font-size="14" font-weight="700" fill="#00d4ff">LAYER 3: MCP Tool Bridge</text>
+            <text x="400" y="302" text-anchor="middle" font-size="11" fill="rgba(0,212,255,0.7)">74 files · 35 logical tools · Thin Python wrappers · MCP protocol</text>
+
+            <!-- Arrow L3→L4 -->
+            <line x1="400" y1="328" x2="400" y2="372" stroke="rgba(0,212,255,0.5)" stroke-width="1.5" marker-end="url(#arch-arrow)"/>
+            <text x="416" y="353" font-size="10" fill="#64748b">orchestrator execution</text>
+
+            <!-- LAYER 4: Python Orchestrators Foundation (bottom) -->
+            <rect x="40" y="372" width="720" height="72" rx="10" fill="rgba(10,14,39,0.8)" stroke="rgba(123,97,255,0.4)" stroke-width="2"/>
+            <text x="400" y="396" text-anchor="middle" font-size="14" font-weight="700" fill="#7b61ff">LAYER 4: Python Orchestrators Foundation</text>
+            <text x="400" y="418" text-anchor="middle" font-size="11" fill="rgba(123,97,255,0.7)">381 files · TDD State Machine · RCA SQLite · WorkflowComposer · SKULL/CORE Enforcement</text>
+          </svg>
+        </div>
+
+        <div class="ac-satisfaction-badge">
+          <span class="ac-badge">Architecture-1</span>
+        </div>
+      </section>
+
+      <!-- SECTION 2: COMPLEMENT -->
+      <section class="section section-alt" id="complement">
+        <h2>Agent + Engine Complement Pattern</h2>
+        <p>The core architectural insight of v3.2.0: <strong>agents and Python MCP tools are complements, not competitors.</strong> They excel at different things and work together seamlessly.</p>
+
+        <h3>What Each Layer Does</h3>
+        <p><strong>Agents (Stateless):</strong> They handle conversation flow, intent interpretation, response formatting, and delegation routing. Written as markdown files, they define how the system talks to users and decides which operations to invoke.</p>
+        <p><strong>Python MCP Tools (Stateful):</strong> They execute the actual work — maintaining TDD state machines, persisting RCA investigations to SQLite, composing multi-step workflows via WorkflowComposer, and enforcing SKULL/CORE compliance checks. This is where the real engineering lives.</p>
+
+        <h3>The Right Model vs. The Wrong Model</h3>
+        <p><strong>Wrong Approach (v3.1 thinking):</strong> "Replace Python with agents." Try to move everything to markdown and let agents do all the work. This loses state, fails to enforce compliance, and breaks audit trails.</p>
+        <p><strong>Right Approach (v3.2):</strong> "Agents route; Python executes stateful operations." Agents decide what to do and how to present results. Python handles state, persistence, and enforcement. Clean separation of concerns.</p>
+
+        <h3>Code That Stays Python Forever</h3>
+        <ul>
+          <li><code>audit_orchestrator.py</code> — RCA + SQLite persistence</li>
+          <li><code>approval_gate.py</code> — DoR enforcement and state management</li>
+          <li><code>autonomous_plan_executor.py</code> — multi-step workflow coordination</li>
+          <li><code>challenge_engine_plugins.py</code> — behavioral validation</li>
+          <li>All files in <code>strategies/</code> directory — domain-specific orchestration logic</li>
+        </ul>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="800" height="280" fill="rgba(26,31,58,0.3)"/>
+
+            <!-- Left panel: Agents -->
+            <rect x="40" y="30" width="300" height="220" rx="8" fill="rgba(0,212,255,0.08)" stroke="rgba(0,212,255,0.4)" stroke-width="2"/>
+            <text x="190" y="55" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="600" fill="#00d4ff" text-anchor="middle">Agents (Stateless)</text>
+            <text x="190" y="80" font-family="Inter, sans-serif" font-size="12" fill="rgba(0,212,255,0.7)" text-anchor="middle">Markdown-defined</text>
+
+            <text x="60" y="110" font-family="Inter, sans-serif" font-size="12" fill="var(--color-text-secondary)">• Intent Routing</text>
+            <text x="60" y="135" font-family="Inter, sans-serif" font-size="12" fill="var(--color-text-secondary)">• Response Formatting</text>
+            <text x="60" y="160" font-family="Inter, sans-serif" font-size="12" fill="var(--color-text-secondary)">• Delegation Coordination</text>
+            <text x="60" y="185" font-family="Inter, sans-serif" font-size="12" fill="var(--color-text-secondary)">• Conversation Flow</text>
+            <text x="60" y="210" font-family="Inter, sans-serif" font-size="12" fill="var(--color-text-secondary)">• User Interaction</text>
+
+            <!-- Right panel: Python Engine -->
+            <rect x="460" y="30" width="300" height="220" rx="8" fill="rgba(123,97,255,0.08)" stroke="rgba(123,97,255,0.4)" stroke-width="2"/>
+            <text x="610" y="55" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="600" fill="#7b61ff" text-anchor="middle">Python Engine (Stateful)</text>
+            <text x="610" y="80" font-family="Inter, sans-serif" font-size="12" fill="rgba(123,97,255,0.7)" text-anchor="middle">TDD + Enforcement</text>
+
+            <text x="480" y="110" font-family="Inter, sans-serif" font-size="12" fill="var(--color-text-secondary)">• TDD State Machine</text>
+            <text x="480" y="135" font-family="Inter, sans-serif" font-size="12" fill="var(--color-text-secondary)">• RCA + SQLite Persistence</text>
+            <text x="480" y="160" font-family="Inter, sans-serif" font-size="12" fill="var(--color-text-secondary)">• WorkflowComposer</text>
+            <text x="480" y="185" font-family="Inter, sans-serif" font-size="12" fill="var(--color-text-secondary)">• SKULL/CORE Enforcement</text>
+            <text x="480" y="210" font-family="Inter, sans-serif" font-size="12" fill="var(--color-text-secondary)">• Audit Trails</text>
+
+            <!-- Center arrow -->
+            <path d="M 340 140 L 460 140" stroke="rgba(0,212,255,0.5)" stroke-width="3" fill="none" marker-end="url(#arrowhead2)"/>
+            <path d="M 460 160 L 340 160" stroke="rgba(0,212,255,0.5)" stroke-width="3" fill="none" marker-end="url(#arrowhead3)"/>
+            <text x="400" y="130" font-family="Inter, sans-serif" font-size="11" fill="rgba(0,212,255,0.7)" text-anchor="middle">MCP Protocol</text>
+
+            <!-- Arrow marker definitions -->
+            <defs>
+              <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                <polygon points="0 0, 10 5, 0 10" fill="rgba(0,212,255,0.5)"/>
+              </marker>
+              <marker id="arrowhead3" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                <polygon points="0 0, 10 5, 0 10" fill="rgba(0,212,255,0.5)"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="ac-satisfaction-badge">
+          <span class="ac-badge">Architecture-2</span>
+        </div>
+      </section>
+
+      <!-- SECTION 3: LENS -->
+      <section class="section" id="lens">
+        <h2>LENS Intelligence Pipeline</h2>
+        <p>Every request flows through a 4-stage diamond called LENS. This pipeline synthesizes context, validates intent, applies intelligence analyzers, and dispatches execution—all while enforcing DoR gates at critical junctures.</p>
+
+        <h3>The Four Stages</h3>
+        <ul>
+          <li><strong>Stage 0 (Hidden):</strong> Context Synthesis — load prior session data, synthesize current request, token-optimize to ≤2000 tokens to fit Claude's context window.</li>
+          <li><strong>Stage 1:</strong> Interaction + DoR (InteractionOrchestrator) — comprehend the request and validate DoR compliance. If DoR &lt; 100%, block and escalate to user.</li>
+          <li><strong>Stage 2:</strong> Intent Routing (IntentRouter → 34 intent types) — classify the request. Confidence ≥0.85 = direct route. 0.60–0.84 = route + clarification. &lt;0.60 = ask user to rephrase.</li>
+          <li><strong>Stage 3:</strong> Intelligence (LENS — Language, Examination, Navigation, Synthesis) — apply 8 specialized analyzers auto-selected based on intent type. Each produces structured insights.</li>
+          <li><strong>Stage 4:</strong> Execution — domain orchestrator via WorkflowComposer templates. Execute the plan and collect evidence.</li>
+        </ul>
+
+        <h3>Post-Phase 2 Evolution</h3>
+        <p>IntentRouter and response formatting steps become agent-defined, routing to <code>cortex-code.agent.md</code>, <code>cortex-review.agent.md</code>, etc. The execution layer remains Python, preserving state and compliance enforcement.</p>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 800 816" width="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <style>text { font-family: 'Space Grotesk', 'Inter', sans-serif; }</style>
+              <marker id="lens-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#00d4ff"/>
+              </marker>
+              <marker id="lens-arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#10b981"/>
+              </marker>
+            </defs>
+
+            <!-- User Request -->
+            <rect x="40" y="24" width="720" height="72" rx="10" fill="rgba(0,212,255,0.18)" stroke="#00d4ff" stroke-width="2"/>
+            <text x="400" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#00d4ff">User Request</text>
+            <text x="400" y="74" text-anchor="middle" font-size="11" fill="rgba(0,212,255,0.8)">Developer intent enters CORTEX pipeline</text>
+
+            <line x1="400" y1="96" x2="400" y2="140" stroke="rgba(0,212,255,0.5)" stroke-width="1.5" marker-end="url(#lens-arrow)"/>
+
+            <!-- §0 Context Synthesis -->
+            <rect x="40" y="140" width="720" height="72" rx="10" fill="rgba(100,116,139,0.12)" stroke="rgba(100,116,139,0.35)" stroke-width="2"/>
+            <text x="400" y="168" text-anchor="middle" font-size="14" font-weight="700" fill="#94a3b8">§0 — Context Synthesis</text>
+            <text x="400" y="190" text-anchor="middle" font-size="11" fill="rgba(148,163,184,0.8)">Workspace awareness · git status · open issues · active sessions</text>
+
+            <line x1="400" y1="212" x2="400" y2="256" stroke="rgba(0,212,255,0.5)" stroke-width="1.5" marker-end="url(#lens-arrow)"/>
+
+            <!-- §1 Interaction + DoR Gate (CORTEX GATE) -->
+            <rect x="40" y="256" width="720" height="72" rx="10" fill="rgba(245,158,11,0.10)" stroke="#f59e0b" stroke-width="2"/>
+            <rect x="40" y="256" width="6" height="72" rx="3" fill="#f59e0b"/>
+            <text x="400" y="278" text-anchor="middle" font-size="10" font-weight="700" fill="#f59e0b" letter-spacing="0.08em">CORTEX GATE</text>
+            <text x="400" y="298" text-anchor="middle" font-size="14" font-weight="700" fill="#f59e0b">§1 — Interaction + DoR Gate</text>
+            <text x="400" y="318" text-anchor="middle" font-size="11" fill="rgba(245,158,11,0.8)">Validates Definition of Ready · DoR &lt; 100% → reject to user with guidance</text>
+
+            <line x1="400" y1="328" x2="400" y2="372" stroke="rgba(0,212,255,0.5)" stroke-width="1.5" marker-end="url(#lens-arrow)"/>
+
+            <!-- §2 Intent Router -->
+            <rect x="40" y="372" width="720" height="72" rx="10" fill="rgba(0,212,255,0.10)" stroke="rgba(0,212,255,0.4)" stroke-width="2"/>
+            <text x="400" y="400" text-anchor="middle" font-size="14" font-weight="700" fill="#00d4ff">§2 — Intent Router</text>
+            <text x="400" y="422" text-anchor="middle" font-size="11" fill="rgba(0,212,255,0.8)">34 intent types · confidence-based dispatch · domain classification</text>
+
+            <line x1="400" y1="444" x2="400" y2="488" stroke="rgba(0,212,255,0.5)" stroke-width="1.5" marker-end="url(#lens-arrow)"/>
+
+            <!-- §3 LENS Pipeline -->
+            <rect x="40" y="488" width="720" height="72" rx="10" fill="rgba(123,97,255,0.10)" stroke="#7b61ff" stroke-width="2"/>
+            <text x="400" y="516" text-anchor="middle" font-size="14" font-weight="700" fill="#7b61ff">§3 — LENS Pipeline</text>
+            <text x="400" y="538" text-anchor="middle" font-size="11" fill="rgba(123,97,255,0.8)">8 analyzers · context enrichment · intent validation · intelligence application</text>
+
+            <line x1="400" y1="560" x2="400" y2="604" stroke="rgba(0,212,255,0.5)" stroke-width="1.5" marker-end="url(#lens-arrow)"/>
+
+            <!-- §4 Execution -->
+            <rect x="40" y="604" width="720" height="72" rx="10" fill="rgba(16,185,129,0.10)" stroke="#10b981" stroke-width="2"/>
+            <text x="400" y="632" text-anchor="middle" font-size="14" font-weight="700" fill="#10b981">§4 — Execution</text>
+            <text x="400" y="654" text-anchor="middle" font-size="11" fill="rgba(16,185,129,0.8)">Domain orchestrators · MCP tools · Python engines · SKULL/CORE enforcement</text>
+
+            <line x1="400" y1="676" x2="400" y2="720" stroke="rgba(16,185,129,0.5)" stroke-width="1.5" marker-end="url(#lens-arrow-green)"/>
+
+            <!-- Evidence + Result -->
+            <rect x="40" y="720" width="720" height="72" rx="10" fill="rgba(16,185,129,0.20)" stroke="#10b981" stroke-width="2"/>
+            <text x="400" y="748" text-anchor="middle" font-size="14" font-weight="700" fill="#10b981">Evidence + Result</text>
+            <text x="400" y="770" text-anchor="middle" font-size="11" fill="rgba(16,185,129,0.8)">DoD evidence recorded · story closed · metrics updated in registry</text>
+          </svg>
+        </div>
+
+        <div class="ac-satisfaction-badge">
+          <span class="ac-badge">Architecture-3</span>
+        </div>
+      </section>
+
+      <!-- SECTION 4: ROUTING -->
+      <section class="section section-alt" id="routing">
+        <h2>Intent Types & Routing Table</h2>
+        <p>The IntentRouter classifies requests into 34 intent types, each mapped to a specific orchestrator and—post-Phase 2—an agent skill. This table shows the primary 10 execution modes that drive 80% of CORTEX operations.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Intent Mode</th>
+              <th>Trigger Keywords</th>
+              <th>Orchestrator</th>
+              <th>Post-P2 Agent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>AUDIT</strong></td>
+              <td><code>/audit</code>, scan, check, review compliance</td>
+              <td>AuditCoordinator</td>
+              <td>cortex-audit.agent.md</td>
+            </tr>
+            <tr>
+              <td><strong>IMPLEMENT</strong></td>
+              <td>build, create, add, feature</td>
+              <td>TDDOrchestrator</td>
+              <td>cortex-code.agent.md</td>
+            </tr>
+            <tr>
+              <td><strong>FIX</strong></td>
+              <td>fix, bug, broken, error</td>
+              <td>TDDOrchestrator</td>
+              <td>cortex-code.agent.md</td>
+            </tr>
+            <tr>
+              <td><strong>REFACTOR</strong></td>
+              <td>refactor, improve, optimize, clean</td>
+              <td>RefactoringOrchestrator</td>
+              <td>cortex-code.agent.md</td>
+            </tr>
+            <tr>
+              <td><strong>DESIGN</strong></td>
+              <td>architect, design, plan structure</td>
+              <td>DesignCoordinator</td>
+              <td>cortex-architect.agent.md</td>
+            </tr>
+            <tr>
+              <td><strong>PLAN</strong></td>
+              <td>plan, phase, roadmap, milestone</td>
+              <td>PlanningCoordinator</td>
+              <td>cortex-architect.agent.md</td>
+            </tr>
+            <tr>
+              <td><strong>RCA</strong></td>
+              <td>root cause, rca, investigate, why</td>
+              <td>InvestigationOrchestrator + RCAEngine</td>
+              <td>cortex-rca.agent.md</td>
+            </tr>
+            <tr>
+              <td><strong>REVIEW</strong></td>
+              <td><code>/review</code>, code review, critique</td>
+              <td>CodeReviewOrchestrator</td>
+              <td>cortex-review.agent.md</td>
+            </tr>
+            <tr>
+              <td><strong>ONBOARD</strong></td>
+              <td>onboard, bootstrap, setup, init</td>
+              <td>OnboardingOrchestrator</td>
+              <td>cortex-onboard.agent.md</td>
+            </tr>
+            <tr>
+              <td><strong>DEBUG</strong></td>
+              <td><code>/debug</code>, trace, step, inspect</td>
+              <td>DebuggerOrchestrator</td>
+              <td>cortex-debug.agent.md</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Confidence-Based Routing Logic</h3>
+        <p>The IntentRouter assigns a confidence score (0–1) to each classified intent:</p>
+        <ul>
+          <li><strong>Confidence ≥ 0.85:</strong> Direct route to the intent's orchestrator.</li>
+          <li><strong>Confidence 0.60–0.84:</strong> Route the intent + request clarification from the user to refine understanding.</li>
+          <li><strong>Confidence &lt; 0.60:</strong> Ask the user to rephrase their request in clearer terms.</li>
+        </ul>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 900 180" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="900" height="180" fill="rgba(26,31,58,0.3)"/>
+
+            <!-- Scale bar -->
+            <rect x="50" y="80" width="800" height="40" rx="6" fill="rgba(26,31,58,0.6)" stroke="var(--border-subtle)" stroke-width="1"/>
+
+            <!-- Gradient bar -->
+            <defs>
+              <linearGradient id="confidenceGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <rect x="60" y="85" width="780" height="30" rx="4" fill="url(#confidenceGrad)"/>
+
+            <!-- Zone markers -->
+            <!-- Red zone -->
+            <rect x="60" y="120" width="260" height="3" fill="#ef4444"/>
+            <text x="190" y="145" font-family="Inter, sans-serif" font-size="11" fill="#ef4444" text-anchor="middle">0.0 - 0.60</text>
+            <text x="190" y="160" font-family="Inter, sans-serif" font-size="10" fill="#ef4444" text-anchor="middle">Ask user to rephrase</text>
+
+            <!-- Amber zone -->
+            <rect x="320" y="120" width="260" height="3" fill="#f59e0b"/>
+            <text x="450" y="145" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b" text-anchor="middle">0.60 - 0.84</text>
+            <text x="450" y="160" font-family="Inter, sans-serif" font-size="10" fill="#f59e0b" text-anchor="middle">Route + clarification</text>
+
+            <!-- Green zone -->
+            <rect x="580" y="120" width="260" height="3" fill="#10b981"/>
+            <text x="710" y="145" font-family="Inter, sans-serif" font-size="11" fill="#10b981" text-anchor="middle">0.85 - 1.0</text>
+            <text x="710" y="160" font-family="Inter, sans-serif" font-size="10" fill="#10b981" text-anchor="middle">Direct route</text>
+
+            <!-- Title -->
+            <text x="450" y="30" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600" fill="var(--color-text-primary)" text-anchor="middle">Intent Confidence Routing Scale</text>
+          </svg>
+        </div>
+
+        <div class="ac-satisfaction-badge">
+          <span class="ac-badge">Architecture-4</span>
+        </div>
+      </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>CORTEX v3.2.0 Architecture Specification — Spoke 2 of 5 | March 27, 2026</p>
+    </footer>
+  </main>
+
+  <!-- BACK TO TOP BUTTON -->
+  <a href="#" class="back-top-btn">↑</a>
+
+  <!-- HUB NAV BAR -->
+  <nav class="hub-nav">
+    <div class="hub-nav-left">
+      <a href="./index.html" class="hub-btn">← Hub</a>
+    </div>
+    <div class="hub-nav-center">
+      <a href="./overview.html" class="hub-btn">Overview</a>
+      <div class="hub-sep"></div>
+      <a href="./architecture.html" class="hub-btn active">Architecture</a>
+      <div class="hub-sep"></div>
+      <a href="./lifecycle.html" class="hub-btn">Lifecycle</a>
+      <div class="hub-sep"></div>
+      <a href="./phases.html" class="hub-btn">Phases</a>
+      <div class="hub-sep"></div>
+      <a href="./governance.html" class="hub-btn">Governance</a>
+      <div class="hub-sep"></div>
+      <a href="./registry.html" class="hub-btn">Registry</a>
+    </div>
+    <div class="hub-nav-right">
+    </div>
+  </nav>
+
+  <script>
+    // Back to top button visibility
+    const backTopBtn = document.querySelector('.back-top-btn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 200) {
+        backTopBtn.classList.add('show');
+      } else {
+        backTopBtn.classList.remove('show');
+      }
+    });
+
+    backTopBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Jump nav active state
+    const jumpBtns = document.querySelectorAll('.jump-btn');
+    const sections = document.querySelectorAll('.section');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          jumpBtns.forEach(btn => btn.classList.remove('active'));
+          const activeBtn = document.querySelector(`.jump-btn[href="#${entry.target.id}"]`);
+          if (activeBtn) activeBtn.classList.add('active');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    sections.forEach(section => observer.observe(section));
+
+    // Hub nav active state
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.hub-btn').forEach(btn => {
+      const href = btn.getAttribute('href');
+      if (href === './' + currentPage || (currentPage === '' && href === './index.html')) {
+        btn.classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>

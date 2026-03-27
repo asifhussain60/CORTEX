@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORTEX v3.2.0 — Registry Guidance</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --accent-primary: #00d4ff;
+      --accent-secondary: #7b61ff;
+      --bg-primary: #0a0e27;
+      --bg-secondary: #1a1f3a;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-error: #ef4444;
+      --color-text-primary: #f0f4f8;
+      --color-text-secondary: #cbd5e1;
+      --color-text-tertiary: #94a3b8;
+      --color-text-muted: #64748b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+    }
+
+    main { min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* PAGE HEADER */
+    .page-header {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 2rem;
+      padding: 2rem;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.08);
+      position: relative;
+      margin-bottom: 0;
+    }
+
+    .page-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), rgba(123, 97, 255, 0.3), transparent);
+    }
+
+    .logo-section { display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .logo-section img {
+      width: 150px;
+      height: 150px;
+      filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+    }
+
+    .back-link {
+      color: var(--color-text-tertiary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--accent-primary); }
+
+    .header-content h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--color-text-primary);
+    }
+
+    .header-subtitle {
+      font-size: 0.95rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .meta-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .meta-chip {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .meta-chip.ok {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--color-success);
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    .meta-chip.open {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--color-warning);
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+
+    .meta-chip.repo {
+      background: rgba(123, 97, 255, 0.1);
+      color: var(--accent-secondary);
+      border-color: rgba(123, 97, 255, 0.2);
+    }
+
+    /* JUMP NAV */
+    .jump-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(10, 14, 39, 0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .jump-btn {
+      padding: 0.6rem 0.9rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: transparent;
+      color: var(--color-text-tertiary);
+      border: 1px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .jump-btn:hover {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.08);
+      border-color: rgba(0, 212, 255, 0.15);
+    }
+
+    .jump-btn.active {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.12);
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .jump-sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(0, 212, 255, 0.15);
+      margin: 0 0.15rem;
+    }
+
+    /* CONTAINER & SECTIONS */
+    .container {
+      flex: 1;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 60px;
+    }
+
+    section h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--accent-primary);
+    }
+
+    section p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .diagram-container {
+      background: rgba(0, 212, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.12);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    svg { display: block; max-width: 100%; height: auto; }
+
+    /* CODE BLOCKS */
+    .code-block {
+      background: rgba(0, 0, 0, 0.3);
+      border-left: 3px solid var(--accent-primary);
+      border-radius: 4px;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* LISTS */
+    ul, ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--color-text-secondary);
+    }
+
+    li { margin-bottom: 0.5rem; }
+
+    /* FOOTER & HUB NAV */
+    footer {
+      padding: 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(0, 212, 255, 0.08);
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      margin-top: 3rem;
+    }
+
+    .hub-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background: rgba(10, 14, 39, 0.95);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(0, 212, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      z-index: 999;
+    }
+
+    .hub-nav a, .hub-nav span {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .hub-nav a:hover { color: var(--accent-primary); }
+
+    .hub-nav a.active {
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .hub-sep { color: var(--color-text-muted); }
+
+    main { padding-bottom: 60px; }
+
+    .back-top-btn {
+      position: fixed;
+      bottom: 70px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.2s;
+      font-weight: 600;
+    }
+
+    .back-top-btn:hover {
+      background: rgba(0, 212, 255, 0.2);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="logo-section">
+        <img src="./assets/images/cortex-logo-200.png" alt="CORTEX">
+        <a href="./index.html" class="back-link">← All Walkthroughs</a>
+      </div>
+      <div class="header-content">
+        <h1>CORTEX v3.2.0 — Registry Guidance</h1>
+        <div class="header-subtitle">Registry Taxonomy Guidance</div>
+        <div class="meta-chips">
+          <span class="meta-chip repo">Foundations.Cortex</span>
+          <span class="meta-chip ok">v3.2.0</span>
+          <span class="meta-chip open">Appendix · Non-canonical</span>
+          <span class="meta-chip">Spoke 6 of 6</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- JUMP NAV -->
+    <nav class="jump-nav">
+      <a href="#sprawl" class="jump-btn active">Sprawl</a>
+      <div class="jump-sep"></div>
+      <a href="#solution" class="jump-btn">Solution</a>
+      <div class="jump-sep"></div>
+      <a href="#namespaces" class="jump-btn">Namespaces</a>
+      <div class="jump-sep"></div>
+      <a href="#ttl" class="jump-btn">TTL Policy</a>
+      <div class="jump-sep"></div>
+      <a href="#enforcement" class="jump-btn">Implementation</a>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="container">
+      <!-- SECTION 1: SPRAWL DIAGNOSIS -->
+      <section id="sprawl">
+        <h2>Current State Diagnosis</h2>
+        <p>The cortex-registry currently contains <strong>802 YAMLs across 23 top-level directories</strong>, exhibiting multiple sprawl patterns that compromise governance and discovery.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-text-secondary);">Directory Breakdown (Top 10)</h3>
+        <ul>
+          <li><strong>planning/</strong> — 200 YAMLs (largest, no expiry policy)</li>
+          <li><strong>knowledge/</strong> — 174 YAMLs</li>
+          <li><strong>workflows/</strong> — 143 YAMLs</li>
+          <li><strong>company/</strong> — 67 YAMLs</li>
+          <li><strong>governance/</strong> — 54 YAMLs</li>
+          <li><strong>core/</strong> — 41 YAMLs</li>
+          <li><strong>templates/</strong> — 35 YAMLs</li>
+          <li><strong>patterns/</strong> — 24 YAMLs</li>
+          <li><strong>config/</strong> — 13 YAMLs</li>
+          <li>13 additional directories (< 10 YAMLs each)</li>
+        </ul>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-warning);">Critical Sprawl Symptoms</h3>
+        <ol style="color: var(--color-text-secondary);">
+          <li><strong>Template duplication:</strong> Templates exist in 4 locations — artifacts/templates/, metrics/dashboards/templates/, templates/, workflows/templates/</li>
+          <li><strong>Governance fragmentation:</strong> Rules and policies scattered across governance/, rules/, and core/</li>
+          <li><strong>Phase directory duplication:</strong> Phases in .archive/cortex-master-v1/phases/, artifacts/templates/phases/, planning/phases/</li>
+          <li><strong>Loose files at registry root:</strong> cortex-master-v2.yaml and yaml-reader.html violate namespace conventions</li>
+          <li><strong>Missing metadata:</strong> 90% of YAMLs lack schema_version and namespace fields</li>
+          <li><strong>No TTL on planning YAMLs:</strong> 200 completed plans never archived — no cleanup mechanism</li>
+        </ol>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 600 250" xmlns="http://www.w3.org/2000/svg">
+            <!-- Y-axis -->
+            <line x1="60" y1="30" x2="60" y2="200" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+            <!-- X-axis -->
+            <line x1="60" y1="200" x2="580" y2="200" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+
+            <!-- Y-axis labels -->
+            <text x="45" y="205" font-size="11" fill="var(--color-text-muted)" text-anchor="end">0</text>
+            <text x="45" y="155" font-size="11" fill="var(--color-text-muted)" text-anchor="end">100</text>
+            <text x="45" y="105" font-size="11" fill="var(--color-text-muted)" text-anchor="end">200</text>
+
+            <!-- Bars -->
+            <g>
+              <!-- planning: 200 -->
+              <rect x="75" y="50" width="35" height="150" fill="var(--color-warning)" opacity="0.8"/>
+              <text x="92" y="215" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">planning/</text>
+              <text x="92" y="38" font-size="11" fill="var(--accent-primary)" font-weight="600" text-anchor="middle">200</text>
+              <!-- warning marker -->
+              <circle cx="110" cy="45" r="4" fill="var(--color-error)"/>
+            </g>
+
+            <g>
+              <!-- knowledge: 174 -->
+              <rect x="120" y="70" width="35" height="130" fill="var(--color-warning)" opacity="0.7"/>
+              <text x="137" y="215" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">knowledge/</text>
+              <text x="137" y="55" font-size="11" fill="var(--accent-primary)" font-weight="600" text-anchor="middle">174</text>
+            </g>
+
+            <g>
+              <!-- workflows: 143 -->
+              <rect x="165" y="93" width="35" height="107" fill="var(--color-warning)" opacity="0.7"/>
+              <text x="182" y="215" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">workflows/</text>
+              <text x="182" y="78" font-size="11" fill="var(--accent-primary)" font-weight="600" text-anchor="middle">143</text>
+            </g>
+
+            <g>
+              <!-- company: 67 -->
+              <rect x="210" y="150" width="35" height="50" fill="var(--color-warning)" opacity="0.6"/>
+              <text x="227" y="215" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">company/</text>
+              <text x="227" y="140" font-size="11" fill="var(--accent-primary)" font-weight="600" text-anchor="middle">67</text>
+            </g>
+
+            <g>
+              <!-- governance: 54 -->
+              <rect x="255" y="159" width="35" height="41" fill="var(--color-warning)" opacity="0.6"/>
+              <text x="272" y="215" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">governance/</text>
+              <text x="272" y="149" font-size="11" fill="var(--accent-primary)" font-weight="600" text-anchor="middle">54</text>
+              <!-- warning marker -->
+              <circle cx="295" cy="155" r="4" fill="var(--color-error)"/>
+            </g>
+
+            <g>
+              <!-- core: 41 -->
+              <rect x="300" y="169" width="35" height="31" fill="var(--color-warning)" opacity="0.6"/>
+              <text x="317" y="215" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">core/</text>
+              <text x="317" y="159" font-size="11" fill="var(--accent-primary)" font-weight="600" text-anchor="middle">41</text>
+              <!-- warning marker -->
+              <circle cx="340" cy="165" r="4" fill="var(--color-error)"/>
+            </g>
+
+            <g>
+              <!-- templates: 35 -->
+              <rect x="345" y="174" width="35" height="26" fill="var(--color-warning)" opacity="0.6"/>
+              <text x="362" y="215" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">templates/</text>
+              <text x="362" y="164" font-size="11" fill="var(--accent-primary)" font-weight="600" text-anchor="middle">35</text>
+              <!-- duplication marker -->
+              <circle cx="385" cy="170" r="4" fill="var(--color-error)"/>
+            </g>
+
+            <g>
+              <!-- patterns: 24 -->
+              <rect x="390" y="182" width="35" height="18" fill="var(--color-warning)" opacity="0.5"/>
+              <text x="407" y="215" font-size="12" fill="var(--color-text-secondary)" text-anchor="middle">patterns/</text>
+              <text x="407" y="172" font-size="11" fill="var(--accent-primary)" font-weight="600" text-anchor="middle">24</text>
+            </g>
+
+            <!-- Legend -->
+            <text x="60" y="245" font-size="10" fill="var(--color-text-muted)">Red circles: sprawl hotspots (duplication, missing metadata, no TTL)</text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- SECTION 2: SOLUTION -->
+      <section id="solution">
+        <h2>Registry Taxonomy Guidance</h2>
+        <p>A 5-rule governance model that prevents sprawl while preserving all existing work.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-success);">Rule 1: Taxonomy Freeze</h3>
+        <p>No new top-level directories without a new ADR. The current 23 directories are consolidated to 8 canonical namespaces. Any write operation attempting to create a top-level directory outside these 8 will fail with a governance error.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-success);">Rule 2: Schema-First YAML Creation</h3>
+        <p>Every new YAML must declare two required fields:</p>
+        <div class="code-block"><code>schema_version: "1.0"
+namespace: company|governance|knowledge|planning|workflows|config|specs|_archive</code></div>
+        <p>The CORTEX registry_manager.py MCP tool validates these fields before any write operation. YAMLs without front-matter fields are flagged as UNREGISTERED on next convergence gate run.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-success);">Rule 3: No Loose Files at Registry Root</h3>
+        <p>The registry root may only contain a README.md and the cortex-master-v2.yaml index file. No other YAMLs, HTML files, or text files are permitted.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-success);">Rule 4: TTL Policy (Time-to-Live)</h3>
+        <p>Every YAML in planning/ must declare one of:</p>
+        <div class="code-block"><code>status: ACTIVE          # no TTL, reviewed quarterly
+status: COMPLETED       # auto-archived 30 days after completion_date
+expires_after: "2026-06-30"  # auto-archived on date</code></div>
+        <p>During convergence gate, any planning/ YAML with <code style="color: var(--accent-primary); background: rgba(0,212,255,0.1); padding: 0.2rem 0.4rem; border-radius: 2px;">status: COMPLETED</code> and completion_date older than 30 days is automatically moved to _archive/.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-success);">Rule 5: Duplicate Detection on Write</h3>
+        <p>Before any new YAML is written, CORTEX checks if a YAML with the same (namespace + entity_type + entity_name) already exists. If yes, the write is rejected and the path to the existing file is returned. This prevents accidental creation of near-duplicate plans.</p>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 650 280" xmlns="http://www.w3.org/2000/svg">
+            <!-- Title -->
+            <text x="325" y="20" font-size="14" font-weight="600" fill="var(--color-text-primary)" text-anchor="middle">YAML Creation Decision Tree</text>
+
+            <!-- START -->
+            <ellipse cx="325" cy="50" rx="35" ry="20" fill="rgba(0,212,255,0.2)" stroke="var(--accent-primary)" stroke-width="2"/>
+            <text x="325" y="55" font-size="11" font-weight="600" fill="var(--color-text-primary)" text-anchor="middle">START</text>
+
+            <!-- Arrow down -->
+            <line x1="325" y1="70" x2="325" y2="95" stroke="rgba(0,212,255,0.3)" stroke-width="1.5"/>
+
+            <!-- Q1: Does entity exist? -->
+            <rect x="230" y="95" width="190" height="40" rx="4" fill="rgba(0,212,255,0.08)" stroke="rgba(0,212,255,0.3)" stroke-width="1.5"/>
+            <text x="325" y="115" font-size="11" font-weight="600" fill="var(--color-text-primary)" text-anchor="middle">Does entity YAML exist?</text>
+            <text x="325" y="128" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">(namespace + type + name)</text>
+
+            <!-- YES branch (left) -->
+            <line x1="270" y1="135" x2="160" y2="160" stroke="var(--color-success)" stroke-width="1.5"/>
+            <text x="210" y="145" font-size="9" fill="var(--color-success)" font-weight="600">YES</text>
+
+            <rect x="80" y="160" width="160" height="35" rx="4" fill="rgba(16,185,129,0.1)" stroke="var(--color-success)" stroke-width="1.5"/>
+            <text x="160" y="175" font-size="11" font-weight="600" fill="var(--color-success)" text-anchor="middle">Update existing</text>
+            <text x="160" y="188" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">✓ Proceed</text>
+
+            <!-- NO branch (right) -->
+            <line x1="380" y1="135" x2="490" y2="160" stroke="rgba(123,97,255,0.5)" stroke-width="1.5"/>
+            <text x="445" y="145" font-size="9" fill="rgba(123,97,255,0.8)" font-weight="600">NO</text>
+
+            <!-- Q2: Valid namespace? -->
+            <rect x="410" y="160" width="160" height="40" rx="4" fill="rgba(123,97,255,0.08)" stroke="rgba(123,97,255,0.3)" stroke-width="1.5"/>
+            <text x="490" y="180" font-size="11" font-weight="600" fill="var(--color-text-primary)" text-anchor="middle">Namespace in 8 canonical?</text>
+            <text x="490" y="193" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">company|governance|...</text>
+
+            <!-- INVALID namespace -->
+            <line x1="490" y1="200" x2="490" y2="230" stroke="var(--color-error)" stroke-width="1.5"/>
+            <text x="545" y="215" font-size="9" fill="var(--color-error)" font-weight="600">NO</text>
+
+            <rect x="410" y="230" width="160" height="35" rx="4" fill="rgba(239,68,68,0.1)" stroke="var(--color-error)" stroke-width="1.5"/>
+            <text x="490" y="245" font-size="11" font-weight="600" fill="var(--color-error)" text-anchor="middle">Raise governance error</text>
+            <text x="490" y="258" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">✗ Reject</text>
+
+            <!-- VALID namespace - Q3: Has metadata? -->
+            <line x1="410" y1="180" x2="250" y2="220" stroke="var(--color-warning)" stroke-width="1.5"/>
+            <text x="320" y="195" font-size="9" fill="var(--color-warning)" font-weight="600">YES</text>
+
+            <rect x="145" y="220" width="210" height="40" rx="4" fill="rgba(245,158,11,0.08)" stroke="var(--color-warning)" stroke-width="1.5"/>
+            <text x="250" y="240" font-size="11" font-weight="600" fill="var(--color-text-primary)" text-anchor="middle">Has schema_version + namespace?</text>
+            <text x="250" y="253" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">in front-matter</text>
+
+            <!-- NO metadata -->
+            <line x1="200" y1="260" x2="130" y2="270" stroke="var(--color-warning)" stroke-width="1.5"/>
+            <text x="160" y="268" font-size="9" fill="var(--color-warning)" font-weight="600">NO</text>
+
+            <rect x="40" y="270" width="180" height="35" rx="4" fill="rgba(245,158,11,0.1)" stroke="var(--color-warning)" stroke-width="1.5"/>
+            <text x="130" y="285" font-size="11" font-weight="600" fill="var(--color-warning)" text-anchor="middle">Add front-matter first</text>
+            <text x="130" y="298" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">⚠ Warn</text>
+
+            <!-- YES metadata - WRITE -->
+            <line x1="300" y1="260" x2="370" y2="270" stroke="var(--color-success)" stroke-width="1.5"/>
+            <text x="340" y="268" font-size="9" fill="var(--color-success)" font-weight="600">YES</text>
+
+            <rect x="320" y="270" width="140" height="35" rx="4" fill="rgba(16,185,129,0.1)" stroke="var(--color-success)" stroke-width="1.5"/>
+            <text x="390" y="290" font-size="11" font-weight="600" fill="var(--color-success)" text-anchor="middle">✓ Write YAML</text>
+            <text x="390" y="298" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">Proceed</text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- SECTION 3: NAMESPACES -->
+      <section id="namespaces">
+        <h2>8 Canonical Namespaces</h2>
+        <p>This appendix proposes consolidating 23 top-level directories into 8 clearer namespaces, each with explicit scope and ownership.</p>
+
+        <ol style="color: var(--color-text-secondary); margin-left: 1.5rem; margin-bottom: 1rem;">
+          <li><strong>company/</strong> — External-facing registry (repos/, domains/, infrastructure/, dashboards/). Absorbs: existing company/.</li>
+          <li><strong>governance/</strong> — All rules and policies (core-rules, skull-rules, compliance, security, gates, audit-checklists). Absorbs: governance/ + rules/ + core/ (merge all three).</li>
+          <li><strong>knowledge/</strong> — Domain knowledge base (domains, archetypes, best-practices, glossary, sdlc, security, testing-validation). Absorbs: existing knowledge/ (unchanged).</li>
+          <li><strong>planning/</strong> — Decisions, phases, roadmaps (with TTL enforcement). Absorbs: existing planning/ (add TTL).</li>
+          <li><strong>workflows/</strong> — All workflow templates (templates/, patterns/, components/). Absorbs: workflows/ + artifacts/ + templates/ + metrics/dashboards/templates/ (merge all 4 template locations).</li>
+          <li><strong>config/</strong> — System configuration (system config, memory, metrics, cowork-setup). Absorbs: config/ + memory/ + metrics/ + cowork-setup/.</li>
+          <li><strong>specs/</strong> — Formal specifications (HTML view specs, theme specs, schema definitions). Absorbs: specs/ + html-views/.</li>
+          <li><strong>_archive/</strong> — Read-only versioned history (completed plans auto-moved by TTL). Absorbs: .archive/ (renamed with underscore for sort-to-top visibility).</li>
+        </ol>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg">
+            <!-- Root node -->
+            <ellipse cx="350" cy="30" rx="60" ry="20" fill="rgba(0,212,255,0.1)" stroke="var(--accent-primary)" stroke-width="2"/>
+            <text x="350" y="35" font-size="12" font-weight="600" fill="var(--color-text-primary)" text-anchor="middle">cortex-registry/</text>
+
+            <!-- Namespace nodes -->
+            <!-- Row 1 -->
+
+            <!-- company -->
+            <line x1="290" y1="50" x2="100" y2="100" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+            <ellipse cx="100" cy="120" rx="50" ry="20" fill="rgba(0,212,255,0.12)" stroke="var(--accent-primary)" stroke-width="1.5"/>
+            <text x="100" y="118" font-size="11" font-weight="600" fill="var(--accent-primary)" text-anchor="middle">company/</text>
+            <text x="100" y="133" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">(67 YAMLs)</text>
+
+            <!-- governance -->
+            <line x1="315" y1="50" x2="220" y2="100" stroke="rgba(245,158,11,0.2)" stroke-width="1"/>
+            <ellipse cx="220" cy="120" rx="50" ry="20" fill="rgba(245,158,11,0.12)" stroke="var(--color-warning)" stroke-width="1.5"/>
+            <text x="220" y="118" font-size="11" font-weight="600" fill="var(--color-warning)" text-anchor="middle">governance/</text>
+            <text x="220" y="133" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">(115 merged)</text>
+
+            <!-- knowledge -->
+            <line x1="335" y1="50" x2="340" y2="100" stroke="rgba(123,97,255,0.2)" stroke-width="1"/>
+            <ellipse cx="340" cy="120" rx="50" ry="20" fill="rgba(123,97,255,0.12)" stroke="var(--accent-secondary)" stroke-width="1.5"/>
+            <text x="340" y="118" font-size="11" font-weight="600" fill="var(--accent-secondary)" text-anchor="middle">knowledge/</text>
+            <text x="340" y="133" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">(174 YAMLs)</text>
+
+            <!-- planning -->
+            <line x1="365" y1="50" x2="460" y2="100" stroke="rgba(59,130,246,0.2)" stroke-width="1"/>
+            <ellipse cx="460" cy="120" rx="50" ry="20" fill="rgba(59,130,246,0.12)" stroke="rgba(59,130,246,0.8)" stroke-width="1.5"/>
+            <text x="460" y="118" font-size="11" font-weight="600" fill="rgba(59,130,246,0.9)" text-anchor="middle">planning/</text>
+            <text x="460" y="133" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">(200 + TTL)</text>
+
+            <!-- workflows -->
+            <line x1="390" y1="50" x2="580" y2="100" stroke="rgba(20,184,166,0.2)" stroke-width="1"/>
+            <ellipse cx="580" cy="120" rx="50" ry="20" fill="rgba(20,184,166,0.12)" stroke="rgba(20,184,166,0.8)" stroke-width="1.5"/>
+            <text x="580" y="118" font-size="11" font-weight="600" fill="rgba(20,184,166,0.9)" text-anchor="middle">workflows/</text>
+            <text x="580" y="133" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">(326 merged)</text>
+
+            <!-- Row 2 -->
+
+            <!-- config -->
+            <line x1="310" y1="50" x2="160" y2="180" stroke="rgba(107,114,128,0.2)" stroke-width="1"/>
+            <ellipse cx="160" cy="200" rx="50" ry="20" fill="rgba(107,114,128,0.12)" stroke="rgba(107,114,128,0.8)" stroke-width="1.5"/>
+            <text x="160" y="198" font-size="11" font-weight="600" fill="rgba(107,114,128,0.9)" text-anchor="middle">config/</text>
+            <text x="160" y="213" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">(78 merged)</text>
+
+            <!-- specs -->
+            <line x1="340" y1="50" x2="300" y2="180" stroke="rgba(168,85,247,0.2)" stroke-width="1"/>
+            <ellipse cx="300" cy="200" rx="50" ry="20" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.8)" stroke-width="1.5"/>
+            <text x="300" y="198" font-size="11" font-weight="600" fill="rgba(168,85,247,0.9)" text-anchor="middle">specs/</text>
+            <text x="300" y="213" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">(allocated)</text>
+
+            <!-- _archive -->
+            <line x1="400" y1="50" x2="540" y2="180" stroke="rgba(100,116,139,0.2)" stroke-width="1"/>
+            <ellipse cx="540" cy="200" rx="50" ry="20" fill="rgba(100,116,139,0.12)" stroke="rgba(100,116,139,0.8)" stroke-width="1.5"/>
+            <text x="540" y="198" font-size="11" font-weight="600" fill="rgba(100,116,139,0.9)" text-anchor="middle">_archive/</text>
+            <text x="540" y="213" font-size="9" fill="var(--color-text-muted)" text-anchor="middle">(TTL sweep)</text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- SECTION 4: TTL POLICY -->
+      <section id="ttl">
+        <h2>TTL Policy in Practice</h2>
+        <p>The TTL enforcement mechanism ensures the 200 planning YAMLs remain curated and live.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-success);">Example 1: Active Plan (No Expiry)</h3>
+        <div class="code-block"><code>schema_version: "1.0"
+namespace: planning
+status: ACTIVE
+entity_type: architecture-plan
+entity_name: cortex-v3.2-unified-plan
+reviewed_at: "2026-03-27"</code></div>
+        <p><strong>Action:</strong> No expiry. Plan remains visible and is reviewed quarterly during convergence gates.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-success);">Example 2: Completed Plan (Auto-Archive in 30 Days)</h3>
+        <div class="code-block"><code>schema_version: "1.0"
+namespace: planning
+status: COMPLETED
+completion_date: "2026-02-15"
+entity_type: migration-plan
+entity_name: python-to-mcp-migration
+# → auto-archived to _archive/ on 2026-03-17 by convergence gate</code></div>
+        <p><strong>Action:</strong> On convergence gate (after 2026-03-17), this YAML is automatically moved to _archive/planning/. Logged in sweep-log.yaml.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-success);">Example 3: Expiry Date Plan</h3>
+        <div class="code-block"><code>schema_version: "1.0"
+namespace: planning
+status: ACTIVE
+expires_after: "2026-06-30"
+entity_type: roadmap
+entity_name: q2-2026-roadmap</code></div>
+        <p><strong>Action:</strong> Plan is visible until 2026-06-30. On convergence gate after that date, it is auto-archived.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-text-secondary);">Running the TTL Sweep</h3>
+        <div class="code-block"><code># Dry-run first:
+python scripts/run_registry_sweep.py --ttl-archive --dry-run
+
+# Execute:
+python scripts/run_registry_sweep.py --ttl-archive</code></div>
+        <p>All archived files are logged to <code style="color: var(--accent-primary); background: rgba(0,212,255,0.1); padding: 0.2rem 0.4rem; border-radius: 2px;">_archive/sweep-log.yaml</code> with timestamp and reason (completed or expired).</p>
+      </section>
+
+      <!-- SECTION 5: ENFORCEMENT & IMPLEMENTATION -->
+      <section id="enforcement">
+        <h2>Implementation Plan</h2>
+        <p>This appendix can be rolled out in four phases without deleting any existing YAMLs.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: rgba(59,130,246,0.9);">Phase 1 (P3, Week 1): Tag Existing YAMLs</h3>
+        <div class="code-block"><code># Dry-run:
+python scripts/tag_existing_yamls.py --add-namespace --dry-run
+
+# Execute:
+python scripts/tag_existing_yamls.py --add-namespace
+
+# Commit:
+git commit -m "chore: add schema_version + namespace to all registry YAMLs"</code></div>
+        <p><strong>Expected impact:</strong> ~802 files tagged with required front-matter fields. No deletions.</p>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: rgba(59,130,246,0.9);">Phase 2 (P3, Week 2): Merge Duplicate Directories</h3>
+        <ul style="color: var(--color-text-secondary); margin-bottom: 1rem;">
+          <li>Merge <strong>governance/ + rules/ + core/</strong> → new consolidated governance/ directory</li>
+          <li>Merge <strong>artifacts/templates/ + metrics/dashboards/templates/ + templates/</strong> → workflows/templates/</li>
+          <li>Rename <strong>.archive/</strong> → <strong>_archive/</strong> (for top-level sort visibility)</li>
+          <li>Update all namespace references in cortex-master-v2.yaml</li>
+        </ul>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: rgba(59,130,246,0.9);">Phase 3 (P3, Week 3): Enable Enforcement</h3>
+        <ul style="color: var(--color-text-secondary); margin-bottom: 1rem;">
+          <li>Update <strong>registry_manager.py</strong> with namespace validation (reject writes to non-canonical directories)</li>
+          <li>Add convergence gate step: <code style="color: var(--accent-primary); background: rgba(0,212,255,0.1); padding: 0.2rem 0.4rem; border-radius: 2px;">run_registry_sweep.py --validate-namespaces</code></li>
+          <li>Enable duplicate detection on write (reject if entity already exists)</li>
+        </ul>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: rgba(59,130,246,0.9);">Phase 4 (Ongoing): TTL Sweep in Convergence Gate</h3>
+        <ul style="color: var(--color-text-secondary); margin-bottom: 1rem;">
+          <li>Every convergence gate run executes <code style="color: var(--accent-primary); background: rgba(0,212,255,0.1); padding: 0.2rem 0.4rem; border-radius: 2px;">run_registry_sweep.py --ttl-archive</code></li>
+          <li>Archived files logged with timestamp and reason to _archive/sweep-log.yaml</li>
+          <li>No manual cleanup required</li>
+        </ul>
+
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--color-success);">Risk Mitigation</h3>
+        <p><strong>No YAML is deleted</strong> — only re-tagged and re-organized. All existing functionality is preserved. Dry-run flags allow safe validation before execution. Phases are sequential to allow rollback at each stage.</p>
+      </section>
+    </div>
+
+    <footer>
+      <p>CORTEX v3.2.0 — Registry Guidance Appendix · Spoke 6 of 6</p>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">Generated by CORTEX Framework · Governance & Architecture</p>
+    </footer>
+  </main>
+
+  <a href="#" class="back-top-btn">↑</a>
+
+  <!-- HUB NAV (fixed bottom) -->
+  <nav class="hub-nav">
+    <a href="./index.html">← Hub</a>
+    <span class="hub-sep">·</span>
+    <a href="./overview.html">Overview</a>
+    <span class="hub-sep">·</span>
+    <a href="./architecture.html">Architecture</a>
+    <span class="hub-sep">·</span>
+    <a href="./lifecycle.html">Lifecycle</a>
+    <span class="hub-sep">·</span>
+    <a href="./phases.html">Phases</a>
+    <span class="hub-sep">·</span>
+    <a href="./governance.html">Governance</a>
+    <span class="hub-sep">·</span>
+    <a href="./registry.html" class="active">Registry</a>
+  </nav>
+
+  <script>
+    // Intersection Observer for jump nav highlighting
+    const sections = document.querySelectorAll('section');
+    const jumpBtns = document.querySelectorAll('.jump-btn');
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-100px 0px -66% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          jumpBtns.forEach(btn => btn.classList.remove('active'));
+          const activeBtn = document.querySelector(`.jump-btn[href="#${entry.target.id}"]`);
+          if (activeBtn) activeBtn.classList.add('active');
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+
+    // Back-to-top button
+    document.querySelector('.back-top-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

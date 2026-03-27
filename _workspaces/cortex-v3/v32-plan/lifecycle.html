@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORTEX v3.2.0 — Feature Lifecycle & Testing</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --accent-primary: #00d4ff;
+      --accent-secondary: #7b61ff;
+      --bg-primary: #0a0e27;
+      --bg-secondary: #1a1f3a;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-error: #ef4444;
+      --color-text-primary: #f0f4f8;
+      --color-text-secondary: #cbd5e1;
+      --color-text-tertiary: #94a3b8;
+      --color-text-muted: #64748b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0d1535 100%);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    main {
+      position: relative;
+    }
+
+    .page-header {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 2rem;
+      padding: 2rem;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.12);
+      position: relative;
+    }
+
+    .page-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #00d4ff, #7b61ff, transparent);
+    }
+
+    .header-logo-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .header-logo {
+      width: 150px;
+      height: 150px;
+      filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+    }
+
+    .header-back {
+      font-size: 0.85rem;
+      color: var(--color-text-tertiary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .header-back:hover {
+      color: var(--accent-primary);
+    }
+
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 1.5rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .header-meta {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: var(--accent-primary);
+    }
+
+    .meta-chip.ok {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: var(--color-success);
+    }
+
+    .meta-chip.repo {
+      background: rgba(123, 97, 255, 0.1);
+      border-color: rgba(123, 97, 255, 0.3);
+      color: var(--accent-secondary);
+    }
+
+    .hub-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: rgba(10, 14, 39, 0.95);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-top: 1px solid rgba(0, 212, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      z-index: 100;
+    }
+
+    .hub-nav-left, .hub-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hub-nav-link {
+      font-size: 0.8rem;
+      color: var(--color-text-tertiary);
+      text-decoration: none;
+      transition: color 0.2s;
+      font-weight: 500;
+    }
+
+    .hub-nav-link:hover {
+      color: var(--accent-primary);
+    }
+
+    .hub-nav-pills {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
+
+    .hub-pill {
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      color: var(--color-text-tertiary);
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .hub-pill:hover {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.08);
+      border-color: rgba(0, 212, 255, 0.2);
+    }
+
+    .hub-pill.active {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.15);
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .jump-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(10, 14, 39, 0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      z-index: 99;
+    }
+
+    .jump-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-tertiary);
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .jump-btn:hover {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.08);
+    }
+
+    .jump-btn.active {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.12);
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .jump-sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(0, 212, 255, 0.15);
+      margin: 0 0.25rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 80px;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      border-radius: 12px;
+      background: rgba(26, 31, 58, 0.5);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+    }
+
+    .section-alt {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .section h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--accent-primary);
+    }
+
+    .section p {
+      margin-bottom: 1rem;
+      color: var(--color-text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .stage-card {
+      padding: 1.5rem;
+      border-radius: 8px;
+      background: rgba(0, 212, 255, 0.05);
+      border-left: 4px solid var(--accent-primary);
+      border: 1px solid rgba(0, 212, 255, 0.15);
+      border-left: 4px solid var(--accent-primary);
+    }
+
+    .stage-card.cortex {
+      border-left-color: var(--color-warning);
+      background: rgba(245, 158, 11, 0.05);
+    }
+
+    .stage-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--accent-primary);
+    }
+
+    .stage-card.cortex h3 {
+      color: var(--color-warning);
+    }
+
+    .stage-card p {
+      font-size: 0.9rem;
+      color: var(--color-text-tertiary);
+      margin: 0;
+    }
+
+    .diagram-container {
+      background: rgba(10, 14, 39, 0.5);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+    }
+
+    .diagram-container svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .gate-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .gate-card {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .gate-header {
+      background: rgba(245, 158, 11, 0.15);
+      border-bottom: 2px solid var(--color-warning);
+      padding: 1rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      color: var(--color-warning);
+      font-size: 0.95rem;
+    }
+
+    .gate-body {
+      padding: 1.5rem;
+    }
+
+    .gate-check {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+    }
+
+    .gate-check::before {
+      content: '•';
+      color: var(--accent-primary);
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .gate-footer {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0, 212, 255, 0.1);
+      font-size: 0.85rem;
+      color: var(--color-text-tertiary);
+    }
+
+    .gate-footer.pass {
+      color: var(--color-success);
+      border-top-color: rgba(16, 185, 129, 0.2);
+    }
+
+    .pyramid {
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .pyramid svg {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+    }
+
+    .swim-diagram {
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .swim-diagram svg {
+      width: 100%;
+      height: auto;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid rgba(0, 212, 255, 0.1);
+      margin-top: 2rem;
+    }
+
+    .back-top-btn {
+      position: fixed;
+      bottom: 60px;
+      right: 2rem;
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 212, 255, 0.15);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.2s;
+      z-index: 90;
+    }
+
+    .back-top-btn:hover {
+      background: rgba(0, 212, 255, 0.25);
+      border-color: rgba(0, 212, 255, 0.5);
+    }
+
+    @media (max-width: 768px) {
+      .page-header {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+      }
+
+      .header-logo {
+        width: 120px;
+        height: 120px;
+      }
+
+      .page-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .hub-nav {
+        height: 48px;
+        padding: 0 1rem;
+        gap: 0.5rem;
+      }
+
+      .hub-nav-pills {
+        flex-wrap: wrap;
+      }
+
+      .jump-nav {
+        flex-wrap: wrap;
+        height: auto;
+        gap: 0.5rem;
+        padding: 0.75rem;
+      }
+
+      .container {
+        padding: 1.5rem 1rem 80px;
+      }
+
+      .section {
+        padding: 1.5rem;
+      }
+
+      .stage-grid, .gate-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="header-logo-col">
+        <img src="./assets/images/cortex-logo-200.png" alt="CORTEX" class="header-logo">
+        <a href="./index.html" class="header-back">← All Walkthroughs</a>
+      </div>
+      <div class="header-content">
+        <h1>CORTEX v3.2.0 — Feature Lifecycle & Testing</h1>
+        <div class="header-meta">
+          <span class="meta-chip repo">Foundations.Cortex</span>
+          <span class="meta-chip ok">v3.2.0</span>
+          <span class="meta-chip">Spoke 3 of 5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- JUMP NAV -->
+    <nav class="jump-nav">
+      <a href="#lifecycle" class="jump-btn active">Lifecycle</a>
+      <div class="jump-sep"></div>
+      <a href="#gates" class="jump-btn">Gates</a>
+      <div class="jump-sep"></div>
+      <a href="#testing" class="jump-btn">Testing</a>
+    </nav>
+
+    <!-- CONTENT SECTIONS -->
+    <div class="container">
+      <!-- SECTION 1: LIFECYCLE -->
+      <section class="section" id="lifecycle">
+        <h2>7-Stage Feature Delivery Pipeline</h2>
+        <p>
+          CORTEX is the <strong>conductor</strong> of adlc-copilot's existing pipeline, not a replacement. The 7 stages are owned by adlc-copilot; CORTEX enforces gates at key handoffs. CORTEX fires at stages 1, 3, 4, and 6—the 4 real decision points. Stages 0, 2, 5, and 7 are owned entirely by adlc-copilot or the developer.
+        </p>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 800 980" width="100%" xmlns="http://www.w3.org/2000/svg">
+            <title>CORTEX 7-Stage Feature Delivery Lifecycle — Vertical Pipeline</title>
+            <defs>
+              <style>text { font-family: 'Space Grotesk', sans-serif; }</style>
+              <marker id="lfarr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 z" fill="rgba(0,212,255,0.55)"/>
+              </marker>
+            </defs>
+            <!-- Glass background -->
+            <rect width="800" height="980" rx="16" fill="rgba(26,31,58,0.6)"/>
+            <!-- Title -->
+            <text x="400" y="38" text-anchor="middle" font-size="15" font-weight="700" fill="#f0f4f8">7-Stage Feature Delivery Lifecycle</text>
+            <text x="400" y="58" text-anchor="middle" font-size="11" fill="#64748b">CORTEX fires at 4 real decision gates · adlc-copilot owns the rest</text>
+
+            <!-- Legend -->
+            <rect x="500" y="68" width="12" height="12" rx="3" fill="rgba(0,212,255,0.15)" stroke="#00d4ff" stroke-width="1.5"/>
+            <text x="518" y="79" font-size="10" fill="#00d4ff">CORTEX Gate</text>
+            <rect x="620" y="68" width="12" height="12" rx="3" fill="rgba(100,116,139,0.12)" stroke="rgba(100,116,139,0.35)" stroke-width="1.5"/>
+            <text x="638" y="79" font-size="10" fill="#94a3b8">adlc-copilot / Dev</text>
+
+            <!-- STAGE 0: Idea — adlc-copilot (y=96) -->
+            <rect x="40" y="96" width="720" height="72" rx="10" fill="rgba(100,116,139,0.10)" stroke="rgba(100,116,139,0.35)" stroke-width="1.5"/>
+            <text x="70" y="120" font-size="13" font-weight="700" fill="#94a3b8">Stage 0 · Idea</text>
+            <text x="70" y="140" font-size="11" fill="#64748b">GitHub issue created · problem statement written · no CORTEX involvement</text>
+            <text x="750" y="136" text-anchor="end" font-size="10" fill="#64748b">adlc-copilot</text>
+            <!-- Arrow -->
+            <line x1="400" y1="168" x2="400" y2="208" stroke="rgba(0,212,255,0.4)" stroke-width="1.5" marker-end="url(#lfarr)"/>
+
+            <!-- STAGE 1: DoR Review — CORTEX gate-readiness (y=212) -->
+            <rect x="40" y="212" width="720" height="72" rx="10" fill="rgba(0,212,255,0.10)" stroke="#00d4ff" stroke-width="2"/>
+            <rect x="40" y="212" width="5" height="72" rx="3" fill="#00d4ff"/>
+            <text x="70" y="236" font-size="13" font-weight="700" fill="#00d4ff">Stage 1 · DoR Review</text>
+            <text x="70" y="256" font-size="11" fill="#cbd5e1">gate-readiness fires · DoR must = 100% · blocks entry to implementation</text>
+            <text x="750" y="252" text-anchor="end" font-size="10" fill="#00d4ff">CORTEX GATE</text>
+            <!-- Arrow -->
+            <line x1="400" y1="284" x2="400" y2="324" stroke="rgba(0,212,255,0.4)" stroke-width="1.5" marker-end="url(#lfarr)"/>
+
+            <!-- STAGE 2: TDD Sprint — Developer (y=328) -->
+            <rect x="40" y="328" width="720" height="72" rx="10" fill="rgba(100,116,139,0.10)" stroke="rgba(100,116,139,0.35)" stroke-width="1.5"/>
+            <text x="70" y="352" font-size="13" font-weight="700" fill="#94a3b8">Stage 2 · TDD Sprint</text>
+            <text x="70" y="372" font-size="11" fill="#64748b">RED→GREEN→REFACTOR · convergence gate runs locally · 1,428 tests maintained</text>
+            <text x="750" y="368" text-anchor="end" font-size="10" fill="#64748b">Developer</text>
+            <!-- Arrow -->
+            <line x1="400" y1="400" x2="400" y2="440" stroke="rgba(0,212,255,0.4)" stroke-width="1.5" marker-end="url(#lfarr)"/>
+
+            <!-- STAGE 3: PR Review — CORTEX gate-review (y=444) -->
+            <rect x="40" y="444" width="720" height="72" rx="10" fill="rgba(0,212,255,0.10)" stroke="#00d4ff" stroke-width="2"/>
+            <rect x="40" y="444" width="5" height="72" rx="3" fill="#00d4ff"/>
+            <text x="70" y="468" font-size="13" font-weight="700" fill="#00d4ff">Stage 3 · PR Review</text>
+            <text x="70" y="488" font-size="11" fill="#cbd5e1">gate-review fires · P0/P1 findings block merge · SKULL/CORE violations caught</text>
+            <text x="750" y="484" text-anchor="end" font-size="10" fill="#00d4ff">CORTEX GATE</text>
+            <!-- Arrow -->
+            <line x1="400" y1="516" x2="400" y2="556" stroke="rgba(0,212,255,0.4)" stroke-width="1.5" marker-end="url(#lfarr)"/>
+
+            <!-- STAGE 4: Security Review — CORTEX gate-security (y=560) -->
+            <rect x="40" y="560" width="720" height="72" rx="10" fill="rgba(0,212,255,0.10)" stroke="#00d4ff" stroke-width="2"/>
+            <rect x="40" y="560" width="5" height="72" rx="3" fill="#00d4ff"/>
+            <text x="70" y="584" font-size="13" font-weight="700" fill="#00d4ff">Stage 4 · Security Review</text>
+            <text x="70" y="604" font-size="11" fill="#cbd5e1">gate-security fires · threat model check · dependency audit · BLOCK on findings</text>
+            <text x="750" y="600" text-anchor="end" font-size="10" fill="#00d4ff">CORTEX GATE</text>
+            <!-- Arrow -->
+            <line x1="400" y1="632" x2="400" y2="672" stroke="rgba(0,212,255,0.4)" stroke-width="1.5" marker-end="url(#lfarr)"/>
+
+            <!-- STAGE 5: Staging Deploy — adlc-copilot (y=676) -->
+            <rect x="40" y="676" width="720" height="72" rx="10" fill="rgba(100,116,139,0.10)" stroke="rgba(100,116,139,0.35)" stroke-width="1.5"/>
+            <text x="70" y="700" font-size="13" font-weight="700" fill="#94a3b8">Stage 5 · Staging Deploy</text>
+            <text x="70" y="720" font-size="11" fill="#64748b">Deployed to staging · smoke tests run · UAT if applicable</text>
+            <text x="750" y="716" text-anchor="end" font-size="10" fill="#64748b">adlc-copilot</text>
+            <!-- Arrow -->
+            <line x1="400" y1="748" x2="400" y2="788" stroke="rgba(0,212,255,0.4)" stroke-width="1.5" marker-end="url(#lfarr)"/>
+
+            <!-- STAGE 6: Prod Gate — CORTEX gate-deployment (y=792) -->
+            <rect x="40" y="792" width="720" height="72" rx="10" fill="rgba(0,212,255,0.10)" stroke="#00d4ff" stroke-width="2"/>
+            <rect x="40" y="792" width="5" height="72" rx="3" fill="#00d4ff"/>
+            <text x="70" y="816" font-size="13" font-weight="700" fill="#00d4ff">Stage 6 · Production Gate</text>
+            <text x="70" y="836" font-size="11" fill="#cbd5e1">gate-deployment fires · final PASS/BLOCK verdict · rollback plan required</text>
+            <text x="750" y="832" text-anchor="end" font-size="10" fill="#00d4ff">CORTEX GATE</text>
+            <!-- Arrow -->
+            <line x1="400" y1="864" x2="400" y2="904" stroke="rgba(16,185,129,0.4)" stroke-width="1.5" marker-end="url(#lfarr)"/>
+
+            <!-- STAGE 7: Done — Complete (y=908) -->
+            <rect x="40" y="908" width="720" height="48" rx="10" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="2"/>
+            <text x="400" y="929" text-anchor="middle" font-size="13" font-weight="700" fill="#10b981">Stage 7 · Done — AC_COMPLETE</text>
+            <text x="400" y="947" text-anchor="middle" font-size="11" fill="#cbd5e1">Convergence gate passed · evidence recorded · story closed</text>
+
+          </svg>
+        </div>
+
+        <h3 style="font-family: Space Grotesk, sans-serif; margin-top: 1.5rem; color: #cbd5e1;">Key Insight</h3>
+        <p>
+          CORTEX enforces decision gates at the critical handoff points: readiness before work begins, code review before merge, security before production, and final go/no-go before deployment. Between gates, adlc-copilot owns the execution.
+        </p>
+      </section>
+
+      <!-- SECTION 2: GATES -->
+      <section class="section section-alt" id="gates">
+        <h2>4 Gate Skills</h2>
+        <p>
+          Each gate enforces discipline at a critical juncture. Gates fire automatically when conditions are met and either unlock the next stage or block with specific guidance.
+        </p>
+
+        <div class="gate-grid">
+          <!-- gate-readiness -->
+          <div class="gate-card">
+            <div class="gate-header">gate-readiness</div>
+            <div class="gate-body">
+              <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem;">
+                <strong>Fires at:</strong> Stage 1 (DoR Review)
+              </div>
+              <div class="gate-check">AC completeness — all testable</div>
+              <div class="gate-check">Architecture clarity — targets identified</div>
+              <div class="gate-check">Dependency resolution — no blockers</div>
+              <div class="gate-check">Risk assessment — P0/P1 documented</div>
+              <div class="gate-footer pass">✓ Pass: DoR = 100% → Proceed</div>
+            </div>
+          </div>
+
+          <!-- gate-review -->
+          <div class="gate-card">
+            <div class="gate-header">gate-review</div>
+            <div class="gate-body">
+              <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem;">
+                <strong>Fires at:</strong> Stage 3 (PR Created)
+              </div>
+              <div class="gate-check">LENS analysis (8 language checks)</div>
+              <div class="gate-check">Holistic validation (5 steps)</div>
+              <div class="gate-check">Challenge gate (risk > threshold)</div>
+              <div class="gate-check">Convergence gate (max 3 cycles)</div>
+              <div class="gate-footer pass">✓ Pass: Risk ≤ 0.6 → PASS</div>
+            </div>
+          </div>
+
+          <!-- gate-security -->
+          <div class="gate-card">
+            <div class="gate-header">gate-security</div>
+            <div class="gate-body">
+              <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem;">
+                <strong>Fires at:</strong> Stage 4 (Security Review)
+              </div>
+              <div class="gate-check">Secret scanning (no hardcoded keys)</div>
+              <div class="gate-check">Dependency CVEs (pip-audit, npm audit)</div>
+              <div class="gate-check">OWASP top-10 surface checks</div>
+              <div class="gate-check">Data rules compliance</div>
+              <div class="gate-footer pass">✓ Pass: Zero P0 findings</div>
+            </div>
+          </div>
+
+          <!-- gate-deployment -->
+          <div class="gate-card">
+            <div class="gate-header">gate-deployment</div>
+            <div class="gate-body">
+              <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem;">
+                <strong>Fires at:</strong> Stage 6 (Production Gate)
+              </div>
+              <div class="gate-check">Smoke tests passing (&lt;60s)</div>
+              <div class="gate-check">DoD score ≥ 40/40</div>
+              <div class="gate-check">Rollback plan documented</div>
+              <div class="gate-check">No open P0/P1 CORTEX findings</div>
+              <div class="gate-footer pass">✓ Pass: Issues approval</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: TESTING -->
+      <section class="section" id="testing">
+        <h2>3-Layer Testing Strategy</h2>
+        <p>
+          A pragmatic testing pyramid replacing the overengineered test-everything approach. Each layer validates a specific concern with bounded scope and time commitment.
+        </p>
+
+        <div class="diagram-container">
+          <svg viewBox="0 0 800 380" width="100%" xmlns="http://www.w3.org/2000/svg">
+            <title>CORTEX 3-Layer Pragmatic Testing Strategy — Tapered Tiers</title>
+            <defs>
+              <style>text { font-family: 'Space Grotesk', sans-serif; }</style>
+            </defs>
+            <!-- Glass background -->
+            <rect width="800" height="380" rx="16" fill="rgba(26,31,58,0.6)"/>
+
+            <!-- Title -->
+            <text x="400" y="42" text-anchor="middle" font-size="15" font-weight="700" fill="#f0f4f8">Pragmatic Testing Strategy</text>
+            <text x="400" y="62" text-anchor="middle" font-size="11" fill="#64748b">High-value only · 3 layers · bounded time</text>
+
+            <!-- Layer 3 — Self-Onboard (top, narrowest: 320px wide) -->
+            <rect x="240" y="80" width="320" height="80" rx="10"
+                  fill="rgba(123,97,255,0.12)" stroke="#7b61ff" stroke-width="2"/>
+            <text x="400" y="104" text-anchor="middle" font-size="13" font-weight="700" fill="#7b61ff">Layer 3 · Self-Onboard · &lt;2min</text>
+            <text x="400" y="122" text-anchor="middle" font-size="11" fill="#cbd5e1">CORTEX onboards itself · model.yaml valid</text>
+            <text x="400" y="140" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="'JetBrains Mono',monospace">python run_tests.py self-onboard</text>
+            <text x="400" y="154" text-anchor="middle" font-size="10" fill="#7b61ff">Weekly | AGENT-INDEX.md ≥10</text>
+
+            <!-- Layer 2 — Agent E2E (middle: 560px wide) -->
+            <rect x="120" y="184" width="560" height="80" rx="10"
+                  fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="2"/>
+            <text x="400" y="208" text-anchor="middle" font-size="13" font-weight="700" fill="#00d4ff">Layer 2 · Agent E2E · &lt;5min</text>
+            <text x="400" y="226" text-anchor="middle" font-size="11" fill="#cbd5e1">10 representative intents routed · format validated</text>
+            <text x="400" y="244" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="'JetBrains Mono',monospace">python run_tests.py agent-e2e</text>
+            <text x="400" y="258" text-anchor="middle" font-size="10" fill="#00d4ff">Pre-PR | ≥9/10 intents pass</text>
+
+            <!-- Layer 1 — Smoke Tests (base, widest: 760px wide) -->
+            <rect x="20" y="288" width="760" height="80" rx="10"
+                  fill="rgba(16,185,129,0.10)" stroke="#10b981" stroke-width="2"/>
+            <text x="400" y="312" text-anchor="middle" font-size="13" font-weight="700" fill="#10b981">Layer 1 · Smoke Tests · &lt;60s</text>
+            <text x="400" y="330" text-anchor="middle" font-size="11" fill="#cbd5e1">MCP availability · intent router · orchestrator imports</text>
+            <text x="400" y="348" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="'JetBrains Mono',monospace">python run_tests.py smoke</text>
+            <text x="400" y="362" text-anchor="middle" font-size="10" fill="#10b981">Every commit | All green &lt; 60s</text>
+          </svg>
+        </div>
+
+        <h3 style="font-family: Space Grotesk, sans-serif; margin-top: 2rem; color: #cbd5e1;">What Was Removed</h3>
+        <p>
+          This strategy eliminated overengineered overhead:
+        </p>
+        <ul style="margin-left: 1.5rem; color: var(--color-text-secondary);">
+          <li style="margin-bottom: 0.5rem;">Surface parity tests across 5 IDEs</li>
+          <li style="margin-bottom: 0.5rem;">Integration tests for every orchestrator</li>
+          <li>Certification testing suite (costly, low signal)</li>
+        </ul>
+        <p style="margin-top: 1rem;">
+          Instead, each layer targets a single critical concern: tool availability, routing logic, and self-consistency. Tests run in seconds to minutes, not hours.
+        </p>
+      </section>
+    </div>
+
+    <footer>
+      <p>CORTEX v3.2.0 · Spoke 3 of 5 · Feature Lifecycle & Testing | Foundations.Cortex Repository</p>
+    </footer>
+  </main>
+
+  <a href="#" class="back-top-btn">↑</a>
+
+  <nav class="hub-nav">
+    <div class="hub-nav-left">
+      <a href="./index.html" class="hub-nav-link">← Hub</a>
+    </div>
+    <div class="hub-nav-pills">
+      <a href="./overview.html" class="hub-pill">Overview</a>
+      <a href="./architecture.html" class="hub-pill">Architecture</a>
+      <a href="./lifecycle.html" class="hub-pill active">Lifecycle</a>
+      <a href="./phases.html" class="hub-pill">Phases</a>
+      <a href="./governance.html" class="hub-pill">Governance</a>
+      <a href="./registry.html" class="hub-pill">Registry</a>
+    </div>
+    <div class="hub-nav-right"></div>
+  </nav>
+
+  <script>
+    // Jump nav active state
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.jump-btn').forEach(btn => btn.classList.remove('active'));
+          const activeBtn = document.querySelector(`.jump-btn[href="#${entry.target.id}"]`);
+          if (activeBtn) activeBtn.classList.add('active');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('section').forEach(section => observer.observe(section));
+  </script>
+</body>
+</html>

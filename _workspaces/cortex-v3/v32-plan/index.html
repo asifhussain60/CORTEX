@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORTEX v3.2.0 — Architecture Plan Hub</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;600&family=Pinyon+Script&display=swap');
+    :root {
+      --accent-primary: #00d4ff;
+      --accent-secondary: #7b61ff;
+      --bg-primary: #0a0e27;
+      --bg-secondary: #1a1f3a;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-error: #ef4444;
+      --color-text-primary: #f0f4f8;
+      --color-text-secondary: #cbd5e1;
+      --color-text-tertiary: #94a3b8;
+      --color-text-muted: #64748b;
+      --border-subtle: rgba(0,212,255,0.12);
+      --border-accent: rgba(0,212,255,0.25);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Inter',sans-serif; background:linear-gradient(135deg,var(--bg-primary) 0%,var(--bg-secondary) 100%); color:var(--color-text-primary); min-height:100vh; }
+
+    /* ── HERO ── */
+    .hero { padding:4rem 2rem 3rem; text-align:center; border-bottom:1px solid var(--border-subtle); position:relative; }
+    .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--accent-primary),var(--accent-secondary),transparent); }
+    .hero-logo { width:150px; height:150px; object-fit:contain; filter:drop-shadow(0 0 20px rgba(0,212,255,0.4)); margin:0 auto 1.5rem; display:block; }
+    .hero-eyebrow { font-family:'Space Grotesk',sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent-primary); margin-bottom:0.75rem; }
+    .hero h1 { font-family:'Space Grotesk',sans-serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:700; background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:0.75rem; }
+    .hero-sub { font-size:1.05rem; color:var(--color-text-secondary); max-width:680px; margin:0 auto 1.5rem; }
+    .hero-attribution { font-family:'Pinyon Script',cursive; font-size:1.6rem; color:var(--color-text-tertiary); margin-bottom:1.5rem; }
+    .hero-attribution span { font-family:'Inter',sans-serif; font-size:0.7rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--color-text-muted); display:block; margin-bottom:0.25rem; }
+    .meta-row { display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center; }
+    .meta-chip { display:inline-flex; align-items:center; gap:0.4rem; padding:0.35rem 0.75rem; border-radius:999px; font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; background:rgba(0,212,255,0.1); color:var(--accent-primary); border:1px solid rgba(0,212,255,0.2); }
+    .meta-chip.ok { background:rgba(16,185,129,0.1); color:var(--color-success); border-color:rgba(16,185,129,0.2); }
+    .meta-chip.open { background:rgba(245,158,11,0.1); color:var(--color-warning); border-color:rgba(245,158,11,0.2); }
+    .meta-chip.repo { background:rgba(123,97,255,0.1); color:var(--accent-secondary); border-color:rgba(123,97,255,0.2); }
+
+    /* ── METRICS STRIP ── */
+    .metrics-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; max-width:1100px; margin:3rem auto; padding:0 2rem; }
+    .metric-card { background:rgba(26,31,58,0.7); border:1px solid var(--border-subtle); border-radius:12px; padding:1.5rem 1rem; text-align:center; backdrop-filter:blur(8px); transition:border-color 0.2s,transform 0.2s; }
+    .metric-card:hover { border-color:var(--border-accent); transform:translateY(-2px); }
+    .metric-num { font-family:'Space Grotesk',sans-serif; font-size:2.2rem; font-weight:700; color:var(--accent-primary); display:block; line-height:1; }
+    .metric-label { font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--color-text-muted); margin-top:0.4rem; display:block; }
+
+    /* ── NAV CARDS ── */
+    .nav-cards-section { max-width:1100px; margin:0 auto; padding:0 2rem 4rem; }
+    .nav-cards-section h2 { font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--color-text-muted); margin-bottom:1.5rem; padding-bottom:0.75rem; border-bottom:1px solid var(--border-subtle); }
+    .cards-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:1.25rem; }
+    .section-card { background:rgba(26,31,58,0.7); border:1px solid var(--border-subtle); border-radius:16px; padding:1.75rem; backdrop-filter:blur(8px); transition:all 0.25s; display:flex; flex-direction:column; text-decoration:none; color:inherit; }
+    .section-card:hover { border-color:var(--border-accent); transform:translateY(-4px); box-shadow:0 8px 32px rgba(0,212,255,0.08); }
+    .card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:0.75rem; }
+    .card-icon { font-size:1.6rem; }
+    .card-tag { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-primary); background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.15); border-radius:4px; padding:0.2rem 0.5rem; }
+    .card-title { font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:700; color:var(--color-text-primary); margin-bottom:0.5rem; }
+    .card-desc { font-size:0.85rem; color:var(--color-text-secondary); line-height:1.6; margin-bottom:1rem; flex:1; }
+    .card-bullets { list-style:none; margin-bottom:1.25rem; }
+    .card-bullets li { font-size:0.78rem; color:var(--color-text-tertiary); padding:0.2rem 0; padding-left:1rem; position:relative; }
+    .card-bullets li::before { content:'›'; position:absolute; left:0; color:var(--accent-primary); }
+    .card-link { display:inline-flex; align-items:center; gap:0.4rem; font-family:'Space Grotesk',sans-serif; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--accent-primary); }
+    .card-link::after { content:'→'; transition:transform 0.2s; }
+    .section-card:hover .card-link::after { transform:translateX(4px); }
+
+    /* ── FOOTER ── */
+    footer { text-align:center; padding:2rem; border-top:1px solid var(--border-subtle); color:var(--color-text-muted); font-size:0.78rem; }
+    footer a { color:var(--color-text-muted); text-decoration:none; }
+    footer a:hover { color:var(--accent-primary); }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <img src="./assets/images/cortex-logo-200.png" alt="CORTEX Logo" class="hero-logo">
+    <div class="hero-eyebrow">CORTEX Framework · Architect Mode</div>
+    <h1>v3.2.0 Architecture Plan</h1>
+    <p class="hero-sub">Consolidated Sharp Knife — the production-grade AI engineering framework condensed from independent analysis of the live repository state.</p>
+    <div class="hero-attribution">
+      <span>Designed &amp; Built by</span>
+      Asif Hussain
+    </div>
+    <div class="meta-row">
+      <span class="meta-chip repo">Foundations.Cortex</span>
+      <span class="meta-chip ok">Planning Complete</span>
+      <span class="meta-chip open">P1 Complete · P2–P5 Planned</span>
+      <span class="meta-chip">14 ADRs · 2 Withdrawn</span>
+      <span class="meta-chip">2026-03-27</span>
+    </div>
+  </div>
+
+  <!-- METRICS STRIP -->
+  <div class="metrics-strip">
+    <div class="metric-card"><span class="metric-num">381</span><span class="metric-label">Python Orchestrators</span></div>
+    <div class="metric-card"><span class="metric-num">74</span><span class="metric-label">MCP Tool Files</span></div>
+    <div class="metric-card"><span class="metric-num">137</span><span class="metric-label">Unified Skills</span></div>
+    <div class="metric-card"><span class="metric-num">40</span><span class="metric-label">DoD Checks</span></div>
+    <div class="metric-card"><span class="metric-num">4</span><span class="metric-label">Gate Skills</span></div>
+    <div class="metric-card"><span class="metric-num">5</span><span class="metric-label">Delivery Phases</span></div>
+    <div class="metric-card"><span class="metric-num">1,428</span><span class="metric-label">Test Files</span></div>
+    <div class="metric-card"><span class="metric-num">802</span><span class="metric-label">Registry YAMLs</span></div>
+  </div>
+
+  <!-- NAV CARDS -->
+  <div class="nav-cards-section">
+    <h2>Plan Sections</h2>
+    <div class="cards-grid">
+
+      <a class="section-card" href="./overview.html">
+        <div class="card-header">
+          <span class="card-icon">🗺️</span>
+          <span class="card-tag">Start Here</span>
+        </div>
+        <div class="card-title">Overview &amp; Ecosystem</div>
+        <p class="card-desc">What v3.2.0 is, what changed from v3.1, the three-repo ecosystem, and the key decisions made during consolidation.</p>
+        <ul class="card-bullets">
+          <li>v3.0 → v3.1 → v3.2 before/after table</li>
+          <li>Three-repo ecosystem map</li>
+          <li>What was removed and why</li>
+        </ul>
+        <span class="card-link">View Overview</span>
+      </a>
+
+      <a class="section-card" href="./architecture.html">
+        <div class="card-header">
+          <span class="card-icon">🏗️</span>
+          <span class="card-tag">Core Design</span>
+        </div>
+        <div class="card-title">Architecture &amp; Agents</div>
+        <p class="card-desc">The 4-layer stack, Agent+Engine complement pattern, LENS pipeline, and intent routing with confidence-based dispatch.</p>
+        <ul class="card-bullets">
+          <li>4-layer architecture stack diagram</li>
+          <li>Agent+Engine complement pattern</li>
+          <li>34 intent types · routing confidence table</li>
+        </ul>
+        <span class="card-link">View Architecture</span>
+      </a>
+
+      <a class="section-card" href="./lifecycle.html">
+        <div class="card-header">
+          <span class="card-icon">🔄</span>
+          <span class="card-tag">Delivery</span>
+        </div>
+        <div class="card-title">Feature Lifecycle &amp; Testing</div>
+        <p class="card-desc">The 7-stage feature delivery pipeline, 4 gate skills at real decision points, and the 3-layer testing strategy.</p>
+        <ul class="card-bullets">
+          <li>7-stage lifecycle swim-lane diagram</li>
+          <li>4 gate skills with trigger conditions</li>
+          <li>3-layer testing pyramid (smoke → E2E → self-onboard)</li>
+        </ul>
+        <span class="card-link">View Lifecycle</span>
+      </a>
+
+      <a class="section-card" href="./phases.html">
+        <div class="card-header">
+          <span class="card-icon">📅</span>
+          <span class="card-tag">Execution</span>
+        </div>
+        <div class="card-title">Phases &amp; Deprecation</div>
+        <p class="card-desc">All 5 delivery phases with absolute step-by-step execution detail, 3-wave orchestrator deprecation plan, and Gantt timeline.</p>
+        <ul class="card-bullets">
+          <li>P1–P5 detailed execution steps with pass criteria</li>
+          <li>3-wave deprecation: routing → formatting → delegation</li>
+          <li>Exact file targets, rollback commands, failure modes</li>
+        </ul>
+        <span class="card-link">View Phases</span>
+      </a>
+
+      <a class="section-card" href="./governance.html">
+        <div class="card-header">
+          <span class="card-icon">⚖️</span>
+          <span class="card-tag">Rules &amp; Quality</span>
+        </div>
+        <div class="card-title">Governance, DoD &amp; ADRs</div>
+        <p class="card-desc">40 DoD checks across 8 categories, 14 architectural decision records, and the SKULL/CORE enforcement hierarchy.</p>
+        <ul class="card-bullets">
+          <li>40 DoD checks by category (bar chart)</li>
+          <li>14 ADRs total (2 withdrawn)</li>
+          <li>SKULL → CORE → Gate enforcement chain</li>
+        </ul>
+        <span class="card-link">View Governance</span>
+      </a>
+
+      <a class="section-card" href="./registry.html">
+        <div class="card-header">
+          <span class="card-icon">🗂️</span>
+          <span class="card-tag">Appendix</span>
+        </div>
+        <div class="card-title">Registry Guidance</div>
+        <p class="card-desc">Registry organization guidance for the 802-YAML cortex-registry. Taxonomy, TTL policy ideas, schema-first creation, and namespace cleanup concepts.</p>
+        <ul class="card-bullets">
+          <li>Current sprawl diagnosis: templates in 4 places, governance in 3</li>
+          <li>8 canonical namespaces replacing 23 ad-hoc directories</li>
+          <li>TTL policy to auto-archive completed planning YAMLs</li>
+        </ul>
+        <span class="card-link">View Registry Plan</span>
+      </a>
+
+    </div>
+  </div>
+
+  <footer>
+    CORTEX v3.2.0 "Consolidated Sharp Knife" · Foundations.Cortex · 2026-03-27 ·
+    <a href="https://asifhussain60.github.io/CORTEX/index.html">CORTEX Framework © 2025–2026 · Asif Hussain</a>
+  </footer>
+
+</body>
+</html>

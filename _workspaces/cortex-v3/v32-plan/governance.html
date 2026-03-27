@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORTEX v3.2.0 — Governance, DoD & ADRs</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --accent-primary: #00d4ff;
+      --accent-secondary: #7b61ff;
+      --bg-primary: #0a0e27;
+      --bg-secondary: #1a1f3a;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-error: #ef4444;
+      --color-text-primary: #f0f4f8;
+      --color-text-secondary: #cbd5e1;
+      --color-text-tertiary: #94a3b8;
+      --color-text-muted: #64748b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--color-text-primary);
+      font-family: Inter, -apple-system, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    main {
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 2rem;
+      padding: 2rem;
+      background: rgba(26, 31, 58, 0.4);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.12);
+      position: relative;
+    }
+
+    .page-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.6), rgba(123, 97, 255, 0.6), transparent);
+    }
+
+    .header-logo {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+      text-align: center;
+    }
+
+    .header-logo img {
+      width: 150px;
+      height: 150px;
+      filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+    }
+
+    .header-logo a {
+      font-size: 0.7rem;
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .header-logo a:hover {
+      text-decoration: underline;
+    }
+
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      justify-content: flex-start;
+    }
+
+    .header-content h1 {
+      font-family: Space Grotesk, sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .meta-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .meta-chip {
+      font-size: 0.75rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      color: var(--accent-primary);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .meta-chip.ok {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.2);
+      color: var(--color-success);
+    }
+
+    .meta-chip.repo {
+      background: rgba(123, 97, 255, 0.08);
+      border-color: rgba(123, 97, 255, 0.2);
+      color: var(--accent-secondary);
+    }
+
+    /* STICKY JUMP NAV */
+    .jump-nav {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      height: 52px;
+      background: rgba(10, 14, 39, 0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .jump-btn {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      background: none;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .jump-btn:hover {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    .jump-btn.active {
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.12);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    .jump-sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(0, 212, 255, 0.15);
+      margin: 0 0.25rem;
+    }
+
+    /* HUB NAV (fixed bottom) */
+    .hub-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(10, 14, 39, 0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-top: 1px solid rgba(0, 212, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      z-index: 85;
+      font-size: 0.85rem;
+    }
+
+    .hub-nav a, .hub-nav span {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .hub-nav a:hover {
+      color: var(--accent-primary);
+    }
+
+    .hub-nav .divider {
+      color: var(--color-text-muted);
+    }
+
+    .hub-nav .active {
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    /* CONTAINER & SECTIONS */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: rgba(26, 31, 58, 0.3);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 8px;
+    }
+
+    .section-alt {
+      background: rgba(26, 31, 58, 0.2);
+    }
+
+    .section h2 {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--accent-primary);
+    }
+
+    .section h3 {
+      font-family: Space Grotesk, sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--color-text-secondary);
+    }
+
+    /* ENFORCEMENT HIERARCHY */
+    .hierarchy-svg {
+      width: 100%;
+      max-width: 600px;
+      margin: 1.5rem auto;
+      display: block;
+    }
+
+    .layer {
+      font-weight: 600;
+      fill: var(--color-text-primary);
+    }
+
+    /* RULES LIST */
+    .rules-list {
+      margin-top: 1.5rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .rule-item {
+      padding: 1rem;
+      background: rgba(0, 212, 255, 0.05);
+      border-left: 3px solid var(--accent-primary);
+      border-radius: 4px;
+    }
+
+    .rule-code {
+      font-family: JetBrains Mono, monospace;
+      font-size: 0.85rem;
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .rule-desc {
+      margin-top: 0.25rem;
+      color: var(--color-text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* DOD CHART */
+    .dod-chart {
+      width: 100%;
+      max-width: 700px;
+      margin: 1.5rem auto;
+      display: block;
+    }
+
+    .chart-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 40px;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .chart-label {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      font-weight: 500;
+    }
+
+    .chart-bar-container {
+      height: 24px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 212, 255, 0.15);
+    }
+
+    .chart-bar {
+      height: 100%;
+      background: linear-gradient(90deg, rgba(0, 212, 255, 0.8), rgba(0, 212, 255, 0.5));
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .chart-count {
+      font-family: JetBrains Mono, monospace;
+      font-size: 0.85rem;
+      color: var(--accent-primary);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* ADR TABLE */
+    .adr-table {
+      width: 100%;
+      margin-top: 1.5rem;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .adr-table thead {
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.15);
+    }
+
+    .adr-table th {
+      padding: 0.75rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--accent-primary);
+      font-family: Space Grotesk, sans-serif;
+    }
+
+    .adr-table td {
+      padding: 0.75rem;
+      border-top: 1px solid rgba(0, 212, 255, 0.08);
+    }
+
+    .adr-table tr:hover {
+      background: rgba(0, 212, 255, 0.04);
+    }
+
+    .adr-code {
+      font-family: JetBrains Mono, monospace;
+      font-size: 0.85rem;
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .status-accepted {
+      color: var(--color-success);
+      font-weight: 600;
+    }
+
+    .status-withdrawn {
+      color: var(--color-text-muted);
+      text-decoration: line-through;
+    }
+
+    .adr-table tr.withdrawn {
+      opacity: 0.6;
+    }
+
+    /* STATUS DONUT */
+    .donut-container {
+      width: 100%;
+      max-width: 300px;
+      margin: 1.5rem auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .donut-svg {
+      width: 200px;
+      height: 200px;
+    }
+
+    .donut-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-family: Space Grotesk, sans-serif;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+    }
+
+    .donut-count {
+      display: block;
+      font-size: 1.8rem;
+      color: var(--accent-primary);
+      font-weight: 700;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 3rem;
+      padding: 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(0, 212, 255, 0.1);
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    .back-top-btn {
+      position: fixed;
+      bottom: 80px;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 50%;
+      color: var(--accent-primary);
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .back-top-btn.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-top-btn:hover {
+      background: rgba(0, 212, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .page-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .header-logo {
+        order: -1;
+      }
+
+      .hub-nav {
+        gap: 1rem;
+        font-size: 0.75rem;
+      }
+
+      main {
+        padding-bottom: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="header-logo">
+        <img src="./assets/images/cortex-logo-200.png" alt="CORTEX">
+        <a href="./index.html">← All Plans</a>
+      </div>
+      <div class="header-content">
+        <h1>CORTEX v3.2.0 — Governance, DoD & ADRs</h1>
+        <div class="meta-chips">
+          <span class="meta-chip repo">Foundations.Cortex</span>
+          <span class="meta-chip ok">v3.2.0</span>
+          <span class="meta-chip">Spoke 5 of 6</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STICKY JUMP NAV -->
+    <nav class="jump-nav">
+      <a href="#enforcement" class="jump-btn active">Enforcement</a>
+      <div class="jump-sep"></div>
+      <a href="#dod" class="jump-btn">DoD Checks</a>
+      <div class="jump-sep"></div>
+      <a href="#adrs" class="jump-btn">ADRs</a>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="container">
+      <!-- ENFORCEMENT HIERARCHY -->
+      <section class="section" id="enforcement">
+        <h2>Enforcement Hierarchy</h2>
+        <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;">
+          Three-layer enforcement chain ensures governance is applied consistently across all CORTEX agents and skills.
+        </p>
+
+        <svg viewBox="0 0 800 352" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <style>text { font-family: 'Space Grotesk', 'Inter', sans-serif; }</style>
+            <marker id="gov-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#00d4ff"/>
+            </marker>
+          </defs>
+
+          <!-- SKULL Rules (P0, Immutable) — top, highest authority -->
+          <rect x="40" y="24" width="720" height="72" rx="10" fill="rgba(239,68,68,0.10)" stroke="#ef4444" stroke-width="2"/>
+          <rect x="40" y="24" width="6" height="72" rx="3" fill="#ef4444"/>
+          <text x="400" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#ef4444">SKULL Rules — P0, Immutable</text>
+          <text x="400" y="74" text-anchor="middle" font-size="11" fill="rgba(239,68,68,0.75)">5 core rules · Cannot be overridden · Enforced at every gate</text>
+
+          <line x1="400" y1="96" x2="400" y2="140" stroke="rgba(0,212,255,0.45)" stroke-width="1.5" marker-end="url(#gov-arrow)"/>
+
+          <!-- CORE Rules (P0, Governance) -->
+          <rect x="40" y="140" width="720" height="72" rx="10" fill="rgba(0,212,255,0.08)" stroke="rgba(0,212,255,0.35)" stroke-width="2"/>
+          <rect x="40" y="140" width="6" height="72" rx="3" fill="#00d4ff"/>
+          <text x="400" y="168" text-anchor="middle" font-size="14" font-weight="700" fill="#00d4ff">CORE Rules — P0, Governance</text>
+          <text x="400" y="190" text-anchor="middle" font-size="11" fill="rgba(0,212,255,0.75)">10+ pragmatic rules · Enforcement via gate skills · HTML-001 through HTML-005</text>
+
+          <line x1="400" y1="212" x2="400" y2="256" stroke="rgba(0,212,255,0.45)" stroke-width="1.5" marker-end="url(#gov-arrow)"/>
+
+          <!-- Gate Skills (Conditional) -->
+          <rect x="40" y="256" width="720" height="72" rx="10" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.35)" stroke-width="2"/>
+          <rect x="40" y="256" width="6" height="72" rx="3" fill="#f59e0b"/>
+          <text x="400" y="284" text-anchor="middle" font-size="14" font-weight="700" fill="#f59e0b">Gate Skills — Conditional Enforcement</text>
+          <text x="400" y="306" text-anchor="middle" font-size="11" fill="rgba(245,158,11,0.75)">4 skills · gate-readiness · gate-review · gate-security · gate-deployment</text>
+        </svg>
+
+        <h3>SKULL Rules</h3>
+        <div class="rules-list">
+          <div class="rule-item">
+            <span class="rule-code">SKULL-001</span>
+            <div class="rule-desc">Single canonical implementation per capability</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">SKULL-002</span>
+            <div class="rule-desc">No direct orchestrator calls without context synthesis</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">SKULL-003</span>
+            <div class="rule-desc">TDD mandatory — RED→GREEN→REFACTOR, never skip</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">SKULL-004</span>
+            <div class="rule-desc">All output inline — never .md/.txt files as deliverables</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">SKULL-005</span>
+            <div class="rule-desc">Convergence Gate mandatory before AC_COMPLETE</div>
+          </div>
+        </div>
+
+        <h3>CORE Rules (selection)</h3>
+        <div class="rules-list">
+          <div class="rule-item">
+            <span class="rule-code">CORE-008</span>
+            <div class="rule-desc">TDD mandatory</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">CORE-011</span>
+            <div class="rule-desc">Type hints on all functions</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">CORE-035</span>
+            <div class="rule-desc">Single canonical implementation</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">CORE-048</span>
+            <div class="rule-desc">Holistic validation gate before IMPLEMENT/FIX/REFACTOR</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">CORE-068</span>
+            <div class="rule-desc">Convergence Gate enforced</div>
+          </div>
+        </div>
+
+        <h3>Gate Skills</h3>
+        <div class="rules-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <div class="rule-item">
+            <span class="rule-code">gate-readiness</span>
+            <div class="rule-desc">AC acceptance & DoR gate</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">gate-review</span>
+            <div class="rule-desc">Peer review & QA validation</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">gate-security</span>
+            <div class="rule-desc">Security & CVE scanning</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">gate-deployment</span>
+            <div class="rule-desc">Release & rollout gates</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DoD CHECKS -->
+      <section class="section section-alt" id="dod">
+        <h2>Definition of Done — 40 Checks Across 8 Categories</h2>
+        <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;">
+          Reduced from 76 checks (15 categories) to 40 checks (8 categories). Every check is binary pass/fail.
+        </p>
+
+        <div class="chart-row">
+          <div class="chart-label">Code Quality</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar" style="width: 80%;"></div>
+          </div>
+          <div class="chart-count">8</div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-label">Test Coverage</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar" style="width: 60%;"></div>
+          </div>
+          <div class="chart-count">6</div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-label">Architecture</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar" style="width: 50%;"></div>
+          </div>
+          <div class="chart-count">5</div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-label">Security</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar" style="width: 50%;"></div>
+          </div>
+          <div class="chart-count">5</div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-label">Governance</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar" style="width: 50%;"></div>
+          </div>
+          <div class="chart-count">5</div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-label">Documentation</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar" style="width: 40%;"></div>
+          </div>
+          <div class="chart-count">4</div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-label">Integration</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar" style="width: 40%;"></div>
+          </div>
+          <div class="chart-count">4</div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-label">Performance</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar" style="width: 30%;"></div>
+          </div>
+          <div class="chart-count">3</div>
+        </div>
+
+        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 1.5rem; text-align: center;">
+          Total: 40 binary checks. All checks must pass before AC_COMPLETE.
+        </p>
+      </section>
+
+      <!-- ADRs -->
+      <section class="section" id="adrs">
+        <h2>Architectural Decision Records (ADRs)</h2>
+        <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;">
+          14 total ADRs: 12 ACCEPTED, 2 WITHDRAWN. ADRs guide all strategic architecture decisions for v3.2.0.
+        </p>
+
+        <table class="adr-table">
+          <thead>
+            <tr>
+              <th style="width: 100px;">ADR</th>
+              <th style="width: 400px;">Title</th>
+              <th style="width: 100px;">Status</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="adr-code">ADR-V3-001</span></td>
+              <td>MCP as primary tool interface</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>Standard protocol for all tool interactions</td>
+            </tr>
+            <tr>
+              <td><span class="adr-code">ADR-V3-002</span></td>
+              <td>Agent + Engine complement pattern</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>Separation of concerns: analysis vs. execution</td>
+            </tr>
+            <tr>
+              <td><span class="adr-code">ADR-V3-003</span></td>
+              <td>3-wave incremental deprecation</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>Smooth migration path for legacy code</td>
+            </tr>
+            <tr>
+              <td><span class="adr-code">ADR-V3-004</span></td>
+              <td>5-phase delivery (reduced from 8)</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>Streamlined execution model</td>
+            </tr>
+            <tr>
+              <td><span class="adr-code">ADR-V3-005</span></td>
+              <td>4 gate skills at real decision points</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>Readiness, Review, Security, Deployment</td>
+            </tr>
+            <tr>
+              <td><span class="adr-code">ADR-V3-006</span></td>
+              <td>40 DoD checks, 8 categories</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>Pragmatic quality gates</td>
+            </tr>
+            <tr>
+              <td><span class="adr-code">ADR-V3-007</span></td>
+              <td>3-layer pragmatic testing pyramid</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>Unit, Integration, E2E testing strategy</td>
+            </tr>
+            <tr>
+              <td><span class="adr-code">ADR-V3-008</span></td>
+              <td>SKULL/CORE/Gate enforcement hierarchy</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>3-layer governance model</td>
+            </tr>
+            <tr>
+              <td><span class="adr-code">ADR-V3-009</span></td>
+              <td>CORTEX as conductor, not pipeline owner</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>Platform orchestration vs. direct execution</td>
+            </tr>
+            <tr>
+              <td><span class="adr-code">ADR-V3-010</span></td>
+              <td>Two primary surfaces (CLI + VS Code)</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>Terminal and editor integrations</td>
+            </tr>
+            <tr>
+              <td><span class="adr-code">ADR-V3-011</span></td>
+              <td>Registry schema-first YAML creation</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>Declarative skill & agent definitions</td>
+            </tr>
+            <tr>
+              <td><span class="adr-code">ADR-V3-012</span></td>
+              <td>Relative paths for all HTML cross-links</td>
+              <td><span class="status-accepted">ACCEPTED</span></td>
+              <td>Portable documentation & offline support</td>
+            </tr>
+            <tr class="withdrawn">
+              <td><span class="adr-code">ADR-V3-013</span></td>
+              <td>Plugin governance + SHA-256 signing (removed)</td>
+              <td><span class="status-withdrawn">WITHDRAWN</span></td>
+              <td>Premature; no third-party plugins yet</td>
+            </tr>
+            <tr class="withdrawn">
+              <td><span class="adr-code">ADR-V3-014</span></td>
+              <td>Release Evidence Mesh, 8-layer certification (removed)</td>
+              <td><span class="status-withdrawn">WITHDRAWN</span></td>
+              <td>Overengineered for markdown files</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Reintroduction Triggers</h3>
+        <div class="rules-list">
+          <div class="rule-item">
+            <span class="rule-code">ADR-V3-013</span>
+            <div class="rule-desc">Reintroduce when: First third-party plugin request received</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-code">ADR-V3-014</span>
+            <div class="rule-desc">Reintroduce when: Regulated compliance requirement identified</div>
+          </div>
+        </div>
+
+        <h3>Status Summary</h3>
+        <svg viewBox="0 0 800 320" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <style>text { font-family: 'Space Grotesk', 'Inter', sans-serif; }</style>
+          </defs>
+
+          <!-- Baseline -->
+          <line x1="40" y1="256" x2="760" y2="256" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+
+          <!-- Gridlines -->
+          <line x1="40" y1="199" x2="760" y2="199" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="40" y1="142" x2="760" y2="142" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="40" y1="85"  x2="760" y2="85"  stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="4,4"/>
+
+          <!-- Y-axis labels -->
+          <text x="35" y="260" font-size="9" fill="#64748b" text-anchor="end">0</text>
+          <text x="35" y="203" font-size="9" fill="#64748b" text-anchor="end">2</text>
+          <text x="35" y="146" font-size="9" fill="#64748b" text-anchor="end">4</text>
+          <text x="35" y="89"  font-size="9" fill="#64748b" text-anchor="end">6</text>
+
+          <!-- Security (4) -->
+          <rect x="40"  y="142" width="60" height="114" rx="4" fill="rgba(0,212,255,0.22)" stroke="#00d4ff" stroke-width="1.5"/>
+          <text x="70"  y="134" text-anchor="middle" font-size="12" font-weight="700" fill="#00d4ff">4</text>
+          <text x="70"  y="272" text-anchor="middle" font-size="10" fill="#94a3b8">Security</text>
+
+          <!-- Integration (7) -->
+          <rect x="130" y="56"  width="60" height="200" rx="4" fill="rgba(0,212,255,0.50)" stroke="#00d4ff" stroke-width="1.5"/>
+          <text x="160" y="48"  text-anchor="middle" font-size="12" font-weight="700" fill="#00d4ff">7</text>
+          <text x="160" y="272" text-anchor="middle" font-size="10" fill="#94a3b8">Integration</text>
+
+          <!-- Governance (4) -->
+          <rect x="220" y="142" width="60" height="114" rx="4" fill="rgba(0,212,255,0.22)" stroke="#00d4ff" stroke-width="1.5"/>
+          <text x="250" y="134" text-anchor="middle" font-size="12" font-weight="700" fill="#00d4ff">4</text>
+          <text x="250" y="272" text-anchor="middle" font-size="10" fill="#94a3b8">Governance</text>
+
+          <!-- Architecture (6) -->
+          <rect x="310" y="85"  width="60" height="171" rx="4" fill="rgba(0,212,255,0.35)" stroke="#00d4ff" stroke-width="1.5"/>
+          <text x="340" y="77"  text-anchor="middle" font-size="12" font-weight="700" fill="#00d4ff">6</text>
+          <text x="340" y="272" text-anchor="middle" font-size="10" fill="#94a3b8">Architecture</text>
+
+          <!-- Workflow (4) -->
+          <rect x="400" y="142" width="60" height="114" rx="4" fill="rgba(0,212,255,0.22)" stroke="#00d4ff" stroke-width="1.5"/>
+          <text x="430" y="134" text-anchor="middle" font-size="12" font-weight="700" fill="#00d4ff">4</text>
+          <text x="430" y="272" text-anchor="middle" font-size="10" fill="#94a3b8">Workflow</text>
+
+          <!-- Health (4) -->
+          <rect x="490" y="142" width="60" height="114" rx="4" fill="rgba(0,212,255,0.22)" stroke="#00d4ff" stroke-width="1.5"/>
+          <text x="520" y="134" text-anchor="middle" font-size="12" font-weight="700" fill="#00d4ff">4</text>
+          <text x="520" y="272" text-anchor="middle" font-size="10" fill="#94a3b8">Health</text>
+
+          <!-- Testing (6) -->
+          <rect x="580" y="85"  width="60" height="171" rx="4" fill="rgba(0,212,255,0.35)" stroke="#00d4ff" stroke-width="1.5"/>
+          <text x="610" y="77"  text-anchor="middle" font-size="12" font-weight="700" fill="#00d4ff">6</text>
+          <text x="610" y="272" text-anchor="middle" font-size="10" fill="#94a3b8">Testing</text>
+
+          <!-- Code Quality (5) -->
+          <rect x="670" y="113" width="60" height="143" rx="4" fill="rgba(0,212,255,0.28)" stroke="#00d4ff" stroke-width="1.5"/>
+          <text x="700" y="105" text-anchor="middle" font-size="12" font-weight="700" fill="#00d4ff">5</text>
+          <text x="700" y="272" text-anchor="middle" font-size="10" fill="#94a3b8">Code Quality</text>
+
+          <!-- Chart title -->
+          <text x="400" y="300" text-anchor="middle" font-size="11" fill="#64748b">40 DoD checks across 8 categories — bars proportional to check count (max 7)</text>
+        </svg>
+      </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      CORTEX v3.2.0 Governance Framework · Spoke 5 of 6
+    </footer>
+  </main>
+
+  <!-- BACK TO TOP -->
+  <a class="back-top-btn" href="#" title="Back to top">↑</a>
+
+  <script>
+    // Jump nav active state
+    const jumpBtns = document.querySelectorAll('.jump-btn');
+    const sections = document.querySelectorAll('.section');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            jumpBtns.forEach((btn) => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`a[href="#${entry.target.id}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    // Back to top button
+    const backBtn = document.querySelector('.back-top-btn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backBtn.classList.add('show');
+      } else {
+        backBtn.classList.remove('show');
+      }
+    });
+
+    backBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Smooth scroll for jump nav
+    jumpBtns.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(btn.getAttribute('href'));
+        target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+
+  <!-- HUB NAV (fixed bottom) -->
+  <div class="hub-nav">
+    <a href="./index.html">← Hub</a>
+    <span class="divider">·</span>
+    <a href="./overview.html">Overview</a>
+    <span class="divider">·</span>
+    <a href="./architecture.html">Architecture</a>
+    <span class="divider">·</span>
+    <a href="./lifecycle.html">Lifecycle</a>
+    <span class="divider">·</span>
+    <a href="./phases.html">Phases</a>
+    <span class="divider">·</span>
+    <span class="active">Governance</span>
+    <span class="divider">·</span>
+    <a href="./registry.html">Registry</a>
+  </div>
+</body>
+</html>
