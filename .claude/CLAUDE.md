@@ -2,6 +2,16 @@
 
 @../.github/copilot-instructions.md
 
+## 🎯 Singular Entry Point
+
+`/cortex` is the one command for all CORTEX operations across all surfaces.
+
+- **Claude Code CLI:** `/cortex [intent]` → `.claude/commands/cortex.md` → routes via IntentRouter
+- **VS Code Copilot:** `/cortex [intent]` → `.github/skills/cortex/SKILL.md` → same routing
+- **Cowork:** CORTEX skill auto-triggers on any CORTEX keyword or command
+
+Do not invoke domain skills directly. All requests flow through `/cortex` → MasterOrchestrator.
+
 ## Runtime Positioning
 - Claude Code is the primary execution backbone.
 - CORTEX must preserve dual-surface compatibility with VS Code Copilot artifacts under `.github/`.
@@ -17,6 +27,7 @@
 
 ## Backbone Artifacts (Required)
 - `.claude/settings.json`
+- `.claude/commands/cortex.md`
 - `.claude/rules/*.md`
 - `.claude/agents/.cortex-agents-readme`
 - `.claude/skills/*/SKILL.md`

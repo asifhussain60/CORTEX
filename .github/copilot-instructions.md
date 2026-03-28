@@ -1,9 +1,42 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-03-15 (M7-a reduction)
+**Updated:** 2026-03-28 (singular entry point)
 **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 **CORE-002:** All output must render inline in VS Code Copilot Chat.
+
+---
+
+## 🎯 Singular Entry Point — `/cortex`
+
+**`/cortex` is the ONE command for everything.** All CORTEX capabilities route through it.
+
+| You want to… | Type… |
+|---|---|
+| Implement a feature | `/cortex implement {description}` |
+| Fix a bug | `/cortex fix {description}` |
+| Refactor code | `/cortex refactor {description}` |
+| Run a full audit + auto-fix | `/cortex audit fix` |
+| Debug a failure | `/cortex debug {path or error}` |
+| Root cause analysis | `/cortex rca {failure}` |
+| Code review | `/cortex review {pr or file}` |
+| Plan phases / roadmap | `/cortex plan` |
+| Clean workspace | `/cortex vacuum` |
+| Health check | `/cortex health` |
+| Production certification | `/cortex totalrecall` |
+| Onboard a new repo | `/cortex onboard {path}` |
+| Architecture review | `/cortex architecture-review` |
+| Generate alternatives | `/cortex challenge {request}` |
+| Ingest content | `/cortex digest {path}` |
+| Distill transcript | `/cortex distill {file}` |
+| Anything else | `/cortex {natural language}` |
+
+**Routing contract:** IntentRouter classifies intent → MasterOrchestrator dispatches → domain orchestrator executes. No pre-selection of domain skills required from the user.
+
+**Surfaces:**
+- Claude Code CLI: `/cortex` → `.claude/commands/cortex.md`
+- VS Code Copilot: `/cortex` → `.github/skills/cortex/SKILL.md`
+- Cowork: CORTEX skill auto-triggers on any CORTEX keyword
 
 ---
 
