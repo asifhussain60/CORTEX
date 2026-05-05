@@ -39,6 +39,7 @@ import json
 import logging
 import re
 import sys
+import unicodedata
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -507,7 +508,7 @@ class BollywoodOrganizer:
             self.stats.errors.append(f"Duplicate detection error: {e}")
 
     def _generate_proper_case_names(self) -> None:
-        """Stage 5: Generate proper case filenames with spaces (in-place)."""
+        """Stage 5: Generate strict English Artist/Title filenames."""
         for entry in self.files:
             # Skip duplicate files (keep only one copy)
             if entry.is_duplicate:
@@ -525,57 +526,123 @@ class BollywoodOrganizer:
                 title = entry.extracted_title or "Unknown Song"
                 film = entry.extracted_film or ""
 
-            # Clean up components
-            title = self._clean_title(title)
-            
-            # Build proper case filename with spaces
-            # Format: Artist - Song Title - Film.ext
-            parts = []
-            
-            if artist:
-                parts.append(self._to_proper_case(artist))
-            
-            parts.append(self._to_proper_case(title))
-            
-            if film:
-                parts.append(self._to_proper_case(film))
-            
-            # Join parts with " - " and add extension
+            canonical_artist, canonical_title = self._canonicalize_artist_title(
+                entry.original_name,
+                artist_candidate=artist,
+                title_candidate=title,
+            )
+
+            if not canonical_artist:
+                canonical_artist = "Unknown Artist"
+            if not canonical_title:
+                canonical_title = canonical_artist
+
             original_ext = entry.original_path.suffix
-            new_name = " - ".join(parts) + original_ext
-            
-            # Sanitize and smart truncate (max 150 chars)
-            new_name = self._sanitize_filename(new_name, max_length=150)
+            new_name = self._sanitize_filename(f"{canonical_title}{original_ext}", max_length=120)
             entry.new_name = new_name
 
-            # Build target path (in-place, same directory)
-            if self.in_place:
-                entry.target_path = entry.original_path.parent / new_name
-            else:
-                # If organizing, use category folders
-                category_path = self.target_dir / entry.category
-                entry.target_path = category_path / new_name
+            # Canonical layout required by policy: Artist/Title.ext
+            artist_folder = self._sanitize_path_component(canonical_artist, fallback="Unknown Artist")
+            entry.target_path = self.target_dir / artist_folder / new_name
 
             self.stats.files_renamed += 1
 
-    def _to_proper_case(self, text: str) -> str:
-        """Convert text to proper case (title case) with clean formatting."""
-        # Remove special characters except spaces, hyphens, apostrophes
-        text = re.sub(r"[^\w\s'-]", "", text)
-        # Normalize multiple spaces to single space
-        text = re.sub(r"\s+", " ", text)
-        # Apply title case
+    def _ascii_fold(self, text: str) -> str:
+        """Convert text to ASCII by dropping non-English characters."""
+        return (
+            unicodedata.normalize("NFKD", text)
+            .encode("ascii", "ignore")
+            .decode("ascii")
+        )
+
+    def _normalize_words(self, text: str) -> str:
+        """Normalize whitespace and convert to proper case."""
+        text = re.sub(r"\s+", " ", text).strip()
+        if not text:
+            return ""
         text = text.title()
-        # Fix common title case issues (keep some words lowercase)
-        small_words = ['A', 'An', 'The', 'And', 'But', 'Or', 'For', 'Nor', 'On', 'At', 'To', 'By', 'Of', 'In']
+        small_words = {
+            "A", "An", "The", "And", "But", "Or", "For", "Nor", "On", "At", "To", "By", "Of", "In", "With"
+        }
         words = text.split()
         if len(words) > 1:
-            # Keep first and last word capitalized, lowercase small words in middle
             for i in range(1, len(words) - 1):
                 if words[i] in small_words:
                     words[i] = words[i].lower()
-            text = ' '.join(words)
-        return text.strip()
+            text = " ".join(words)
+        return text
+
+    def _sanitize_artist(self, text: str) -> str:
+        """Normalize artist name to strict English words only."""
+        text = self._ascii_fold(text)
+        text = re.sub(r"\b(ft|feat|featuring|x|vs)\b.*$", "", text, flags=re.IGNORECASE)
+        text = re.sub(r"[^A-Za-z\s]", " ", text)
+        text = re.sub(r"\d+", " ", text)
+        return self._normalize_words(text)
+
+    def _sanitize_title(self, text: str) -> str:
+        """Normalize title to strict English words only and remove noise."""
+        text = self._ascii_fold(text)
+        noise_patterns = [
+            r"\b(official|video|lyrical|lyrics|audio|hd|uhd|fhd|4k|8k|remix|version|full|new|latest|hindi|bollywood)\b",
+            r"\b(song|track|mv|music|promo|shorts?)\b",
+            r"\b\d{3,4}p\b",
+        ]
+        for pattern in noise_patterns:
+            text = re.sub(pattern, " ", text, flags=re.IGNORECASE)
+        text = re.sub(r"\([^)]*\)", " ", text)
+        text = re.sub(r"\[[^\]]*\]", " ", text)
+        text = re.sub(r"[^A-Za-z\s]", " ", text)
+        text = re.sub(r"\d+", " ", text)
+        return self._normalize_words(text)
+
+    def _extract_artist_hint_from_filename(self, original_name: str) -> str:
+        """Extract artist hint from filename patterns like '(JENNIE)'."""
+        stem = Path(original_name).stem
+        paren_groups = re.findall(r"\(([^)]{1,80})\)", stem)
+        for group in paren_groups:
+            candidate = self._sanitize_artist(group)
+            if candidate:
+                return candidate
+
+        # Fallback: leading token before separator
+        prefix = re.split(r"\s+-\s+|\s{2,}", stem, maxsplit=1)[0]
+        return self._sanitize_artist(prefix)
+
+    def _canonicalize_artist_title(
+        self,
+        original_name: str,
+        artist_candidate: Optional[str],
+        title_candidate: Optional[str],
+    ) -> Tuple[str, str]:
+        """Build canonical Artist/Title from noisy filename and parsed metadata."""
+        artist = self._sanitize_artist(artist_candidate or "")
+        title = self._sanitize_title(title_candidate or "")
+
+        if not artist:
+            artist = self._extract_artist_hint_from_filename(original_name)
+
+        if not title:
+            title = self._sanitize_title(Path(original_name).stem)
+
+        # Collapse cases like "like Jennie" into "Jennie" when matching artist.
+        if artist and re.fullmatch(rf"(?i)like\s+{re.escape(artist)}", title):
+            title = artist
+
+        if artist and title and title.lower() == artist.lower():
+            return artist, title
+
+        return artist, title
+
+    def _sanitize_path_component(self, text: str, fallback: str) -> str:
+        """Sanitize folder names for filesystem safety."""
+        cleaned = re.sub(r"[^A-Za-z\s]", " ", text)
+        cleaned = self._normalize_words(cleaned)
+        return cleaned if cleaned else fallback
+
+    def _to_proper_case(self, text: str) -> str:
+        """Convert text to proper case (title case) with clean formatting."""
+        return self._normalize_words(self._ascii_fold(text))
 
     def _clean_title(self, title: str) -> str:
         """Clean song title by removing redundant metadata and additive words."""
@@ -613,7 +680,7 @@ class BollywoodOrganizer:
         # Remove trailing/leading dashes or spaces
         title = title.strip(" -–—")
         
-        return title
+        return self._sanitize_title(title)
 
     def _extract_title_from_filename(self, filename: str) -> str:
         """
@@ -640,10 +707,17 @@ class BollywoodOrganizer:
 
     def _sanitize_filename(self, filename: str, max_length: int = 100) -> str:
         """Sanitize filename removing invalid characters with smart truncation."""
-        # Remove invalid characters
+        # Normalize to ASCII and strict English chars.
+        filename = self._ascii_fold(filename)
         invalid_chars = '<>:"/\\|?*'
         for char in invalid_chars:
             filename = filename.replace(char, "")
+
+        stem, ext = Path(filename).stem, Path(filename).suffix
+        stem = re.sub(r"[^A-Za-z\s]", " ", stem)
+        stem = re.sub(r"\d+", " ", stem)
+        stem = self._normalize_words(stem)
+        filename = f"{stem}{ext or '.mp4'}"
 
         # Smart truncate if too long
         if len(filename) > max_length:
@@ -691,18 +765,22 @@ class BollywoodOrganizer:
                     file_path = entry.target_path if entry.target_path and entry.target_path.exists() else entry.original_path
                     audio = MP4(str(file_path))
 
+                    canonical_title = self._sanitize_title(Path(file_path).stem) or "Unknown Song"
+                    canonical_artist = self._sanitize_artist(file_path.parent.name) or "Unknown Artist"
+
                     # Write tags
-                    audio["\xa9nam"] = title  # Title
-                    audio["\xa9ART"] = ", ".join(artists)  # Artist
-                    audio["\xa9alb"] = album  # Album
+                    audio["\xa9nam"] = canonical_title  # Title
+                    audio["\xa9ART"] = canonical_artist  # Artist
+                    audio["\xa9alb"] = "Bollywood Party Mix"  # Album → single canonical Plex collection
                     audio["\xa9gen"] = genre  # Genre
                     if year:
                         audio["\xa9day"] = str(year)  # Year
                     audio["\xa9cmt"] = f"Original: {entry.original_name}"  # Comment
-                    audio["\xa9grp"] = entry.category  # Grouping
-                    
-                    # Set collection to "Bollywood Party Songs" (clearing any previous collections)
-                    audio["\xa9col"] = ["Bollywood Party Songs"]  # Collection (must be list)
+                    # Remove ©grp (individual category) — collection is driven by ©alb alone
+                    if "\xa9grp" in audio:
+                        del audio["\xa9grp"]
+                    # Set ©col for non-Plex players
+                    audio["\xa9col"] = ["Bollywood Party Mix"]  # Collection (must be list)
 
                     audio.save()
                     self.stats.files_tagged += 1
@@ -714,7 +792,7 @@ class BollywoodOrganizer:
         except ImportError:
             logger.warning("mutagen not installed — skipping MP4 tagging (pip install mutagen)")
 
-    def update_collections(self, collection_name: str = "Bollywood Party Songs") -> int:
+    def update_collections(self, collection_name: str = "Bollywood Party Mix") -> int:
         """
         Update collection metadata on all MP4 files.
         
@@ -786,11 +864,22 @@ class BollywoodOrganizer:
 
     def _apply_renames(self) -> None:
         """Apply file renames (in-place)."""
-        import shutil
+        applied_count = 0
 
         for entry in self.files:
             if not entry.target_path or entry.is_duplicate:
                 continue
+
+            if entry.original_path == entry.target_path:
+                continue
+
+            if not entry.original_path.exists():
+                logger.warning(f"Source missing, skipping: {entry.original_path}")
+                self.stats.warnings.append(f"Source missing: {entry.original_name}")
+                continue
+
+            # Ensure destination artist folder exists before rename.
+            entry.target_path.parent.mkdir(parents=True, exist_ok=True)
 
             # Skip if target already exists (unless it's the same file)
             if entry.target_path.exists() and entry.target_path != entry.original_path:
@@ -801,10 +890,13 @@ class BollywoodOrganizer:
             try:
                 # Rename file (in-place)
                 entry.original_path.rename(entry.target_path)
+                applied_count += 1
                 logger.debug(f"Renamed: {entry.original_name} → {entry.target_path.name}")
             except Exception as e:
                 logger.error(f"Rename failed for '{entry.original_name}': {e}")
                 self.stats.errors.append(f"Rename error: {entry.original_name}")
+
+        self.stats.files_renamed = applied_count
 
     def _organize_files(self) -> None:
         """Stage 6: Move files to categorized folders (APPLY mode only)."""
@@ -873,7 +965,10 @@ class BollywoodOrganizer:
             for i, entry in enumerate(non_duplicates, 1):
                 logger.info(f"\n{i}. ORIGINAL: {entry.original_name}")
                 logger.info(f"   NEW NAME: {entry.new_name}")
-                logger.info(f"   PATH: {entry.original_path.parent.relative_to(self.target_dir) if entry.original_path.parent != self.target_dir else '(root)'}")
+                if entry.target_path:
+                    logger.info(f"   TARGET: {entry.target_path.relative_to(self.target_dir)}")
+                else:
+                    logger.info(f"   TARGET: (not set)")
                 if entry.metadata:
                     logger.info(f"   METADATA: {entry.metadata.artists[0] if entry.metadata.artists else 'Unknown'}")
                     logger.info(f"             Album: {entry.metadata.album or 'N/A'}")

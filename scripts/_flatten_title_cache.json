@@ -1,0 +1,1586 @@
+[
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Aadat Bollywood\\Aadat.mp4",
+    "flat_title": "Aadat",
+    "size_bytes": 229338398
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Film Version\\Aafat Liger Vijay Deverakonda Ananya Panday Tanishk Rashmi Zahrah.mp4",
+    "flat_title": "Aafat",
+    "size_bytes": 179226910
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Tamannaah Bhatia\\Aaj Ki Raat.mp4",
+    "flat_title": "Aaj Ki Raat",
+    "size_bytes": 250860900
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Aap Jaisa Koi\\Aap Jaisa Koi.mp4",
+    "reason": "duplicate of 'Aap Jaisa Koi an Action Hero.mp4' (smaller by 56 bytes)",
+    "size_bytes": 75617257
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Tanishk\\Aap Jaisa Koi an Action Hero.mp4",
+    "flat_title": "Aap Jaisa Koi",
+    "size_bytes": 75617313
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Himesh Reshammiya Neha\\Aashiq Banaya Aapne.mp4",
+    "flat_title": "Aashiq Banaya Aapne",
+    "size_bytes": 55658795
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Aaye Haaye\\Aaye Haaye.mp4",
+    "flat_title": "Aaye Haaye",
+    "size_bytes": 242025607
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Abhi Toh Party Shuru Hui Hai Badshah\\Abhi Toh Party Shuru Hui Hai Badshah.mp4",
+    "flat_title": "Abhi Toh Party Shuru Hui",
+    "size_bytes": 572715604
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Achacho\\Achacho.mp4",
+    "reason": "duplicate of 'Achacho Aranmanai Sundar C Tamannaah Raashii Khanna Hiphop Tamizha.mp4' (smaller by 202 bytes)",
+    "size_bytes": 305136059
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Achacho\\Achacho Aranmanai Sundar C Tamannaah Raashii Khanna Hiphop Tamizha.mp4",
+    "flat_title": "Achacho",
+    "size_bytes": 305136261
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Adivi Sesh\\Adivi Sesh.mp4",
+    "flat_title": "Adivi Sesh",
+    "size_bytes": 207065289
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Akeli Laila\\Akeli Laila Baaghi.mp4",
+    "flat_title": "Akeli Laila",
+    "size_bytes": 261195146
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Akh Lad Jaave Song\\Akh Lad Jaave.mp4",
+    "flat_title": "Akh Lad Jaave",
+    "size_bytes": 76823499
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Akhiyaan Gulaab\\Akhiyaan Gulaab.mp4",
+    "flat_title": "Akhiyaan Gulaab",
+    "size_bytes": 191360774
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Akshay\\Akshay Housefull Dil E Nadaan.mp4",
+    "flat_title": "Dil E Nadaan",
+    "size_bytes": 384753675
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Arabic Deep House Belly Dance Music\\Arabic Deep House Belly Dance.mp4",
+    "flat_title": "Arabic Deep House",
+    "size_bytes": 3774526330
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Arabic Edm Nights\\Arabic Edm Nights.mp4",
+    "flat_title": "Arabic Edm Nights",
+    "size_bytes": 3766903492
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Asha Bhosle\\Asha Bhosle Yaara Dildaara Asim Riaz Zaara Yesmin.mp4",
+    "flat_title": "Yaara Dildaara",
+    "size_bytes": 247105710
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Guru Randhawa\\Azul.mp4",
+    "flat_title": "Azul",
+    "size_bytes": 217914359
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Baaghi Yeh Mera Husn\\Baaghi Yeh Mera Husn.mp4",
+    "flat_title": "Yeh Mera Husn",
+    "size_bytes": 341797962
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Babuji Zara Dheere Chalo\\Babuji Zara Dheere Chalo.mp4",
+    "flat_title": "Babuji Zara Dheere Chalo",
+    "size_bytes": 136489608
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Natti Natasha Remix\\Baby Im Jealous.mp4",
+    "flat_title": "Baby Im Jealous",
+    "size_bytes": 324516520
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Bad Boy\\Bad Boy X Bad Girl Badshah.mp4",
+    "flat_title": "Bad Boy",
+    "size_bytes": 213846512
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Badshah Payal Dev\\Badshah Payal Dev.mp4",
+    "flat_title": "Badshah Payal Dev",
+    "size_bytes": 175771793
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Balma\\Balma.mp4",
+    "flat_title": "Balma",
+    "size_bytes": 253903301
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Bambai Se Gayi Puna\\Bambai Se Gayi Puna.mp4",
+    "flat_title": "Bambai Se Gayi Puna",
+    "size_bytes": 70743913
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Basanti\\Basanti.mp4",
+    "flat_title": "Basanti",
+    "size_bytes": 91979563
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Bb Jaana Samjho Na\\Bb Jaana Samjho Na.mp4",
+    "flat_title": "Jaana Samjho Na",
+    "size_bytes": 286920406
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Bebe Rexha Faithless\\Bebe Rexha Faithless.mp4",
+    "flat_title": "Faithless",
+    "size_bytes": 89927513
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Shreya Ghoshal\\Besos.mp4",
+    "flat_title": "Besos",
+    "size_bytes": 293646318
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Besos\\Besos Jacqueline Fernandez Shikhar Dhawan.mp4",
+    "reason": "duplicate of 'Besos.mp4' (smaller by 118 bytes)",
+    "size_bytes": 293646200
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Best of Sreeleela Dance Songs\\Best of Sreeleela Dance Songs.mp4",
+    "flat_title": "Best Of Sreeleela",
+    "size_bytes": 2433480641
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Compilations\\Best Party Hits Playlist\\Best Party Hits Playlist Hit Party Songs.mp4",
+    "flat_title": "Best Party Hits",
+    "size_bytes": 1697718956
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Bom Diggy Diggy\\Bom Diggy Diggy.mp4",
+    "flat_title": "Bom Diggy Diggy",
+    "size_bytes": 925158039
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Bullet Ashiqana\\Bullet Ashiqana.mp4",
+    "flat_title": "Bullet Ashiqana",
+    "size_bytes": 84625409
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Catch Me\\Catch Me Khiladi Songs.mp4",
+    "flat_title": "Catch Me",
+    "size_bytes": 199660043
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Pritam\\Character Dheela.mp4",
+    "flat_title": "Character Dheela",
+    "size_bytes": 1201224448
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Character Dheela\\Character Dheela.mp4",
+    "reason": "duplicate of 'Character Dheela.mp4' (smaller by 952,303,877 bytes)",
+    "size_bytes": 248920571
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Chittiyaan Kalaiyaan\\Chittiyaan Kalaiyaan.mp4",
+    "flat_title": "Chittiyaan Kalaiyaan",
+    "size_bytes": 77977073
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Choli Ke Peeche Kya Hai\\Choli Ke Peeche Kya Hai.mp4",
+    "flat_title": "Choli Ke Peeche Kya Hai",
+    "size_bytes": 102507225
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Choli Ke Pichhe\\Choli Ke Pichhe.mp4",
+    "flat_title": "Choli Ke Pichhe",
+    "size_bytes": 511855656
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Chudi Jo Khanki\\Chudi Jo Khanki.mp4",
+    "flat_title": "Chudi Jo Khanki",
+    "size_bytes": 368106114
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Compilations\\Cocktail Party Mashup\\Cocktail Party Mashup.mp4",
+    "flat_title": "Cocktail Party Mashup",
+    "size_bytes": 150241129
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Daaku\\Daaku Badshah.mp4",
+    "flat_title": "Daaku",
+    "size_bytes": 129921711
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Daaru Peeke Dance Neha Kakkar Kuch Kuch Locha Hai Sunny Leone Amjad Nadeem\\Daaru Peeke Dance Neha Kakkar Kuch Kuch Locha Hai Sunny Leone Amjad Nadeem.mp4",
+    "flat_title": "Daaru Peeke Dance",
+    "size_bytes": 106593831
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Daavudi\\Daavudi Devara.mp4",
+    "flat_title": "Daavudi",
+    "size_bytes": 626835657
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Daddy Mummy Urvashi Rautela Kunal Khemu Dsp Bhaag Johnny T Series\\Daddy Mummy Urvashi Rautela Kunal Khemu Dsp Bhaag Johnny T Series.mp4",
+    "flat_title": "Daddy Mummy",
+    "size_bytes": 121511545
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Dance Meri Rani Guru Randhawa\\Dance Meri Rani Guru Randhawa.mp4",
+    "flat_title": "Dance Meri Rani",
+    "size_bytes": 266500207
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Darzi Kaka Wrld Sukh E Shiva Choudhary\\Darzi Kaka Wrld Sukh E Shiva Choudhary Ft Shreya Kalra.mp4",
+    "flat_title": "Darzi Kaka",
+    "size_bytes": 244033908
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Dekhkar Jo Mujhe\\Dekhkar Jo Mujhe.mp4",
+    "flat_title": "Dekhkar Jo Mujhe",
+    "size_bytes": 305731156
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Desi Hriiiiii\\Desi Hriiiiii.mp4",
+    "flat_title": "Desi Hrithik",
+    "size_bytes": 91829459
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Desi Look\\Desi Look.mp4",
+    "flat_title": "Desi Look",
+    "size_bytes": 63715726
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Desire Habibi Arabic Afro House Reggaeton\\Desire Habibi Arabic Afro House Reggaeton.mp4",
+    "flat_title": "Desire",
+    "size_bytes": 524629471
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Dharmesh D\\Dharmesh D Marhaba.mp4",
+    "flat_title": "Marhaba",
+    "size_bytes": 327290183
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Harshvardhan\\Dil Dil Dil.mp4",
+    "flat_title": "Dil Dil Dil",
+    "size_bytes": 297241155
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Hrithik Roshan\\Dil Laga Na.mp4",
+    "flat_title": "Dil Laga Na",
+    "size_bytes": 161191782
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Dil Thaam Ke Song\\Dil Thaam Ke.mp4",
+    "flat_title": "Dil Thaam Ke",
+    "size_bytes": 491140427
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Dilbar Ki Aankhon Ka\\Dilbar Ki Aankhon Ka.mp4",
+    "flat_title": "Dilbar Ki Aankhon Ka",
+    "size_bytes": 123356782
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Dimaak Kharaab\\Dimaak Kharaab Ismart Shankar Ram Pothineni Nidhhi Agerwal Nabha Natesh.mp4",
+    "flat_title": "Dimaak Kharaab",
+    "size_bytes": 442644760
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Dirham Danish Alfaaz Kaira\\Dirham Danish Alfaaz Kaira.mp4",
+    "flat_title": "Dirham",
+    "size_bytes": 262763896
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Chikni Chameli\\Diwali Party Songs.mp4",
+    "flat_title": "Diwali Party Songs",
+    "size_bytes": 2328481472
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Compilations\\Cocktail Party Mashup\\Dj Shiv Chauhan.mp4",
+    "flat_title": "Dj Shiv Chauhan",
+    "size_bytes": 150241175
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Do Patti Akhiyaan De Kol\\Do Patti Akhiyaan De Kol.mp4",
+    "flat_title": "Akhiyaan De Kol",
+    "size_bytes": 150328875
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Do Patti Thaaein Thaaein\\Do Patti Thaaein Thaaein.mp4",
+    "flat_title": "Thaaein Thaaein",
+    "size_bytes": 176805273
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Dum Dum\\Dum Dum.mp4",
+    "flat_title": "Dum Dum",
+    "size_bytes": 253626696
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Dum Dum Dance Track\\Dum Dum Dance.mp4",
+    "flat_title": "Dum Dum Dance",
+    "size_bytes": 451146283
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Dum Maaro Dum\\Dum Maaro Dum.mp4",
+    "flat_title": "Dum Maaro Dum",
+    "size_bytes": 63854419
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Edward Maya Tiger J Shroff Zahrah S Khan Tanishk Bagchi\\Edward Maya Tiger J Shroff Zahrah S Khan Tanishk Bagchi.mp4",
+    "flat_title": "Stereo Love",
+    "size_bytes": 220161109
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Ek Baar Aaja\\Ek Baar Aaja.mp4",
+    "flat_title": "Ek Baar Aaja",
+    "size_bytes": 329787058
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Ek Main Aur Ek Tu Hai\\Ek Main Aur Ek Tu Hai.mp4",
+    "flat_title": "Ek Main Aur Ek Tu Hai",
+    "size_bytes": 74419398
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Fast Forward\\Fast Forward.mp4",
+    "flat_title": "Fast Forward",
+    "size_bytes": 252695613
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Fighter Heer Aasmani\\Fighter Heer Aasmani.mp4",
+    "flat_title": "Heer Aasmani",
+    "size_bytes": 206438223
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Fighter Ishq Jaisa Kuch\\Fighter Ishq Jaisa Kuch.mp4",
+    "reason": "duplicate of 'Hrithik Roshan Fighter Ishq Jaisa Kuch.mp4' (smaller by 30 bytes)",
+    "size_bytes": 275145862
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Neha Kakkar\\Gali Gali.mp4",
+    "flat_title": "Gali Gali",
+    "size_bytes": 85939018
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Genie\\Genie Abdi Abdi.mp4",
+    "flat_title": "Genie",
+    "size_bytes": 372314523
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Ghafoor\\Ghafoor.mp4",
+    "flat_title": "Ghafoor",
+    "size_bytes": 239865384
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Gore Gore Mukhde Pe Ishq Vishk Rebound\\Gore Gore Mukhde Pe Ishq Vishk Rebound.mp4",
+    "flat_title": "Gore Gore Mukhde Pe",
+    "size_bytes": 225444025
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Gori Hai Kalaiyan\\Gori Hai Kalaiyan Badshah X Sharvi Yadav.mp4",
+    "flat_title": "Gori Hai Kalaiyan",
+    "size_bytes": 146184684
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Gurmeet Bhadana Ishika Rajput Monika Sharma Nach to Sahi Naagin Haryanvi\\Gurmeet Bhadana Ishika Rajput Monika Sharma Nach to Sahi Naagin Haryanvi.mp4",
+    "flat_title": "Nach To Sahi",
+    "size_bytes": 257408786
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Guru Randhawa Song\\Guru Randhawa.mp4",
+    "flat_title": "Guru Randhawa",
+    "size_bytes": 218041566
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Guru Randhawa\\Guru Randhawa Second.mp4",
+    "reason": "duplicate of 'Guru Randhawa.mp4' (smaller by 225,139 bytes)",
+    "size_bytes": 217816427
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Guru Randhawa\\Guru Randhawa Third.mp4",
+    "reason": "duplicate of 'Guru Randhawa.mp4' (smaller by 127,339 bytes)",
+    "size_bytes": 217914227
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Happy New Year\\Happy Year.mp4",
+    "flat_title": "Happy Year",
+    "size_bytes": 1224064492
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Harrdy Sandhu\\Harrdy Sandhu.mp4",
+    "reason": "duplicate of 'Harrdy Sandhu Second.mp4' (smaller by 45,456,155 bytes)",
+    "size_bytes": 136746296
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Harrdy Sandhu\\Harrdy Sandhu Bijlee Bijlee Ft Palak Tiwari Jaani Bpraak Arvindr Khaira Desi Melodies.mp4",
+    "flat_title": "Bijlee Bijlee",
+    "size_bytes": 136746536
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Harrdy Sandhu\\Harrdy Sandhu Second.mp4",
+    "flat_title": "Harrdy Sandhu",
+    "size_bytes": 182202451
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Hasina Pagal Deewani Indoo Ki Jawani\\Hasina Pagal Deewani Indoo Ki Jawani.mp4",
+    "reason": "duplicate of 'Kiara Advani Hasina Pagal Deewani Indoo Ki Jawani.mp4' (smaller by 34 bytes)",
+    "size_bytes": 108709156
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Salman Khan\\Heeriye Nasha Tera Karke Ranjha Ye Tabah Ho Gaya.mp4",
+    "flat_title": "Heeriye",
+    "size_bytes": 142528964
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Hello Ji Ragini Mms\\Hello Ji Ragini Mms.mp4",
+    "flat_title": "Hello Ji",
+    "size_bytes": 97963557
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Bollywood New Hit Songs\\Hit Songs Songs.mp4",
+    "flat_title": "Hit Songs",
+    "size_bytes": 2763724818
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Honthon Pe Bas\\Honthon Pe Bas.mp4",
+    "reason": "duplicate of 'Zaara Yesmin Honthon Pe Bas.mp4' (smaller by 29 bytes)",
+    "size_bytes": 299253040
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Tiger Shroff\\Hook Up.mp4",
+    "flat_title": "Hook Up",
+    "size_bytes": 82627157
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Hookup\\Hookup.mp4",
+    "reason": "duplicate of 'Hook Up.mp4' (smaller by 965,202 bytes)",
+    "size_bytes": 81661955
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Housefull Qayamat\\Housefull Qayamat.mp4",
+    "flat_title": "Qayamat",
+    "size_bytes": 255721579
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Hrithik\\Hrithik Fighter Sher Khul Gaye.mp4",
+    "flat_title": "Sher Khul Gaye",
+    "size_bytes": 276070055
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Hrithik Roshan\\Hrithik Roshan Fighter Ishq Jaisa Kuch.mp4",
+    "flat_title": "Ishq Jaisa Kuch",
+    "size_bytes": 275145892
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Hui Malang\\Hui Malang.mp4",
+    "flat_title": "Hui Malang",
+    "size_bytes": 267456363
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Hum Aaye Hain\\Hum Aaye Hain.mp4",
+    "flat_title": "Hum Aaye Hain",
+    "size_bytes": 235142379
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Hum Dono Title\\Hum Dono Title.mp4",
+    "flat_title": "Hum Dono",
+    "size_bytes": 215048342
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Hyped Habibi Arabic Afrobeat Reggaeton\\Hyped Habibi Arabic Afrobeat Reggaeton.mp4",
+    "flat_title": "Hyped Habibi",
+    "size_bytes": 451162771
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Hypnotize\\Hypnotize Honeymoon.mp4",
+    "flat_title": "Hypnotize",
+    "size_bytes": 63172747
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Garry Sandhu\\Illegal Weapon.mp4",
+    "flat_title": "Illegal Weapon",
+    "size_bytes": 80793267
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Illegal Weapon\\Illegal Weapon.mp4",
+    "reason": "duplicate of 'Illegal Weapon.mp4' (smaller by 29 bytes)",
+    "size_bytes": 80793238
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Compilations\\International Mashup\\International Mashup Dip Sr.mp4",
+    "flat_title": "International Mashup",
+    "size_bytes": 131575766
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Ishq Bukhaar\\Ishq Bukhaar.mp4",
+    "flat_title": "Ishq Bukhaar",
+    "size_bytes": 82427117
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Item Rani Dance Song\\Item Rani Dance.mp4",
+    "flat_title": "Item Rani",
+    "size_bytes": 182066203
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Jabse Dekha Tumko\\Jabse Dekha Tumko.mp4",
+    "flat_title": "Jabse Dekha Tumko",
+    "size_bytes": 238450923
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Jala Dance Anthem\\Jala Dance Anthem.mp4",
+    "flat_title": "Jala",
+    "size_bytes": 296163746
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Janaab E Aali\\Janaab E Aali.mp4",
+    "flat_title": "Janaab E Aali",
+    "size_bytes": 326283647
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Jannataan Naseeb Video\\Jannataan Naseeb.mp4",
+    "flat_title": "Jannataan",
+    "size_bytes": 184659154
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Jennie\\Jennie.mp4",
+    "flat_title": "Jennie",
+    "size_bytes": 142277250
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Jennifer Lopez\\Jennifer Lopez.mp4",
+    "flat_title": "Jennifer Lopez",
+    "size_bytes": 108054564
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Jugni Music\\Jugni.mp4",
+    "flat_title": "Jugni",
+    "size_bytes": 82659081
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Badshah\\Jugnu Nikhita Gandhi Akanksha Sharma Party.mp4",
+    "flat_title": "Jugnu",
+    "size_bytes": 62430688
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Kaala Jaadu Music\\Kaala Jaadu.mp4",
+    "flat_title": "Kaala Jaadu",
+    "size_bytes": 190335806
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Kaali Teri Gutt\\Kaali Teri Gutt.mp4",
+    "flat_title": "Kaali Teri Gutt",
+    "size_bytes": 176312031
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Bollywood Hits\\Kaali Teri Gutt.mp4",
+    "reason": "duplicate of 'Kaali Teri Gutt.mp4' (smaller by 115 bytes)",
+    "size_bytes": 176311916
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Kala Sha Kala\\Kala Sha Kala Om Aditya Roy K Elnaaz Sanjana S Enbee Amjad Nadeem Raahi Dev N Kumaar.mp4",
+    "flat_title": "Kala Sha Kala",
+    "size_bytes": 71303088
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Kartik A\\Kartik a Luka Chuppi Coca Cola.mp4",
+    "flat_title": "Coca Cola",
+    "size_bytes": 77234914
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Katseye\\Katseye.mp4",
+    "flat_title": "Katseye",
+    "size_bytes": 213698565
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Ki Lagda\\Ki Lagda.mp4",
+    "flat_title": "Ki Lagda",
+    "size_bytes": 111804534
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Kiara Advani\\Kiara Advani Hasina Pagal Deewani Indoo Ki Jawani.mp4",
+    "flat_title": "Hasina Pagal Deewani",
+    "size_bytes": 108709190
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Kismat Ki Chaabi\\Kismat Ki Chaabi.mp4",
+    "flat_title": "Kismat Ki Chaabi",
+    "size_bytes": 272113534
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Kiss Kiss Bang Bang\\Kiss Kiss Bang Bang They Call Him Og.mp4",
+    "flat_title": "Kiss Kiss Bang Bang",
+    "size_bytes": 968329736
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sreeleela\\Kissik.mp4",
+    "flat_title": "Kissik",
+    "size_bytes": 387256809
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Kissik Hindi\\Kissik.mp4",
+    "reason": "duplicate of 'Kissik.mp4' (smaller by 27 bytes)",
+    "size_bytes": 387256782
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Kokaina\\Kokaina.mp4",
+    "flat_title": "Kokaina",
+    "size_bytes": 567327231
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Kufar Fearless Track\\Kufar Fearless.mp4",
+    "flat_title": "Kufar",
+    "size_bytes": 228583342
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Ladki Dramebaaz Hai\\Ladki Dramebaaz Hai.mp4",
+    "flat_title": "Ladki Dramebaaz Hai",
+    "size_bytes": 102196809
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Laila Main Laila\\Laila Main Laila.mp4",
+    "flat_title": "Laila Main Laila",
+    "size_bytes": 66395846
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Compilations\\Bohemia Rap Megamix\\Likhe Jo Khat X Sandesa.mp4",
+    "flat_title": "Likhe Jo Khat",
+    "size_bytes": 37716126
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Lovely Romantic\\Lovely Romantic.mp4",
+    "flat_title": "Lovely Romantic",
+    "size_bytes": 124684161
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Lucifer\\Lucifer.mp4",
+    "flat_title": "Lucifer",
+    "size_bytes": 94301144
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Lyricaldo You Love Me Baaghi Disha P Tiger S Shraddha K Rene Bendali Tanishk B Nikhita\\Lyricaldo You Love Me Baaghi Disha P Tiger S Shraddha K Rene Bendali Tanishk B Nikhita.mp4",
+    "flat_title": "You Love Me",
+    "size_bytes": 82250133
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Maahi Ve Wajah Tum Ho\\Maahi Ve Wajah Tum Ho.mp4",
+    "flat_title": "Maahi Ve",
+    "size_bytes": 59883140
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Madamiyan\\Madamiyan.mp4",
+    "flat_title": "Madamiyan",
+    "size_bytes": 873711983
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Madison Beer\\Madison Beer.mp4",
+    "flat_title": "Madison Beer",
+    "size_bytes": 331457536
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Mai Tere Ishq Mein\\Mai Tere Ishq Mein Danish Alfaaz Bohemia Isha Malviya.mp4",
+    "flat_title": "Mai Tere Ishq Mein",
+    "size_bytes": 1161760576
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Main Tere Ishq Mein Danish Alfaaz Bohemia Isha Malviya\\Main Tere Ishq Mein Danish Alfaaz Bohemia Isha Malviya.mp4",
+    "flat_title": "Main Tere Ishq Mein",
+    "size_bytes": 310897013
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Yashita Sharma\\Main Yaar Manana Ni.mp4",
+    "flat_title": "Main Yaar Manana Ni",
+    "size_bytes": 28037830
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Main Yaar Manana Ni\\Main Yaar Manana Ni.mp4",
+    "reason": "duplicate of 'Main Yaar Manana Ni.mp4' (smaller by 44 bytes)",
+    "size_bytes": 28037786
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Maine Pi Rakhi Hai\\Maine Pi Rakhi Hai.mp4",
+    "flat_title": "Maine Pi Rakhi Hai",
+    "size_bytes": 365582920
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Manike\\Manike.mp4",
+    "flat_title": "Manike",
+    "size_bytes": 82882289
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Mashooka\\Mashooka.mp4",
+    "flat_title": "Mashooka",
+    "size_bytes": 48081032
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Various Artists\\Mashuka.mp4",
+    "flat_title": "Mashuka",
+    "size_bytes": 122499483
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Mast Malang\\Mast Malang.mp4",
+    "flat_title": "Mast Malang",
+    "size_bytes": 75986147
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Masth Malaika\\Masth Malaika Mark.mp4",
+    "flat_title": "Masth Malaika",
+    "size_bytes": 245719303
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Mein Shaukan Nachne Di\\Mein Shaukan Nachne Di.mp4",
+    "flat_title": "Mein Shaukan Nachne Di",
+    "size_bytes": 112660934
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Memu Free Fire\\Memu Free Fire.mp4",
+    "flat_title": "Memu Free Fire",
+    "size_bytes": 84027031
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Mere Dil Gaaye Ja\\Mere Dil Gaaye Ja.mp4",
+    "flat_title": "Mere Dil Gaaye Ja",
+    "size_bytes": 87269557
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Meri Zulfo Se\\Meri Zulfo Se.mp4",
+    "flat_title": "Meri Zulfo Se",
+    "size_bytes": 388136478
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Pritam\\Metroin Dino Zamaana Lage.mp4",
+    "flat_title": "Metro In Dino",
+    "size_bytes": 94454908
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Mohabbat\\Mohabbat.mp4",
+    "flat_title": "Mohabbat",
+    "size_bytes": 86215270
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Mohe Panghat Pe\\Mohe Panghat Pe.mp4",
+    "flat_title": "Mohe Panghat Pe",
+    "size_bytes": 338335455
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Morni\\Morni.mp4",
+    "flat_title": "Morni",
+    "size_bytes": 1049629733
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Move Your Body Ankitvlog\\Move Your Body Ankitvlog.mp4",
+    "flat_title": "Move Your Body",
+    "size_bytes": 70826940
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Mungda\\Mungda Total Dhamaal.mp4",
+    "reason": "duplicate of 'Mungda Total Dhamaal Sonakshi Sinha Jyotica Tangri Shaan Subhro Gourov Roshin.mp4' (smaller by 139 bytes)",
+    "size_bytes": 93128943
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Mungda Total Dhamaal Sonakshi Sinha Jyotica Tangri Shaan Subhro Gourov Roshin\\Mungda Total Dhamaal Sonakshi Sinha Jyotica Tangri Shaan Subhro Gourov Roshin.mp4",
+    "flat_title": "Mungda",
+    "size_bytes": 93129082
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Munni Badnaam Hui\\Munni Badnaam Hui.mp4",
+    "flat_title": "Munni Badnaam Hui",
+    "size_bytes": 367478399
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Naach Meri Naagin Neelkamal Singh Soundarya S Tanishk Paradox Simar Bhushan K\\Naach Meri Naagin Neelkamal Singh Soundarya S Tanishk Paradox Simar Bhushan K.mp4",
+    "flat_title": "Naach Meri Naagin",
+    "size_bytes": 254761550
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Naach Meri Rani Guru Randhawa\\Naach Meri Rani Guru Randhawa Feat Nora Fatehi.mp4",
+    "flat_title": "Naach Meri Rani",
+    "size_bytes": 57470791
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Naagan\\Naagan.mp4",
+    "reason": "duplicate of 'Naagan Dg Immortals Roy Ahsii.mp4' (smaller by 64 bytes)",
+    "size_bytes": 376289794
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Naagan\\Naagan Dg Immortals Roy Ahsii.mp4",
+    "flat_title": "Naagan",
+    "size_bytes": 376289858
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Naagin Dance Viruss\\Naagin Dance Viruss.mp4",
+    "flat_title": "Naagin Dance",
+    "size_bytes": 291146670
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Naam Shabana Dil Hua Besharam Akshay Kumar Taapsee Pannu Meet Bros Aditi\\Naam Shabana Dil Hua Besharam Akshay Kumar Taapsee Pannu Meet Bros Aditi.mp4",
+    "flat_title": "Dil Hua Besharam",
+    "size_bytes": 100674352
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Nadiyon Paar\\Nadiyon Paar.mp4",
+    "flat_title": "Nadiyon Paar",
+    "size_bytes": 55298287
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Nakhreelo\\Nakhreelo.mp4",
+    "flat_title": "Nakhreelo",
+    "size_bytes": 232905678
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Nasha\\Nasha.mp4",
+    "flat_title": "Nasha",
+    "size_bytes": 259329252
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Nasheeli Ankhein\\Nasheeli Ankhein.mp4",
+    "reason": "duplicate of 'Nasheeli Ankhein I Shivani Sharma Kabir Duhan Singh Rubai B Show.mp4' (smaller by 204 bytes)",
+    "size_bytes": 196525800
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Nasheeli Ankhein\\Nasheeli Ankhein I Shivani Sharma Kabir Duhan Singh Rubai B Show.mp4",
+    "flat_title": "Nasheeli Ankhein",
+    "size_bytes": 196526004
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Nigaah Beautiful Song\\Nigaah Beautiful.mp4",
+    "flat_title": "Nigaah",
+    "size_bytes": 219148909
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Compilations\\Nonstop Year Party Mashup\\Nonstop Year Party Mashup.mp4",
+    "flat_title": "Nonstop Party Mashup",
+    "size_bytes": 584947838
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Nora Fatehi\\Nora Fatehi Ft Shenseea.mp4",
+    "flat_title": "Nora Fatehi",
+    "size_bytes": 152393852
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Nora\\Nora Nora Fatehi.mp4",
+    "flat_title": "Nora",
+    "size_bytes": 241162017
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\O Antava Mawa Oo Oo Antava Pushpa Songs Allu Arjun Rashmika Dsp Sukumar Samantha\\O Antava Mawa Oo Oo Antava Pushpa Songs Allu Arjun Rashmika Dsp Sukumar Samantha.mp4",
+    "flat_title": "O Antava",
+    "size_bytes": 100508778
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\O Romeo Aashiqon Ki Colony\\O Romeo Aashiqon Ki Colony.mp4",
+    "flat_title": "O Romeo",
+    "size_bytes": 255680038
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Obsession Habibi Arabic Afro House Reggaeton\\Obsession Habibi Arabic Afro House Reggaeton.mp4",
+    "flat_title": "Obsession",
+    "size_bytes": 593208671
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Oh Mama Tetema\\Oh Mama Tetema.mp4",
+    "flat_title": "Oh Mama Tetema",
+    "size_bytes": 294262311
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Viruss\\Omfo.mp4",
+    "flat_title": "Omfo",
+    "size_bytes": 160666483
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Omfo\\Omfo Girik Aman.mp4",
+    "reason": "duplicate of 'Omfo.mp4' (smaller by 110 bytes)",
+    "size_bytes": 160666373
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\One More Time\\One More Time Robinhood.mp4",
+    "flat_title": "One More Time",
+    "size_bytes": 220747397
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Telugu\\Oo Antava Mawa Oo Oo Antava Pushpa Songs Allu Arjun Dsp Sukumar Samantha.mp4",
+    "flat_title": "Oo Antava",
+    "size_bytes": 311551278
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Otilia\\Otilia X Mellow D.mp4",
+    "flat_title": "Otilia",
+    "size_bytes": 53761355
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Badshah\\Paani Paani.mp4",
+    "flat_title": "Paani Paani",
+    "size_bytes": 160487348
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Paapi Paapi\\Paapi Paapi Gurram Paapi Reddy.mp4",
+    "flat_title": "Paapi Paapi",
+    "size_bytes": 167985969
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Pabbi\\Pabbi.mp4",
+    "flat_title": "Pabbi",
+    "size_bytes": 262109397
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Pan India\\Pan India.mp4",
+    "flat_title": "Pan India",
+    "size_bytes": 208352483
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Panghat\\Panghat.mp4",
+    "flat_title": "Panghat",
+    "size_bytes": 659204910
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Panwadi\\Panwadi.mp4",
+    "flat_title": "Panwadi",
+    "size_bytes": 353223576
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Yo Yo Honey Singh\\Payal.mp4",
+    "flat_title": "Payal",
+    "size_bytes": 1061207681
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sunny Sanskari Ki Tulsi Kumari\\Perfect.mp4",
+    "flat_title": "Perfect",
+    "size_bytes": 234913498
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Perfect\\Perfect Guru Randhawa Varun Dhawan Janhvi Kapoor.mp4",
+    "reason": "duplicate of 'Perfect.mp4' (smaller by 134 bytes)",
+    "size_bytes": 234913364
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Pols\\Pols.mp4",
+    "flat_title": "Pols",
+    "size_bytes": 100813663
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Priyanka Chopra\\Priyanka Chopra.mp4",
+    "flat_title": "Priyanka Chopra",
+    "size_bytes": 115236092
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Romantic\\Proper Patola\\Proper Patola Namaste England Arjun Parineeti Badshah Diljit Aastha.mp4",
+    "flat_title": "Proper Patola",
+    "size_bytes": 64618118
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Guru Randhawa\\Qatal.mp4",
+    "flat_title": "Qatal",
+    "size_bytes": 217816560
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Que Me Toque\\Que Me Toque.mp4",
+    "flat_title": "Que Me Toque",
+    "size_bytes": 168381304
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Queen Gulabi Song\\Queen Gulabi.mp4",
+    "flat_title": "Queen Gulabi",
+    "size_bytes": 184705737
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Ra Ra Rakkamma\\Ra Ra Rakkamma Vikrant Rona.mp4",
+    "flat_title": "Ra Ra Rakkamma",
+    "size_bytes": 306832112
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Rajkummar\\Rajkummar Na Na Na Na Na Re.mp4",
+    "flat_title": "Na Na Na Na Na Re",
+    "size_bytes": 127279666
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Ram Chahe Leela\\Ram Chahe Leela.mp4",
+    "flat_title": "Ram Chahe Leela",
+    "size_bytes": 733131518
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Rico Rico\\Rico Rico.mp4",
+    "flat_title": "Rico Rico",
+    "size_bytes": 204031209
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\M-R\\Routine Gur Sidhu\\Routine Gur Sidhu.mp4",
+    "flat_title": "Routine",
+    "size_bytes": 297526900
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Saaho Bad Boy\\Saaho Bad Boy.mp4",
+    "reason": "duplicate of 'Bad Boy X Bad Girl Badshah.mp4' (smaller by 70,669,358 bytes)",
+    "size_bytes": 143177154
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sab Gazab\\Sab Gazab.mp4",
+    "flat_title": "Sab Gazab",
+    "size_bytes": 285626725
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Sajna Party Song\\Sajna Party.mp4",
+    "reason": "duplicate of 'Sajna Party Song.mp4' (smaller by 122,026,646 bytes)",
+    "size_bytes": 100844770
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Romantic\\Sajna Party Song.mp4",
+    "flat_title": "Sajna Party",
+    "size_bytes": 222871416
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sunidhi Chauhan\\Sajna Ve Sajna Flip Shehnaaz Gill.mp4",
+    "flat_title": "Sajna Ve Sajna",
+    "size_bytes": 222871478
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Shantanu\\Sara Zamana Gunti Veedhi.mp4",
+    "flat_title": "Sara Zamana",
+    "size_bytes": 400655489
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sunny\\Saturday Night.mp4",
+    "flat_title": "Saturday Night",
+    "size_bytes": 98166269
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sawaal Puchdi\\Sawaal Puchdi.mp4",
+    "flat_title": "Sawaal Puchdi",
+    "size_bytes": 395332257
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Lavinia\\Shaggy Ft Lavbbe.mp4",
+    "flat_title": "Shaggy",
+    "size_bytes": 247136824
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Shake It Wild Habibi Arabic Afro House Reggaeton\\Shake It Wild Habibi Arabic Afro House Reggaeton.mp4",
+    "flat_title": "Shake It Wild",
+    "size_bytes": 494158166
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Shakira\\Shakira.mp4",
+    "flat_title": "Shakira",
+    "size_bytes": 61063803
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\G Spark\\Shaky.mp4",
+    "flat_title": "Shaky",
+    "size_bytes": 228375163
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sharara\\Sharara Second.mp4",
+    "flat_title": "Sharara",
+    "size_bytes": 296015322
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Shararat Dhurandhar Ranveer Aditya Dhar Shashwat Jasmine Madhubanti Ayesha Krystle\\Shararat Dhurandhar Ranveer Aditya Dhar Shashwat Jasmine Madhubanti Ayesha Krystle.mp4",
+    "flat_title": "Shararat",
+    "size_bytes": 296015575
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Shaukan\\Shaukan.mp4",
+    "flat_title": "Shaukan",
+    "size_bytes": 154196065
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\A-F\\Badshah\\She Move It Like.mp4",
+    "flat_title": "She Move It Like",
+    "size_bytes": 56731921
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sheher Ki Ladki\\Sheher Ki Ladki.mp4",
+    "flat_title": "Sheher Ki Ladki",
+    "size_bytes": 76009027
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Shringaar\\Shringaar Vayu Aasthagill Akasasingofficial Raftaarmusic Milind Soman.mp4",
+    "flat_title": "Shringaar",
+    "size_bytes": 214144882
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sikandar Naache\\Sikandar Naache.mp4",
+    "flat_title": "Sikandar Naache",
+    "size_bytes": 261031440
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Simar Kaur\\Simar Kaur.mp4",
+    "flat_title": "Simar Kaur",
+    "size_bytes": 203377070
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Guru Randhawa\\Sirra.mp4",
+    "flat_title": "Sirra",
+    "size_bytes": 218041699
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Slow Slow\\Slow Slow.mp4",
+    "flat_title": "Slow Slow",
+    "size_bytes": 261124645
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\So Gaya Yeh Jahan\\So Gaya Yeh Jahan.mp4",
+    "flat_title": "So Gaya Yeh Jahan",
+    "size_bytes": 57266553
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Son of Sardaar\\Son of Sardaar.mp4",
+    "flat_title": "Son Of Sardaar",
+    "size_bytes": 188775236
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Step It Up Dance\\Step It Up Dance.mp4",
+    "flat_title": "Step It Up",
+    "size_bytes": 829521137
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sukh E\\Sukh E.mp4",
+    "flat_title": "Sukh E",
+    "size_bytes": 313507202
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sultana\\Sultana Be Happy.mp4",
+    "reason": "duplicate of 'Sultana Nora Fatehi Prabhu Deva Be Happy Mika Singh Sunidhi Chauhan Harsh Upadhyay.mp4' (smaller by 26,375,635 bytes)",
+    "size_bytes": 329539351
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sultana Nora Fatehi Prabhu Deva Be Happy Mika Singh Sunidhi Chauhan Harsh Upadhyay\\Sultana Nora Fatehi Prabhu Deva Be Happy Mika Singh Sunidhi Chauhan Harsh Upadhyay.mp4",
+    "flat_title": "Sultana",
+    "size_bytes": 355914986
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Supreme Habibi Arabic Afro House Reggaeton Drop\\Supreme Habibi Arabic Afro House Reggaeton Drop.mp4",
+    "flat_title": "Supreme Habibi",
+    "size_bytes": 563758302
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Tabahi\\Tabahi Badshah.mp4",
+    "flat_title": "Tabahi",
+    "size_bytes": 148905082
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Sharvari\\Taras.mp4",
+    "flat_title": "Taras",
+    "size_bytes": 229372364
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Tauba Payal Dev Badshah Malavika Mohanan Aditya Dev Apni Dhun\\Tauba Payal Dev Badshah Malavika Mohanan Aditya Dev Apni Dhun.mp4",
+    "flat_title": "Tauba",
+    "size_bytes": 62622697
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Karan Aujla\\Tauba Tauba.mp4",
+    "flat_title": "Tauba Tauba",
+    "size_bytes": 252844986
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Tera Ki Khayal Man of the Moon Guru Randhawa Malaika Arora Sanjoy Royal Maan Bhushan Kumar\\Tera Ki Khayal Man of the Moon Guru Randhawa Malaika Arora Sanjoy Royal Maan Bhushan Kumar.mp4",
+    "flat_title": "Tera Ki Khayal",
+    "size_bytes": 278255167
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Thumka Maar Song\\Thumka Maar.mp4",
+    "flat_title": "Thumka Maar",
+    "size_bytes": 352364225
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Varun Dhawan\\Thumkeshwari.mp4",
+    "flat_title": "Thumkeshwari",
+    "size_bytes": 307881330
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Titliyan Rocky Handsome John Abraham Shruti Haasan Sunidhi Chauhan\\Titliyan Rocky Handsome John Abraham Shruti Haasan Sunidhi Chauhan.mp4",
+    "flat_title": "Titliyan",
+    "size_bytes": 71495412
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Tollywood Queens\\Tollywood Queens Viral Dance Hits.mp4",
+    "flat_title": "Tollywood Queens",
+    "size_bytes": 5435409665
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Trendingg\\Trendingg.mp4",
+    "flat_title": "Trending",
+    "size_bytes": 246878978
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Tring Tring\\Tring Tring.mp4",
+    "flat_title": "Tring Tring",
+    "size_bytes": 337628603
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Tu Meri Main Tera Main Tera Tu Meri\\Tu Meri Main Tera Main Tera Tu Meri.mp4",
+    "flat_title": "Tu Meri Main Tera",
+    "size_bytes": 288453131
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Tum Mere Na Huye\\Tum Mere Na Huye.mp4",
+    "flat_title": "Tum Mere Na Huye",
+    "size_bytes": 114908263
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Twist Habibi Arabic Afro House Reggaeton\\Twist Habibi Arabic Afro House Reggaeton.mp4",
+    "flat_title": "Twist Habibi",
+    "size_bytes": 648484931
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Valeti Daaru\\Valeti Daaru.mp4",
+    "flat_title": "Valeti Daaru",
+    "size_bytes": 149526710
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Party-Dance\\Varun D\\Varun D Illegal Weapon Street Dancer D.mp4",
+    "flat_title": "Illegal Weapon 2.0",
+    "size_bytes": 101299253
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Vibe Guru Randhawa\\Vibe Guru Randhawa.mp4",
+    "flat_title": "Vibe",
+    "size_bytes": 206480542
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Wallah Wallah\\Wallah Wallah.mp4",
+    "flat_title": "Wallah Wallah",
+    "size_bytes": 310820149
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\What Jhumka\\What Jhumka.mp4",
+    "flat_title": "What Jhumka",
+    "size_bytes": 231108379
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\G-L\\Jimin\\Who.mp4",
+    "flat_title": "Who",
+    "size_bytes": 306845078
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Whos That Girl Ikka\\Whos That Girl Ikka X Guru Randhawa.mp4",
+    "flat_title": "Whos That Girl",
+    "size_bytes": 244859892
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Wish and Panther Bolo Bolo\\Wish and Panther Bolo Bolo.mp4",
+    "flat_title": "Bolo Bolo",
+    "size_bytes": 281203811
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Compilations\\Year End Mashup\\Year End Mashup.mp4",
+    "flat_title": "Year End Mashup",
+    "size_bytes": 691683464
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Collections\\Compilations\\New Year Mashup\\Year Mashup Musical Planet.mp4",
+    "flat_title": "Year Mashup",
+    "size_bytes": 148806161
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Yimmy Yimmy\\Yimmy Yimmy.mp4",
+    "flat_title": "Yimmy Yimmy",
+    "size_bytes": 254242248
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Yo Yo Honey Singh Prod Beat Unlock\\Yo Yo Honey Singh Prod Beat Unlock.mp4",
+    "flat_title": "Yo Yo Honey Singh",
+    "size_bytes": 68912974
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Zaalim\\Zaalim.mp4",
+    "flat_title": "Zaalim",
+    "size_bytes": 144206564
+  },
+  {
+    "action": "skip",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Zaar Zaar\\Zaar Zaar.mp4",
+    "reason": "duplicate of 'Zaar Zaar Feat Elli Avrram Rusha Blizza Neeti Mohan Farhan Khan.mp4' (smaller by 160 bytes)",
+    "size_bytes": 227251629
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Zaar Zaar\\Zaar Zaar Feat Elli Avrram Rusha Blizza Neeti Mohan Farhan Khan.mp4",
+    "flat_title": "Zaar Zaar",
+    "size_bytes": 227251789
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Zaara Yesmin\\Zaara Yesmin Honthon Pe Bas.mp4",
+    "flat_title": "Honthon Pe Bas",
+    "size_bytes": 299253069
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Zara Samjho Ishara\\Zara Samjho Ishara.mp4",
+    "flat_title": "Zara Samjho Ishara",
+    "size_bytes": 250540650
+  },
+  {
+    "action": "move",
+    "original": "Z:\\MUSIC\\Bollywood\\Artists\\S-Z\\Zulf\\Zulf.mp4",
+    "flat_title": "Zulf",
+    "size_bytes": 116708065
+  }
+]
