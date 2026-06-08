@@ -41,6 +41,7 @@ Also remove:
 - Any studio alias from the studio registry (for example: `blackedraw`, `deeper`, `vixen`, `pure taboo`).
 - Duplicate-collision suffixes from prior runs when present in source names (for example: ` (2)`, ` (3)`).
 - Common quality/source tags (`1080p`, `720p`, `2160p`, `4k`, `uhd`) when present.
+- Descriptor phrases before performer names that are non-essential noise, including `big tit milf`.
 
 Important:
 - Keep title meaning intact after noise removal.
@@ -70,30 +71,39 @@ Note:
 
 ## Mandatory Workflow (Do Not Skip)
 1. Scan files under `G:\Downloads` recursively.
-2. Generate proposed `sanitized_name` and `target_path` for every file.
-3. Show a Markdown table with one row per file and columns exactly:
+2. Run an LLM-assisted semantic pass per filename to classify tokens as:
+   - `Noise` (source/studio/quality/descriptor noise)
+   - `Core Title` (meaningful scene/title words)
+   - `Performer Tokens` (likely performer names)
+   - `Deterministic Truncation Fix` (only obvious clipped-token completion)
+3. Generate proposed `sanitized_name` and `target_path` for every file.
+4. Show a Markdown table with one row per file and columns exactly:
    - `Current Name`
+   - `Noise Removed`
+   - `Core Title`
    - `Studio`
    - `Proposed Name`
    - `Target Folder`
    - `Action`
-4. Stop and ask for explicit approval using this exact prompt:
+5. Stop and ask for explicit approval using this exact prompt:
    - `Type APPROVE to continue, or REVISE with your requested edits.`
-5. If the user does not reply with `APPROVE`, do not execute any rename/move commands.
-6. If any new studios are proposed for registry growth, present them in a second table before execution with columns:
+6. If the user does not reply with `APPROVE`, do not execute any rename/move commands.
+7. If any new studios are proposed for registry growth, present them in a second table before execution with columns:
    - `Detected Token`
    - `Proposed Studio Name`
    - `Proposed Folder`
    - `Aliases`
    - `Action`
-7. Stop again for explicit approval before updating the registry file.
-8. Only after approvals, execute filesystem operations.
-9. On `APPROVE`, perform operations safely:
+8. Stop again for explicit approval before updating the registry file.
+9. Only after approvals, execute filesystem operations.
+10. On `APPROVE`, perform operations safely:
    - Create studio folders as needed.
    - In one execution pass, perform `Move + Rename` together for each file.
    - Use collision-safe behavior (append ` (2)`, ` (3)`, etc. before extension only when required to prevent overwrite).
    - Log each completed operation in a result table.
-10. After completion, show a final table:
+   - Apply automatic semantic rewrites only when they are deterministic and high-confidence.
+   - If the LLM proposes speculative rewrites (for example, inserting missing verbs or nouns), show them as `Review Required` and do not auto-apply without explicit per-item approval.
+11. After completion, show a final table:
    - `Old Path`
    - `New Path`
    - `Status`
@@ -112,6 +122,8 @@ Apply in this order:
 Hard output requirement:
 - Final filename must not include source tags or studio tokens.
 - Final filename must be Proper Case.
+- Final filename must exclude descriptor noise like `Big Tit Milf` when it appears before performer names.
+- LLM auto-fixes must be limited to deterministic corrections (for example, obvious clipped words like `Neig` -> `Neighbor`).
 
 ## Filename Length Standard (Keep Clear, Not Long)
 Use this naming convention by default:
