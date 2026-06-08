@@ -14,7 +14,7 @@ Use this registry as the source of truth for studio detection and folder naming:
 Registry rules:
 - Match studios by aliases first (case-insensitive).
 - Use the registry `folder` for target folder names.
-- If no alias matches, route to `UnknownStudio`.
+- If no alias matches, route to `Titles`.
 - Keep `Deeper` as a recognized studio.
 
 Growth rules:
@@ -36,15 +36,22 @@ Noise tokens to remove wherever they appear (case-insensitive):
 - HD
 - BBC
 - Blacked
+- GKG
+- MF
+- FMF
+- TS
+- interracial
 
 Also remove:
 - Any studio alias from the studio registry (for example: `blackedraw`, `deeper`, `vixen`, `pure taboo`).
 - Duplicate-collision suffixes from prior runs when present in source names (for example: ` (2)`, ` (3)`).
 - Common quality/source tags (`1080p`, `720p`, `2160p`, `4k`, `uhd`) when present.
 - Descriptor phrases before performer names that are non-essential noise, including `big tit milf`.
+- Trailing marketing/studio suffixes at end of basename (for example: `bellesa plus`, `belessa plus`, standalone trailing `plus`, and trailing studio aliases).
 
 Important:
 - Keep title meaning intact after noise removal.
+- Treat `MILF` as valid content when it appears as part of meaningful title text.
 - Do not create empty or generic names.
 - Preserve file extensions.
 - Never overwrite existing files.
@@ -56,7 +63,7 @@ Infer a target studio from the registry and place the sanitized file under:
 - `G:\Downloads\Deeper\`
 - `G:\Downloads\PureTaboo\`
 - `G:\Downloads\Vixen\`
-- `G:\Downloads\UnknownStudio\` (fallback)
+- `G:\Downloads\Titles\` (fallback)
 
 Studio inference hints (case-insensitive):
 - contains `blackedraw` -> `Blacked`
@@ -115,14 +122,19 @@ Apply in this order:
 3. Remove duplicate adjacent words.
 4. Remove collision suffix markers in source names (` (2)`, ` (3)`, ...).
 5. Remove stray single-letter leftovers introduced by token stripping, unless numeric.
-6. Trim punctuation/spaces from both ends.
-7. Convert to Proper Case (Title Case), with each word capitalized, while keeping obvious acronyms and performer names readable.
-8. If result becomes too short or ambiguous, keep additional context words from original.
+6. Strip trailing meaningless suffix fragments at end of basename (repeat until stable):
+   - studio aliases
+   - `plus`
+   - dangling separators/stop-words created by stripping (for example trailing `-`, `_`, `and`)
+7. Trim punctuation/spaces from both ends.
+8. Convert to Proper Case (Title Case), with each word capitalized, while keeping obvious acronyms and performer names readable.
+9. If result becomes too short or ambiguous, keep additional context words from original.
 
 Hard output requirement:
 - Final filename must not include source tags or studio tokens.
 - Final filename must be Proper Case.
 - Final filename must exclude descriptor noise like `Big Tit Milf` when it appears before performer names.
+- Final filename must not end with meaningless trailing suffixes like `Plus` or trailing studio-alias remnants.
 - LLM auto-fixes must be limited to deterministic corrections (for example, obvious clipped words like `Neig` -> `Neighbor`).
 
 ## Filename Length Standard (Keep Clear, Not Long)
